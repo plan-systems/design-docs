@@ -27,9 +27,7 @@ It is written for developer-types ready to understand and vet PLAN's architectur
 ## PLAN: A Synopsis
 
 
-PLAN can't be empowering for community organizers if its not usable by non-technical users.  
-Yet, we know distributed systems, content-based addressing, and cryptography are alien concepts to most people.  
-PLAN How does PLAN square this circle?
+PLAN can't be empowering for community organizers if its not usable by non-technical users.  Yet, we know distributed systems, content-based addressing, and cryptography are alien concepts to most people.  PLAN How does PLAN square this circle?
 
 PLAN secret weapon is hidden in plain sight: instead of relying on a 2D-constrained and sandboxed web/browser experience, PLAN uses the [Unity](https://unity3d.com) game engine to power the end-user's experience while using [Go](https://golang.org) for its p2p node.  
 
