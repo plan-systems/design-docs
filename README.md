@@ -1,7 +1,5 @@
 # PLAN - Engineering & Design Docs
 
-> :rocket: Making Protocol Labs Protocol _Labs_.
-
 ```
          P urposeful
          L ogistics
@@ -24,18 +22,18 @@ intuitively and reliably.
 
 ## What's in This Repo?
 
-This repo contains a directory and explanation of the layers, abstractions, and technologies that make it up. 
-This information is intended for developer-types ready to understand and vet PLAN's architecture and design.  
+This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN. 
+It is written for developer-types ready to understand and vet PLAN's architecture and design.  
 
 Also in this repo is an engineering roadmap.
 
 
 ## PLAN: An Engineering Synopsis
 
-PLAN isn't anything if it's not usable by non-technical users.  Yet, we know distributed systems, content-based
-addressing, and cryptography are not human-relatable.  How do we square this circle?
+PLAN can't be empowering for community organizer if its not usable by non-technical users.  Yet, we know distributed systems, content-based
+addressing, and cryptography are generally foreign concepts to most people.  How do we square this circle?
 
-IRC was a successfull entrierly flexible standard that served many -- including the military.  
+IRC was a successful entirely flexible standard that served many -- including the military.  
 
 PLAN is a p2p community-centric node operating layer, built on top of an open append-only and content-based addressing storage API, 
 accessed by a real-time graphical client.  
@@ -47,4 +45,5 @@ In PLAN's
  - [01. Synopsis](https://github.com/plan-tools/engineering-docs/01-synopsist)
 
 ---
+
 
