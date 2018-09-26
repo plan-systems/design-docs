@@ -13,7 +13,7 @@ It is intended to be an instrument of productivity, organization, and self-relia
 
 PLAN is free and open-source (GPLv3), and each component and layer is "pluggable" an is offered as
 an embodiment of an open-protocol.  The design principles of PLAN are similar and consistent with
-Tim Berners-Lee's intention and design of http.
+Tim Berners-Lee's intention and design around http.
 
 May PLAN empower organizations and individuals with little or no resources to communicate and self-organize 
 intuitively and reliably.
