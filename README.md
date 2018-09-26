@@ -5,8 +5,8 @@
          L ogistics
          A rchitecture
 P  L  A  N etwork
-
-Welcome to PLAN!
+```
+## Welcome to PLAN!
 
 PLAN is a secure, visual communications and logistics planning tool for individuals and communities.
 It is intended to be an instrument of productivity, organization, and self-reliance.
@@ -17,8 +17,6 @@ Tim Berners-Lee's intention and design of http.
 
 May PLAN empower organizations and individuals with little or no resources to communicate and self-organize 
 intuitively and reliably.
-
-```
 
 ## What's in This Repo?
 
