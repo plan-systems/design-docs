@@ -8,28 +8,23 @@ P  L  A  N etwork
 ```
 ## Welcome to PLAN!
 
-PLAN is a secure, visual communications and logistics planning tool for individuals and communities.
-It is intended to be an instrument of productivity, organization, and self-reliance.
+PLAN is an multi-purpose communications and logistics planning tool for individuals, organizations, and communities. Its open “pluggable” architecture integrates distributed services, encryption, and interoperable data-transport technologies — all in a realtime visual interface. PLAN is intended for productivity, organization, and collaboration.
 
-PLAN is free and open-source (GPLv3), and each component and layer is "pluggable" an is offered as
-an embodiment of an open-protocol.  The design principles of PLAN are similar and consistent with
-Tim Berners-Lee's intention and design around http.
+PLAN is free and open-source (GPLv3). Each "pluggable" component layer is designed to be interoperable with other protocols and distributed applications (dapps) that are adapted or designed for use in PLAN (e.g. a PLAN based web browser that serves 'http' content).  The design principles of PLAN are similar and consistent with Tim Berners-Lee's intention and design around the widely adopted 'http' protocol.
 
 May PLAN empower organizations and individuals with little or no resources to communicate and self-organize 
-intuitively and reliably.
+intuitively, securely, and reliably.
 
 ## What's in This Repo?
 
 This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN. 
 It is written for developer-types ready to understand and vet PLAN's architecture and design.  
 
-
 ## PLAN: A Synopsis
-
 
 PLAN can't be empowering for community organizers if its not usable by non-technical users.  Yet, we know distributed systems, content-based addressing, and cryptography are alien concepts to most people.  PLAN How does PLAN square this circle?
 
-PLAN secret weapon is hidden in plain sight: instead of relying on a 2D-constrained and sandboxed web/browser experience, PLAN uses the [Unity](https://unity3d.com) game engine to power the end-user's experience while using [Go](https://golang.org) for its p2p node.  
+PLAN secret weapon is hidden in plain sight: instead of relying on a 2D-constrained and sandboxed web/browser experience, PLAN uses the [Unity] (https://unity3d.com) game engine to power the end-user's experience while using [Go](https://golang.org) for its p2p node.  
 
 For the end-user, this affords:
    - A realtime, visual, and spatially-oriented interface
@@ -61,8 +56,7 @@ The permissions and rules of merge conflict resolution are deterministic so that
 
 PLAN has two persistent pluggable storage layers, one characterized by append-only operations, and the other characterized by content-based loading and storing.  The former, dubbed the Persistent Data Interface (PDI) is used to host a community's channel data and is intentionally designed to be compatible with the append-only nature of blockchain storage.  The latter, dubbed the Cloud File Interface (CFI) is used to serve a community's hungry data needs while PLAN's channel and GUI hide hashnames that no one want's to see or interact with.  For example, a channel of type `/plan/channel/file/cfi/video` is used as a container channel who entries are CFI pathnames to each successive rev of that file (e.g. `/plan/cfi/ipfs/QmYwAPJv5C...`).  Note that this schema allows PLAN which community "cloud" files are in use and which can be dropped.    In the client UI, this channel's protocol identifier would cause it to be presented as a single opqaue object whose use would cuase the latest rev to be fetched. This allows users to enjoy and easily access community content while not having to have any understanding about what's happening under the hood.
 
-In sum, PLAN is a p2p community-centric node operating layer, built on top of an open append-only and content-based addressing storage API, 
-accessed by a real-time graphical client.  Its intentional channel, ACL, and crypto sub-system provision for flexible, defensible, and human-intractable access.  In PLAN, communities arise from community organizers that value owning their own data, having a formidable crypto city wall, and the ability to continue operation in the face of Internet disruptions.  
+In sum, PLAN is a p2p community-centric node operating layer, built on top of an open append-only and content-based addressing storage API, accessed by a real-time graphical client.  Its intentional channel, ACL, and crypto sub-system provision for flexible, defensible, and human-intractable access.  In PLAN, communities arise from community organizers that value owning their own data, having a formidable crypto city wall, and the ability to continue operation in the face of Internet disruptions.  
 
 
 EOF
