@@ -8,9 +8,9 @@ P  L  A  N etwork
 ```
 ## Welcome to PLAN!
 
-PLAN is an multi-purpose communications and logistics planning tool for individuals, organizations, and communities. Its open “pluggable” architecture integrates distributed services, encryption, and interoperable data-transport technologies — all in a realtime visual interface. PLAN is intended for productivity, organization, and collaboration.
+PLAN is an multi-purpose communications and logistics planning tool for individuals, organizations, and communities. Its open “pluggable” architecture integrates distributed services, encryption, and interoperable data-transport technologies — all in a realtime visual interface. PLAN is intended to be an instrument productivity, organization, and collaboration.
 
-PLAN is free and open-source (GPLv3). Each "pluggable" component layer is designed to be interoperable with other protocols and distributed applications (dapps) that are adapted or designed for use in PLAN (e.g. a PLAN based web browser that serves 'http' content).  The design principles of PLAN are similar and consistent with Tim Berners-Lee's intention and design around the widely adopted 'http' protocol.
+PLAN is free and open-source (GPLv3). Components in PLAN are pluggable so that contributors can add, improve, or expand functionality, and component interfaces and data structures embody the benefits and principles of interoperability.  The design principles of PLAN are similar and consistent with Tim Berners-Lee's vision and intention surrounding HTTP.
 
 May PLAN empower organizations and individuals with little or no resources to communicate and self-organize 
 intuitively, securely, and reliably.
