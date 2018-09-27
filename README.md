@@ -22,11 +22,11 @@ It is written for developer-types ready to understand and vet PLAN's architectur
 
 ## PLAN: A Synopsis
 
-PLAN will be empowering for communities and organizers if it can be usable by non-technical users. As software designers, we must come to terms that distributed systems, content-based addressing, and cryptography are alien concepts for most people. How does PLAN square this circle?
+PLAN will be empowering for communities and organizers if it can be usable by non-technical users. As software designers, we must accept that distributed systems, content-based addressing, and cryptography are alien concepts for most people. How does PLAN square this circle?
 
-It’s not necessary to know exactly how encryption or CPUs work in order to take advantage of the benefits they provide, and it’s not particularly important where exactly data resides in a network or how it is served. PLAN's simplifies the complex nature of trustless and distributed technologies into visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of relying on a 2D-constrained and sandboxed web/browser experience, PLAN uses the [Unity](https://unity3d.com) game engine to power the end-user's experience while using [Go](https://golang.org) for its p2p node.  
+It’s not necessary to know exactly how encryption or CPUs work in order to take advantage of the benefits they provide, and it’s not particularly important where exactly data resides in a network or how it is served. PLAN's simplifies the complex nature of trustless and distributed technologies into visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of relying on a 2D-constrained and sandboxed web/browser experience, PLAN uses the [Unity](https://unity3d.com) game engine for the end-user's experience and uses [Go](https://golang.org) for its p2p node.  
 
-For the end-user, this affords:
+For the end-user, using a graphics engine affords:
    - A realtime, visual, and spatially-oriented interface
    - A first-class input and display device experience
    - Full horsepower of the user's device/workstation
@@ -37,7 +37,7 @@ For PLAN, this affords:
    - The power and capabilities of Go
    - A effective and robust multi-platform p2p node
    - Embedding of key technologies such as:
-[IPFS](https://github.com/ipfs); [libp2p](https://github.com/libp2p); [protobufs](https://developers.google.com/protocol-buffers), and [gRPC](https://grpc.io).
+[IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [protobufs](https://developers.google.com/protocol-buffers), and [gRPC](https://grpc.io).
 
 The PLAN Unity client talks to a `pnode`, the name for PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes.  
 
