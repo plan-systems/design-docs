@@ -17,12 +17,11 @@ intuitively, securely, and reliably.
 
 ## What's in This Repo?
 
-This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN. 
-It is written for developer-types ready to understand and vet PLAN's architecture and design.  
+This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for developer-types ready to understand and vet PLAN's architecture and design.  
 
 ## PLAN: A Synopsis
 
-PLAN will be empowering for communities and organizers _only if_ non-technical users can use it easily. As software designers, we must accept that distributed technologies, content-based addressing, and cryptography are alien concepts for most people. How does PLAN square this circle?
+PLAN will be empowering for communities and organizers _only if_ non-technical users can use it easily. As software designers, we must accept that distributed technologies, content-based addressing, and cryptography are alien concepts to most people. How does PLAN square this circle?
 
 It’s not necessary to know exactly how encryption or CPUs work in order to take advantage of the benefits they provide, and it’s not particularly important where exactly data resides in a network or how it is served. PLAN's simplifies the complex nature of trustless and distributed technologies into visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of relying on a 2D-constrained and sandboxed web/browser experience, PLAN uses the [Unity](https://unity3d.com) game engine for the end-user's experience and uses [Go](https://golang.org) for its p2p node.  
 
