@@ -10,10 +10,9 @@ P  L  A  N etwork
 
 PLAN is an multi-purpose communications and logistics planning tool for individuals, organizations, and communities. Its open “pluggable” architecture integrates distributed services, encryption, and interoperable data-transport technologies — all in a realtime visual interface. PLAN is intended to be an instrument productivity, organization, and collaboration.
 
-PLAN is free and open-source (GPLv3). Components in PLAN are pluggable so that contributors can add, improve, or expand functionality, and component interfaces and data structures embody the benefits and principles of interoperability. The design principles of PLAN are similar and consistent with Tim Berners-Lee's vision and intention surrounding HTTP.
+PLAN is free and open-source (GPLv3). Components in PLAN are pluggable so that contributors can add, improve, or expand functionality, component interfaces, and data structures. The design principles of PLAN are similar and consistent with Tim Berners-Lee's vision and intention surrounding HTTP.
 
-May PLAN empower organizations and individuals with little or no resources to communicate and self-organize 
-intuitively, securely, and reliably.
+May PLAN empower organizations and individuals with little or no resources to intuitively, securely, and reliably communicate and self-organize.
 
 ## What's in This Repo?
 
