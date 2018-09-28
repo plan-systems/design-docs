@@ -22,7 +22,7 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 PLAN will be empowering for communities and organizers _only if_ non-technical users can use it easily. As software designers, we must accept that distributed technologies, content-based addressing, and cryptography are alien concepts to most people. How does PLAN square this circle?
 
-It’s not necessary to know exactly how algorithms work in order to take advantage of the benefits they provide, and it’s not particularly important where exactly data resides in a network or how it is served. PLAN's architecture simplifies the complex nature of trustless and distributed technologies with visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of relying on a 2D-constrained and sandboxed web/browser experience, the end-user experiences PLAN through the [Unity](https://unity3d.com) game engine while [Go](https://golang.org) powers its p2p node. Perhaps someday the PLAN Foundation will be able to support development of an [Unreal](https://www.unrealengine.com) client as well.
+It’s not necessary to know exactly how algorithms work in order to take advantage of the benefits they provide, and it’s not particularly important where exactly data resides in a network or how it is served. PLAN's architecture simplifies the complex nature of trustless and distributed technologies with visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of a 2D-constrained and sandboxed web/browser experience, the end-user experiences PLAN through the [Unity](https://unity3d.com) game engine while [Go](https://golang.org) powers its p2p node. Someday the PLAN Foundation would love to support development of an [Unreal](https://www.unrealengine.com) client as well.
 
 For the end-user, using a graphics engine affords:
    - A realtime, visual, and spatially-oriented interface
@@ -32,7 +32,7 @@ For the end-user, using a graphics engine affords:
    - Multi-platform (desktop/mobile) support
 
 For PLAN, this affords: 
-   - The power and capabilities of Gohpers
+   - The power and capabilities of Go
    - A effective and robust multi-platform p2p node
    - An extensible & resilient development platform
    - Embedding of key technologies such as: [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [protobufs](https://developers.google.com/protocol-buffers) and [gRPC](https://grpc.io).
