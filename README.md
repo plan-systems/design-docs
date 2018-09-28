@@ -10,7 +10,7 @@ P  L  A  N etwork
 
 PLAN is an multi-purpose communications and logistics planning tool for individuals, organizations, and communities. Its open “pluggable” architecture integrates distributed services, encryption, and interoperable data-transport technologies — all in a realtime visual interface. PLAN is an instrument for productivity, organization, and collaboration.
 
-PLAN is free and open-source (GPLv3). Components in PLAN are pluggable so that anyone can easily add, improve, or extend component functionality. The design principles of PLAN are similar and consistent with Tim Berners-Lee's vision around HTTP, making information transport and delivery profoundly interoperable and extendable.  Also to be acknowledged are the principles underpinning [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which suggest to regard every protcol or process as something that can be expressed as being nested inside another.  `http://` becomes `/http`.
+PLAN is free and open-source (GPLv3). Components in PLAN are pluggable so that anyone can easily add, improve, or extend component functionality. The design principles of PLAN are focused on making information transport and delivery profoundly interoperable and extendable, similar and consistent with Tim Berners-Lee's vision for HTTP. Also to be acknowledged are the principles underpinning [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which suggest to regard every protcol or process as something that can be expressed as being nested inside another; e.g. `http://` becomes `/http`.
 
 May PLAN empower organizations and individuals with little or no resources to intuitively, securely, and reliably communicate and self-organize.
 
@@ -22,7 +22,7 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 PLAN will be empowering for communities and organizers _only if_ non-technical users can use it easily. As software designers, we must accept that distributed technologies, content-based addressing, and cryptography are alien concepts to most people. How does PLAN square this circle?
 
-It’s not necessary to know exactly how algorithms work in order to take advantage of the benefits they provide, and it’s not particularly important where exactly data resides in a network or how it is served. PLAN's simplifies the complex nature of trustless and distributed technologies into visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of relying on a 2D-constrained and sandboxed web/browser experience, the end-user experiences PLAN through the [Unity](https://unity3d.com) game engine while [Go](https://golang.org) powers its p2p node.  Perhaps someday the PLAN Foundation could support development of an Unreal client as well.
+It’s not necessary to know exactly how algorithms work in order to take advantage of the benefits they provide, and it’s not particularly important where exactly data resides in a network or how it is served. PLAN's archetecture simplifies the complex nature of trustless and distributed technologies with visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of relying on a 2D-constrained and sandboxed web/browser experience, the end-user experiences PLAN through the [Unity](https://unity3d.com) game engine while [Go](https://golang.org) powers its p2p node. Perhaps someday the PLAN Foundation will be able to support development of an Unreal client as well.
 
 For the end-user, using a graphics engine affords:
    - A realtime, visual, and spatially-oriented interface
@@ -34,8 +34,8 @@ For the end-user, using a graphics engine affords:
 For PLAN, this affords: 
    - The power and capabilities of Gohpers
    - A effective and robust multi-platform p2p node
-   - Embedding of key technologies such as:
-[IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [protobufs](https://developers.google.com/protocol-buffers) and [gRPC](https://grpc.io).
+   - An extensible & resilient development platform
+   - Embedding of key technologies such as: [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [protobufs](https://developers.google.com/protocol-buffers) and [gRPC](https://grpc.io).
 
 The PLAN Unity client talks to a `pnode`, the name for PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes.  
 
