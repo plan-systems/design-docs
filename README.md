@@ -29,13 +29,13 @@ For the end-user, using a graphics engine affords:
    - A first-class input and display device experience
    - Full horsepower of the user's device/workstation
    - Transparent end-to-end encryption
-   - Multi-platform (desktop/mobile) support
+   - Multi-platform support (Android, iOS, macOS, Windows, Linux)
 
 For PLAN, this affords: 
    - The power and capabilities of Go
    - A effective and robust multi-platform p2p node
    - An extensible & resilient development platform
-   - Embedding of key technologies such as: [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [protobufs](https://developers.google.com/protocol-buffers) and [gRPC](https://grpc.io).
+   - Embedding of key stacks such as: [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [protobufs](https://developers.google.com/protocol-buffers) and [gRPC](https://grpc.io).
 
 The PLAN Unity client talks to a `pnode`, the name for PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes.  
 
