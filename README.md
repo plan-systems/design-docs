@@ -35,7 +35,7 @@ For PLAN, this affords:
    - The power and capabilities of Go
    - A effective and robust multi-platform p2p node
    - An extensible & resilient development platform
-   - Embedding of key stacks, namely: [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [Ethereum](https://www.ethereum.org), [protobufs](https://developers.google.com/protocol-buffers) and [gRPC](https://grpc.io).
+   - Embedding of key stacks, namely: [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [Ethereum](https://www.ethereum.org), and [Protobufs](https://developers.google.com/protocol-buffers)+[gRPC](https://grpc.io).
 
 The PLAN Unity client talks to a `pnode`, the name for PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes.  
 
