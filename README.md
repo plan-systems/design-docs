@@ -32,7 +32,7 @@ For the end-user, using a graphics engine affords:
    - Multi-platform (desktop/mobile) support
 
 For PLAN, this affords: 
-   - The power and capabilities of gohpers
+   - The power and capabilities of Gohpers
    - A effective and robust multi-platform p2p node
    - Embedding of key technologies such as:
 [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [protobufs](https://developers.google.com/protocol-buffers) and [gRPC](https://grpc.io).
