@@ -2,6 +2,7 @@
 
 http://plan.tools
 
+### Problem statement
 
 A founding set of community organizers ("admins") wish to form **C**, a distributed storage and communication network. On each community node, the members of **C** agree to employ **L<sub>C</sub>**, an append-only [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are to be considered "in the clear" to potential adversaries.   **C** is characterized by a set of community members at a given point in time, with one or more members administering member permissions on data structures encoded on **L<sub>C</sub>**.
 
@@ -16,45 +17,41 @@ The members of **C** wish to assert that:
 
 
 The members of **C** devise the following infrastructure:
-   - Let `UUID` represent a fixed-length pseudo-randomly independently generated ID that ensures no reasonable chance of collision (typically 20 to 32 bytes).
-   - All data entries on **L<sub>C</sub>** are encrypted using keys located on the "community keyring", **[]K<sub>C</sub>**.
-   - Entries on **L<sub>C</sub>** are the serialization of:
-```
-type EntryCrypt struct {
-    CommunityKeyID    UUID     // Community key used to encrypt .HeaderCrypt
-    HeaderCrypt       []byte   // := Encrypt(<EntryHdr>.Marshal(), <EntryCrypt>.CommunityKeyID)
-    ContentCrypt      []byte   // := Encrypt(<Body>.Marshal(), <EntryHdr>.ContentKeyID)
-    Sig               []byte   // := CalcSig(<EntryCrypt>.Marshal(), GetKey(<EntryHdr>.AuthorMemberID,
-                               //                                           <EntryHdr>.AuthorMemberEpoch))
-}
-```
-   - When `HeaderCrypt` is decrypted using **[]K<sub>C</sub>**, it operates on a _virtual_ channel:
-```
-type EntryHeader struct {
-    EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
-    TimeSealed        int64    // Unix timestamp of when this header was encrypted and signed.
-    ChannelID         UUID     // "Channel" that this entry is posted to (or operates on)
-    ChannelEpoch      UUID     // Epoch of the channel in effect when this entry was sealed
-    AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
-    AuthorMemberEpoch UUID     // Epoch of the author's identity when this entry was sealed
-    ContentKeyID      UUID     // Specifies key used to encrypt EntryCrypt.ContentCrypt
-}
-```
-   - Each member of **C** maintains possession of the community keyring **[]K<sub>C</sub>**, such that:
-        - **[]K<sub>C</sub>** is set of keys that encrypts and decrypts **C**'s message traffic to/from **L**
-        - A newly generated community key is distributed to **C**'s members via a persistent data channel using asymmetric encryption (a community admin )
-   - **C**'s "member registry channel" is defined as a log containing each member's UUID and current crypto "epoch"
-   - **C**'s root "access control channel" (ACC) is a log containing access grants to member ID
-
-
-
+   1. Let `UUID` represent a fixed-length pseudo-randomly independently generated ID that ensures no reasonable chance of collision (typically 20 to 32 bytes).
+   2. All data entries on **L<sub>C</sub>** are encrypted using keys located on the "community keyring", **[]K<sub>C</sub>**.
+   3. Entries on **L<sub>C</sub>** are the serialization of:
+   ```
+   type EntryCrypt struct {
+       CommunityKeyID    UUID     // Community key used to encrypt .HeaderCrypt
+       HeaderCrypt       []byte   // := Encrypt(<EntryHdr>.Marshal(), <EntryCrypt>.CommunityKeyID)
+       ContentCrypt      []byte   // := Encrypt(<Body>.Marshal(), <EntryHdr>.ContentKeyID)
+       Sig               []byte   // := CalcSig(<EntryCrypt>.Marshal(), GetKey(<EntryHdr>.AuthorMemberID,
+                                  //                                           <EntryHdr>.AuthorMemberEpoch))
+   }
+   ```
+   4. When `HeaderCrypt` is decrypted using **[]K<sub>C</sub>**, it operates on a _virtual_ channel:
+   ```
+   type EntryHeader struct {
+       EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
+       TimeSealed        int64    // Unix timestamp of when this header was encrypted and signed.
+       ChannelID         UUID     // "Channel" that this entry is posted to (or operates on)
+       ChannelEpoch      UUID     // Epoch of the channel in effect when this entry was sealed
+       AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
+       AuthorMemberEpoch UUID     // Epoch of the author's identity when this entry was sealed
+       ContentKeyID      UUID     // Specifies key used to encrypt EntryCrypt.ContentCrypt
+   }
+   ```
+   5. Members of **C** maintain their copy of the community keyring, **[]K<sub>C</sub>**, where:
+        i. **[]K<sub>C</sub>** encrypts and decrypts **C**'s message traffic to/from **L**
+        i. A newly generated community key is distributed to **C**'s members via a persistent data channel using asymmetric encryption (the community admin that issues a new community key separately "sends" the key to each member in **C**'s member registry channel, encryptiung the new key with the recipient members's latest public key, also available in the member registry channel)
+   6. **C**'s "member registry channel" is defined as a log containing each member's UUID and current crypto "epoch":
 ```
 // EpochInfo implies a linked list of epochs extending from the past to the present
 type EpochInfo struct {
     EpochStart            timestamp
     EpochID               UUID
     PrevEpochID           UUID
-    EpochTransitionSecs   int
+    TransitionSecs        int
 }
 // MemberEpoch represents a public "rev" of a community member's crypto
 type MemberEpoch struct {
@@ -62,6 +59,12 @@ type MemberEpoch struct {
     PubSigningKey         []byte
     PubCryptoKey          []byte
 }
+```
+   7. **C**'s root "access control channel" (ACC) is a log containing access grants to member ID
+
+
+
+```
 // ChannelEpoch represents a "rev" of Channel's most sensitive properties
 type ChannelEpoch struct {
     EpochInfo             EpochInfo
