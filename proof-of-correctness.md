@@ -17,7 +17,7 @@ The members of **C** wish to assert that:
 
 The members of **C** devise the following infrastructure:
    - Let `UUID` represent a fixed-length pseudo-randomly independently generated ID that ensures no reasonable chance of collision (typically 20 to 32 bytes).
-   - All data entries on **L<sub>C</sub>** are encrypted using keys located on the "community keyring", **[K]<sub>C</sub>**.
+   - All data entries on **L<sub>C</sub>** are encrypted using keys located on the "community keyring", **[]K<sub>C</sub>**.
    - Entries on **L<sub>C</sub>** are the serialization of:
 ```
 type EntryCrypt struct {
@@ -28,7 +28,7 @@ type EntryCrypt struct {
                                  //                                           <EntryHdr>.AuthorMemberEpoch))
 }
 ```
-   - When `HeaderCrypt` is decrypted using **[K]<sub>C</sub>**, it operates on a _virtual_ channel:
+   - When `HeaderCrypt` is decrypted using **[]K<sub>C</sub>**, it operates on a _virtual_ channel:
 ```
 type EntryHeader struct {
     EntryOp             EntryOp  // Specifies how to interepret this entry. Typically, POST_CONTENT
@@ -40,8 +40,8 @@ type EntryHeader struct {
     ContentKeyID        UUID     // Specifies key used to encrypt EntryCrypt.ContentCrypt
 }
 ```
-   - Each member of **C** maintains possession of the community keyring **[K]<sub>C</sub>**, such that:
-        - **[K]<sub>C</sub>** is set of keys that encrypts and decrypts **C**'s message traffic to/from **L**
+   - Each member of **C** maintains possession of the community keyring **[]K<sub>C</sub>**, such that:
+        - **[]K<sub>C</sub>** is set of keys that encrypts and decrypts **C**'s message traffic to/from **L**
         - A newly generated community key is distributed to **C**'s members via a persistent data channel using asymmetric encryption (a community admin )
    - **C**'s "member registry channel" is defined as a log containing each member's UUID and current crypto "epoch"
    - **C**'s root "access control channel" (ACC) is a log containing access grants to member ID
@@ -95,6 +95,6 @@ Let **Ac** be one or more members of **C** that are designated admins and are ch
 
 
 
-Let **σ** be the average time period it takes for replicated network messages to reach 2/3 of the network's nodes.  This lets us set a reasonable upper-bound on how long permissions changes in **C** take to propigate.  If we were to wait 100 or 1000 times **σ**, it would be safe to assume that any nodes able to receive a replicated message would have recieved it (if it was possible).  We thus express a time delay ceiling of permissions propigation as **kσ**.  Above this time, we assume there it is not beneficial to wait and hope that a newly arrived message will resolve a confict.  We therefore must establish a determinisitc set of rules to resolve all possible **CRS** conflicts.  For a network of 10,000 nodes in the internet of 2018, a reasonable value for **kσ** could be 3-12 hours. 
+Let **σ** be the average time period it takes for replicated network messages to reach 2/3 of the network's nodes.  This lets us set a reasonable upper-bound on how long permissions changes in **C** take to propigate.  If we were to wait 10 or 100 times **σ**, it would be safe to assume that any nodes able to receive a replicated message would have recieved it (if it was possible).  We thus express a time delay ceiling of permissions propigation as **kσ**.  Above this time, we assume there it is not beneficial to wait and hope that a newly arrived message will resolve a confict.  We therefore must establish a determinisitc set of rules to resolve all possible **CRS** conflicts.  For a network of 10,000 nodes in the internet of 2018, a reasonable value for **kσ** could be 3-12 hours. 
 
 
