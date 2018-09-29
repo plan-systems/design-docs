@@ -3,9 +3,10 @@
 http://plan.tools
 
 
-A founding set of community organizers ("admins") wish to form **C**, a digital community. On each community node, the members of **C** agree to employ **L<sub>C</sub>**, an append-only [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are to be considered "in the clear" to potential adversaries.   **C** is characterized by a set of community members at a given point in time, with one or more members administering member permissions on data structures encoded on **L<sub>C</sub>**.
+A founding set of community organizers ("admins") wish to form **C**, a distributred storage and communication network. On each community node, the members of **C** agree to employ **L<sub>C</sub>**, an append-only [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are to be considered "in the clear" to potential adversaries.   **C** is characterized by a set of community members at a given point in time, with one or more members administering member permissions on data structures encoded on **L<sub>C</sub>**.
 
 The members of **C** wish to assert that:
+   1. Only members of **C** have append access to **L<sub>C</sub>**
    1. All communication within and between members of **C** is:
       1. informationally maximally opaque, and
       2. secure from all other actors *not* in **C**.
