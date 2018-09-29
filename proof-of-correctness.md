@@ -21,23 +21,23 @@ The members of **C** devise the following infrastructure:
    - Entries on **L<sub>C</sub>** are the serialization of:
 ```
 type EntryCrypt struct {
-    CommunityKeyID      UUID     // Community key used to encrypt .HeaderCrypt
-    HeaderCrypt         []byte   // := Encrypt(<EntryHdr>.Marshal(), <EntryCrypt>.CommunityKeyID)
-    ContentCrypt        []byte   // := Encrypt(<Body>.Marshal(), <EntryHdr>.ContentKeyID)
-    Sig                 []byte   // := CalcSig(<EntryCrypt>.Marshal(), GetKey(<EntryHdr>.AuthorMemberID,
-                                 //                                           <EntryHdr>.AuthorMemberEpoch))
+    CommunityKeyID    UUID     // Community key used to encrypt .HeaderCrypt
+    HeaderCrypt       []byte   // := Encrypt(<EntryHdr>.Marshal(), <EntryCrypt>.CommunityKeyID)
+    ContentCrypt      []byte   // := Encrypt(<Body>.Marshal(), <EntryHdr>.ContentKeyID)
+    Sig               []byte   // := CalcSig(<EntryCrypt>.Marshal(), GetKey(<EntryHdr>.AuthorMemberID,
+                               //                                           <EntryHdr>.AuthorMemberEpoch))
 }
 ```
    - When `HeaderCrypt` is decrypted using **[]K<sub>C</sub>**, it operates on a _virtual_ channel:
 ```
 type EntryHeader struct {
-    EntryOp             EntryOp  // Specifies how to interepret this entry. Typically, POST_CONTENT
-    TimeSealed          int64    // Unix timestamp of when this header was encrypted and signed.
-    ChannelID           UUID     // "Channel" that this entry is posted to (or operates on)
-    ChannelEpoch        UUID     // Epoch of the channel in effect when this entry was sealed
-    AuthorMemberID      UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
-    AuthorMemberEpoch   UUID     // Epoch of the author's identity when this entry was sealed
-    ContentKeyID        UUID     // Specifies key used to encrypt EntryCrypt.ContentCrypt
+    EntryOp           EntryOp  // Specifies how to interepret this entry. Typically, POST_CONTENT
+    TimeSealed        int64    // Unix timestamp of when this header was encrypted and signed.
+    ChannelID         UUID     // "Channel" that this entry is posted to (or operates on)
+    ChannelEpoch      UUID     // Epoch of the channel in effect when this entry was sealed
+    AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
+    AuthorMemberEpoch UUID     // Epoch of the author's identity when this entry was sealed
+    ContentKeyID      UUID     // Specifies key used to encrypt EntryCrypt.ContentCrypt
 }
 ```
    - Each member of **C** maintains possession of the community keyring **[]K<sub>C</sub>**, such that:
