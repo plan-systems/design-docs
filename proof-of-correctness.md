@@ -16,7 +16,7 @@ The members of **C** wish to assert that:
    1. All communication within and between members of **C** is:
         a) informationally maximally opaque, and
         b) secure from all other actors *not* in **C**.
-   2. Adding new members to **C** incurs no significant additional security liabilty on the infrastructure.
+   2. Adding new members to **C** incurs no additional security liabilty on the infrastructure.
    3. Within **C**, each node's "community repo state" (**CRS**) converges to a stable/monotonic state as network connectivity "catches up", for any set of network traffic delivery conditions (natural or adversarial).
    4. Members can be de-listed from **C** such they no longer have access to the **CRS** after **kσ** amount of time.
 
@@ -39,7 +39,7 @@ The members of **C** devise the following infrastructure:
        EntryOp             EntryOp  // Specifies how to interepret this entry. Typically, POST_CONTENT
        TimeSealed          int64    // Unix timestamp of when this header was encrypted and signed.
        ChannelID           UUID     // "Channel" that this entry is posted to.
-       ChannelEpoch        UUID     // Epoch of this channel in effect when this entry was sealed
+       ChannelEpoch        UUID     // Epoch of the channel in effect when this entry was sealed
        AuthorMemberID      UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
        AuthorMemberEpoch   UUID     // Epoch of the author's identity when this entry was sealed
        ContentKeyID        UUID     // Specifies key used to encrypt EntryCrypt.BodyCrypt
