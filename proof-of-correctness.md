@@ -18,7 +18,7 @@ The members of **C** wish to assert that:
 The members of **C** devise the following infrastructure:
    - Let `UUID` represent a fixed-length pseudo-randomly independently generated ID that ensures no reasonable chance of collision (typically 20 to 32 bytes).
    - All data entries on **L<sub>C</sub>** are encrypted using keys located on the "community keyring", **[K]<sub>C</sub>**.
-   - Entries on **L<sub>C</sub>** are a serialization of:
+   - Entries on **L<sub>C</sub>** are the serialization of:
 ```
    type EntryCrypt struct {
        CommunityKeyID      UUID     // Community key used to encrypt .HeaderCrypt
@@ -28,7 +28,7 @@ The members of **C** devise the following infrastructure:
                                     //                                           <EntryHdr>.AuthorMemberEpoch))
    }
 ```
-   - Decrypted, each entry is specified to be appended to a _virtual_ channel:
+   - When `HeaderCrypt` is decrypted using **[K]<sub>C</sub>**, it operates on a _virtual_ channel:
 ```
    type EntryHeader struct {
        EntryOp             EntryOp  // Specifies how to interepret this entry. Typically, POST_CONTENT
