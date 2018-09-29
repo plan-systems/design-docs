@@ -20,25 +20,25 @@ The members of **C** devise the following infrastructure:
    - All data entries on **L<sub>C</sub>** are encrypted using keys located on the "community keyring", **[K]<sub>C</sub>**.
    - Entries on **L<sub>C</sub>** are the serialization of:
 ```
-   type EntryCrypt struct {
-       CommunityKeyID      UUID     // Community key used to encrypt .HeaderCrypt
-       HeaderCrypt         []byte   // := Encrypt(<EntryHdr>.Marshal(), <EntryCrypt>.CommunityKeyID)
-       ContentCrypt        []byte   // := Encrypt(<Body>.Marshal(), <EntryHdr>.ContentKeyID)
-       Sig                 []byte   // := CalcSig(<EntryCrypt>.Marshal(), GetKey(<EntryHdr>.AuthorMemberID,
-                                    //                                           <EntryHdr>.AuthorMemberEpoch))
-   }
+type EntryCrypt struct {
+    CommunityKeyID      UUID     // Community key used to encrypt .HeaderCrypt
+    HeaderCrypt         []byte   // := Encrypt(<EntryHdr>.Marshal(), <EntryCrypt>.CommunityKeyID)
+    ContentCrypt        []byte   // := Encrypt(<Body>.Marshal(), <EntryHdr>.ContentKeyID)
+    Sig                 []byte   // := CalcSig(<EntryCrypt>.Marshal(), GetKey(<EntryHdr>.AuthorMemberID,
+                                 //                                           <EntryHdr>.AuthorMemberEpoch))
+}
 ```
    - When `HeaderCrypt` is decrypted using **[K]<sub>C</sub>**, it operates on a _virtual_ channel:
 ```
-   type EntryHeader struct {
-       EntryOp             EntryOp  // Specifies how to interepret this entry. Typically, POST_CONTENT
-       TimeSealed          int64    // Unix timestamp of when this header was encrypted and signed.
-       ChannelID           UUID     // "Channel" that this entry is posted to.
-       ChannelEpoch        UUID     // Epoch of the channel in effect when this entry was sealed
-       AuthorMemberID      UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
-       AuthorMemberEpoch   UUID     // Epoch of the author's identity when this entry was sealed
-       ContentKeyID        UUID     // Specifies key used to encrypt EntryCrypt.ContentCrypt
-   }
+type EntryHeader struct {
+    EntryOp             EntryOp  // Specifies how to interepret this entry. Typically, POST_CONTENT
+    TimeSealed          int64    // Unix timestamp of when this header was encrypted and signed.
+    ChannelID           UUID     // "Channel" that this entry is posted to (or operates on)
+    ChannelEpoch        UUID     // Epoch of the channel in effect when this entry was sealed
+    AuthorMemberID      UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
+    AuthorMemberEpoch   UUID     // Epoch of the author's identity when this entry was sealed
+    ContentKeyID        UUID     // Specifies key used to encrypt EntryCrypt.ContentCrypt
+}
 ```
    - Each member of **C** maintains possession of the community keyring **[K]<sub>C</sub>**, such that:
         - **[K]<sub>C</sub>** is set of keys that encrypts and decrypts **C**'s message traffic to/from **L**
@@ -59,31 +59,31 @@ Their intention is to assert that:
 ```
 // EpochInfo implies a linked list of epochs extending from the past to the present
 type EpochInfo struct {
-	EpochStart            timestamp
-	EpochID               UUID
-	PrevEpochID           UUID
-	EpochTransitionSecs   int
+    EpochStart            timestamp
+    EpochID               UUID
+    PrevEpochID           UUID
+    EpochTransitionSecs   int
 }
 // MemberEpoch represents a public "rev" of a community member's crypto
 type MemberEpoch struct {
-	EpochInfo             EpochInfo
-	PubSigningKey         []byte
-	PubCryptoKey          []byte
+    EpochInfo             EpochInfo
+    PubSigningKey         []byte
+    PubCryptoKey          []byte
 }
 // ChannelEpoch represents a "rev" of Channel's most sensitive properties
 type ChannelEpoch struct {
-	EpochInfo             EpochInfo
-	ChannelProtocol       string        // If access control channel: "/chType/ACC", else: "/chType/client/*"
-	ChannelID             UUID          // Immutable; set at channel genesis
-	AccessChannelID       UUID          // This channel's ACC (and conforms to an ACC) 
+    EpochInfo             EpochInfo
+    ChannelProtocol       string        // If access control channel: "/chType/ACC", else: "/chType/client/*"
+    ChannelID             UUID          // Immutable; set at channel genesis
+    AccessChannelID       UUID          // This channel's ACC (and conforms to an ACC) 
 }
 type CommunityMember struct {
-    CommunityID           UUID          // Assigned 
-	MemberID              UUID                     // Issued when member joins C
-	type KeyRepo struct {
-		CommunityKeyring  []KeyEntry
-		PersonalKeyring   []KeyEntry
-	}
+    CommunityID               UUID          // Assigned 
+    MemberID                  UUID          // Issued when member joins C
+    type KeyRepo struct {
+        CommunityKeyring []KeyEntry
+    PersonalKeyring  []KeyEntry
+    }
 }
 ```
 Let **St** be an append-only p2p replicating data store, where new data blobs can be appended and subsequently retrieved (via a transaction ID).  A node's particualar state of **St**
