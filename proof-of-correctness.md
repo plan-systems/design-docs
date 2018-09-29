@@ -7,8 +7,8 @@ A founding set of community organizers ("admins") wish to form **C**, a digital 
 
 The members of **C** wish to assert that:
    1. All communication within and between members of **C** is:
-        a) informationally maximally opaque, and
-        b) secure from all other actors *not* in **C**.
+      1. informationally maximally opaque, and
+      2. secure from all other actors *not* in **C**.
    2. Adding new members to **C** incurs no additional security liabilty on the infrastructure.
    3. Within **C**, each node's "community repo state" (**CRS**) converges to a stable/monotonic state as network connectivity "catches up", for any set of network traffic delivery conditions (natural or adversarial).
    4. Members can be de-listed from **C** such they no longer have access to the **CRS** after **kσ** amount of time.
