@@ -3,14 +3,14 @@
 http://plan.tools
 
 
-A founding set of community organizers ("admins") wish to form **C**, a distributred storage and communication network. On each community node, the members of **C** agree to employ **L<sub>C</sub>**, an append-only [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are to be considered "in the clear" to potential adversaries.   **C** is characterized by a set of community members at a given point in time, with one or more members administering member permissions on data structures encoded on **L<sub>C</sub>**.
+A founding set of community organizers ("admins") wish to form **C**, a distributed storage and communication network. On each community node, the members of **C** agree to employ **L<sub>C</sub>**, an append-only [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are to be considered "in the clear" to potential adversaries.   **C** is characterized by a set of community members at a given point in time, with one or more members administering member permissions on data structures encoded on **L<sub>C</sub>**.
 
 The members of **C** wish to assert that:
    1. Only members of **C** have append access to **L<sub>C</sub>**
    1. All communication within and between members of **C** is:
-      1. informationally maximally opaque, and
+      1. informationally completely opaque, and
       2. secure from all other actors *not* in **C**.
-   2. Adding new members to **C** incurs no additional security liabilty on the infrastructure.
+   2. New members can be added to **C** at any time, given admin permissions are met.
    3. Within **C**, each node's "community repo state" (**CRS**) converges to a stable/monotonic state as network connectivity "catches up", for any set of network traffic delivery conditions (natural or adversarial).
    4. Members can be de-listed from **C** such they no longer have access to the **CRS** after **kσ** amount of time.
 
@@ -31,7 +31,7 @@ type EntryCrypt struct {
    - When `HeaderCrypt` is decrypted using **[]K<sub>C</sub>**, it operates on a _virtual_ channel:
 ```
 type EntryHeader struct {
-    EntryOp           EntryOp  // Specifies how to interepret this entry. Typically, POST_CONTENT
+    EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
     TimeSealed        int64    // Unix timestamp of when this header was encrypted and signed.
     ChannelID         UUID     // "Channel" that this entry is posted to (or operates on)
     ChannelEpoch      UUID     // Epoch of the channel in effect when this entry was sealed
@@ -45,14 +45,6 @@ type EntryHeader struct {
         - A newly generated community key is distributed to **C**'s members via a persistent data channel using asymmetric encryption (a community admin )
    - **C**'s "member registry channel" is defined as a log containing each member's UUID and current crypto "epoch"
    - **C**'s root "access control channel" (ACC) is a log containing access grants to member ID
-
-An actor is said to have access to "in" **C** if and only if she possesses the communit  
-Their intention is to assert that:
-   1. All communication between members in **C** is informationally opaque and secure from all actors *not* in **C**.
-   2. Additional new members can be invited into **C** at any time
-   3. The community's data store replicates across members of **C** such that 
-        a.  bl
-        b.  ggf 
 
 
 
