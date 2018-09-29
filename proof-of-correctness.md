@@ -1,16 +1,9 @@
-###Features
+
 
 http://plan.tools
 
 
-Let **UUID** represent a fixed-length pseudo-randomly generated ID that ensures no human-reasonable chance of collision (typically 20 to 32 bytes).
-
-Let **σ** be the average time period it takes for replicated network messages to reach 2/3 of the network's nodes.  This lets us set a reasonable upper-bound on how long permissions changes in **C** take to propigate.  If we were to wait 100 or 1000 times **σ**, it would be safe to assume that any nodes able to receive a replicated message would have recieved it (if it was possible).  We thus express a time delay ceiling of permissions propigation as **kσ**.  Above this time, we assume there it is not beneficial to wait and hope that a newly arrived message will resolve a confict.  We therefore must establish a determinisitc set of rules to resolve all possible **CRS** conflicts.  For a network of 10,000 nodes in the internet of 2018, a reasonable value for **kσ** could be 3-12 hours.  After this point, nodes not yet reached can effecvtively regarded as being offline.
-
-
-in an information network where it would be "unusual" for a replicated network message to have not been replicated across the network.  In other words, i
-
-A founding set of community organizers ("admins") wish to form **C**, a digital community.  **C** is characterized by a set of community members, one or more positioned to administer member permissions. On each community node, the members of **C** agree to employ **L<sub>C</sub>**, an append-only [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are to be considered "in the clear" to potential adversaries.  Network nodes in **C**  
+A founding set of community organizers ("admins") wish to form **C**, a digital community.  **C** is characterized by a set of community members, one or more positioned to administer member permissions. On each community node, the members of **C** agree to employ **L<sub>C</sub>**, an append-only [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are to be considered "in the clear" to potential adversaries.  
 
 The members of **C** wish to assert that:
    1. All communication within and between members of **C** is:
@@ -22,6 +15,7 @@ The members of **C** wish to assert that:
 
 
 The members of **C** devise the following infrastructure:
+   - Let `UUID` represent a fixed-length pseudo-randomly generated ID that ensures no reasonable chance of collision (20 to 32 bytes).
    - All data entries on **L<sub>C</sub>** are encrypted using keys located on **[K]<sub>C</sub>**, the "community keyring"
    - Encrypted, entries on **L<sub>C</sub>** are serialized from:
 ```
@@ -33,7 +27,7 @@ The members of **C** devise the following infrastructure:
                                     //                                           <EntryHdr>.AuthorMemberEpoch))
    }
 ```
-   - Decrypted, each entry is specified to be appended to a virtual channel:
+   - Decrypted, each entry is specified to be appended to a _virtual_ channel:
 ```
    type EntryHeader struct {
        EntryOp             EntryOp  // Specifies how to interepret this entry. Typically, POST_CONTENT
@@ -42,7 +36,7 @@ The members of **C** devise the following infrastructure:
        ChannelEpoch        UUID     // Epoch of the channel in effect when this entry was sealed
        AuthorMemberID      UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
        AuthorMemberEpoch   UUID     // Epoch of the author's identity when this entry was sealed
-       ContentKeyID        UUID     // Specifies key used to encrypt EntryCrypt.BodyCrypt
+       ContentKeyID        UUID     // Specifies key used to encrypt EntryCrypt.ContentCrypt
    }
 ```
    - Each member of **C** maintains possession of the community keyring **[K]<sub>C</sub>**, such that:
@@ -98,6 +92,8 @@ Let
 Let **Ac** be one or more members of **C** that are designated admins and are charged with moderating and orgranizing community dats 
 
 
-type CommunityMember := `
+
+
+Let **σ** be the average time period it takes for replicated network messages to reach 2/3 of the network's nodes.  This lets us set a reasonable upper-bound on how long permissions changes in **C** take to propigate.  If we were to wait 100 or 1000 times **σ**, it would be safe to assume that any nodes able to receive a replicated message would have recieved it (if it was possible).  We thus express a time delay ceiling of permissions propigation as **kσ**.  Above this time, we assume there it is not beneficial to wait and hope that a newly arrived message will resolve a confict.  We therefore must establish a determinisitc set of rules to resolve all possible **CRS** conflicts.  For a network of 10,000 nodes in the internet of 2018, a reasonable value for **kσ** could be 3-12 hours. 
 
 
