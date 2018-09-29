@@ -18,7 +18,7 @@ The members of **C** wish to assert that:
 The members of **C** devise the following infrastructure:
    - Let `UUID` represent a fixed-length pseudo-randomly independently generated ID that ensures no reasonable chance of collision (typically 20 to 32 bytes).
    - All data entries on **L<sub>C</sub>** are encrypted using keys located on the "community keyring", **[K]<sub>C</sub>**.
-   - Encrypted, entries on **L<sub>C</sub>** are serialized from:
+   - Encrypted, entries on **L<sub>C</sub>** are a serialization of:
 ```
    type EntryCrypt struct {
        CommunityKeyID      UUID     // Community key used to encrypt .HeaderCrypt
