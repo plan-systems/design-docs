@@ -14,7 +14,8 @@ The members of **C** wish to assert that:
    2. New members can be added to **C** at any time, given admin permissions are met.
    3. Within **C**, each node's "community repo state" (**CRS**) converges to a stable/monotonic state as network connectivity "catches up", for any set of network traffic delivery conditions (natural or adversarial).
    4. Members can be de-listed from **C** such they no longer have access to the **CRS** after **kσ** amount of time.
-
+   5. Once a member's crypto is known to be comprised or lost, a community admin can initiate a new member and community security "epoch" such that any adversary in posession of said crypto won't have access to any information or communitty data from **σ** onward.
+  
 
 The members of **C** devise the following infrastructure:
    1. Let `UUID` represent a fixed-length pseudo-randomly independently generated ID that ensures no reasonable chance of collision (typically 20 to 32 bytes).
@@ -84,6 +85,8 @@ type CommunityMember struct {
 Let **St** be an append-only p2p replicating data store, where new data blobs can be appended and subsequently retrieved (via a transaction ID).  A node's particualar state of **St**
 
 Let 
+   , where the afflicted member's keys are regenerated (originating from a token generated from a community admin).  
+
 
 Let **Ac** be one or more members of **C** that are designated admins and are charged with moderating and orgranizing community dats 
 
