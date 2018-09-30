@@ -1,9 +1,9 @@
 # PLAN - Engineering & Design Docs
 
 ```
-         P urposeful
-      P  L ogistics
-   P  L  A rchitecture
+-  -  -  P urposeful
+-  -  -  L ogistics
+-  -  -  A rchitecture
 P  L  A  N etwork
 ```
 ## Welcome to PLAN!
