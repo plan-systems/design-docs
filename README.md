@@ -2,8 +2,8 @@
 
 ```
          P urposeful
-         L ogistics
-         A rchitecture
+      +  L ogistics
+   +  +  A rchitecture
 P  L  A  N etwork
 ```
 ## Welcome to PLAN!
