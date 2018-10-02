@@ -24,13 +24,13 @@ A founding set of community organizers ("admins") wish to form **C**, a secure d
 ### Specifications & Requirements
 
 The members of **C** wish to assert that:
-   1. _Only_ members of **C** have append access to **L<sub>C</sub>**
+   1. _Only_ members of **C** have append access to **L<sub>C</sub>**.
    2. For all actors _not_ in **C**, all data sent to, read from, and residing on **L<sub>C</sub>** is informationally completely opaque.
-   3. New members can be added to **C** at any time (given that **C** policies and permissions are met)
+   3. New members can be added to **C** at any time (given that **C** policies and permissions are met).
    4. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
-   5. Assume a minority number of non-admin members are or become covert adversaries of **C**.  Even if working in concert, it must be cryptographically impossible for them to: impersonate other members, insert any unauthorized permissions or privileges changes, gain access to other member's private keys or information, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
-   6. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members could retain their copies of **R** before the community entered this new security "epoch")
-   7. For each node daemon **i** in **C** ("node"), it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial).  That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that semi-strong eventual consistency is guaranteed.
+   5. Assume a minority number of non-admin members are or become covert adversaries of **C**.  Even if working in concert, it must be impossible for them to: impersonate other members, insert unauthorized permissions or privileges changes, gain access to others' private keys or information, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
+   6. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **R** before the community entered this new security "epoch").
+   7. For each node **i** in **C**, it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial).  That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that semi-strong eventual consistency is guaranteed.
    8. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
        - an adversary in possession of said keys will have no further access to **C**
        - the afflicted member's resulting security state is unaffected
