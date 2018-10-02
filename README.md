@@ -1,3 +1,4 @@
+# PLAN
 
 ```
          P urposeful
@@ -5,6 +6,9 @@
          A rchitecture
 P  L  A  N etwork
 ```
+
+[PLAN](http://plan.tools) is an multi-purpose communications and logistics planning tool for individuals and organizations. 
+
 # PLAN - Design & Engineering Docs
 
 ## Welcome to PLAN!
