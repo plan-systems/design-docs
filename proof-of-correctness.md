@@ -25,9 +25,7 @@ A founding set of community organizers ("admins") wish to form **C**, a secure d
 
 The members of **C** wish to assert that:
    1. _Only_ members of **C** have append access to **L<sub>C</sub>**
-   2. All data appended to and read from **L<sub>C</sub>** is:
-      1. informationally completely opaque, and
-      2. cryptographically inaccessible from all actors *not* in **C**.
+   2. For all actors _not_ in **C**, all data sent to, read from, and residing on **L<sub>C</sub>** is informationally completely opaque.
    3. New members can be added to **C** at any time (given that **C** policies and permissions are met)
    4. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
    5. Assume a minority number of non-admin members are or become covert adversaries of **C**.  Even if working in concert, it must be cryptographically impossible for them to: impersonate other members, insert any unauthorized permissions or privileges changes, gain access to other member's private keys or information, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
