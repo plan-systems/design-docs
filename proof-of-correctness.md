@@ -9,15 +9,15 @@ P  L  A  N etwork
 
 ### What is this?
 
-In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or infrastructure design rigorously satisfies a given set of specifications or claims.  The intention is to remove all doubt that there exists a way for the proposed method to not satisfy any of the specifications.
+In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or infrastructure design rigorously satisfies a given set of specifications or claims.  The intention is to remove all doubt that there exists a way for the proposed method to _not_ satisfy any of the specifications.
 
-Below, we first express the scenario, a set of specifications, and the design of a digital infrastructure.  We then proceed to demonstrate correctness for each specification, citing how the design and its operation satisfies that specification.  
+Below, we first express the scenario, a set of specifications, and a digital infrastructure schema.  We then proceed to demonstrate correctness for each specification, citing how the design and its operation satisfies that specification.  
 
 ---
 
 ### Scenario
 
-A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common software daemon ("node"). On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are considered to be "in the clear" to potential adversaries.   **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and infrastructure oversight.  
+A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common software daemon ("node"). On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are considered to be "in the clear" to potential adversaries (i.e. wire privacy is not assumed)   **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and infrastructure oversight.  
 
 ---
 
