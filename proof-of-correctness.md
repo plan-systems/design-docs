@@ -24,7 +24,7 @@ The members of **C** wish to assert that:
    6. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
        - an adversary in possession of said keys will have no further access to **C**
        - the afflicted member's resulting security state is unaffected
-   7. **C** is not forever committed to a particular CRDT technology and can opt to use an alternate technology at any time (e.g. **C<sub>A</sub>** may select a CRDT that may halt in order to preserve security/safety while **C<sub>B</sub>** may prefer an implementation that favors "liveness").
+   7. **C** is not forever committed to a particular CRDT and can opt to use an alternate CRDT technology at any time (e.g. **C<sub>A</sub>** may prefer a CRDT that halts in order to preserve security/safety conditions while **C<sub>B</sub>** may prefer another that favors "liveness" over safety).
 
 
 ---
