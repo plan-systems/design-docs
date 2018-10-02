@@ -1,18 +1,27 @@
+## PLAN: Proof of Correctness
 
+```
+         P urposeful
+         L ogistics
+         A rchitecture
+P  L  A  N etwork
+```
 
+### What is this?
 
-http://plan.tools
+In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science)" refers to a formal walk-though and demonstration that a proposed method and/or infrastructure design rigorously satisfies a given set of specifications or claims.  The intention is to remove all doubt that there exists a way for the proposed method to fail to satisfy the specifications.
 
+Below, we first express the scenario, a set of specifications, and the design of a digital infrastructure.  We then proceed to demonstrate correctness for each specification, citing how the design and its operation satisfies that specification.  
 
-Notes: the data structures listed here are intended for understanding and readability, so implementation details and methods to ensure practical operation are omitted.
+---
 
-### Situation
+### Scenario
 
 A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common software daemon ("node"). On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are considered to be "in the clear" to potential adversaries.   **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and infrastructure oversight.  
 
 ---
 
-### Specifications & Claims
+### Specifications & Requirements
 
 The members of **C** wish to assert that:
    1. _Only_ members of **C** have append access to **L<sub>C</sub>**
@@ -23,7 +32,7 @@ The members of **C** wish to assert that:
    4. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
    5. Assume a minority number of non-admin members are or become covert adversaries of **C**.  It must be cryptographically impossible for them to: spoof as other members, illegally alter any permissions or privileges, gain access to other member's private keys or content, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
    5. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members could retain their copies of **R** before the community entered this new security "epoch")
-   4. For each node daemon **i** in **C** ("node"), it's replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial).  That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that strong eventual consistency is guaranteed.
+   4. For each node daemon **i** in **C** ("node"), it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial).  That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that semi-strong eventual consistency is guaranteed.
    6. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
        - an adversary in possession of said keys will have no further access to **C**
        - the afflicted member's resulting security state is unaffected
