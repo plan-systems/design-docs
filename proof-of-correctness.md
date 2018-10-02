@@ -17,7 +17,7 @@ Below, we first express the scenario, a set of specifications, and a digital inf
 
 ### Scenario
 
-A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common software daemon ("node"). On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are considered to be "in the clear" to potential adversaries (i.e. wire privacy is not assumed)   **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and infrastructure oversight.  
+A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common software daemon ("node"). On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) whose data transactions are considered to be "in the clear" to potential adversaries (i.e. wire privacy is not assumed.  **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and infrastructure oversight.  
 
 ---
 
