@@ -9,7 +9,7 @@ P  L  A  N etwork
 
 ### What is this?
 
-In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or infrastructure design rigorously satisfies a given set of specifications or claims.  The intention is to remove all doubt that there exists a way for the proposed method to fail to satisfy the specifications.
+In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or infrastructure design rigorously satisfies a given set of specifications or claims.  The intention is to remove all doubt that there exists a way for the proposed method to not satisfy any of the specifications.
 
 Below, we first express the scenario, a set of specifications, and the design of a digital infrastructure.  We then proceed to demonstrate correctness for each specification, citing how the design and its operation satisfies that specification.  
 
