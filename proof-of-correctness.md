@@ -17,7 +17,7 @@ Below, we first express the scenario, a set of specifications, and a digital inf
 
 ### Scenario
 
-A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common software daemon ("node"). On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) implementation whose data transactions are considered to be "in the clear" to potential adversaries (i.e. wire privacy is not assumed).  **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and infrastructure oversight.  
+A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common software daemon ("node"). On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) implementation whose raw data transactions are considered to be "in the clear" to adversaries (i.e. "wire" privacy is not assumed).  **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and infrastructure oversight.  
 
 ---
 
@@ -27,16 +27,16 @@ The members of **C** wish to assert that:
    1. _Only_ members of **C** have append access to **L<sub>C</sub>**
    2. All data appended to and read from **L<sub>C</sub>** is:
       1. informationally completely opaque, and
-      2. cryptographically secure from all actors *not* in **C**.
+      2. cryptographically inaccessible from all actors *not* in **C**.
    3. New members can be added to **C** at any time (given that **C** policies and permissions are met)
    4. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
-   5. Assume a minority number of non-admin members are or become covert adversaries of **C**.  It must be cryptographically impossible for them to: spoof as other members, illegally alter any permissions or privileges, gain access to other member's private keys or content, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
-   5. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members could retain their copies of **R** before the community entered this new security "epoch")
-   4. For each node daemon **i** in **C** ("node"), it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial).  That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that semi-strong eventual consistency is guaranteed.
-   6. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
+   5. Assume a minority number of non-admin members are or become covert adversaries of **C**.  Even if working in concert, it must be cryptographically impossible for them to: impersonate other members, insert any unauthorized permissions or privileges changes, gain access to other member's private keys or information, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
+   6. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members could retain their copies of **R** before the community entered this new security "epoch")
+   7. For each node daemon **i** in **C** ("node"), it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial).  That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that semi-strong eventual consistency is guaranteed.
+   8. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
        - an adversary in possession of said keys will have no further access to **C**
        - the afflicted member's resulting security state is unaffected
-   7. **C**, led by a coordinated admin effort, can switch CRDT technologies over its lifetime (e.g. **C** uses a CRDT that halts on in limiting network conditions in order to preserve security/safety, but earlier in its history when it was smaller, **C** used one that favored "liveness" over safety).
+   9. **C**, led by a coordinated admin effort, can switch CRDT technologies over its lifetime (e.g. **C** uses a CRDT that halts on in limiting network conditions in order to preserve security/safety, but earlier in its history when it was smaller, **C** used one that favored "liveness" over safety).
 
 
 ---
