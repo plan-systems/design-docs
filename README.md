@@ -1,4 +1,3 @@
-# PLAN - Design & Engineering Docs
 
 ```
          P urposeful
@@ -6,6 +5,8 @@
          A rchitecture
 P  L  A  N etwork
 ```
+# PLAN - Design & Engineering Docs
+
 ## Welcome to PLAN!
 
 PLAN is an multi-purpose communications and logistics planning tool for individuals, organizations, and communities. Its open “pluggable” architecture integrates distributed services, encryption, and interoperable data-transport technologies — all in a realtime visual interface. PLAN is an instrument for productivity, organization, and collaboration.
