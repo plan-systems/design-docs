@@ -19,7 +19,7 @@ Please note that the data structures listed below are intended to convey underst
 
 ### Scenario
 
-A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common software daemon ("node"). On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) implementation whose raw data transactions are considered to be "in the clear" to adversaries (i.e. "wire" privacy is not assumed).  **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and infrastructure oversight.  
+A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common software daemon ("node"). On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) implementation whose raw data transactions are considered to be "in the clear" to adversaries (i.e. "wire" privacy is not assumed). **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and infrastructure oversight.  
 
 ---
 
@@ -30,9 +30,9 @@ The members of **C** wish to assert that:
    2. For all actors _not_ in **C**, all data sent to, read from, and residing on **L<sub>C</sub>** is informationally completely opaque.
    3. New members can be added to **C** at any time (given that **C** policies and permissions are met).
    4. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
-   5. Assume a minority number of non-admin members are or become covert adversaries of **C**.  Even if working in concert, it must be impossible for them to: impersonate other members, insert unauthorized permissions or privileges changes, gain access to others' private keys or information, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
+   5. Assume a minority number of non-admin members are or become covert adversaries of **C**. Even if working in concert, it must be impossible for them to: impersonate other members, insert unauthorized permissions or privileges changes, gain access to others' private keys or information, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
    6. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **R** before the community entered this new security "epoch").
-   7. For each node **i** in **C**, it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial).  That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that strong eventual consistency (SEC) is guaranteed.  
+   7. For each node **i** in **C**, it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that strong eventual consistency (SEC) is guaranteed.  
    8. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
        - an adversary in possession of said keys will have no further access to **C**
        - the afflicted member's resulting security state is unaffected
@@ -103,10 +103,10 @@ The members of **C** propose the following infrastructure:
    }
    ```
 
-   6. Entries that do not conform to channel properties or permissions are placed in a "holding tank" within **R<sub>i</sub>**.  The node periodically reattempts to merge these entries with the understanding that later-arriving entries may alter **R<sub>i</sub>** such that previously rejected entries now conform.  Entries that are rejected on the basis of an validation failure (e.g. signature validation failure) are dropped.  These rejections are cause for concern and could logged to discern bad actor patterns.
+   6. Entries that do not conform to channel properties or permissions are placed in a "holding tank" within **R<sub>i</sub>**. The node periodically reattempts to merge these entries with the understanding that later-arriving entries may alter **R<sub>i</sub>** such that previously rejected entries now conform. Entries that are rejected on the basis of an validation failure (e.g. signature validation failure) are dropped. These rejections are cause for concern and could logged to discern bad actor patterns.
    7. Members of **C** maintain their copy of the community keyring, **[]K<sub>C</sub>**, where:
         1. **[]K<sub>C</sub>** encrypts/decrypts `EntryCrypt` traffic to/from **L<sub>C</sub>**
-        2. A newly generated community key is distributed to **C**'s members via a persistent data channel using asymmetric encryption (the community admin that issues a new community key separately "sends" the key to each member in **C**'s member registry channel, encrypting the new key with the recipient members's latest public key, also available in the member registry channel)
+        2. A newly generated community key is distributed to **C**'s members via a persistent data channel using asymmetric encryption (the community admin that issues a new community key separately "sends" the key to each member in **C**'s member registry channel, encrypting the new key with the recipient members's latest public key, which is also available in the member registry channel)
    8. **C**'s "member registry channel" is defined as a log containing each member's UUID and current crypto "epoch":
 ```
 
@@ -145,7 +145,7 @@ In this operating system
 
 
 
-Let **St** be an append-only p2p replicating data store, where new data blobs can be appended and subsequently retrieved (via a transaction ID).  A node's particular state of **St**
+Let **St** be an append-only p2p replicating data store, where new data blobs can be appended and subsequently retrieved (via a transaction ID). A node's particular state of **St**
 
 Let
    , where the afflicted member's keys are regenerated (originating from a token generated from a community admin).  
