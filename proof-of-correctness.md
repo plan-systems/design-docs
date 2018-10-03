@@ -1,4 +1,4 @@
-# PLAN: A Proof of Correctness
+# Proof of Correctness for PLAN
 
 ```
          P urposeful
@@ -9,11 +9,11 @@ P  L  A  N etwork
 
 ### What is this?
 
-In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or design rigorously satisfies a given set of specifications or claims.  The intention is to remove _all_ doubt that there exists a set of conditions such that the proposed method would _not_ meet all the specifications.
+In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or design rigorously satisfies a given set of specifications or claims.  The intention is to remove _all doubt_ that there exists a set of conditions such that the proposed method would _not_ meet all the specifications.
 
-Below, we first express the scenario, a set of specifications, and a digital infrastructure schema.  We then proceed to demonstrate correctness for each specification, citing how the design and its operation satisfies that specification.  
+Below, we first express the scenario, a set of specifications, and a digital infrastructure schema.  We then proceed to demonstrate correctness for each specification, citing how the schema and its prescribed operation satisfies that specification.  
 
-Please note that some of the data structures listed below are intended to convey understanding and correctness more than they are intended to be fully performant or efficient.  You can find that step manifested as [go-plan](https://github.com/plan-tools/go-plan)
+Please note that the data structures listed below are intended to convey understanding and model correctness more than they are intended to be performant.  [go-plan](https://github.com/plan-tools/go-plan) is this latter implementation.
 
 ---
 
@@ -36,7 +36,7 @@ The members of **C** wish to assert that:
    8. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
        - an adversary in possession of said keys will have no further access to **C**
        - the afflicted member's resulting security state is unaffected
-   9. **C**, led by a coordinated admin effort, can switch CRDT technologies over its lifetime (e.g. **C** uses a CRDT that halts on in limiting network conditions in order to preserve security/safety, but earlier in its history when it was smaller, **C** used one that favored "liveness" over safety).
+   9. **C**, led by a coordinated admin effort, can swap out CRDT technologies (e.g. **C** may use a CRDT that automatically halts under suspicious network conditions or insufficient peer connectivity, but earlier in its history when it was smaller, **C** used a CRDT that favored "liveness" over safety).
 
 
 ---
@@ -60,7 +60,7 @@ The members of **C** propose the following infrastructure:
                                   //                                           <EntryHeader>.AuthorMemberEpoch))
    }
    ```
-   4. Each `EntryCrypt.HeaderCrypt` is encrypted using **[]K<sub>C</sub>** and specifies a persistent `ChannelID` that it operates on within **C**'s _virtual_ channel space:
+   4. Each `EntryCrypt.HeaderCrypt` is encrypted using **[]K<sub>C</sub>** and specifies a persistent `ChannelID` that it operates on **C**'s _virtual_ channel space:
    ```
    type EntryHeader struct {
        EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
@@ -154,3 +154,23 @@ Let
 8. **C**'s technology provisions for a "hard fork", where admins and members elect which fork to place themselves in.  
 
 Let **σ<sub>C</sub>** be the average time period it takes for replicated network messages to reach 2/3 of the network's nodes.  This lets us set a reasonable upper-bound on how long permissions changes in **C** take to propagate.  If we were to wait 10 or 100 times **σ**, it would be safe to assume that any nodes able to receive a replicated message would have received it (if it was possible).  We thus express a time delay ceiling of permissions propagation as **kσ**.  Above this time, we assume there it is not beneficial to wait and hope that a newly arrived message will resolve a conflict.  We therefore must establish a deterministic set of rules to resolve all possible **CRS** conflicts.  For a network of 10,000 nodes in the internet of 2018, a reasonable value for **kσ** could be 3-12 hours.
+
+
+
+https://github.com/protocol/research-RFPs/blob/master/RFPs/rfp-4-CRDT-ACL.md
+
+
+https://github.com/protocol/research-RFPs/blob/master/RFPs/rfp-5-optimized-CmRDT.md
+
+https://github.com/protocol/research/blob/master/README.md
+
+https://github.com/protocol/research-RFPs/blob/master/RFP-application-instructions.md
+
+https://github.com/ipfs/research-CRDT/tree/master/research
+
+https://github.com/ipfs/research-CRDT
+
+https://github.com/protocol/research/issues/8
+
+
+https://github.com/protocol/research-RFPs/blob/master/RFP-application-instructions.md
