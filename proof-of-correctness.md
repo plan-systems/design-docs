@@ -1,4 +1,4 @@
-## PLAN: Proof of Correctness
+# PLAN: A Proof of Correctness
 
 ```
          P urposeful
@@ -9,9 +9,11 @@ P  L  A  N etwork
 
 ### What is this?
 
-In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or infrastructure design rigorously satisfies a given set of specifications or claims.  The intention is to remove all doubt that there exists a way for the proposed method to _not_ satisfy any of the specifications.
+In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or design rigorously satisfies a given set of specifications or claims.  The intention is to remove _all_ doubt that there exists a set of conditions such that the proposed method would _not_ meet all the specifications.
 
 Below, we first express the scenario, a set of specifications, and a digital infrastructure schema.  We then proceed to demonstrate correctness for each specification, citing how the design and its operation satisfies that specification.  
+
+Please note that some of the data structures listed below are intended to convey understanding and correctness more than they are intended to be fully performant or efficient.  You can find that step manifested as [go-plan](https://github.com/plan-tools/go-plan)
 
 ---
 
@@ -30,7 +32,7 @@ The members of **C** wish to assert that:
    4. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
    5. Assume a minority number of non-admin members are or become covert adversaries of **C**.  Even if working in concert, it must be impossible for them to: impersonate other members, insert unauthorized permissions or privileges changes, gain access to others' private keys or information, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
    6. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **R** before the community entered this new security "epoch").
-   7. For each node **i** in **C**, it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial).  That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that semi-strong eventual consistency is guaranteed.
+   7. For each node **i** in **C**, it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial).  That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that strong eventual consistency (SEC) is guaranteed.  
    8. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
        - an adversary in possession of said keys will have no further access to **C**
        - the afflicted member's resulting security state is unaffected
@@ -51,14 +53,14 @@ The members of **C** propose the following infrastructure:
    3. Each transaction residing on **L<sub>C</sub>** is a serialization of:
    ```
    type EntryCrypt struct {
-       CommunityKeyID    UUID     // Community key used to encrypt .HeaderCrypt
+       CommunityKeyID    UUID     // Identifies the community key used to encrypt .HeaderCrypt
        HeaderCrypt       []byte   // := Encrypt(<EntryHeader>.Marshal(), <EntryCrypt>.CommunityKeyID)
        ContentCrypt      []byte   // := Encrypt(<Body>.Marshal(), <EntryHeader>.ContentKeyID)
        Sig               []byte   // := MakeSig(<EntryCrypt>.Marshal(), KeyFor(<EntryHeader>.AuthorMemberID,
                                   //                                           <EntryHeader>.AuthorMemberEpoch))
    }
    ```
-   4. Each `EntryCrypt.HeaderCrypt` is encrypted using **[]K<sub>C</sub>** and specifies a persistent `ChannelID` to operate on within **C**'s _virtual_ channel space:
+   4. Each `EntryCrypt.HeaderCrypt` is encrypted using **[]K<sub>C</sub>** and specifies a persistent `ChannelID` that it operates on within **C**'s _virtual_ channel space:
    ```
    type EntryHeader struct {
        EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
@@ -67,7 +69,7 @@ The members of **C** propose the following infrastructure:
        ChannelEpochID    UUID     // Epoch of the channel in effect when this entry was sealed
        AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
        AuthorMemberEpoch UUID     // Epoch of the author's identity when this entry was sealed
-       ContentKeyID      UUID     // Specifies *any* key used to encrypt EntryCrypt.ContentCrypt
+       ContentKeyID      UUID     // Identifies *any* key used to encrypt EntryCrypt.ContentCrypt
    }
    ```
    5. On each community node, newly arriving transactions from **L<sub>C</sub>** are decrypted using **[]K<sub>C</sub>**, verified, and deterministically merged into the node's local community "repo", **R<sub>i</sub>**:

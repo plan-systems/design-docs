@@ -17,7 +17,7 @@ May PLAN empower organizations and individuals with little or no resources to in
 
 ## What's in This Repo?
 
-This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for developer-types ready to understand and vet PLAN's architecture and design.  
+This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for developer-types ready to understand and vet PLAN's architecture and design.  A formal [proof of correctness](https://github.com/plan-tools/design-docs/blob/master/proof-of-correctness.md) for PLAN is also available for review.
 
 ## PLAN: A Synopsis
 
@@ -32,7 +32,7 @@ For the end-user, using a graphics engine affords:
    - Transparent end-to-end encryption
    - Multi-platform support (Android, iOS, macOS, Windows, Linux)
 
-For PLAN, this affords: 
+For PLAN, this affords:
    - The power and capabilities of Go
    - A effective and robust multi-platform p2p node
    - An extensible & resilient development platform
@@ -54,11 +54,11 @@ Moment to moment, each `pnode` in a given community:
 
 The permissions and rules of merge conflict resolution are deterministic so that strong eventual consistency (SEC) is preserved. This means that although a given pnode's data state may not be equal to other community pnodes state (due to network constraints), each pnode is guaranteed to converge and to a monotonic state.
 
-PLAN has two persistent pluggable storage layers, one characterized by append-only operations, and the other characterized by content-based loading and storing. The former, dubbed the Persistent Data Interface (PDI) is used to host a community's channel data and is intentionally designed to be compatible with the append-only nature of blockchain storage. The latter, dubbed the Cloud File Interface (CFI), is used to serve a community's high capacity data needs and off-chain storage requirements, while PLAN's channel protocols and GUI hide and manage hashnames that no one wants to see or interact with. For example, a channel of type `/plan/channel/file/cfi/video` is used as a wrapper whose entries are CFI pathnames to each successive revision of that file (e.g. `/plan/cfi/ipfs/QmYwAPJv5C...`).  This schema affords:
-   - PLAN's deterministic infrastructure to know which CFI items are in use ("pinned") and which can be unpinned/deallocated. 
+PLAN has two persistent pluggable storage layers, one characterized by append-only operations, and the other characterized by content-based loading and storing. The former, dubbed the Persistent Data Interface (PDI) is used to host a community's channel data and is intentionally designed to be compatible with the append-only nature of blockchain storage. The latter, dubbed the Cloud File Interface (CFI), is used to serve a community's high capacity data needs and off-PDI storage requirements, while PLAN's channel protocols and GUI wrap hashnames and other implementation details that no one wants to see or interact with. For example, a channel of type `/plan/channel/file/cfi/video` is used as a wrapper whose entries are CFI pathnames to each successive revision of that file (e.g. `/plan/cfi/ipfs/QmYwAPJv5C...`).  This schema affords:
+   - PLAN's deterministic infrastructure to know which CFI items are in use ("pinned") and which can be unpinned/deallocated.
    - Seamless UI integration and interactivity.  In the client UI, a channel's wrapper identifier causes it to be presented as a single opaque object (like a traditional file), where its activation causes the latest revision to be fetched and consumed. This allows users to easily access community content while not having to have any understanding about what's happening under the hood.
 
-In sum, PLAN is a p2p community-centric node operating system, built on pluggable append-only and content-based addressing storage APIs, accessible via a _real-time_ visually intuitive interface — all within cryptographic layers of privacy. Its intentional channel, ACC, and crypto sub-systems provision for flexible, defensible, and first-class human access. 
+In sum, PLAN is a p2p community-centric node operating system, built on pluggable append-only and content-based addressing storage APIs, accessible via a _real-time_ visually intuitive interface — all within cryptographic layers of privacy. Its intentional channel, ACC, and crypto sub-systems provision for flexible, defensible, and first-class human access.
 
 Using PLAN, communities arise from community organizers who value owning their own data, having a formidable crypto city wall, and the ability to continue operating in the face of Internet disruptions.  
 
