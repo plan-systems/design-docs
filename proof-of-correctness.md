@@ -19,24 +19,28 @@ Please note that the data structures listed below are intended to convey underst
 
 ### Scenario
 
-A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common software daemon ("node"). On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) implementation whose raw data transactions are considered to be "in the clear" to adversaries (i.e. "wire" privacy is not assumed). **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and infrastructure oversight.  
+A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common peer-to-peer software daemon ("node"). **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and community-global rules/policies.  
+
+On their nodes, the members of **C** agree to employ **L<sub>C</sub>**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) implementation.  Data contained in transactions on **L<sub>C</sub>** is considered to be "in the clear" to adversaries (i.e. neither "wire" privacy nor storage privacy is assumed).
+
+**L<sub>C</sub>** implements any verification subsystem such that transactions posted to **L<sub>C</sub>** are acceptable only if the transaction's author (signer) has been authorized to do so.  This may appear to be a bold requirement, but it merely _transfers_ all security liability to the key(s) used in the genesis of **L<sub>C</sub>**.  For example, a _privately_ created Ethereum blockchain meets this requirement since admins of **C** would issue Ether to themselves and transfer portions of it the members of **C**, enabling append access.
 
 ---
 
 ### Specifications & Requirements
 
 The members of **C** wish to assert that:
-   1. _Only_ members of **C** have append access to **L<sub>C</sub>**.
-   2. For all actors _not_ in **C**, all data sent to, read from, and residing on **L<sub>C</sub>** is informationally completely opaque.
-   3. New members can be added to **C** at any time (given that **C** policies and permissions are met).
-   4. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
-   5. Assume a minority number of non-admin members are or become covert adversaries of **C**. Even if working in concert, it must be impossible for them to: impersonate other members, insert unauthorized permissions or privileges changes, gain access to others' private keys or information, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
-   6. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **R** before the community entered this new security "epoch").
-   7. For each node **i** in **C**, it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that strong eventual consistency (SEC) is guaranteed.  
-   8. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
-       - an adversary in possession of said keys will have no further access to **C**
-       - the afflicted member's resulting security state is unaffected
-   9. **C**, led by a coordinated admin effort, can swap out CRDT technologies (e.g. **C** may use a CRDT that automatically halts under suspicious network conditions or insufficient peer connectivity, but earlier in its history when it was smaller, **C** used a CRDT that favored "liveness" over safety).
+1. _Only_ members of **C** have append access to **L<sub>C</sub>**.
+2. For all actors _not_ in **C**, all data sent to, read from, and residing on **L<sub>C</sub>** is informationally completely opaque.
+3. New members can be added to **C** at any time (given that **C** policies and permissions are met).
+4. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
+5. Assume a minority number of members are (or become) covert adversaries of **C**. Even if working in concert, it must be impossible for them to: impersonate other members, insert unauthorized permission or privilege changes, gain access to others' private keys or information, or alter **L<sub>C</sub>** in any way that poisons or destroys community content.
+6. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **R** before the community entered this new security "epoch").
+7. For each node **i** in **C**, it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **L<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that strong eventual consistency (SEC) is guaranteed.  
+8. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
+   - an adversary in possession of said keys will have no further access to **C**
+   - the afflicted member's resulting security state is unaffected
+9. **C**, led by a coordinated admin effort, can swap out CRDT technologies (e.g. **C** may use a CRDT that automatically halts under suspicious network conditions or insufficient peer connectivity, but earlier in its history when it had to be more agile, **C** used a CRDT that favored "liveness" over safety).
 
 
 ---
@@ -44,80 +48,85 @@ The members of **C** wish to assert that:
 ### Proposal
 
 The members of **C** propose the following infrastructure:
-   1. Let `UUID` represent a constant-length independently unique ID that ensures no reasonable chance of collision (typically 20 to 32 pseudo-randomly generated bytes).
-   2. Each member of **C** securely maintains two "keyrings":
-      1. **[]K<sub>personal</sub>**, the member's _personal keyring_, used to:
-           - decrypt/encrypt information "sent" to/from that member
-           - create signatures that authenticate information claimed to be authored by that member
-      2. **[]K<sub>C</sub>**, the _community keyring_, used to encrypt/decrypt "community public" data (i.e. the cryptographic bridge between **L<sub>C</sub>** and **R<sub>L</sub>**)
-   3. Each transaction residing on **L<sub>C</sub>** is a serialization of:
-   ```
-   type EntryCrypt struct {
-       CommunityKeyID    UUID     // Identifies the community key used to encrypt .HeaderCrypt
-       HeaderCrypt       []byte   // := Encrypt(<EntryHeader>.Marshal(), <EntryCrypt>.CommunityKeyID)
-       ContentCrypt      []byte   // := Encrypt(<Body>.Marshal(), <EntryHeader>.ContentKeyID)
-       Sig               []byte   // := MakeSig(<EntryCrypt>.Marshal(), KeyFor(<EntryHeader>.AuthorMemberID,
-                                  //                                           <EntryHeader>.AuthorMemberEpoch))
-   }
-   ```
-   4. Each `EntryCrypt.HeaderCrypt` is encrypted using **[]K<sub>C</sub>** and specifies a persistent `ChannelID` that it operates on **C**'s _virtual_ channel space:
-   ```
-   type EntryHeader struct {
-       EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
-       TimeSealed        int64    // Unix timestamp of when this header was encrypted and signed ("sealed")
-       ChannelID         UUID     // Channel that this entry is posted to (or operates on)
-       ChannelEpochID    UUID     // Epoch of the channel in effect when this entry was sealed
-       AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
-       AuthorMemberEpoch UUID     // Epoch of the author's identity when this entry was sealed
-       ContentKeyID      UUID     // Identifies *any* key used to encrypt EntryCrypt.ContentCrypt
-   }
-   ```
-   5. On each community node, newly arriving transactions from **L<sub>C</sub>** are decrypted using **[]K<sub>C</sub>**, verified, and deterministically merged into the node's local community "repo", **R<sub>i</sub>**:
-   ```
-   // A node's community replica/repo/Ri
-   type CommunityRepo struct {
-       Channels          map[ChannelID]ChannelStore
-   }
-
-   // Stores and provides rapid access to entries in a channel
-   type ChannelStore struct {
-       ChannelID         ChannelID
-       Epochs            []ChannelEpoch  // The latest element is this channel's current epoch
-       EntryTable        []Entry         // Contains EntryHeader info and points to ContentCrypt blob
-   }
-
-   // Represents a "rev" of this channel's security properties
-   type ChannelEpoch struct {
-       EpochInfo         EpochInfo
-       ChannelProtocol   string          // If access control channel: "/chType/ACC"; else: "/chType/client/*"
-       ChannelID         UUID            // Immutable; generated during channel genesis
-       AccessChannelID   UUID            // This channel's owning ACC (and conforms to an ACC)
-   }
-
-   // Specifies general epoch params and info
-   type EpochInfo struct {
-       EpochStart        timestamp
-       EpochID           UUID
-       EpochIDPrev       UUID            // Implies a linked list of epochs extending from the past
-       TransitionSecs    int             // Custom-epoch transition rules, etc
-   }
-   ```
-
-   6. Entries that do not conform to channel properties or permissions are placed in a "holding tank" within **R<sub>i</sub>**. The node periodically reattempts to merge these entries with the understanding that later-arriving entries may alter **R<sub>i</sub>** such that previously rejected entries now conform. Entries that are rejected on the basis of an validation failure (e.g. signature validation failure) are dropped. These rejections are cause for concern and could logged to discern bad actor patterns.
-   7. Members of **C** maintain their copy of the community keyring, **[]K<sub>C</sub>**, where:
-        1. **[]K<sub>C</sub>** encrypts/decrypts `EntryCrypt` traffic to/from **L<sub>C</sub>**
-        2. A newly generated community key is distributed to **C**'s members via a persistent data channel using asymmetric encryption (the community admin that issues a new community key separately "sends" the key to each member in **C**'s member registry channel, encrypting the new key with the recipient members's latest public key, which is also available in the member registry channel)
-   8. **C**'s "member registry channel" is defined as a log containing each member's UUID and current crypto "epoch":
+1. Let `UUID` represent a constant-length independently unique ID that ensures no reasonable chance of collision (typically 20 to 32 pseudo-randomly generated bytes).
+2. Each member of **C** securely maintains two "keyrings":
+  1. **[]K<sub>personal</sub>**, the member's _personal keyring_, used to:
+       - decrypt/encrypt information "sent" to/from that member
+       - create signatures that authenticate information claimed to be authored by that member
+  2. **[]K<sub>C</sub>**, the _community keyring_, used to encrypt/decrypt "community public" data (i.e. the cryptographic bridge between **L<sub>C</sub>** and **R<sub>L</sub>**)
+3. Each transaction residing on **L<sub>C</sub>** is a serialization of:
 ```
-
-// MemberEpoch represents a public "rev" of a community member's crypto
-type MemberEpoch struct {
-    EpochInfo             EpochInfo
-    PubSigningKey         []byte
-    PubCryptoKey          []byte
+type EntryCrypt struct {
+   CommunityKeyID    UUID     // Identifies the community key used to encrypt .HeaderCrypt
+   HeaderCrypt       []byte   // := Encrypt(<EntryHeader>.Marshal(), <EntryCrypt>.CommunityKeyID)
+   ContentCrypt      []byte   // := Encrypt(<Body>.Marshal(), <EntryHeader>.ContentKeyID)
+   Sig               []byte   // := MakeSig(<EntryCrypt>.Marshal(), KeyFor(<EntryHeader>.AuthorMemberID,
+                              //                                           <EntryHeader>.AuthorMemberEpoch))
 }
 ```
-   7. **C**'s root "access control channel" (ACC) is a log containing access grants to member ID
+4. Each `EntryCrypt.HeaderCrypt` is encrypted using **[]K<sub>C</sub>** and specifies a persistent `ChannelID` that it operates on **C**'s _virtual_ channel space:
+```
+type EntryHeader struct {
+   EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
+   TimeSealed        int64    // Unix timestamp of when this header was encrypted and signed ("sealed")
+   ChannelID         UUID     // Channel that this entry is posted to (or operates on)
+   ChannelEpochID    UUID     // Epoch of the channel in effect when this entry was sealed
+   AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
+   AuthorMemberEpoch UUID     // Epoch of the author's identity when this entry was sealed
+   ContentKeyID      UUID     // Identifies *any* key used to encrypt EntryCrypt.ContentCrypt
+}
+```
+5. For every `EntryCrypt` **e** authored by members of **C** and posted to **L<sub>C</sub>**, **e**`.Sig` is generated from on a hash digest of all other fields using the private signing key associated with the author's member ID and their current member epoch.  The key used to encrypt **e<sub>header</sub>**
+5. On a community node **i**, let **e** be an `EntryCrypt` newly arriving from **L<sub>C</sub>**.  
+  1. Let **e<sub>header</sub>** be the `EntryHeader` resulting from decrypting e.`HeaderCrypt` using the key in **[]K<sub>C</sub>** indexed by `e.CommunityKeyID`.
+  2. `e.Sig` is validated by retrieving the public signing key listed for (**e<sub>header</sub>**`.AuthorMemberID`, `.AuthorMemberEpoch`) within **R<sub>i</sub>**.
+If either of the keys listed above are not found, it is possible that **R<sub>i</sub>** has not been updated with entries that have yet to arrive.  Thus, **e** is placed into the node's "holding tank" for delayed processing since  If the keys are found by steps (1) or (2) fail to check, the entry is considered "hard" rejected and not considered further.
+6. Assuming   
+  , verified, and deterministically merged into the node's local community "repo", **R<sub>i</sub>**:
+```
+// A node's community replica/repo/Ri
+type CommunityRepo struct {
+   Channels          map[ChannelID]ChannelStore
+}
+
+// Stores and provides rapid access to entries in a channel
+type ChannelStore struct {
+   ChannelID         ChannelID
+   Epochs            []ChannelEpoch  // The latest element is this channel's current epoch
+   EntryTable        []Entry         // Contains EntryHeader info and points to ContentCrypt blob
+}
+
+// Represents a "rev" of this channel's security properties
+type ChannelEpoch struct {
+   EpochInfo         EpochInfo
+   ChannelProtocol   string          // If access control channel: "/chType/ACC"; else: "/chType/client/*"
+   ChannelID         UUID            // Immutable; generated during channel genesis
+   AccessChannelID   UUID            // This channel's owning ACC (and conforms to an ACC)
+}
+
+// Specifies general epoch parameters and info
+type EpochInfo struct {
+   EpochStart        timestamp
+   EpochID           UUID
+   EpochIDPrev       UUID            // Forms a linked list extending from the past
+   TransitionSecs    int             // Custom-epoch transition rules, etc
+}
+```
+
+6. Entries that do not conform to channel properties or permissions are placed in a "holding tank" within **R<sub>i</sub>**. The node periodically reattempts to merge these entries with the understanding that later-arriving entries may alter **R<sub>i</sub>** such that previously rejected entries now conform. Entries that are rejected on the basis of an validation failure (e.g. signature validation failure) are dropped. These rejections are cause for concern and could logged to discern bad actor patterns.
+7. Members of **C** maintain their copy of the community keyring, **[]K<sub>C</sub>**, where:
+    1. **[]K<sub>C</sub>** encrypts/decrypts `EntryCrypt` traffic to/from **L<sub>C</sub>**
+    2. A newly generated community key is distributed to **C**'s members via a persistent data channel using asymmetric encryption (the community admin that issues a new community key separately "sends" the key to each member in **C**'s member registry channel, encrypting the new key with the recipient members's latest public key, which is also available in the member registry channel)
+8. **C**'s "member registry channel" is defined as a log containing each member's UUID and current crypto "epoch":
+```
+// MemberEpoch represents a public "rev" of a community member's crypto
+type MemberEpoch struct {
+EpochInfo             EpochInfo
+PubSigningKey         []byte
+PubCryptoKey          []byte
+}
+```
+7. **C**'s root "access control channel" (ACC) is a log containing access grants to member ID
 
 
 
@@ -136,10 +145,17 @@ type CommunityMember struct {
 
 ### Proof of Requirements & Claims
 
+   1.  A node running a daemon that hosts **L<sub>C</sub>** is hosting a replicating append-only CRDT database by definition.  Using any implementation available, it is endowed with authentication mechanism such that any client wishing to submit a transaction to be appended, must either provide a transaction signature that  
+
+
+### further
 
 
 
-###
+
+
+
+### scrap/work area
 
 In this operating system
 
