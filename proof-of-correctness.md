@@ -13,7 +13,7 @@ In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Cor
 
 Below, we first express the scenario, a set of specifications, and a digital infrastructure schema.  We then proceed to demonstrate correctness for each specification, citing how the schema and its prescribed operation satisfies that specification.  
 
-Please note that the data structures listed below are intended to convey understanding and model correctness more than they are intended to be performant.  [go-plan](https://github.com/plan-tools/go-plan) embodies is this latter implementation.
+Please note that the data structures listed below are intended to convey understanding and model correctness more than they are intended to be performant.  [go-plan](https://github.com/plan-tools/go-plan) is the latter.
 
 ---
 
@@ -23,13 +23,15 @@ A founding set of community organizers ("admins") wish to form **C**, a secure d
 
 On their nodes, the members of **C** agree to employ **𝓛**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type).  Data entries appended to **𝓛** ("transactions") are characterized by an arbitrary payload buffer, a signing public key, and a signature of a cryptographic digest of the transaction.  Transactions on **𝓛** are considered to be "in the clear" to adversaries (i.e. neither "wire" privacy _nor_ storage privacy is assumed).
 
-For a given **C**, **𝓛<sub>C</sub>** is assumed to either contain (or have access to) a verification system such that a transaction submitted to **𝓛<sub>C</sub>** is acceptable _only if_ the transaction's author (signer) has permission.  This may appear to be a strong requirement, but instead only reflects the _transference_ of all security liability to the key(s) specified during the genesis of **𝓛<sub>C</sub>** to an _external_ set authorities.
+Given **C**, **𝓛<sub>C</sub>** is assumed to either contain (or have access to) a verification system such that a transaction submitted to **𝓛<sub>C</sub>** is acceptable _only if_ the transaction's author (signer) has explicit _𝓛-append permission_.  At first this may appear to be a strong requirement, but that's a reflection of the _transference_ of all security liability to the key(s) specified during the genesis of **𝓛<sub>C</sub>** to an _external_ set of authorities.
 
 For example, a customized "private distro" of the [Ethereum](https://en.wikipedia.org/wiki/Ethereum) blockchain ("**Eth<sub>C</sub>**") could be used to implement **𝓛<sub>C</sub>** since:
    - The admins, upon creating **Eth<sub>C</sub>**, would issue themselves some large bulk amount _"C-Ether"_.
    - The admins of **C** would periodically distribute portions of _C-Ether_ to members of **C** (quotas).  
    - Large client payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed to **Eth<sub>C</sub>**.
    - On **C**'s nodes, **Eth<sub>C</sub>** transactions that do not "burn" an amount of _C-Ether_ commensurate with the byte size of the payload would be rejected/ignored.
+
+To help regard **𝓛**, watch the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video commentary](https://www.youtube.com/watch?v=cidZRD3NzHg) speak about blockchain as an empowering distributed a security and information technology.
 
 ---
 
