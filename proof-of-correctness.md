@@ -31,7 +31,7 @@ For example, a customized "private distro" of the [Ethereum](https://en.wikipedi
    - Large client payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed to **Eth<sub>C</sub>**.
    - On **C**'s nodes, **Eth<sub>C</sub>** transactions that do not "burn" an amount of _C-Ether_ commensurate with the byte size of the payload would be rejected/ignored.
 
-To help regard **𝓛**, watch the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video commentary](https://www.youtube.com/watch?v=cidZRD3NzHg) speak about blockchain as an empowering distributed a security and information technology.
+To help regard **𝓛**, watch the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video commentary](https://www.youtube.com/watch?v=cidZRD3NzHg) speak about the distributed blockchain as an empowering, security and information technology.
 
 ---
 
