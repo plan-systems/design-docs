@@ -1,4 +1,4 @@
-# Proof of Correctness for PLAN
+Securityexploitation# Proof of Correctness for PLAN
 
 ```
          P urposeful
@@ -17,21 +17,29 @@ Please note that the data structures listed below are intended to convey underst
 
 ---
 
+### Notes on Digital Security
+
+We acknowledge that even the most advanced secure systems are vulnerable to private key theft and socially engineered threats.  That is, an adversary in possession of another's private keys without their knowledge, or an adversary manipulating/coercing others can be very difficult to detect or avert.  Biometric authentication systems can mitigate _some_ of these threats, but they also introduce additional surfaces that can potentially exploited (e.g. spoofing a biometric device or exploiting an engineering flaw).
+
+The system offered in this proof features swift countermeasures _once it becomes known_ that private keys have been comprimosed or unathorized accessed has occured.
+
+---
+
 ### Scenario
 
 A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common peer-to-peer software daemon ("node"). **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and community-global rules/policies.  
 
 On their nodes, the members of **C** agree to employ **𝓛**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type).  Data entries appended to **𝓛** ("transactions") are characterized by an arbitrary payload buffer, a signing public key, and a signature of a cryptographic digest of the transaction.  Transactions on **𝓛** are considered to be "in the clear" to adversaries (i.e. neither "wire" privacy _nor_ storage privacy is assumed).
 
-Given **C**, **𝓛<sub>C</sub>** is assumed to either contain (or have access to) a verification system such that a transaction submitted to **𝓛<sub>C</sub>** is acceptable _only if_ the transaction's author (signer) has explicit _𝓛-append permission_.  At first this may appear to be a strong requirement, but that's a reflection of the _transference_ of all security liability to the key(s) specified during the genesis of **𝓛<sub>C</sub>** to an _external_ set of authorities.
+Given **C**, **𝓛<sub>C</sub>** is assumed to either contain (or have access to) a verification system such that a transaction submitted to **𝓛<sub>C</sub>** is acceptable _only if_ the transaction's author (signer) has explicit _𝓛-append permission_.  At first this may appear to be a strong requirement, but it reflects the _transference_ of all security liability to the key(s) specified during the genesis of **𝓛<sub>C</sub>** to an _external_ set of authorities.
 
-For example, a customized "private distro" of the [Ethereum](https://en.wikipedia.org/wiki/Ethereum) blockchain ("**Eth<sub>C</sub>**") could be used to implement **𝓛<sub>C</sub>** since:
-   - The admins, upon creating **Eth<sub>C</sub>**, would issue themselves some large bulk amount _"C-Ether"_.
-   - The admins of **C** would periodically distribute portions of _C-Ether_ to members of **C** (quotas).  
-   - Large client payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed to **Eth<sub>C</sub>**.
-   - On **C**'s nodes, **Eth<sub>C</sub>** transactions that do not "burn" an amount of _C-Ether_ commensurate with the byte size of the payload would be rejected/ignored.
+For example, a customized "private distro" of the [Ethereum](https://en.wikipedia.org/wiki/Ethereum) blockchain ("**⧫<sub>C</sub>**") could be used to implement **𝓛<sub>C</sub>** since:
+   - The admins, upon creating **⧫<sub>C</sub>**, would issue themselves some large bulk amount _"C-Ether"_.
+   - The admins of **C** would periodically distribute portions of _C-Ether_ to members of **C** (a quota implementation).  
+   - Large client payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed to **⧫<sub>C</sub>**.
+   - On **C**'s nodes, **⧫<sub>C</sub>** transactions that do not "burn" an amount of _C-Ether_ commensurate with the byte size of the payload would be rejected/ignored.
 
-To help regard **𝓛**, watch the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video commentary](https://www.youtube.com/watch?v=cidZRD3NzHg) speak about blockchain as an empowering distributed a security and information technology.
+To help regard **𝓛**, watch the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video clip](https://www.youtube.com/watch?v=cidZRD3NzHg&t=1214s) speak about blockchain as an empowering distributed security and information technology.
 
 ---
 
@@ -43,8 +51,8 @@ The members of **C** wish to assert that:
 2. For all actors _not_ in **C**, all transactions sent to, read from, and residing on **𝓛<sub>C</sub>** are informationally opaque to the maximum extent possible.
 3. New members can be added to **C** at any time (given that **C** policies and permissions are met).
 4. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
-5. Assume a minority number of members are (or become) covert adversaries of **C**. Even if working in concert, it must be impossible for them to: impersonate other members, insert unauthorized permission or privilege changes, gain access to others' private keys or information, or alter **𝓛<sub>C</sub>** in any way that poisons or destroys community content.
-5. In the event an admin becomes an adversary of **C**, an adversary gains access to an admin's private keys, or **𝓛<sub>C</sub>** is otherwise corrupted or vandalized, **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state.
+5. Assume a minority number of members are (or become) covert adversaries of **C** (or are otherwise coerced).  Even if working in concert, it must be impossible for them to: impersonate other members, insert unauthorized permission or privilege changes, gain access to others' private keys or information, or alter **𝓛<sub>C</sub>** in any way that poisons or destroys community content.
+5. In the event that an adversary gains access to an admin's private keys (or an admin becomes an adversary), or **𝓛<sub>C</sub>** is otherwise corrupted or vandalized, **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state.
 6. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **R** before the community entered this new security "epoch").
 7. For each node **i** in **C**, it's local replica state ("**R<sub>i</sub>**"), converges to a stable/monotonic state as **𝓛<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **R<sub>1</sub>**...**R<sub>n</sub>** update such that strong eventual consistency (SEC) is guaranteed.  
 8. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
@@ -56,7 +64,7 @@ The members of **C** wish to assert that:
 ---
 
 
-### Proposal
+### System Proposal
 
 The members of **C** propose the following infrastructure:
 1. Let `UUID` represent a constant-length independently unique ID that ensures no reasonable chance of collision (typically 20 to 32 pseudo-randomly generated bytes).
@@ -135,15 +143,16 @@ type MemberEpoch struct {
    EpochInfo             EpochInfo
    PubSigningKey         []byte
    PubCryptoKey          []byte
+
 }
 ```
 7. **C**'s root "access control channel" (ACC) is a log containing access grants to member ID
 
-8.  If/When a member, **m**, becomes aware their keyrings has been lost or compromised, **m** (or a peer of **m**) can immediately initiate a _keyring halt procedure_, where:
-     1.  A special transaction by **m** (or on behalf of **m**) is submitted to **𝓛<sub>C</sub>** immediately "burning" **m**'s ability to post any further transactions to **𝓛<sub>C</sub>**.  This removes the ability of an adversary in possession of _any_ of **m**'s keyrings to author further entries on **𝓛<sub>C</sub>**.  
+8.  If/When a member, **m**, becomes aware their keyrings has been lost or compromised, **m** (or a peer of **m**) would initiate a _keyring halt procedure_, where:
+     1.  A special transaction by **m** (or on behalf of **m**) is submitted to **𝓛<sub>C</sub>**, immediately "burning" **m**'s ability to post any further transactions to **𝓛<sub>C</sub>**.  In effect, this removes the ability of any actor in possession of **m**'s keyrings to author further entries on **𝓛<sub>C</sub>**.  
      2.  An admin, or a quorum of **C**, or an automated system initiates:
-        - a new community key epoch for **C**, _and_
-        - a secure token that would be transferred to **m** via a secure channel (or in person).  This token, when opened, would allow a new `MemberEpoch` to be accepted for **m**, allowing **m** to resume normal access to **𝓛<sub>C</sub>**.
+         - a new community key epoch for **C**, _and_
+         - a secure token that would be transferred to **m** via a secure channel (or in person).  This token, when opened, would allow a new `MemberEpoch` to be accepted for **m**, allowing **m** to resume normal access to **𝓛<sub>C</sub>**.
      In effect, all subsequent transactions on **𝓛<sub>C</sub>** will be unreadable to any holder of the compromised keyring is not is possession of any key that would gain them access to the newly issued community key or **m** newly issued keys.  **m** would regain
 Note that the given adversary would only have access to community public data (with **[]K<sub>C</sub>**) and **m**'s particualar dats
 
@@ -164,14 +173,24 @@ type CommunityMember struct {
 
 ### Proof of Requirements & Claims
 
- 1.  In order for a data storage transaction, **t**, to be accepted into **𝓛<sub>C</sub>**, it must (by definition):
-    - contain a valid signature that proves the data and author borne by **t** is authentic, _and_
-    - specify an author that **𝓛<sub>C</sub>** recognizes as having permission to post a transaction of that size.
+_Each numbered item here corresponds to the items in the Specifications & Requirements section_.
 
- Given that each member **m** of **C** is in sole possession of their personal keyring, it follows that only **m** can author and sign transactions that **𝓛<sub>C</sub>** will regard as authentic.  If/When **m** becomes aware their personal keys are lost or compromised, **m** can immediately initiate a _keyring halt procedure_.  
+ 1.  In order for a data storage transaction, **t**, to be accepted into **𝓛<sub>C</sub>**, it must, by definition:
 
-  **𝓛<sub>C</sub>** (and )
- A **C** node in **C** running a daemon hosting **𝓛<sub>C</sub>** is hosting a replicating append-only CRDT database by definition.  Using any implementation available, it is endowed with authentication mechanism such that any client wishing to submit a transaction to be appended, must either provide a transaction signature that  
+     - contain a valid signature that proves the data and author borne by **t** is authentic, _and_
+     - specify an author that **𝓛<sub>C</sub>** recognizes as having permission to post a transaction of that size.
+
+     Given that each member **m** of **C** is in sole possession of their personal keyring, it follows that _only_ **m** can author and sign transactions that **𝓛<sub>C</sub>** will accept.  In the case where **m**'s personal keys are lost or compromised, **m** can immediately initiate a _keyring halt procedure_ (described above), making any possessor of **m**'s private keys to be unable to post to **𝓛<sub>C</sub>**.
+
+
+2.  Any actor _not_ a member of **C** by defintion does not possess the community keyring, **[]K<sub>C</sub>**, containing the latest community keys.  Thus, the _only_ information publicly available is the `UUID` of the community key used to encrypt a given `EntryCrypt` stored on **𝓛<sub>C</sub>**. This implies:
+    - information opacity is maximized since all other information resides within `HeaderCrypt` or `ContentCrypt`, _with the exception that_  adversaries snooping **𝓛<sub>C</sub>** could discern _when_ a new community security epoch began (but could correspond to any number of cicumstances).
+    - if actor **a** is formerly a member of **C** or gained access to another member's private keys, then **a**'s access is limited to
+      read-access, up to the time when a new community security epoch was initiated.   In order for **a** to recieve the latest community key, **a** must have the latest private key of a member currently in **C** (see _initiating a new community security epoch_).  "Latest key", meaning the private key associated with the latest security epoch written to the appropritate reserevd channel.
+      
+      This is becuase **a**, unlike members of **C**, would not have a key needed to decrypt the newly community keys. 
+       be  not possess the newly issued key  Thus, all **C** entries authored in the new comunity key epoch will be unreadbale by **a**. 
+
 
 
 ### further
