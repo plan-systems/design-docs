@@ -54,7 +54,7 @@ The members of **C** wish to assert that:
 5. Assume a minority number of members are (or become) covert adversaries of **C** (or are otherwise coerced).  Even if working in concert, it must be impossible for them to: impersonate other members, insert unauthorized permission or privilege changes, gain access to others' private keys or information, or alter **𝓛<sub>C</sub>** in any way that poisons or destroys community content.
 5. In the event that an adversary gains access to an admin's private keys (or an admin becomes an adversary), or **𝓛<sub>C</sub>** is otherwise corrupted or vandalized, **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state.
 6. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **𝓡** before the community entered this new security "epoch").
-7. For each node **i** in **C**, it's local replica state ("**𝓡<sub>i</sub>**"), converges to a stable/monotonic state as **𝓛<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **𝓡<sub>1</sub>**...**𝓡<sub>n</sub>** update such that strong eventual consistency (SEC) is guaranteed.  
+7. For each node **n<sub>i</sub>** in **C**, it's local replica state ("**𝓡<sub>i</sub>**"), converges to a stable/monotonic state as **𝓛<sub>C</sub>** message traffic "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **𝓡<sub>1</sub>**...**𝓡<sub>n</sub>** update such that strong eventual consistency (SEC) is guaranteed.  
 8. If/When it is discovered that a member's personal or community keys are known to be either comprised or lost, an admin (or members previously designated by the afflicted member) initiate a new security epoch such that:
    - an adversary in possession of said keys will have no further access to **C**
    - the afflicted member's resulting security state is unaffected
@@ -93,7 +93,7 @@ type EntryHeader struct {
     EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
     TimeAuthored      int64    // Unix timestamp of when this header was encrypted and signed ("sealed")
     ChannelID         UUID     // Channel that this entry is posted to (or operates on)
-    ChannelEpochID    UUID     // Epoch of the channel in effect when this entry was sealed
+    ChannelEpochID    UUID     // Cites the latest epoch of the channel in effect when this entry was authored
     AuthorityEntryID  UUID     // Cites the entry in ChannelEpochID->ChannelID authorizing the validity of this entry
     AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
     AuthorMemberEpoch UUID     // Epoch of the author's identity when this entry was sealed
@@ -101,7 +101,7 @@ type EntryHeader struct {
 }
 ```
 5. For every `EntryCrypt` **e** authored by members of **C** and posted to **𝓛<sub>C</sub>**, **e**`.Sig` is generated from on a hash digest of all other fields using the private signing key associated with the author's member ID and their current member epoch.  The key used to encrypt **e<sub>header</sub>**
-5. On a community node **i**, let **e** be an `EntryCrypt` newly arriving from **𝓛<sub>C</sub>**.  
+5. On a community node **n<sub>i</sub>**, let **e** be an `EntryCrypt` newly arriving from **𝓛<sub>C</sub>**.  
   1. Let **e<sub>header</sub>** be the `EntryHeader` resulting from decrypting e.`HeaderCrypt` using the key in **[]K<sub>C</sub>** indexed by `e.CommunityKeyID`.
   2. `e.Sig` is validated by retrieving the public signing key listed for (**e<sub>header</sub>**`.AuthorMemberID`, `.AuthorMemberEpoch`) within **𝓡<sub>i</sub>**.
 If either of the keys listed above are not found, it is possible that **𝓡<sub>i</sub>** has not been updated with entries that have yet to arrive.  Thus, **e** is placed into the node's "holding tank" for delayed processing since  If the keys are found by steps (1) or (2) fail to check, the entry is considered "hard" rejected and not considered further.
@@ -178,32 +178,48 @@ type CommunityMember struct {
 ### Standard Procedures
 
    * [Keyring Halt](#keyring-halt-procedure)
-   * [Channel Entry Validation](#Channel-Entry-Validation)
-        - For node **i** in **C**:
-            - Let **𝓡<sub>i</sub>** denote the local replica state of **𝓛<sub>C</sub>** at a given time
-            - For each entry **e** that newly arrives from  **𝓛<sub>C</sub>** (or is authored locally and also submitted to **𝓛<sub>C</sub>**):
-                1. **e<sub>UUID</sub>** ⇐ **e<sub>digest</sub>** ⇐  Hash(  **e**`.CommunityKeyID`,   **e**`.HeaderCrypt`,  **e**.`ContentCrypt` )
-                2. **e<sub>hdr</sub>** ⇐ Decrypt( **e**`.HeaderCrypt`,  **𝓡<sub>i</sub>**.LookupKey(**e**`.CommunityKeyID`) )
+   * [Deferring An Entry]
+
+   * [Merging Channel Entries](#Channel-Entry-Validation)
+        - Given node **n<sub>i</sub>** in **C**, let **𝓡<sub>i</sub>** denote the local replica state of **𝓛<sub>C</sub>** at a given time.
+        - On "deferring" an entry:
+            - Since entries can arrive in a semi-arbitrary order at **n<sub>i</sub>**, an entry may arrive whose successful processing may depend on other entries that have yet to arrive (or finish processing).
+            - This means that as **n<sub>i</sub>** attempts to merge entries from **𝓛<sub>C</sub>** into **𝓡<sub>i</sub>**, it will sometimes encounter an incoming entry **e** that it cannot yet assuredly merge or reject.  In this sitaution, **e** is moved into an appropriate `RetryPool` such that  **n<sub>i</sub>** will retry merging it at a later time (we say "**e** is deferred").
+        - On "rejecting" an entry:
+            - As **n<sub>i</sub>** processes entries from **𝓛<sub>C</sub>**, there are specific conditions that, if not met, will cause **n<sub>i</sub>** to "hard" reject an entry.
+            - If a "hard" requirement is not met, such as an entry having a valid signature, the entry is considered to be permanently rejected/discarded (we say "**e** is rejected"). 
+        - For each new entry **e** arriving from **𝓛<sub>C</sub>** (or is locally authored and also submitted to **𝓛<sub>C</sub>**):
+            - Validate **e**:
+                1. **e<sub>digest</sub>** ⇐  DigestFor(  **e**`.CommunityKeyID`,   **e**`.HeaderCrypt`,  **e**.`ContentCrypt` )
+                2. **e<sub>hdr</sub>** ⇐ `EntryHeader` ⇐ Decrypt( **e**`.HeaderCrypt`,  **𝓡<sub>i</sub>**.LookupKey(**e**`.CommunityKeyID`) )
+                    - if the specified key is not found, **e** is deferred for later.
                 3. **e<sub>authPubKey</sub>** ⇐ **𝓡<sub>i</sub>**.LookupKeyFor(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
-                3. ValidateSig( **e<sub>digest</sub>**, `e.Sig`, **e<sub>authPubKey</sub>** )
-                   - if `e.Sig` is invalid, then permanently reject/discard **e**.
-                5. **𝘾𝒉<sub>store</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore( **e<sub>hdr</sub>**.`ChannelID` )
-                6. **𝘾𝒉<sub>epoch</sub>** ⇐ **𝘾<sub>store</sub>**.LookupEpoch( **e<sub>hdr</sub>**.`ChannelEpochID` )
+                4. ValidateSig(**e<sub>digest</sub>**, `e.Sig`, **e<sub>authPubKey</sub>**)
+                    - if `e.Sig` is invalid, then permanently reject/discard **e**.
+            - Try merge **e** into **𝓡<sub>i</sub>**:
+                1. **𝘾𝒉<sub>store</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore( **e<sub>hdr</sub>**.`ChannelID` )
+                2. Ensure the cited `ChannelEpoch` is acceptable:
+                    - **𝓔<sub>cited</sub>** ⇐ **𝘾𝒉<sub>store</sub>**.LookupEpoch( **e<sub>hdr</sub>**.`ChannelEpochID` )
+                        - if **𝓔<sub>cited</sub>** == `nil`, then move **e** into **𝘾𝒉<sub>store</sub>**`.RetryPool` ("retry mergelater")
+                    - **𝓔<sub>expected</sub>** ⇐ **𝘾𝒉<sub>store</sub>**.LatestEpoch()
+                    - if **𝓔<sub>cited</sub>** = `nil` or ≠ **𝓔<sub>expected</sub>**, then proceed
                 7. **𝘼𝘾𝘾𝒉<sub>store</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore( **𝘾𝒉<sub>epoch</sub>**.`ChannelID` )
                 8. **ℓ<sub>auth</sub>** ⇐ **𝘼𝘾𝘾𝒉<sub>store</sub>**.LookupAccessLevelFor( **e<sub>hdr</sub>**.`AuthorMemberID` )
-                   - if any type errors in steps 5-8, then permanently reject/discard **e**
-                   - if  **ℓ<sub>auth</sub>** does not permit **e**`.EntryOp`, then move **e** to **𝘾𝒉<sub>store</sub>**`.RetryPool`
+                    - if any unexpected errors during steps 5-8, then permanently reject/discard **e**
+                    - Move **e** to **𝘾𝒉<sub>store</sub>**`.RetryPool` (to be retried later), ___if___:
+                        - if  **ℓ<sub>auth</sub>** does not permit **e<sub>hdr</sub>**`.EntryOp`
+                        - 
                 9. if **𝘾𝒉<sub>store</sub>**`.IsACC()` _and_ has mutated to be _more_ restricitve, then revalidate dependent channels:
-                    - Let **t<sub>rev</sub>** ⇐ **e**`.TimeAuthored`
+                    - Let **t<sub>rev</sub>** ⇐ **e<sub>hdr</sub>**`.TimeAuthored`
                     - for each **𝘾𝒉<sub>j</sub>** in **C** where **𝘾𝒉<sub>j</sub>**`.AccessChannelID` == **𝘾𝒉<sub>store</sub>**`.ChannelID`:
                         - Scanning forward from **t<sub>rev</sub>** in  **𝘾𝒉<sub>j</sub>**, for each entry **e<sub>j</sub>**:
                             - Revalidate **e<sub>j</sub>** (steps 5-9 above)
-                    - Although there are edge cases where the above could result in a cascading workload, in almost all cases the amount of work is either n/a or negligable.  This is because:
+                    - Although there are edge cases where the above _could_ result in a cascading workload, in almost all cases the amount of work is either n/a or negligable.  This is because:
                         - Revaldiation is only needed if:
                             - the channel is an ACC (i.e. only ACCs have dependencies), _and_
                             - the entry mutation makes an ACC _more_ restrictive 
                         - Most activity in **C** is presumably content, not access-control related.  (e.g. compare the number of ACL-related files stored on a workstation to the _total_ number of files)
-                        - Mutations to a channel tend to occur close to the present time (i.e. only O(1) of all entry history is affected)
+                        - Mutations to a channel tend to occur close to the present time (⇒ only O(1) of all entry history is affected)
                         - Revalidation can be strategically deferred/scheduled, allowing multiple ACC mutations to require only a single revalidation pass.
 
                             
@@ -232,9 +248,11 @@ _Each numbered item here corresponds to the items in the Specifications & Requir
     - if actor **a** is formerly a member of **C** (or was known to have access to a member's private keys), then **a**'s access is limited to
       read-access up to until the time when a new community security epoch was initiated.   In order for **a** to receive the latest community key, **a** must possess the latest private key of a member currently in **C** (see _initiating a new community security epoch_). 
       
-3.  Since all entries in a node's local replica ("**𝓡<sub>i</sub>**") must pass [Channel Entry Validation](#Channel-Entry-Validation), entries merged into **𝓡<sub>i</sub>** therefore are successively valid.  For this not to be the case, one of the following must be true:
-    - Given node **i** there exists a way to reorder or withhold transcations from **𝓛<sub>C</sub>** such that 
-    - There exists a way for a member **m** (or an adversary covertly in possession of **m**'s keys) to author a series of channel entries such that one or more channel permissions are violated or altered in an unauthorized way.  All forms of this can be expressed as an entry being validated, and thus merged, into a channel when it should be rejected.  How could an entry be merged in a channel that whose ACC denies it?  Implementation oversights aside, this could only happen by a late-arriving entry retroactively changing a channel's ACC such that now some set of entries should now be rejected.  However, since [ACC Change Propigation](#) occurs for all ACC changes, any conflicting entries would be put into the channel's `RetryTable`.  In cases where there is an ambigous conflict (e.g. an admin gives  member is given moderator access to a channel while another 
+3. All "live" entries in a node's local replica ("**𝓡<sub>i</sub>**") must pass [Channel Entry Validation](#Channel-Entry-Validation).  This implies each successive state of **𝓡<sub>i</sub>** is a valid mutation of its previous state.  What is the possibilty that replicas on two different nodes differ such that are such that  node **n<sub>i</sub>** **nSo is there a way for  **𝓡<sub>i</sub>** and  **𝓡<sub>j</sub>** The remaining possibilty for  **𝓡<sub>i</sub>** to be  abilty for For this not to be the case, one of the following must be true:
+    - Given node **n<sub>i</sub>** there exists a way to reorder (or temporarily withhold) transcations coming from **𝓛<sub>C</sub>** such that **𝓡<sub>i</sub>** passes through states that it ordinarily would not have passed through. This scenario:
+        - precludes the possibility of unauthorized key or channel access since any absence of transcations couldn't result in generation/grant of _additional_ permissions, _provided that an ACC mutation also initiates a new channel security epoch_. Since all ACC references must cite the _latest_ ACC epoch (or risk rejection), an adversary witholding transactions from **n<sub>i</sub>** at worst would result in denial of service.
+        - discounts **𝓛<sub>C</sub>**'s ability to auto-halt if 
+    - There exists a way for a member **m** (or an adversary covertly in possession of **m**'s keys) to author a series of channel entries such that one or more channel permissions are violated or altered in an unauthorized way. This can be expressed as an entry being validated, and thus merged, into a channel when it should be rejected.  How could an entry be merged in a channel that whose ACC denies it?  Implementation oversights aside, this could only happen by a late-arriving entry retroactively changing a channel's ACC such that now some set of entries should now be rejected.  However, since [ACC Change Propigation](#) occurs for all ACC changes, any conflicting entries would be put into the channel's `RetryTable`.  In cases where there is an ambigous conflict (e.g. an admin gives  member is given moderator access to a channel while another 
         - An implementation bug 
 
 
