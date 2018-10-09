@@ -19,9 +19,9 @@ Please note that the data structures listed below are intended to convey underst
 
 ## On Digital Security
 
-We acknowledge that even the most advanced secure systems are vulnerable to private key theft, socially engineered deception, or coercion.  That is, an adversary in possession of another's private keys without their knowledge, or an adversary manipulating or coercing others is difficult or impossible to prevent.  Biometric authentication systems can mitigate _some_ of these threats, but they also introduce additional surfaces that can potentially be exploited (e.g. spoofing a biometric device or exploiting an engineering oversight).
+We acknowledge that even the most advanced secure systems are vulnerable to private key theft, socially engineered deception, or extreme coercion.  That is, an adversary in possession of another's private keys without their knowledge, or an adversary manipulating or coercing others is difficult or impossible to prevent.  Biometric authentication systems can mitigate _some_ of these threats, but they also introduce additional surfaces that can potentially be exploited (e.g. spoofing a biometric device or exploiting an engineering oversight).
 
-The system discussed here features swift auto-countermeasures _once it becomes known_ that private keys have been compromised or unauthorized access has occurred.
+The system of operation discussed here features swift auto-countermeasures _once it becomes known_ that private keys have been compromised or unauthorized access has occurred.
 
 ---
 
@@ -29,9 +29,9 @@ The system discussed here features swift auto-countermeasures _once it becomes k
 
 A founding set of **c**ommunity organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common peer-to-peer software daemon ("node"). **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and community-global rules/policies.  
 
-On their nodes, the members of **C** agree to employ **𝓛**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type).  Data entries appended to **𝓛** ("transactions") are characterized by an arbitrary payload buffer, a signing public key, and a signature of a cryptographic digest of the transaction.  Transactions on **𝓛** are considered to be "in the clear" to adversaries (i.e. neither "wire" privacy _nor_ storage privacy is assumed).
+On their nodes, the members of **C** agree to employ **𝓛**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type).  Data entries appended to **𝓛** ("transactions") are characterized by an arbitrary payload buffer, a signing public key, and a signature authenticating the transaction.  Transactions on **𝓛** are considered to be "in the clear" to adversaries (i.e. neither "wire" privacy _nor_ storage privacy is assumed).
 
-Given **C**, **𝓛<sub>C</sub>** is assumed to either contain (or have access to) a verification system such that a transaction submitted to **𝓛<sub>C</sub>** is acceptable _only if_ the transaction's author (signer) has explicit _𝓛-append permission_.  At first this may appear to be a strong requirement, but it reflects the _transference_ of all security liability to the key(s) specified during the genesis of **𝓛<sub>C</sub>** to an _external_ set of authorities.
+Given **C**, **𝓛<sub>C</sub>** is assumed to either contain (or have access to) a verification system such that a transaction submitted to **𝓛<sub>C</sub>** is acceptable _only if_ the transaction's author (signer) has explicit _𝓛-append permission_.  At first this may appear to be a strong requirement, but it reflects the _transference_ of security liability of the key(s) specified during the genesis of **𝓛<sub>C</sub>** to an _external_ set of authorities.
 
 For example, a customized "private distro" of the [Ethereum](https://en.wikipedia.org/wiki/Ethereum) blockchain ("**⧫<sub>C</sub>**") could be used to implement **𝓛<sub>C</sub>** since:
    - The admins, upon creating **⧫<sub>C</sub>**, would issue themselves some large bulk amount _"C-Ether"_.
@@ -39,7 +39,7 @@ For example, a customized "private distro" of the [Ethereum](https://en.wikipedi
    - Large client payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed to **⧫<sub>C</sub>**.
    - On **C**'s nodes, **⧫<sub>C</sub>** transactions that do not "burn" an amount of _C-Ether_ commensurate with the byte size of the payload would be rejected/ignored.
 
-To help regard **𝓛**, watch the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video clip](https://www.youtube.com/watch?v=cidZRD3NzHg&t=1214s) speak about blockchain as an empowering distributed security and information technology.
+To put **𝓛** into context, consider watching the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video clip](https://www.youtube.com/watch?v=cidZRD3NzHg&t=1214s) speak about blockchain as an empowering distributed security and information technology.
 
 ---
 
@@ -47,10 +47,10 @@ To help regard **𝓛**, watch the distinguished [George Glider](https://en.wiki
 ## Specifications & Requirements
 
 The members of **C** wish to assert that:
-1. _Only_ members of **C** have append access to **𝓛<sub>C</sub>**.
+1. _Only_ members of **C** have append-access to **𝓛<sub>C</sub>**.
 2. For all actors _not_ in **C**, all transactions sent to, read from, and residing on **𝓛<sub>C</sub>** are informationally opaque to the maximum extent possible.
-3. New members can be added to **C** at any time (given that **C** policies and permissions are met).
-4. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
+3. There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
+4. New members can be added to **C** at any time (given that **C** policies and permissions are met).
 5. Assume a minority number of members are (or become) covert adversaries of **C** (or are otherwise coerced).  Even if working in concert, it must be impossible for them to: impersonate other members, insert unauthorized permission or privilege changes, gain access to others' private keys or information, or alter **𝓛<sub>C</sub>** in any way that poisons or destroys community content.
 5. In the event that an adversary gains access to an admin's private keys (or an admin becomes an adversary), or **𝓛<sub>C</sub>** is otherwise corrupted or vandalized, **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state.
 6. Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **R** before the community entered this new security "epoch").
@@ -76,23 +76,29 @@ The members of **C** propose the following infrastructure:
 3. Each transaction residing on **𝓛<sub>C</sub>** is a serialization of:
 ```
 type EntryCrypt struct {
-   CommunityKeyID    UUID     // Identifies the community key used to encrypt .HeaderCrypt
-   HeaderCrypt       []byte   // := Encrypt(<EntryHeader>.Marshal(), <EntryCrypt>.CommunityKeyID)
-   ContentCrypt      []byte   // := Encrypt(<Body>.Marshal(), <EntryHeader>.ContentKeyID)
-   Sig               []byte   // := MakeSig(<EntryCrypt>.Marshal(), KeyFor(<EntryHeader>.AuthorMemberID,
-                              //                                           <EntryHeader>.AuthorMemberEpoch))
+    CommunityKeyID    UUID     // Identifies the community key used to encrypt .HeaderCrypt
+    HeaderCrypt       []byte   // := Encrypt(<EntryHeader>.Marshal(), <EntryCrypt>.CommunityKeyID)
+    ContentCrypt      []byte   // := Encrypt(<Body>.Marshal(), e->hdr.ContentKeyID)
+    Sig               []byte   // Authenticates this EntryCrypt; signed by e->hdr.AuthorMemberID
 }
+
 ```
+Let:
+   * **e<sub>#</sub>** ≡  `Hash(  `e`.CommunityKeyID,  `e`.HeaderCrypt,  `e.`ContentCrypt )`
+   * **e<sub>hdr</sub>** ≡ Decypt( `e.HeaderCrypt`, **R<sub>i</sub>**.LookupKey(`e.CommunityKeyID`) )
+   * **e<sub>sig</sub>** ≡ `e.Sig` ≡ Sign(**e<sub>#</sub>**, **R<sub>i</sub>**.LookupKeyFor(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`) )
+
+    return 
 4. Each `EntryCrypt.HeaderCrypt` is encrypted using **[]K<sub>C</sub>** and specifies a persistent `ChannelID` that it operates on **C**'s _virtual_ channel space:
 ```
 type EntryHeader struct {
-   EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
-   TimeSealed        int64    // Unix timestamp of when this header was encrypted and signed ("sealed")
-   ChannelID         UUID     // Channel that this entry is posted to (or operates on)
-   ChannelEpochID    UUID     // Epoch of the channel in effect when this entry was sealed
-   AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
-   AuthorMemberEpoch UUID     // Epoch of the author's identity when this entry was sealed
-   ContentKeyID      UUID     // Identifies *any* key used to encrypt EntryCrypt.ContentCrypt
+    EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
+    TimeSealed        int64    // Unix timestamp of when this header was encrypted and signed ("sealed")
+    ChannelID         UUID     // Channel that this entry is posted to (or operates on)
+    ChannelEpochID    UUID     // Epoch of the channel in effect when this entry was sealed
+    AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
+    AuthorMemberEpoch UUID     // Epoch of the author's identity when this entry was sealed
+    ContentKeyID      UUID     // Identifies *any* key used to encrypt EntryCrypt.ContentCrypt
 }
 ```
 5. For every `EntryCrypt` **e** authored by members of **C** and posted to **𝓛<sub>C</sub>**, **e**`.Sig` is generated from on a hash digest of all other fields using the private signing key associated with the author's member ID and their current member epoch.  The key used to encrypt **e<sub>header</sub>**
@@ -112,7 +118,8 @@ type CommunityRepo struct {
 type ChannelStore struct {
    ChannelID         ChannelID
    Epochs            []ChannelEpoch  // The latest element is this channel's current epoch
-   EntryTable        []Entry         // Contains EntryHeader info and points to ContentCrypt blob
+   LiveTable         []Entry         // Entries indexed by TimeSealed
+   RetryTable        []Entry         // Contains entries that were soft rejected
 }
 
 // Represents a "rev" of this channel's security properties
@@ -168,14 +175,16 @@ type CommunityMember struct {
 }
 ```
 
+### Standard Procedures
 
-_keyring halt procedure_
-_initiating a new community security epoch_
-_initiating a new member security epoch_
-_adding a new member_
-_delisting a member_
-_validating a channel entry_
-
+   * [Keyring Halt](#keyring-halt-procedure)
+   * [Channel Entry Validation](#Channel-Entry-Validation)
+   * [ACC Change Propigation](#)
+   * [Start New Community Epoch](#Initiate-a-New-Community-Epoch)
+   * [Start New Member Epoch](#Initiate-a-New-Member-Epoch)
+   * [Add New Member](#Add-New-Member)
+   * [Delist Member](#Delisting-a-Member)
+ 
 
 ---
 
@@ -183,21 +192,36 @@ _validating a channel entry_
 
 _Each numbered item here corresponds to the items in the Specifications & Requirements section_.
 
- 1.  In order for a data storage transaction, **t**, to be accepted into **𝓛<sub>C</sub>**, it must, by definition:
+ 1.  Given **𝓛<sub>C</sub>**, in order for a data storage transaction **t** to be accepted, by definition it must:
 
      - contain a valid signature that proves the data and author borne by **t** is authentic, _and_
      - specify an author that **𝓛<sub>C</sub>** recognizes as having permission to post a transaction of that size.
 
-     Given that each member **m** of **C** is in sole possession of their personal keyring, it follows that _only_ **m** can author and sign transactions that **𝓛<sub>C</sub>** will accept.  In the case where **m**'s personal keys are lost or compromised, **m** can immediately initiate a _keyring halt procedure_ (described above), making any possessor of **m**'s private keys to be unable to post to **𝓛<sub>C</sub>**.
+     Given that each member **m** of **C** is in sole possession of their personal keyring, it follows that _only_ **m** can author and sign transactions that **𝓛<sub>C</sub>** will accept.  In the case where **m**'s personal keys are lost or compromised, **m** would immediately initiate a [Keyring Halt](#keyring-halt) procedure, leaving any possessor of **m**'s private keys unable to post a trasnaction to **𝓛<sub>C</sub>**.
 
 
-2.  Any actor _not_ a member of **C** by definition does _not_ possess the community keyring, **[]K<sub>C</sub>**, containing the latest community keys.  Thus, the _only_ information available to actots outside of **C** is the `UUID` of the community key used to encrypt a given `EntryCrypt` stored on **𝓛<sub>C</sub>**. This implies:
-    - information opacity is maximized since all other information resides within `HeaderCrypt` or `ContentCrypt`, _with the exception that_  adversaries snooping **𝓛<sub>C</sub>** could discern _when_ a new community security epoch began (but could correspond to any number of circumstances).
-    - if actor **a** is formerly a member of **C** (or gained access to a member's private keys), then **a**'s access is limited to
+2.  Any actor _not_ a member of **C** by definition does not possess the community keyring, **[]K<sub>C</sub>**, containing the latest community keys.  Thus, the _only_ information available to actors outside of **C** is the `UUID` of the community key used to encrypt a given `EntryCrypt` stored on **𝓛<sub>C</sub>**. This implies:
+    - information opacity is maximized since all other information resides within `HeaderCrypt` or `ContentCrypt`, _with the exception that_  adversaries snooping **𝓛<sub>C</sub>** could discern _when_ a new community security epoch began.  However this is weak information since such an event could correspond to any number of circumstances.
+    - if actor **a** is formerly a member of **C** (or was known to have access to a member's private keys), then **a**'s access is limited to
       read-access up to until the time when a new community security epoch was initiated.   In order for **a** to receive the latest community key, **a** must possess the latest private key of a member currently in **C** (see _initiating a new community security epoch_). 
       
-3.  
+3.  Since all entries in a node's local replica ("**R<sub>i</sub>**") must pass [Channel Entry Validation](#Channel-Entry-Validation), entries merged into **R<sub>i</sub>** therefore are successively valid.  For this not to be the case, one of the following must be true:
+    - Given node **i** there exists a way to reorder or withhold transcations from **𝓛<sub>C</sub>** such that 
+    - There exists a way for a member **m** (or an adversary covertly in possession of **m**'s keys) to author a series of channel entries such that one or more channel permissions are violated or altered in an unauthorized way.  All forms of this can be expressed as an entry being validated, and thus merged, into a channel when it should be rejected.  How could an entry be merged in a channel that whose ACC denies it?  Implementation oversights aside, this could only happen by a late-arriving entry retroactively changing a channel's ACC such that now some set of entries should now be rejected.  However, since [ACC Change Propigation](#) occurs for all ACC changes, any conflicting entries would be put into the channel's `RetryTable`.  In cases where there is an ambigous conflict (e.g. an admin gives  member is given moderator access to a channel while another 
+        - An implementation bug 
 
+There are two cases of conflicts:
+   - an unambigous conflict: an entry **e** under consideration does not validate against its implied ACC.  It is uncondiontally moved from the `LiveTable` to the `RetryTable` (e.g. a post from an author that has now been delisted). --  i.e. any entry NOT in an ACC!
+   - every entry in an ACC *could* potentially affect all other channels it controls
+   - unapposed ACC change: there exists no other entry authored in the timespan **ko**  
+   - an ambigous conflict (in an ACC): the merger of **e<sub>1</sub>** would potentially result in one or more _other_ entries to unambigously conflict 
+
+Since the [Add New Member](#Add-New-Member) procedure is implemented by making standard entries that conform to [Channel Entry Validation](#Channel-Entry-Validation), the security liabilty of  
+
+integrity of adding new members to **C** in accordance with **C** policies rests in the 
+
+
+a probabiltisic proof?  if entries in the soft holding tank
 
      
 
@@ -205,7 +229,8 @@ _Each numbered item here corresponds to the items in the Specifications & Requir
 
 
 
-
+note: although TimeAuthored is used to index entries, some Lc implmentations may optionally provide a time index value that converges to within
+a fixed provable accuracy of when the network witnessed it sent (as it travels further into the past).  TimeConsensus (Dfinity, Hashgraph).  For a given transaction **t**, let **t<sub>t </sub>**
 
 
 ### scrap/work area
