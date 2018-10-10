@@ -189,29 +189,26 @@ type CommunityMember struct {
             - As **n<sub>i</sub>** processes entries from **𝓛<sub>C</sub>**, there are specific conditions that, if not met, will cause **n<sub>i</sub>** to "hard" reject an entry.
             - If a "hard" requirement is not met, such as an entry having a valid signature, the entry is considered to be permanently rejected/discarded (we say "**e** is rejected"). 
         - For each new entry **e** arriving from **𝓛<sub>C</sub>** (or is locally authored and also submitted to **𝓛<sub>C</sub>**):
-            - Validate **e**:
+            - Validate **e** authenticity:
                 1. **e<sub>digest</sub>** ⇐  DigestFor(  **e**`.CommunityKeyID`,   **e**`.HeaderCrypt`,  **e**.`ContentCrypt` )
                 2. **e<sub>hdr</sub>** ⇐ `EntryHeader` ⇐ Decrypt( **e**`.HeaderCrypt`,  **𝓡<sub>i</sub>**.LookupKey(**e**`.CommunityKeyID`) )
                     - if the specified key is not found, **e** is deferred.
                 3. **e<sub>authPubKey</sub>** ⇐ **𝓡<sub>i</sub>**.LookupKeyFor(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
                 4. ValidateSig(**e<sub>digest</sub>**, **e**`.Sig`, **e<sub>authPubKey</sub>**)
                     - if **e**`.Sig` is invalid, then **e** is rejected.
-            - Try to merge **e** into **𝓡<sub>i</sub>**:
-                1. **𝘾𝒉<sub>store</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore( **e<sub>hdr</sub>**.`ChannelID` )
-                2. Ensure the cited `ChannelEpoch` is acceptable:
-                    - **𝓔<sub>cited</sub>** ⇐ **𝘾𝒉<sub>store</sub>**.LookupEpoch( **e<sub>hdr</sub>**.`ChannelEpochID` )
-                        - if **𝓔<sub>cited</sub>** == `nil`, then **e** is deferred.
-                    - **𝓔<sub>expected</sub>** ⇐ **𝘾𝒉<sub>store</sub>**.ExpectedEpoch()
-                        - if **𝓔<sub>cited</sub>** ≠ **𝓔<sub>expected</sub>**, then **e** is deferred.
-                    
-                7. **𝘼𝘾𝘾𝒉<sub>store</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore( **𝘾𝒉<sub>epoch</sub>**.`ChannelID` )
-                8. **ℓ<sub>auth</sub>** ⇐ **𝘼𝘾𝘾𝒉<sub>store</sub>**.LookupAccessLevelFor( **e<sub>hdr</sub>**.`AuthorMemberID` )
-                    - if any unexpected conditions during steps 1-4, then **e** is rejected.
+            - Validate **e** in its destination channel:
+                1. **𝘾𝒉<sub>dst</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore( **e<sub>hdr</sub>**.`ChannelID` )
+                    - if **𝘾𝒉<sub>dst</sub>** = `nil`, then **e** is deferred.
+                2. Validate the `ChannelEpoch` cited by **e**:
+                    - **𝓔<sub>cited</sub>** ⇐ **𝘾𝒉<sub>dst</sub>**.LookupEpoch( **e<sub>hdr</sub>**.`ChannelEpochID` )
+                        - if **𝓔<sub>cited</sub>** = `nil`, then **e** is deferred.
+                    - if **𝓔<sub>cited</sub>**.CanAccept(**e<sub>hdr</sub>**`.TimeAuthored`), then proceed, else **e** is rejected.
+                2. **𝘾𝒉<sub>acc</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore(  **𝓔<sub>cited</sub>**.`AccessChannelID` )
+                3. **ℓ<sub>auth</sub>** ⇐ **𝘾𝒉<sub>acc</sub>**.LookupAccessLevelFor( **e<sub>hdr</sub>**.`AuthorMemberID` )
                     - if  **ℓ<sub>auth</sub>** does not permit **e<sub>hdr</sub>**`.EntryOp`, then **e** is deferred.
-                        
-                9. if **𝘾𝒉<sub>store</sub>**`.IsACC()` _and_ has mutated to be _more_ restricitve, then revalidate dependent channels:
+                4. if **𝘾𝒉<sub>dst</sub>**`.IsACC()` _and_ has mutated to be _more_ restricitve, then revalidate dependent channels:
                     - Let **t<sub>rev</sub>** ⇐ **e<sub>hdr</sub>**`.TimeAuthored`
-                    - for each **𝘾𝒉<sub>j</sub>** in **C** where **𝘾𝒉<sub>j</sub>**`.AccessChannelID` == **𝘾𝒉<sub>store</sub>**`.ChannelID`:
+                    - for each **𝘾𝒉<sub>j</sub>** in **C** where **𝘾𝒉<sub>j</sub>**.IsDependentOn(**e<sub>hdr</sub>**.`ChannelID`, **t<sub>rev</sub>**) = `true`:
                         - Scanning forward from **t<sub>rev</sub>** in  **𝘾𝒉<sub>j</sub>**, for each entry **e<sub>j</sub>**:
                             - Revalidate **e<sub>j</sub>** (steps 1-4 above)
                     - Although there are edge cases where the above _could_ result in a cascading workload, in almost all cases the amount of work is either n/a or negligable.  This is because:
@@ -220,7 +217,7 @@ type CommunityMember struct {
                             - the entry mutation makes an ACC _more_ restrictive 
                         - Most activity in **C** is presumably content, not access-control related.  (e.g. compare the number of ACL-related files stored on a workstation to the _total_ number of files)
                         - Mutations to a channel tend to occur close to the present time (⇒ only O(1) of all entry history is affected)
-                        - Revalidation can be strategically deferred/scheduled, allowing multiple ACC mutations to require only a single revalidation pass.
+                        - Revalidation can be strategically scheduled, allowing multiple ACC mutations to require only a single revalidation pass.
 
                             
    * [Start New Community Epoch](#Initiate-a-New-Community-Epoch)
