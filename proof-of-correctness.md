@@ -192,28 +192,28 @@ type CommunityMember struct {
             - Validate **e**:
                 1. **e<sub>digest</sub>** ⇐  DigestFor(  **e**`.CommunityKeyID`,   **e**`.HeaderCrypt`,  **e**.`ContentCrypt` )
                 2. **e<sub>hdr</sub>** ⇐ `EntryHeader` ⇐ Decrypt( **e**`.HeaderCrypt`,  **𝓡<sub>i</sub>**.LookupKey(**e**`.CommunityKeyID`) )
-                    - if the specified key is not found, **e** is deferred for later.
+                    - if the specified key is not found, **e** is deferred.
                 3. **e<sub>authPubKey</sub>** ⇐ **𝓡<sub>i</sub>**.LookupKeyFor(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
-                4. ValidateSig(**e<sub>digest</sub>**, `e.Sig`, **e<sub>authPubKey</sub>**)
-                    - if `e.Sig` is invalid, then permanently reject/discard **e**.
-            - Try merge **e** into **𝓡<sub>i</sub>**:
+                4. ValidateSig(**e<sub>digest</sub>**, **e**`.Sig`, **e<sub>authPubKey</sub>**)
+                    - if **e**`.Sig` is invalid, then **e** is rejected.
+            - Try to merge **e** into **𝓡<sub>i</sub>**:
                 1. **𝘾𝒉<sub>store</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore( **e<sub>hdr</sub>**.`ChannelID` )
                 2. Ensure the cited `ChannelEpoch` is acceptable:
                     - **𝓔<sub>cited</sub>** ⇐ **𝘾𝒉<sub>store</sub>**.LookupEpoch( **e<sub>hdr</sub>**.`ChannelEpochID` )
-                        - if **𝓔<sub>cited</sub>** == `nil`, then move **e** into **𝘾𝒉<sub>store</sub>**`.RetryPool` ("retry mergelater")
-                    - **𝓔<sub>expected</sub>** ⇐ **𝘾𝒉<sub>store</sub>**.LatestEpoch()
-                    - if **𝓔<sub>cited</sub>** = `nil` or ≠ **𝓔<sub>expected</sub>**, then proceed
+                        - if **𝓔<sub>cited</sub>** == `nil`, then **e** is deferred.
+                    - **𝓔<sub>expected</sub>** ⇐ **𝘾𝒉<sub>store</sub>**.ExpectedEpoch()
+                        - if **𝓔<sub>cited</sub>** ≠ **𝓔<sub>expected</sub>**, then **e** is deferred.
+                    
                 7. **𝘼𝘾𝘾𝒉<sub>store</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore( **𝘾𝒉<sub>epoch</sub>**.`ChannelID` )
                 8. **ℓ<sub>auth</sub>** ⇐ **𝘼𝘾𝘾𝒉<sub>store</sub>**.LookupAccessLevelFor( **e<sub>hdr</sub>**.`AuthorMemberID` )
-                    - if any unexpected errors during steps 5-8, then permanently reject/discard **e**
-                    - Move **e** to **𝘾𝒉<sub>store</sub>**`.RetryPool` (to be retried later), ___if___:
-                        - if  **ℓ<sub>auth</sub>** does not permit **e<sub>hdr</sub>**`.EntryOp`
-                        - 
+                    - if any unexpected conditions during steps 1-4, then **e** is rejected.
+                    - if  **ℓ<sub>auth</sub>** does not permit **e<sub>hdr</sub>**`.EntryOp`, then **e** is deferred.
+                        
                 9. if **𝘾𝒉<sub>store</sub>**`.IsACC()` _and_ has mutated to be _more_ restricitve, then revalidate dependent channels:
                     - Let **t<sub>rev</sub>** ⇐ **e<sub>hdr</sub>**`.TimeAuthored`
                     - for each **𝘾𝒉<sub>j</sub>** in **C** where **𝘾𝒉<sub>j</sub>**`.AccessChannelID` == **𝘾𝒉<sub>store</sub>**`.ChannelID`:
                         - Scanning forward from **t<sub>rev</sub>** in  **𝘾𝒉<sub>j</sub>**, for each entry **e<sub>j</sub>**:
-                            - Revalidate **e<sub>j</sub>** (steps 5-9 above)
+                            - Revalidate **e<sub>j</sub>** (steps 1-4 above)
                     - Although there are edge cases where the above _could_ result in a cascading workload, in almost all cases the amount of work is either n/a or negligable.  This is because:
                         - Revaldiation is only needed if:
                             - the channel is an ACC (i.e. only ACCs have dependencies), _and_
