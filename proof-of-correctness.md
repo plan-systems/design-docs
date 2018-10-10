@@ -208,7 +208,7 @@ type CommunityMember struct {
                     - if  **ℓ<sub>auth</sub>** does not permit **e<sub>hdr</sub>**`.EntryOp`, then **e** is deferred.
                 4. if **𝘾𝒉<sub>dst</sub>**`.IsACC()` _and_ has mutated to be _more_ restricitve, then revalidate dependent channels:
                     - Let **t<sub>rev</sub>** ⇐ **e<sub>hdr</sub>**`.TimeAuthored`
-                    - for each **𝘾𝒉<sub>j</sub>** in **C** where **𝘾𝒉<sub>j</sub>**.IsDependentOn(**e<sub>hdr</sub>**.`ChannelID`, **t<sub>rev</sub>**) = `true`:
+                    - for each **𝘾𝒉<sub>j</sub>** in **C** where **𝘾𝒉<sub>j</sub>**.IsDependentOn(**e<sub>hdr</sub>**.`ChannelID`, **t<sub>rev</sub>**):
                         - Scanning forward from **t<sub>rev</sub>** in  **𝘾𝒉<sub>j</sub>**, for each entry **e<sub>j</sub>**:
                             - Revalidate **e<sub>j</sub>** (steps 1-4 above)
                     - Although there are edge cases where the above _could_ result in a cascading workload, in almost all cases the amount of work is either n/a or negligable.  This is because:
