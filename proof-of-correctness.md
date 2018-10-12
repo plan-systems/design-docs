@@ -51,7 +51,7 @@ The members of **C** wish to assert...
 #### Access Exclusivity
 - _Only_ members of **C** effectively have read and append access to **𝓛<sub>C</sub>**.
 - Alternatively, parts of **C** can be set up for "public access" where non-members of **C** have read access to select community content.
-- Man-in-the-middle attacks are rendered impotent or impossible.
+- Man-in-the-middle attacks are impotent or impossible.
 
 #### Signal Opacity
 - For all actors _not_ in **C**, all transactions sent to, read from, and residing on **𝓛<sub>C</sub>** are informationally opaque to the maximum extent possible.
