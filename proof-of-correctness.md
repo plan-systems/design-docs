@@ -48,21 +48,20 @@ For context, consider watching the distinguished [George Glider](https://en.wiki
 
 The members of **C** wish to assert...
 
+#### Signal Opacity
+- For all actors _not_ in **C**, all transactions sent to, read from, and residing on **𝓛<sub>C</sub>** are informationally opaque to the maximum extent possible.
+
 #### Access Exclusivity
 - _Only_ members of **C** effectively have read and append access to **𝓛<sub>C</sub>**.
 - Alternatively, parts of **C** can be set up for "public access" where non-members of **C** have read access to select community content.
-- Man-in-the-middle attacks are impotent or impossible.
-
-#### Signal Opacity
-- For all actors _not_ in **C**, all transactions sent to, read from, and residing on **𝓛<sub>C</sub>** are informationally opaque to the maximum extent possible.
 
 #### Permissions Assurance
 - There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
 - Consider the case where a number of members are (or become) covert adversaries of **C** (or are otherwise coerced).  Even if working in concert, it must still be impossible to: impersonate other members, insert unauthorized permission or privilege changes, gain access to others' private keys or information, or alter **𝓛<sub>C</sub>** in any way that poisons or destroys community content.
 
-#### Permissions Fluidity
+#### Membership Fluidity
 - New members can be added to **C** at any time (given that **C** policies and permissions are met).
-- Member admins can "delist" members from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **𝓡** before the community entered this new security "epoch").
+- Member can be "delisted" from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **𝓡** before the community entered this new security "epoch").
 
 #### Strong Eventual Consistency
 - For each node **n<sub>i</sub>** in **C**, it's local replica state ("**𝓡<sub>i</sub>**"), converges to a stable/monotonic state as **𝓛<sub>C</sub>** message traffic eventually "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **𝓡<sub>1</sub>**...**𝓡<sub>n</sub>** mutate such that strong eventual consistency (SEC) is guaranteed.  
@@ -74,7 +73,7 @@ The members of **C** wish to assert...
     - **𝓛<sub>C</sub>** is otherwise corrupted or vandalized, 
 - ...then **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state, where specified members are delisted from the member registry.
 
-#### Security Breach Recovery
+#### Real-World Security Provisioning
 - If/When it is discovered that a member's private keys are known to be either lost or possibly comprised, a "keyring halt" can be immediately initiated such that any actor in possession of said keys will have no further read or write access to **C**.
 - Agents that can intitiate a [Keyring Halt] include:
    - the afflicted member
@@ -92,11 +91,13 @@ The members of **C** wish to assert...
 
 ## System Proposal
 
+The members of **C** present the following system of infrastructure...
+
 ### System Synopsis
 
-- The system proposed is "IRC-inspired" in that community and member information is organized into an infinitely large virtual channel addressing space.  However, instead of new channel entries just being rebroadcast to connected clients (as on an IRC server), channel entries _persist_ by being stored as replicated transactions on **𝓛<sub>C</sub>**.    
+- The system proposed is "IRC-inspired" in that community and member information is organized into an infinitely large virtual channel addressing space.  However, instead of entries entered into channels just being rebroadcast to connected clients (as on an IRC server), entries _persist_ by being stored as replicated transactions on **𝓛<sub>C</sub>**.    
 - When a channel is created, it is assigned a `ChannelProtocol` string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them.  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, affords graphical client interfaces rich and wide-open possibilites.
-- Also like IRC, each channel has its own permissions settings.  Every channel is controlled by an "access control" channel ("ACC"), a channel that uses an internal protocol to specify channel permissions.  Like other channels, even an ACC designates a parent ACC, all the way up to **C**'s root-level ACC.  
+- Also like IRC, each channel has its own permissions settings.  Every channel is controlled by an "access control" channel ("ACC"), a channel that conforms to a protocol designed to specify channel permissions.  Like other channels, each ACC designates a parent ACC, all the way up to **C**'s root-level ACC.  
 - Members, channels, and **C** itself uses security "epochs" to demarcate security events and provide [permissions assurance](#permissions-assurance).
 - Each community node (**n<sub>i</sub>**) iteratively mutates its local replica (**𝓡<sub>i</sub>**) by "replaying" newly arriving entries from **𝓛<sub>C</sub>**, possibly rejecting entries or deferring entries for later processing as appropriate.
 
@@ -113,11 +114,7 @@ The members of **C** wish to assert...
 
 ### System Data Structures
 
-
-The members of **C** propose the following infrastructure:
-- Let `UUID` represent a constant-length independently unique ID that ensures no reasonable chance of collision (typically 20 to 32 pseudo-randomly generated bytes).
-
-- Each transaction residing on **𝓛<sub>C</sub>** contains a serialization of one or more:
+- Each transaction residing on **𝓛<sub>C</sub>** contains a one or more serializations of:
 ```
 type EntryCrypt struct {
     CommunityKeyID    UUID     // Identifies the community key used to encrypt .HeaderCrypt
@@ -126,7 +123,7 @@ type EntryCrypt struct {
     Sig               []byte   // Authenticates this entry; generated by e->hdr.AuthorMemberID
 }
 ```
-4. Each `EntryCrypt.HeaderCrypt` is encrypted using **[]K<sub>C</sub>** and specifies a persistent `ChannelID` in **C**'s _virtual_ channel space:
+- Each `.HeaderCrypt` is decrypted using **[]K<sub>C</sub>**.  It specifies a persistent `ChannelID` in **C**'s _virtual_ channel space:
 ```
 type EntryHeader struct {
     EntryOp           int32    // Op code specifying how to interpret this entry. Typically, POST_CONTENT
@@ -138,7 +135,7 @@ type EntryHeader struct {
     ContentKeyID      UUID     // Identifies any key used to encrypt EntryCrypt.ContentCrypt
 }
 ```
-5. On each community node **n<sub>i</sub>**, newly arriving entries from **𝓛<sub>C</sub>** are validated and merged into the node's local community "repo" ("**𝓡<sub>i</sub>**") using the [Channel Entry Validation](#Channel-Entry-Validation) procedure. 
+- On each community node **n<sub>i</sub>**, newly arriving entries from **𝓛<sub>C</sub>** are validated and merged into the node's local community "repo" ("**𝓡<sub>i</sub>**") using the [Channel Entry Validation](#Channel-Entry-Validation) procedure. 
 
 ```
 // A node's community replica/repo/𝓡i
@@ -146,7 +143,7 @@ type CommunityRepo struct {
    Channels          map[ChannelID]ChannelStore
 }
 
-// Stores and provides rapid access to entries in a channel
+// Stores channel entries and provides rapid access to them
 type ChannelStore struct {
    ChannelID         ChannelID
    Epochs            []ChannelEpoch  // The latest element is this channel's current epoch
@@ -241,6 +238,7 @@ Note that the given adversary would only have access to community public data (w
         4. **ℓ<sub>auth</sub>** ⇐ **𝘾𝒉<sub>acc</sub>**.LookupAccessLevelFor( **e<sub>hdr</sub>**.`AuthorMemberID` )
             - if  **ℓ<sub>auth</sub>** does not permit **e<sub>hdr</sub>**`.EntryOp`, then **e** is deferred.
     - Merge **e** into **𝓡<sub>i</sub>**:
+        - if inserting **e** introduces an ambigous conflict, then perform [ambiguous conflict resolution](#resolving-ambiguous-conflcits). 
         - if **𝘾𝒉<sub>dst</sub>** is an ACC and will be _more_ restrictive with **e**, then [initiate a new channel epoch](Initiating-a-New-Channel-Epoch) for **𝘾𝒉<sub>dst</sub>**
         - **𝘾𝒉<sub>dst</sub>**.InsertEntry(**e**)
     - Propagate the mutation of **𝘾𝒉<sub>dst</sub>** ("revalidation"):
@@ -290,11 +288,22 @@ Any channel (or access channel) can either be community-public or private.
 
 
 
+#### Resolving Ambiguous Conflcits
 
-#### Start New Community Epoch
-#### Start New Member Epoch
+- The consensus properties of **C** are effectively called into action here.  By default, entries in conflict with eachother are each given a score based on the seniority of each member and the time delta of the entries.  There is either deterministic "winner" or "tie". In a tie, both entries in confict are nullified.  
+    - Implementation note: nullified entries, although effectively rejected, remain 
+    - and that occur within a given time window are rejected.  
+- In accessing ambiguous conflict resolution, we separate them into to categories:
+   - Legitimate/Natural
+       - In this case, we assume the intention and timestamp on the entries are accurate and well intentioned. 
+   - Adversary-Induced
+       - In this case, we assume one or more of the entries in conflict have forged `TimeAuthored` and are mal-intentioned.
+- Ideally, we want to devise a resolution scheme that produces the most favorable outcomes for natural conficts but is resilliant against adversary-induced conflicts. 
+    
+#### Starting a New Community Epoch
+#### Starting a New Member Epoch
 #### Issuing a New Private Channel Key
-#### Initiating a New Channel Epoch 
+#### Starting a New Channel Epoch 
 #### Add New Member
 #### Delist Member
  
@@ -305,50 +314,49 @@ Any channel (or access channel) can either be community-public or private.
 
 _Each numbered item here corresponds to the items in the Specifications & Requirements section_.
 
- 1.  Given **𝓛<sub>C</sub>**, in order for a data storage transaction **txn<sub>C</sub>** to be accepted, by definition it must:
 
-     - contain a valid signature that proves the data and author borne by **txn<sub>C</sub>** is authentic, _and_
-     - specify an author that **𝓛<sub>C</sub>** recognizes as having permission to post a transaction of that size.
+#### Signal Opacity
 
-     Given that each member **m** of **C** is in sole possession of their personal keyring, it follows that _only_ **m** can author and sign transactions that **𝓛<sub>C</sub>** will accept.  In the case where **m**'s personal keys are lost or compromised, **m** would immediately initiate a [Keyring Halt](#keyring-halt) procedure, leaving any possessor of **m**'s private keys unable to post a transaction to **𝓛<sub>C</sub>**.
+- Given that each `EntryCrypt` of **C** residing within transactions stored on **𝓛<sub>C</sub>** and considered to be "in the clear", what information is being made available or is discernable to an actors who are _not_ members of **C**?
+- An actor _not_ a member of **C** by definition does not possess the community keyring, **[]K<sub>C</sub>**, containing the latest community keys.  Thus, the _only_ information available to actors outside of **C** is the `UUID` of the community key used to encrypt a given `EntryCrypt` stored on **𝓛<sub>C</sub>**. This implies:
+    - Only members of **C** effectively have read-access to **C**'s content.
+    - Information opacity is maximized since all other information resides within `HeaderCrypt` or `ContentCrypt`, _with the exception that_  adversaries snooping **𝓛<sub>C</sub>** could discern _when_ a new community security epoch began (by noting the appearance of new `UUID`).  However, this is weak information since such an event could correspond to any number of circumstances.
+    - If actor **a** is formerly a member of **C** (or gained access to a member's keys), then **a**'s access is limited to read-access up to until the time when a new community security epoch was initiated.   In order for **a** to receive the latest community key, **a** must possess the _latest_ private key of a member currently in **C** (see [Starting a New Community Epoch](#Starting-a-New-Community-Epoch)). 
+        - In the case that **a**'s copy of the keys matches the current **C** security epoch, this represents the memebers of **C** are _unaware_ of the security breach (otherwise a member would have initiated a [keyring halt](#keyring-halt) or at least [started a new community security epoch](#Starting-a-New-Community-Epoch)).  
 
+#### Access Exclusivity
 
-2.  Any actor _not_ a member of **C** by definition does not possess the community keyring, **[]K<sub>C</sub>**, containing the latest community keys.  Thus, the _only_ information available to actors outside of **C** is the `UUID` of the community key used to encrypt a given `EntryCrypt` stored on **𝓛<sub>C</sub>**. This implies:
-    - information opacity is maximized since all other information resides within `HeaderCrypt` or `ContentCrypt`, _with the exception that_  adversaries snooping **𝓛<sub>C</sub>** could discern _when_ a new community security epoch began.  However this is weak information since such an event could correspond to any number of circumstances.
-    - if actor **a** is formerly a member of **C** (or was known to have access to a member's private keys), then **a**'s access is limited to
-      read-access up to until the time when a new community security epoch was initiated.   In order for **a** to receive the latest community key, **a** must possess the latest private key of a member currently in **C** (see _initiating a new community security epoch_). 
-      
-3. All "live" entries in a node's local replica ("**𝓡<sub>i</sub>**") must pass [Channel Entry Validation](#Channel-Entry-Validation).  This implies each successive state of **𝓡<sub>i</sub>** is, exclusively, a valid mutation of its previous state.  However, transactions arriving from **𝓛<sub>C</sub>** ("entries") could be reordered naturally, or they could be intentionally modified, reordered, or withheld by an adversary.   First, we rule out the corruption/alteration of entries since each entry contains a signature from a member of **C** (read on for the case where an adversary has possession of a member's private keys).  So, could the outside reordering or withholding of entries from **𝓛<sub>C</sub>** ("withholding") cause **𝓡<sub>i</sub>** to pass through a state such that even one of the access controls or grants asserted by members of **C** could be circumvented or exploited?  We consider two categories of failures:
+- _Read-Access Exclusivity_
+    - Only an actor is possession of **[]K<sub>C</sub>** has the ability to read the encrypted content residing on **𝓛<sub>C</sub>**.  Also see the above section.
+- _Append-Access Exclusivity_
+    - Given **𝓛<sub>C</sub>**, in order for a storage transaction **txn<sub>C</sub>** to be accepted by **𝓛<sub>C</sub>**, by definition it must:
+        - contain a valid signature that proves the data and author borne by **txn<sub>C</sub>** is authentic, _and_
+        - specify an author that **𝓛<sub>C</sub>** recognizes as having permission to post a transaction of that size.
+    - Given that each member **m** of **C** is in sole possession of their personal keyring, it follows that _only_ **m** can author and sign transactions that **𝓛<sub>C</sub>** will accept.  
+    - In the case where **m**'s private keys are lost or compromised, **m** would immediately initiate a [keyring halt](#keyring-halt), leaving any actor in possession of **m**'s keys unable to post a transaction to **𝓛<sub>C</sub>**.
+
+#### Permissions Assurance
+
+- All "live" entries in a node's local replica ("**𝓡<sub>i</sub>**") must pass [Channel Entry Validation](#Channel-Entry-Validation).  This implies each successive state of **𝓡<sub>i</sub>** is, exclusively, a valid mutation of its previous state.  
+- However, transactions arriving from **𝓛<sub>C</sub>** ("entries") will naturally arrive somewhat out of order — or they could be intentionally modified, reordered, or withheld by an adversary.   
+- First, we rule out the corruption/alteration of entries since any entry with an invalid signature is immediately and permanently rejected.
+    - The case where an adversary covertly has possession of a member's private keys is addressed later on.
+ - So, could the reordering, blocking, or withholding of entries from **𝓛<sub>C</sub>** ("withholding") cause **𝓡<sub>i</sub>** to pass through a state such that one of the access controls or grants established by members of **C** could be circumvented or exploited?  We consider two categories of failures:
     1. **Unauthorized key, channel, or content access**
-        - These scenarios imply unauthorized possession of a private key that allows access to one or more encrypted entry contents on **𝓡<sub>i</sub>** 
-        - Since any withholding of entries couldn't result in any _additional_  generation/grant of permissions, the remaining possibility is that withholding entries would result in  **𝓡<sub>i</sub>** not mutating in a way where privileged data remains accessible.  However, this is precluded since any ACC mutation that is restrictive in nature automatically [initiates a new channel security epoch](#Initiating-a-New-Channel-Epoch), where _only_ members to have access are each explicitly sent the new private channel key (using each recipient's public key).  This summarizes how member access is "removed" in an append-only system: the delisted member isn't issued the  key for the new security epoch.    
-    2. **Access control channel violation**
+        - These scenarios are characterized by gaining unauthorized access to a key that in turn allows access to encrypted contents on **𝓡<sub>i</sub>**.
+        - Since any withholding of entries couldn't result in any _additional_  generation/grant of permissions, the remaining possibility is that withholding entries would somehow result in  **𝓡<sub>i</sub>** not mutating in a way where privileged data remains accessible.  However, this is precluded since any ACC mutation that is restrictive in nature automatically [starts a new channel security epoch](#Starting-a-New-Channel-Epoch), where _only_ members listed for access are each explicitly sent the new private channel key (using each recipient's public key).  This summarizes how member access is "removed" in an append-only system: the delisted member isn't issued the  key for the new security epoch.    
+    2. **Access control violation**
         - This implies, there exists a way for member **m** (or an adversary covertly in possession of **m**'s keys) to author one or more channel entries such that one or more channel permissions can be altered in an unauthorized way or otherwise circumvented.
-        - 
-        - This can be expressed as an entry being validated, and thus merged, into a channel when it should instead be rejected.  How could an entry be merged in a channel whose ACC denies access?  However, [Channel Entry Validation](#Channel-Entry-Validation) ensures that entries that do not validate under their host channel's ACC will never be "live".
+        - This can be expressed as an entry being validated, and thus merged, into a channel when it should instead be rejected.  How could an entry ever be merged in a channel whose ACC denies access?  [Channel Entry Validation](#Channel-Entry-Validation) ensures that entries that do not validate under their host channel's ACC will never be "live".
         - An adversary in possession of **m**'s keys could forge an entry to a community-public channel that **m** does not have write access to, but [Channel Entry Validation](#Channel-Entry-Validation) running on others' nodes would reject this entry.  
-        - In cases where there is an "ambiguous conflict" (e.g. an admin grants **m** moderator access to channel 𝘾𝒉 at the same time a different admin grants **m** mere read access to 𝘾𝒉) then a deterministically-deciding machinery is invoked.  More analysis is needed, but these cases are not only rare, they require network conditions to be tortuously architected in order for edge cases to emerge.  Further, the fog of uncertainty around a given "ambiguous conflict" tends to only be as   Suffice it to say. the consensus properties of **𝓛<sub>C</sub>** are put on display here.    Note: the superposition of all possible states of **𝓡** in **C**, even in an ambiguous conflict, does not include the possibility of **m** 
+        - In cases where there is an "ambiguous conflict" (e.g. an admin grants Alice moderator access to channel 𝘾𝒉 at the same exact time a different admin grants Alice standard access to 𝘾𝒉) then deterministic [ambiguous conflict resolution](#resolving-ambigous-conflcits) occurs. 
+            - Athough ambiguous conflicts are rare, we assume here that an adversary would induce ambiguous conflicts in an attempt to circumvent access controls on **C**.  
+            - The scope of uncertainty around an ambiguous conflict ("**ψ**") is propotional to the specific scope of the conflict (e.g. the contended status of who moderates **C**'s lost and found channel does not affect other areas of **C**).  In other words, given ambigous conflict **ψ**, the superposition of all possible states of **𝓡** in **C** only depends on states entangled with **ψ**.
+            - Given this, and that ambiguous conflicts are deterministically resolved in a symmetrical (access-neutral) way, adversary **O** is _at most_ limited to denial of service.  Further, **O** could only do so in proportion to **O**'s level of access within **C**.  For exmaple, if **O** only has standard member permissions in **C**, then **O** couldn't even create an entry able to be in ambiguous conflict since **O**'s sphere of access control is not large to contend with another member. 
+            - Given the low probabilty of repeated naturally occuring ambiguous conflicts, a protective watchdog service for **C** could raise an admin alert under cetain conditions — or auto-initiate a [keyring halt](#keyring-halt).
 
-
-      (or temporarily withhold) transactions coming from **𝓛<sub>C</sub>** such that **𝓡<sub>i</sub>** passes through states that it ordinarily would not have passed through.
-    - In this process, 
-What is the possibility that replicas on two different nodes differ such that are such that  node **n<sub>i</sub>** **nSo is there a way for  **𝓡<sub>i</sub>** and  **𝓡<sub>j</sub>** The remaining possibilty for  **𝓡<sub>i</sub>** to be  abilty for For this not to be the case, one of the following must be true:
-    - Given node **n<sub>i</sub>** there exists a way to reorder (or temporarily withhold) transactions coming from **𝓛<sub>C</sub>** such that **𝓡<sub>i</sub>** passes through states that it ordinarily would not have passed through. This scenario:
-        - precludes the possibility of unauthorized key or channel access since any absence of transactions couldn't result in generation/grant of _additional_ permissions, _provided that an ACC mutation also initiates a new channel security epoch_. Since all ACC references must cite the _latest_ ACC epoch (or risk rejection), an adversary withholding transactions from **n<sub>i</sub>** at worst would result in denial of service.
-        - discounts **𝓛<sub>C</sub>**'s ability to auto-halt if 
-    - There exists a way for a member **m** (or an adversary covertly in possession of **m**'s keys) to author a series of channel entries such that one or more channel permissions are violated or altered in an unauthorized way. This can be expressed as an entry being validated, and thus merged, into a channel when it should be rejected.  How could an entry be merged in a channel that whose ACC denies it?  Implementation oversights aside, this could only happen by a late-arriving entry retroactively changing a channel's ACC such that now some set of entries should now be rejected.  However, since [ACC Change Propagation](#) occurs for all ACC changes, any conflicting entries would be put into the channel's `RetryTable`.  In cases where there is an ambiguous conflict (e.g. an admin gives  member is given moderator access to a channel while another 
-        - An implementation bug 
-
-
-   - if an entry **e** under consideration does not validate against its parent ACC, it is said to be "in conflict".  All entries (except those in **C**'s "root" channels) can potentially be in conflict since an entry could arrive and alter it's parent ACC such that is now in conflict.
-    -if **e** is in conflict,  
- - when "in band" conflict occurs (a conflict w/in the same channel), the "winner" is chosen by a weighted compare of each authors relative seniority weighted with the time delta
-     that is, there exists no possible    It is uncondiontally moved from the `LiveTable` to the `RetryTable` (e.g. a post from an author that has now been delisted). --  i.e. any entry NOT in an ACC!
-   - every entry in an ACC *could* potentially affect all other channels it controls
-   - unopposed ACC change: there exists no other entry authored in the timespan **ko**  
-   - an ambiguous conflict (in an ACC): the merger of **e<sub>1</sub>** would potentially result in one or more _other_ entries to unambiguously conflict 
-
-Since the [Add New Member](#Add-New-Member) procedure is implemented by making standard entries that conform to [Channel Entry Validation](#Channel-Entry-Validation), the security liabilty of  
+#### Membership Fluidity
+- Since the [Add New Member](#Add-New-Member) procedure is implemented by making standard entries that conform to [Channel Entry Validation](#Channel-Entry-Validation), the security liabilty of  
 
 integrity of adding new members to **C** in accordance with **C** policies rests in the 
 
