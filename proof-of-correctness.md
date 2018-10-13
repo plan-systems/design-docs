@@ -74,12 +74,12 @@ The members of **C** wish to assert...
 - ...then **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state, where specified members are delisted from the member registry.
 
 #### Real-World Security Provisioning
-- If/When it is discovered that a member's private keys are known to be either lost or possibly comprised, a "keyring halt" can be immediately initiated such that any actor in possession of said keys will have no further read or write access to **C**.
-- Agents that can intitiate a [Keyring Halt] include:
-   - the afflicted member
+- If/When it is discovered that a member's private keys are known to be either lost or possibly comprised, a "[keyring halt](#keyring-halt)" can be immediately initiated such that any actor in possession of said keys will have no further read or write access to **C**.
+- Actors that can intitiate a keyring halt include:
+   - the afflicted member, _or_
    - a member peer (depending on community-global settings), _or even_
-   - an automated watchdog system for **C** (responding to malicious behavior)
-- Following a keyring halt, the afflicted member's security state enters new "epoch" and incurs no additional security liabilty.  That is, there are no potential "gotchas" sometime down the road if an adversary gains access to comprimised keys.
+   - an automated watchdog system on **C** (responding to abnormal or malicious activity)
+- Following a keyring halt, the afflicted member's security state enters new "epoch" and incurs no additional security liabilty.  That is, there are no potential "gotchas" sometime down the road if an adversary gains access to previously comprimised keys.
 
 #### Storage Portability
 - **C**, led by a coordinated admin effort, always has the ability to swap out CRDT technologies. 
@@ -238,7 +238,7 @@ Note that the given adversary would only have access to community public data (w
         4. **ℓ<sub>auth</sub>** ⇐ **𝘾𝒉<sub>acc</sub>**.LookupAccessLevelFor( **e<sub>hdr</sub>**.`AuthorMemberID` )
             - if  **ℓ<sub>auth</sub>** does not permit **e<sub>hdr</sub>**`.EntryOp`, then **e** is deferred.
     - Merge **e** into **𝓡<sub>i</sub>**:
-        - if inserting **e** introduces an ambigous conflict, then perform [ambiguous conflict resolution](#resolving-ambiguous-conflcits). 
+        - if inserting **e** introduces an ambiguous conflict, then perform [ambiguous conflict resolution](#resolving-ambiguous-conflcits). 
         - if **𝘾𝒉<sub>dst</sub>** is an ACC and will be _more_ restrictive with **e**, then [initiate a new channel epoch](Initiating-a-New-Channel-Epoch) for **𝘾𝒉<sub>dst</sub>**
         - **𝘾𝒉<sub>dst</sub>**.InsertEntry(**e**)
     - Propagate the mutation of **𝘾𝒉<sub>dst</sub>** ("revalidation"):
