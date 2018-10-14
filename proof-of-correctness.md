@@ -33,11 +33,11 @@ On their nodes, the members of **C** agree to employ **𝓛**, an _append-only_ 
 
 Let **𝓛<sub>C</sub>** be a CRDT whose genesis is under exclusive control of the admins of **C**.  **𝓛<sub>C</sub>** is assumed to either contain (or have access to) a verification system such that a transaction submitted to **𝓛<sub>C</sub>** is acceptable _only if_ the transaction's author (signer) has explicit _𝓛-append permission_.  At first this may appear to be a strong requirement, but it reflects the _transference_ of security liability of the key(s) specified during the genesis of **𝓛<sub>C</sub>** to an _external_ set of authorities.
 
-For example, a customized "private distro" of the [Ethereum](https://en.wikipedia.org/wiki/Ethereum) blockchain ("**⧫<sub>C</sub>**") could be used to implement **𝓛<sub>C</sub>** since:
-   - The admins, upon creating **⧫<sub>C</sub>**, would issue themselves some large bulk amount _"C-Ether"_.
+For example, a customized "private distro" of the [Ethereum](https://en.wikipedia.org/wiki/Ethereum) blockchain ("**⧫**") could be used to implement **𝓛** since:
+   - The admins of **C**, on creating **⧫<sub>C</sub>**, would issue themselves some large bulk amount _"C-Ether"_.
    - The admins of **C** would periodically distribute portions of _C-Ether_ to members of **C** (a quota implementation).  
    - Large client payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed to **⧫<sub>C</sub>**.
-   - On **C**'s nodes, **⧫<sub>C</sub>** transactions that do not "burn" an amount of _C-Ether_ commensurate with the byte size of the payload would be rejected/ignored.
+   - On **C**'s nodes, **⧫<sub>C</sub>** transactions that do not "burn" an amount of _C-Ether_ commensurate with the byte size of the payload would be rejected/dropped.
 
 For context, consider watching the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video clip](https://www.youtube.com/watch?v=cidZRD3NzHg&t=1214s) speak about blockchain as an empowering distributed security and information technology.
 
@@ -60,8 +60,8 @@ The members of **C** wish to assert...
 - Consider the case where a number of members are (or become) covert adversaries of **C** (or are otherwise coerced).  Even if working in concert, it must still be impossible to: impersonate other members, insert unauthorized permission or privilege changes, gain access to others' private keys or information, or alter **𝓛<sub>C</sub>** in any way that poisons or destroys community content.
 
 #### Membership Fluidity
-- New members can be added to **C** at any time (given that **C** policies and permissions are met).
-- Member can be "delisted" from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **𝓡** before the community entered this new security "epoch").
+- New members can be invited to and join **C** at any time (given that **C** policies and permissions are met).
+- A member can be "delisted" from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **𝓡** before the community entered this new security "epoch").
 
 #### Strong Eventual Consistency
 - For each node **n<sub>i</sub>** in **C**, it's local replica state ("**𝓡<sub>i</sub>**"), converges to a stable/monotonic state as **𝓛<sub>C</sub>** message traffic eventually "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **𝓡<sub>1</sub>**...**𝓡<sub>N</sub>** mutate such that strong eventual consistency (SEC) is guaranteed.  
@@ -79,7 +79,7 @@ The members of **C** wish to assert...
     - an adversary gains covert access to admin/root private keys, 
     - one or more admins becomes adversarial towards **C**, _or_ 
     - **𝓛<sub>C</sub>** is otherwise corrupted or vandalized, 
-- ...then **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state, where specified members are delisted from the member registry.
+- ...then **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state, where specified members are delisted from the member registry and others become admins.
 
 #### Storage Fungibility
 - **C**, led by a coordinated admin effort, always has the ability to swap out CRDT technologies. 
@@ -402,11 +402,12 @@ _Each numbered item here corresponds to the items in the Specifications & Requir
 #### Proof of Storage Portability
 
 - Suppose **C** wishes to switch to an alternative CRDT techology.
+- Using a weaker form of the steps listed in [proof of independence assurance](#proof-of-independence-assurance), **C** can coordinate a switch to a new CRDT medium almost transparently.  
 - Using steps similar to the steps in the [proof of independence assurance](#proof-of-independence-assurance), the admins of **C** can coordinate a switch to a new CRDT medium almost transparently.  
-- This is to say that **𝓛** is to **C** as a hard drive is to a workstation.  **C**'s "hard drive" can be transparently replaced:
+- This is to say that **𝓛** is to **C** as a hard drive is to a workstation.  **C**'s "hard drive" can be replaced:
     - with the same exact model
     - with a different "brand"
-    - with a different storage technology
+    - with a different storage technology all together
 
      
 
