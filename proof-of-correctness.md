@@ -76,12 +76,12 @@ The members of **C** wish to assert...
 
 #### Independence Assurance
 - In the event that:
-    - an adversary gains covert access to admin/root private keys, 
+    - an adversary gains covert access to admin/root private keys, _or_
     - one or more admins becomes adversarial towards **C**, _or_ 
     - **𝓛<sub>C</sub>** is otherwise corrupted or vandalized, 
-- ...then **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state, where specified members are delisted from the member registry and others become admins.
+- ...then **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state, where specified members are delisted from the member registry and others are granted admin permission.
 
-#### Storage Fungibility
+#### Storage Portability
 - **C**, led by a coordinated admin effort, always has the ability to swap out CRDT technologies. 
 - For example, **𝓛<sub>C</sub>** may automatically halt under suspicious network conditions or insufficient peer connectivity, but earlier in its history when it had to be more agile, **C** used a CRDT that favored "liveness" over safety).
 
@@ -408,6 +408,7 @@ _Each numbered item here corresponds to the items in the Specifications & Requir
     - with the same exact model
     - with a different "brand"
     - with a different storage technology all together
+- Alernatively a repo **𝓡** could be ported and run under a different processing system implementation.
 
      
 
