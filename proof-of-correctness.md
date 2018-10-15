@@ -368,7 +368,7 @@ _Each numbered item here corresponds to the items in the Specifications & Requir
 
 #### Proof of Membership Fluidity
 
-- Both [adding a new member](#adding-A-New-Member) and [delisting a member](#delisting-a-member) are implemented using standard entries in **C**'s channel system where these entries undergo normal [channel entry validation](#Channel-Entry-Validation).
+- Both [adding a new member](#adding-A-New-Member) and [delisting a member](#delisting-a-member) are implemented using standard entries in **C**'s channel system entries undergo normal [channel entry validation](#Channel-Entry-Validation).
 - This implies that all the properties, assurances, and security afforded by channel entry validation extend to all apsects of membership fluidity.  In other words, membership fluidity is just a specialized form of [permissions assurance](#Permissions-Assurance).
 
 #### Proof of Strong Eventual Consistency
