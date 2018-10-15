@@ -323,7 +323,7 @@ to decrypt the payload into the new community key.  This key is added to the use
 
 ## Proof of Requirements & Claims
 
-_Each numbered item here corresponds to the items in the Specifications & Requirements section_.
+_Each item here corresponds to each item in the [Specifications & Requirements](#Specifications-&-Requirements) section_.
 
 
 #### Proof of Signal Opacity
