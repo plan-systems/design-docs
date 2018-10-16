@@ -25,6 +25,7 @@ The system of operation discussed here features swift auto-countermeasures _once
 
 ---
 
+
 ## Scenario
 
 A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common peer-to-peer software daemon ("node"). **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and community-global rules/policies.  
@@ -43,6 +44,13 @@ For context, consider watching the distinguished [George Glider](https://en.wiki
 
 ---
 
+## On Network Latency
+
+When a chain of events is descibed in this system, replcated data transactions and messages are assumed to potentially take significant lengths of time to propigate across the network.  It is also assumed that some nodes may be offline for indefinite periods of time.
+
+Given the nodes of **C**, let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99% chance that all _reachable_ nodes in **C** have received a given replicated message.   For a network of 10,000 reachable nodes in 2018, **Δ<sub>C</sub>** is in the neighborhood of 1-10 minutes, depending on how **𝓛** implements transaction replication.
+
+---
 
 ## Specifications & Requirements
 
@@ -163,7 +171,7 @@ type ChannelEpoch struct {
 
 // Specifies general epoch parameters and info
 type EpochInfo struct {
-   EpochStart        timestamp
+   TimeStarted       timestamp
    EpochID           UUID
    EpochIDPrev       UUID
    TransitionSecs    int             // Epoch transition param, etc
@@ -178,9 +186,12 @@ type EpochInfo struct {
 ```
 // Represents a public "rev" of a community member's crypto
 type MemberEpoch struct {
-   EpochInfo             EpochInfo
-   PubSigningKey         []byte
-   PubCryptoKey          []byte
+   MemberID          UUID
+   EpochInfo         EpochInfo
+   PubSigningKey     []byte
+   PubCryptoKey      []byte
+   HomeChannel       UUID
+   ExInfo            plan.Block
 }
 ```
 7. **C**'s root "access control channel" (ACC) is a log containing access grants to member ID
@@ -189,27 +200,89 @@ type MemberEpoch struct {
   
 
 ```
-
-type CommunityMember struct {
-    CommunityID               UUID          // Assigned
-    MemberID                  UUID          // Issued when member joins C
-    type KeyRepo struct {
-        CommunityKeyring []KeyEntry
-    PersonalKeyring  []KeyEntry
-    }
+type MemberGenesis struct {
+   MemberID          UUID       // Member ID
+   FirstEpochID      UUID       // References a MemberEpoch in the community registry channel
 }
 ```
 
 ### Standard Procedures
 
 #### Keyring Halt
-- If/When a member **m** becomes aware their keyrings has been lost or compromised, **m** (or a peer of **m**) would initiate a keyring halt procedure, where:
-    1.  A special transaction by **m** (or on behalf of **m**) is submitted to **𝓛<sub>C</sub>**, immediately "burning" **m**'s ability to post any further transactions to **𝓛<sub>C</sub>**.  In effect, this removes the ability of any actor in possession of **m**'s keyrings to author further entries on **𝓛<sub>C</sub>**.  
-     2.  An admin, or a quorum of **C**, or an automated system initiates:
-         - a new community key epoch for **C**, _and_
-         - a secure token that would be transferred to **m** via a secure channel (or in person).  This token, when opened, would allow a new `MemberEpoch` to be accepted for **m**, allowing **m** to resume normal access to **𝓛<sub>C</sub>**.
+- Given **m** in **C**, a _keyring halt_ is a special transaction is submitted to **𝓛<sub>C</sub>**, immediately "burning" the abilty of **m** (or any possessor of **m** latest private keys), to post any further transactions to **𝓛<sub>C</sub>**.
+    - All subsequent transactions signed by **[]K<sub>m</sub>** and posted to **𝓛<sub>C</sub>** will be rejected.  
+    - For example, in **⧫<sub>C</sub>**, the transaction would send all **m**'s _C-Ether_ to address `x0`.
+- In the case that an adversary in possesion of **[]K<sub>m</sub>** transfers 𝓛-append priviledges to another identity:
+    - Entries from that new identity could be blacklisted/auto-rejected
+    - Entries authored/signed by **[]K<sub>m</sub>** would be rejected once 
+
+        - A [new member epoch is started](#Starting-a-New-Member-Epoch), 
+
+- In effect, this removes the ability of any actor in possession of **m**'s private keys to author any further entries since transactions signed by ** posted to **𝓛<sub>C</sub>** will be rejected.  
+The machinery in **𝓛<sub>C</sub>** is such that this transaction 
+
+
+TODO: ensure rejected is only used for entries where there is zero chance of recovered (only bad sigs)
+
+#### Starting a New Member Epoch
+
+- Given member **m** in **C** (defined by **m**'s member `UUID` and history of `MemberEpoch`s validly appearing in **C**'s reserved _member registry channel_.
+- When **m** wishes to update their currently live/published `MemberEpoch` (typically when **m** wishes to _rekey_)
+    - **m** creates an updated `MemberEpoch`, **𝓔**, retaining new private keys in **[]K<sub>personal</sub>**
+    - **m** packages **𝓔** into a new entry ("**e<sub>𝓔</sub>**"), signs it, and posts it to **C**'s reserved _member epoch channel_.
+- Once each node **n<sub>i</sub>** merges **e<sub>𝓔</sub>**, subsequent entries authored by **m** that are _not_ signed by **m**'s latest signing key are rejected.
+
+
+#### Adding A New Member to C
+
+- When **C** wants to bestow member status to actor **a**:
+    - Given the permissions and authority needed on **C**, the root authority on **C** generates a new entry in the community registry channel containing:
+        - a newly generated `MemeberID` for **a**
+        - 
+    - A member of **C** ("**m<sub>a</sub>**") is designated as the "authority of admittance" for **a**
+    - With this authority, **m<sub>a</sub>**'s node creates a token **τ**, containing:
+        - a newly generated `MemeberID` for **a**
+        - a copy of the community keyring
+        - a secret **s<sub>a</sub>** later used by **a** to register a new set of public keys under the given `MemeberID`
+        - network addresses thand other boostrapping information that allows **a** to gain connectivity to **𝓛<sub>C</sub>**
+        - a token that bestows its bearer postage on **𝓛<sub>C</sub>**
+    - **τ**, secured with a symmetrical key, is given to **a** via any unsecured means (e.g. email, USB, OS file sharing)
+    - Via face-to-face communication, direct contact, or via other secure means, **m<sub>a</sub>** gives **a** the key to access **τ**.
+    - On a newly created "blank" node, **n<sub>a</sub>** (or an existing node of **C** in a logged-out state)
+        - **a** passes **τ** to the client
+        - the client prompts **a** for the key that decrypts **τ**
+        - the client opens **τ** and:
+            - bootstraps **𝓛<sub>C</sub>**
+            - builds **𝓡<sub>a</sub>** using normal [channel entry validation](#Channel-Entry-Validation)
+        - when **𝓡<sub>a</sub>** is up to date, **n<sub>a</sub>**:
+            - generates a new set of private keys to be published.  
+            - posts a new `MemberEpoch` to **𝓛<sub>C</sub>**, also signed by **s<sub>a</sub>**, authenticating the new member epoch. 
+    - The nodes of **C**, verifying this, now regard the public keys in `MemberEpoch` as **a**'s latest public keys.
+        - Entries that are authored and signed by **a** any earlier than **Δ<sub>C</sub>** are rejected.
+
+#### Delisting A Member from C
+- When **C** or admins of **C** decide that member **m** is to be "delisted", they want to immediately strip **m**'s abilty to read and write to **C**.  
+    - read **C** content
+    - author content in **C** 
+
+
+#### Loss of Keys
+- Given **m** in **C**, a _keyring halt_ refers to the prompt execution of the following steps:
+- If/When a member **m** becomes aware their community or personal keys have been lost or compromised ("**[]K<sub>lost</sub>**"), the possessor of **[]K<sub>lost</sub>** naturally would be able to:
+    - author entries in **m**'s name
+    - read community-public data on **C**
+- In such an event, a _keyring halt_ is issued, referring to a special transaction issued by **m** (or on behalf of **m**) and submitted to **𝓛<sub>C</sub>**, immediately "burning" **m**'s ability to post any further transactions across **𝓛<sub>C</sub>**.  
+    - In effect, this removes the ability of any actor in possession of **[]K<sub>lost</sub>** to author (and post) any further entries to **𝓛<sub>C</sub>**.  
+- An admin, peers of **m**, a quorum of **C**, or an automated system would:
+    - [initiate a new community epoch](#Starting-a-New-Community-Epoch) for **C**.
+        - In effect, all subsequent community-public data in **C** uses a newly generated community key that is not in **[]K<sub>lost</sub>**.
+        - [start a new member epoch](#Starting-a-New-Member-Epoch) for **m**.
+    3. In effect, all subsequent transactions on **𝓛<sub>C</sub>** will be unreadable to any holder of the compromised keyring
+            - a secure token that would be transferred to **m** via a secure channel (or in person).  This token, when opened, would allow a new `MemberEpoch` to be accepted for **m**, allowing **m** to resume normal access to **𝓛<sub>C</sub>**.
      In effect, all subsequent transactions on **𝓛<sub>C</sub>** will be unreadable to any holder of the compromised keyring is not is possession of any key that would gain them access to the newly issued community key or **m** newly issued keys.  **m** would regain
 Note that the given adversary would only have access to community public data (with **[]K<sub>C</sub>**) and **m**'s particular dats
+- In the case that an adversary issues their own **e<sub>𝓔</sub>** _before_ **m** is able to initiate a _keyring halt_, **m** could work with an admin of **C** to:
+    - issue an entry that would rescind any entries in the _member epoch channel_ not authored by **m**
 
 #### Channel Entry Validation
 - Given node **n<sub>i</sub>** in **C**, let **𝓡<sub>i</sub>** denote the local replica state of **𝓛<sub>C</sub>** on **n<sub>i</sub>** at a given time.
@@ -225,7 +298,11 @@ Note that the given adversary would only have access to community public data (w
         1. **e<sub>digest</sub>** ⇐  ComputeDigest(**e**`.CommunityKeyID`,   **e**`.HeaderCrypt`,  **e**.`ContentCrypt`)
         2. **e<sub>hdr</sub>** ⇐ `EntryHeader` ⇐ Decrypt(**e**`.HeaderCrypt`,  **𝓡<sub>i</sub>**.LookupKey(**e**`.CommunityKeyID`))
             - if the specified community key is not found, **e** is deferred.
+        3. **𝓔<sub>auth</sub>** ⇐ **𝓡<sub>i</sub>**.LookupMemberEpoch(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
+            - if **𝓔<sub>auth</sub>** = `nil`, then **e** is deferred. 
+            - if **e<sub>hdr</sub>**`.TimeAuthored` is after **𝓔<sub>auth</sub>**`.TimeClosed`, then **e** is deferred.
         3. **e<sub>authPubKey</sub>** ⇐ **𝓡<sub>i</sub>**.LookupKeyFor(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
+            - if **e<sub>authPubKey</sub>** = `nil`, then **e** is deferred. 
         4. ValidateSig(**e<sub>digest</sub>**, **e**`.Sig`, **e<sub>authPubKey</sub>**)
             - if **e**`.Sig` is invalid, then **e** is rejected.
     - "Channel-Validate" **e**:
@@ -302,8 +379,9 @@ Any channel (or access channel) can either be community-public or private.
        - In this case, we assume one or more of the entries in conflict have forged `TimeAuthored` and are mal-intentioned.
 - Ideally, we want to devise a resolution scheme that produces the most favorable outcomes for natural conflicts but is resilient against adversary-induced conflicts. 
     
-#### Starting a New Community Epoch
-#### Starting a New Member Epoch
+#### Starting a New Community Epoch 
+- "Starting a New Epoch for a Community"?
+
 
 
 When a community admin initiates a community-key "rekey event", the newly generated community key is securely and individually
@@ -312,11 +390,11 @@ When a pnode is processing an entry that it does not have a community key for, i
 for an entry for the current client's public key, it will send the client the encrypted community key.  The client uses its SKI
 to decrypt the payload into the new community key.  This key is added to the user's SKI keychain and is sent back to pnode.
 
+ - a secure token that would be transferred to **m** via a secure channel (or in person).  This token, when opened, would allow a new `MemberEpoch` to be accepted for **m**, allowing **m** to resume normal access to **𝓛<sub>C</sub>**.
+     In effect, all subsequent transactions on **𝓛<sub>C</sub>** will be unreadable to any holder of the compromised keyring is not is possession of any key that would gain them access to the newly issued community key or **m** newly issued keys.  **m** would regain
 
 #### Issuing a New Private Channel Key
 #### Starting a New Channel Epoch 
-#### Adding A New Member
-#### Delisting A Member
  
 
 ---
