@@ -11,9 +11,30 @@ P  L  A  N etwork
 
 In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or design rigorously satisfies a given set of specifications or claims.  The intention is to remove _all doubt_ that there exists a set of conditions such that the proposed method would _not_ meet all the specifications.
 
-Below, we express the scenario, a set of specifications, and a digital system of operation.  We then proceed to demonstrate correctness for each specification, citing how the system and its prescribed operation satisfies that specification.  
+Below, we express the [scenario](#scenario), a [set of specifications](#Specifications-&-Requirements), and a [proposed system of operation](#Proposed-System-of-Operation).  We then proceed to demonstrate [correctness for each specification](#Proof-of-Requirements-&-Claims), citing how the system and its prescribed operation satisfies that specification.  
 
-Please note that the data structures listed below are intended to convey understanding and model correctness more than they are intended to be performant.  [go-plan](https://github.com/plan-tools/go-plan) is the latter.
+Please note that the data structures listed below are intended to convey understanding and model correctness more than they are intended to be performant.  [go-plan](https://github.com/plan-tools/go-plan) is intended to be the latter.
+
+---
+
+
+# Scenario
+
+A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common peer-to-peer software daemon ("node"). **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and community-global rules/policies.  
+
+On their nodes, the members of **C** agree to employ **𝓛**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type).  Data entries appended to **𝓛** ("transactions") are characterized by an arbitrary payload buffer, a signing public key, and a signature authenticating the transaction.  Transactions on any given **𝓛** are considered to be "in the clear" (i.e. neither "wire" privacy _nor_ storage privacy is assumed).
+
+Let **𝓛<sub>C</sub>** be a CRDT whose genesis is under exclusive control of the admins of **C**.  **𝓛<sub>C</sub>** is assumed to either contain (or have access to) a verification system such that a transaction submitted to **𝓛<sub>C</sub>** is acceptable _only if_ the transaction's author (signer) has explicit _𝓛-append permission_ ("postage").  At first this may appear to be a strong requirement, but it reflects the _transference_ of security liability of the key(s) specified during the genesis of **𝓛<sub>C</sub>** to an _external_ set of authorities.
+
+For example, a customized "private distro" of the [Ethereum](https://en.wikipedia.org/wiki/Ethereum) blockchain ("**⧫**") could be used to implement **𝓛** since:
+- The admins of **C**, on creating **⧫<sub>C</sub>**, would issue themselves large some bulk amount _C-Ether_ ("postage").
+- The admins of **C** would periodically distribute portions of _C-Ether_ to members of **C** (serving as a postage quota).  
+- On **C**'s nodes, **⧫<sub>C</sub>**:
+    - Large client payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed.
+    - Transactions that do not "burn" an amount of postage commensurate with the byte size of the payload would be rejected/dropped.
+    - Transactions that transfer postage from non-designated identities would be rejected/dropped.
+
+For context, consider watching the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video clip](https://www.youtube.com/watch?v=cidZRD3NzHg&t=1214s) speak about blockchain as an empowering distributed security and information technology.
 
 ---
 
@@ -25,25 +46,6 @@ The system of operation discussed here features swift auto-countermeasures _once
 
 ---
 
-
-## Scenario
-
-A founding set of community organizers ("admins") wish to form **C**, a secure distributed storage network comprised of computers with varying capabilities, each running a common peer-to-peer software daemon ("node"). **C** is characterized by a set of individual members for any given point in time, with one or more members charged with administering member status, member permissions, and community-global rules/policies.  
-
-On their nodes, the members of **C** agree to employ **𝓛**, an _append-only_ [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type).  Data entries appended to **𝓛** ("transactions") are characterized by an arbitrary payload buffer, a signing public key, and a signature authenticating the transaction.  Transactions on any given **𝓛** are considered to be "in the clear" (i.e. neither "wire" privacy _nor_ storage privacy is assumed).
-
-Let **𝓛<sub>C</sub>** be a CRDT whose genesis is under exclusive control of the admins of **C**.  **𝓛<sub>C</sub>** is assumed to either contain (or have access to) a verification system such that a transaction submitted to **𝓛<sub>C</sub>** is acceptable _only if_ the transaction's author (signer) has explicit _𝓛-append permission_.  At first this may appear to be a strong requirement, but it reflects the _transference_ of security liability of the key(s) specified during the genesis of **𝓛<sub>C</sub>** to an _external_ set of authorities.
-
-For example, a customized "private distro" of the [Ethereum](https://en.wikipedia.org/wiki/Ethereum) blockchain ("**⧫**") could be used to implement **𝓛** since:
-   - The admins of **C**, on creating **⧫<sub>C</sub>**, would issue themselves some large bulk amount _"C-Ether"_.
-   - The admins of **C** would periodically distribute portions of _C-Ether_ to members of **C** (a quota implementation).  
-   - Large client payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed to **⧫<sub>C</sub>**.
-   - On **C**'s nodes, **⧫<sub>C</sub>** transactions that do not "burn" an amount of _C-Ether_ commensurate with the byte size of the payload would be rejected/dropped.
-
-For context, consider watching the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video clip](https://www.youtube.com/watch?v=cidZRD3NzHg&t=1214s) speak about blockchain as an empowering distributed security and information technology.
-
----
-
 ## On Network Latency
 
 When a chain of events is descibed in this system, replcated data transactions and messages are assumed to potentially take significant lengths of time to propigate across the network.  It is also assumed that some nodes may be offline for indefinite periods of time.
@@ -52,7 +54,7 @@ Given the nodes of **C**, let **Δ<sub>C</sub>** be the time period needed for t
 
 ---
 
-## Specifications & Requirements
+# Specifications & Requirements
 
 The members of **C** wish to assert...
 
@@ -96,12 +98,11 @@ The members of **C** wish to assert...
 
 ---
 
-
-## System Proposal
+# Proposed System of Operation
 
 The members of **C** present the following system of infrastructure...
 
-### System Synopsis
+## System Synopsis
 
 - The system proposed is "IRC-inspired" in that community and member information is organized into an infinitely large virtual channel addressing space.  However, instead of entries entered into channels just being rebroadcast to connected clients (as on an IRC server), entries _persist_ by being stored as replicated transactions on **𝓛<sub>C</sub>**.    
 - When a channel is created, it is assigned a `ChannelProtocol` string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them.  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, affords graphical client interfaces rich and wide-open possibilites.
@@ -111,17 +112,20 @@ The members of **C** present the following system of infrastructure...
 - Hence, the entry processing pipeline forms a securely contained processing center system of operation above and outside **C**'s channel data space.
 
 
-### System Security
+## System Security
 
 
-- Let `UUID` represent a constant-length independently generated identifier that ensures no reasonable chance of peer collision (consider 20 or 32 pseudo-randomly generated bytes). It is difficult to express [collision odds](http://preshing.com/20110504/hash-collision-probabilities/) in meaningful human terms, even for "modest" probability spaces such as 1 in 2<sup>160</sup>. 
-- Each member of **C** securely maintains two "keyrings":
-   1. **[]K<sub>personal</sub>**, the member's _personal keyring_, used to:
+- Let `UUID` represent a constant-length independently generated identifier that ensures no reasonable chance of peer collision. Athough it is difficult to express [collision odds](http://preshing.com/20110504/hash-collision-probabilities/) in meaningful human terms (even for "modest" probability spaces such as 1 in 2<sup>160</sup>), 20 to 32 pseudo-randomly generated bytes is more than sufficient to implement `UUID`.
+- Each member, **m**, in **C** securely maintains custody of two "keyrings":
+   1. **[]K<sub>m</sub>**, the member's _personal keyring_, used to:
        - decrypt/encrypt information "sent" to/from that member
        - create signatures that authenticate information authored by that member
-   2. **[]K<sub>C</sub>**, the _community keyring_, used to encrypt/decrypt "community public" data (i.e. the cryptographic bridge between **𝓛<sub>C</sub>** and **𝓡<sub>i</sub>**)
+   2. **[]K<sub>C</sub>**, the _community keyring_, used to encrypt/decrypt "community public" data (i.e. the cryptographic bridge between **𝓛<sub>C</sub>** and **𝓡<sub>i</sub>**) 
+- When **m** signs or encrypts data, **m** always uses the latest published ("live") keys, denoted by **[0]K<sub>m</sub>** and **[0]K<sub>C</sub>** (as newly issued keys are inserted on the "left" side of a list).
+- When **m** is accessing **C**, it is given that **m**'s local client effectively has access to these keyrings (though they can be implmented in ways that further comparmentalize security, such as using a hardware dongle or a key server).
 
-### System Data Structures
+
+## System Data Structures
 
 - Each transaction residing in **𝓛<sub>C</sub>** contains a one or more serializations of:
 ```
@@ -206,55 +210,71 @@ type MemberGenesis struct {
 }
 ```
 
-### Standard Procedures
+
+## Reserved Channels
+- A small number of channel `UUID`s are hardcoded ("reserved") and are used to specify root-level information and permissions, namely admin and member status.  The number, purpose, and use of these channels can be expanded to meet future needs.  These channels are special in that entries must meet additonal security checks/requirements.
+
+
+#### Root Access Channel
+- This is **C**'s root channel, effectively specifying which members are admins.
+- Automated machinery in **C** could optionally be geared to use smart contracts on **𝓛<sub>C</sub>** to add entries to this channel.
+    - .e.g. a majority vote of admins could be required in order to add a new admin to the root access channel. 
+
+#### Member Registry Channel
+- community-public read-only (only admins can write), where entries contain one or more `MemberGenesis` records, referencing an initial `MemberEpoch` record in the resereved _Member Epoch Channel_ (below).  
+
+#### Member Epoch Channel
+- a special community-public channel where members (or designated memebrs/admin specified by the parent ACC) publish new revisions to their `MemberEpoch` record.  
+- A `MemberEpoch` record specifies essential information about a member, such as their public encryption and signining keys.
+- Entries in this channel must meet the additional requirements that ensure a `MemberEpoch` can only be updated by it's owner (or a member delegated to do so).
+
+
+
+
+## Standard Procedures
 
 #### Keyring Halt
-- Given **m** in **C**, a _keyring halt_ is a special transaction is submitted to **𝓛<sub>C</sub>**, immediately "burning" the abilty of **m** (or any possessor of **m** latest private keys), to post any further transactions to **𝓛<sub>C</sub>**.
-    - All subsequent transactions signed by **[]K<sub>m</sub>** and posted to **𝓛<sub>C</sub>** will be rejected.  
+- Given member **m**'s private keys ("**[]K<sub>m</sub>**"), a _keyring halt_ is a special transaction submitted to **𝓛<sub>C</sub>**, immediately "burning" the abilty of **m** (or any possessor of **[]K<sub>m</sub>**) to post transactions to **𝓛<sub>C</sub>**.
+    - Any transactions signed by **[]K<sub>m</sub>** and subsequently posted to **𝓛<sub>C</sub>** will be rejected because **[]K<sub>m</sub>** no longer has post permission on **𝓛<sub>C</sub>**.
     - For example, in **⧫<sub>C</sub>**, the transaction would send all **m**'s _C-Ether_ to address `x0`.
-- In the case that an adversary in possesion of **[]K<sub>m</sub>** transfers 𝓛-append priviledges to another identity:
-    - Entries from that new identity could be blacklisted/auto-rejected
-    - Entries authored/signed by **[]K<sub>m</sub>** would be rejected once 
-
-        - A [new member epoch is started](#Starting-a-New-Member-Epoch), 
-
-- In effect, this removes the ability of any actor in possession of **m**'s private keys to author any further entries since transactions signed by ** posted to **𝓛<sub>C</sub>** will be rejected.  
-The machinery in **𝓛<sub>C</sub>** is such that this transaction 
+- In the case that an adversary in possesion of **[]K<sub>m</sub>** transfers their postage (their 𝓛-append priviledges) to another identity _before_ a keyring halt is posted for **m**, entries using postage descendent from the "tainted" postage would be rejected.
+- In the case that an a adversary in possession of **[]K<sub>m</sub>** [starts a new member epoch](#Starting-a-New-Member-Epoch), an admin or member delegate in relationship with **m** would issue new entries that replace/rescind entries as necessary.  With any malicious entries in the [Member Epoch Channel](#Member-Epoch-Channel) rescinded, any 
 
 
-TODO: ensure rejected is only used for entries where there is zero chance of recovered (only bad sigs)
 
 #### Starting a New Member Epoch
 
 - Given member **m** in **C** (defined by **m**'s member `UUID` and history of `MemberEpoch`s validly appearing in **C**'s reserved _member registry channel_.
-- When **m** wishes to update their currently live/published `MemberEpoch` (typically when **m** wishes to _rekey_)
-    - **m** creates an updated `MemberEpoch`, **𝓔**, retaining new private keys in **[]K<sub>personal</sub>**
+- When **m** wishes to replace their currently published ("live") `MemberEpoch` with a new revision (often, when **m** wishes to _rekey_)
+    - **m** creates an updated `MemberEpoch`, **𝓔**, retaining the newly generated private keys in **[]K<sub>personal</sub>**
     - **m** packages **𝓔** into a new entry ("**e<sub>𝓔</sub>**"), signs it, and posts it to **C**'s reserved _member epoch channel_.
-- Once each node **n<sub>i</sub>** merges **e<sub>𝓔</sub>**, subsequent entries authored by **m** that are _not_ signed by **m**'s latest signing key are rejected.
+        - In the  _member epoch channel_, in order for an entry to be considered live, it must have the appropriate member signatures, or it must be authored by a member bestowed with an elevated access level (i.e. one or more members or admins designated to assist members if they are locked out of **C** as a result of a [keyring halt](#keyring-halt)
+- Once each node **n<sub>i</sub>** merges **e<sub>𝓔</sub>**, subsequent entries authored by **m** that are _not_ signed by **m**'s _latest_ signing key are rejected.  
+
 
 
 #### Adding A New Member to C
 
 - When **C** wants to bestow member status to actor **a**:
     - Given the permissions and authority needed on **C**, the root authority on **C** generates a new entry in the community registry channel containing:
-        - a newly generated `MemeberID` for **a**
+        - a newly generated `MemberID` for **a**
         - 
     - A member of **C** ("**m<sub>a</sub>**") is designated as the "authority of admittance" for **a**
     - With this authority, **m<sub>a</sub>**'s node creates a token **τ**, containing:
-        - a newly generated `MemeberID` for **a**
+        - a newly generated `MemberID` for **a**
         - a copy of the community keyring
-        - a secret **s<sub>a</sub>** later used by **a** to register a new set of public keys under the given `MemeberID`
-        - network addresses thand other boostrapping information that allows **a** to gain connectivity to **𝓛<sub>C</sub>**
+        - a secret **s<sub>a</sub>** later used by **a** to register a new set of public keys under the given `MemberID`
+        - network addresses and other boostrapping information that allows **a** to gain connectivity to **𝓛<sub>C</sub>**
         - a token that bestows its bearer postage on **𝓛<sub>C</sub>**
     - **τ**, secured with a symmetrical key, is given to **a** via any unsecured means (e.g. email, USB, OS file sharing)
     - Via face-to-face communication, direct contact, or via other secure means, **m<sub>a</sub>** gives **a** the key to access **τ**.
     - On a newly created "blank" node, **n<sub>a</sub>** (or an existing node of **C** in a logged-out state)
         - **a** passes **τ** to the client
         - the client prompts **a** for the key that decrypts **τ**
-        - the client opens **τ** and:
+        - the client opens **τ** and, if applicable:
             - bootstraps **𝓛<sub>C</sub>**
             - builds **𝓡<sub>a</sub>** using normal [channel entry validation](#Channel-Entry-Validation)
-        - when **𝓡<sub>a</sub>** is up to date, **n<sub>a</sub>**:
+        - when **𝓡<sub>a</sub>** is current, **n<sub>a</sub>**:
             - generates a new set of private keys to be published.  
             - posts a new `MemberEpoch` to **𝓛<sub>C</sub>**, also signed by **s<sub>a</sub>**, authenticating the new member epoch. 
     - The nodes of **C**, verifying this, now regard the public keys in `MemberEpoch` as **a**'s latest public keys.
@@ -496,6 +516,17 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 
 note: although TimeAuthored is used to index entries, some Lc implementations may optionally provide a time index value that converges to within
 a fixed provable accuracy of when the network witnessed it sent (as it travels further into the past).  TimeConsensus (Dfinity, Hashgraph).  For a given transaction **t**, let **t<sub>t </sub>**
+
+
+### Version History
+
+
+
+| Version |   Date   | Description of Changes |
+|:-------:|:--------:|------------------------|
+|   0.1   | Oct 2018 | Under construction     |
+|         |          |                        |
+|         |          |                        |
 
 
 ### scrap/work area
