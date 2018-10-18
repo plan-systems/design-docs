@@ -180,7 +180,7 @@ type ChannelEpoch struct {
 type EpochInfo struct {
    TimeStarted       timestamp
    EpochID           UUID
-   EpochIDPrev       UUID
+   PredEpochID       UUID            // 0 if this is the first epoch.
    TransitionSecs    int             // Epoch transition param, etc
 }
 ```
@@ -191,7 +191,7 @@ type EpochInfo struct {
     2. A newly generated community key is distributed to **C**'s members via a persistent data channel using asymmetric encryption (the community admin that issues a new community key separately "sends" the key to each member in **C**'s member registry channel, encrypting the new key with the recipient members's latest public key, which is also available in the member registry channel)
 8. **C**'s "member registry channel" is defined as a log containing each member's UUID and current crypto "epoch":
 ```
-// Represents a public "rev" of a community member's crypto
+// Represents a public "rev" of a community member's community-public info
 type MemberEpoch struct {
    MemberID          UUID
    EpochInfo         EpochInfo
@@ -207,8 +207,9 @@ type MemberEpoch struct {
   
 
 ```
-type MemberGenesis struct {
+type MemberInvite struct {
    MemberID          UUID       // Member ID
+   EpochSigningKey   []byte     // Allows the first MemberEpoch to be authenticated
    FirstEpochID      UUID       // References a MemberEpoch in the community registry channel
 }
 ```
@@ -223,65 +224,62 @@ A small number of channel `UUID`s are hardcoded ("reserved") and are used to spe
 - Automated machinery in **C** could optionally be geared to use smart contracts on **𝓛<sub>C</sub>** to add entries to this channel.
     - e.g. a majority vote of admins could be required in order to add a new admin to the root access channel. 
 
-#### Member Registry Channel
-- Community-public read-only (only admins can write), where entries contain one or more `MemberGenesis` records, referencing an initial `MemberEpoch` record in the reserved _Member Epoch Channel_ (below).  
+#### Member Invite Channel
+- Community-public read-only, where entries contain `MemberEpoch` records that enable new members to be added to **C**
+- The private half of the `.PubSigningKey` is used to autenticate a new member's initial `MemberEpoch` record, appearing in the reserved _Member Epoch Channel_ (below).  
 
 #### Member Epoch Channel
-- a special community-public channel where members (or designated members/admin specified by the parent ACC) publish new revisions to their `MemberEpoch` record.  
-- A `MemberEpoch` record specifies essential information about a member, such as their public encryption and signing keys.
-- Entries in this channel must meet the additional requirements that ensure a `MemberEpoch` can only be updated by it's owner (or a member delegated to do so).
+- This is a special community-public channel where members (or designated members/admin specified by the parent ACC) publish revisions to their most currently posted `MemberEpoch` record.  
+- A `MemberEpoch` published to this channel specifies essential information about a member, such as their public encryption and signing keys.
+- Each entry is this channel contains a `MemberEpoch`, **𝓔**, and is only considered valid if:
+    - the member that signed the entry is either the `MemberID` that appears in **𝓔** _or_ (or is signed by peer(s) delegated to do so).
+    - the predecessor epoch (**𝓔**`.PredEpochID`) is, in fact, elligible to be succeeded.
+        - If **m** is a newly-invited member and is posting their first `MemberEpoch`, then the validating "parent" epoch of **𝓔** is found in the [Member Invite Channel](#Member-Invite-Channel). 
 
-
-
+ 
 
 ## Standard Procedures
 
 #### Keyring Halt
-- Given member **m**'s private keys ("**[]K<sub>m</sub>**"), a _keyring halt_ is a special transaction submitted to **𝓛<sub>C</sub>**, immediately "burning" the ability of **m** (or any possessor of **[]K<sub>m</sub>**) to post transactions to **𝓛<sub>C</sub>**.
+- Given: member **m**'s private keys ("**[]K<sub>m</sub>**"), a _keyring halt_ is a special transaction submitted to **𝓛<sub>C</sub>**, immediately "burning" the ability of **m** (or any possessor of **[]K<sub>m</sub>**) to post transactions to **𝓛<sub>C</sub>**.
     - Any transactions signed by **[]K<sub>m</sub>** and subsequently posted to **𝓛<sub>C</sub>** will be rejected because **[]K<sub>m</sub>** no longer has post permission on **𝓛<sub>C</sub>**.
     - For example, in **⧫<sub>C</sub>**, the transaction would send all **m**'s _C-Ether_ to address `x0`.
 - In the case that an adversary in possession of **[]K<sub>m</sub>** transfers their postage (their 𝓛-append privileges) to another identity _before_ a keyring halt is posted for **m**, entries using postage descendent from the "tainted" postage would be rejected.
 - In the case that an a adversary in possession of **[]K<sub>m</sub>** [starts a new member epoch](#Starting-a-New-Member-Epoch), an admin or member delegate in relationship with **m** would issue new entries that replace/rescind entries as necessary.  With adversarial entries in the [Member Epoch Channel](#Member-Epoch-Channel) rescinded, any dependent entries would be permanently deferred during [channel entry validation](#Channel-Entry-Validation).
+- Note: admin intervention is required in that postage must be reallocated to **m** 
 
 
 
 #### Starting a New Member Epoch
 
-- Given member **m** in **C** (defined by **m**'s member `UUID` and history of `MemberEpoch`s validly appearing in **C**'s reserved _member registry channel_.
-- When **m** wishes to replace their currently published ("live") `MemberEpoch` with a new revision (often, when **m** wishes to _rekey_)
-    - **m** creates an updated `MemberEpoch`, **𝓔**, retaining the newly generated private keys in **[]K<sub>personal</sub>**
-    - **m** packages **𝓔** into a new entry ("**e<sub>𝓔</sub>**"), signs it, and posts it to **C**'s reserved _member epoch channel_.
-        - In the  _member epoch channel_, in order for an entry to be considered live, it must have the appropriate member signatures, or it must be authored by a member bestowed with an elevated access level (i.e. one or more members or admins designated to assist members if they are locked out of **C** as a result of a [keyring halt](#keyring-halt)
-- Once each node **n<sub>i</sub>** merges **e<sub>𝓔</sub>**, subsequent entries authored by **m** that are _not_ signed by **m**'s _latest_ signing key are rejected.  
-
+- Given that member **m** wishes to replace their currently published `MemberEpoch` with a new revision:
+    - **m** creates an updated `MemberEpoch`, **𝓔′** and places the newly generated private keys into their personal keyring, **[]K<sub>m</sub>**.
+    - **m** packages **𝓔′** into a new entry ("**e<sub>𝓔′</sub>**"), signs it, and posts it to **C**'s [Member Epoch Channel](#Member-Epoch-Channel).
+    - On nodes that have merged **e<sub>𝓔′</sub>**, subsequent entries authored by **m** that _don't_ use the signing key listed in **𝓔′** are deferred.  
 
 
 #### Adding A New Member to C
 
-- When **C** wants to bestow member status to actor **a**:
-    - Given the permissions and authority needed on **C**, the root authority on **C** generates a new entry in the community registry channel containing:
-        - a newly generated `MemberID` for **a**
-        - 
-    - A member of **C** ("**m<sub>a</sub>**") is designated as the "authority of admittance" for **a**
-    - With this authority, **m<sub>a</sub>**'s node creates a token **τ**, containing:
-        - a newly generated `MemberID` for **a**
-        - a copy of the community keyring
-        - a secret **s<sub>a</sub>** later used by **a** to register a new set of public keys under the given `MemberID`
-        - network addresses and other bootstrapping information that allows **a** to gain connectivity to **𝓛<sub>C</sub>**
+- Given that the permissions and prerequisties are met on **C** are met to bestow member status to actor **α**:
+    1. A root authority of **C** generates and posts a new `MemberEpoch`, **𝓔<sub>0</sub>**, in the [Member Invite Channel](#Member-Invite-Channel), containing:
+        - a newly generated `MemberID` for **α**.
+        - the public half of newly generated keys. 
+        - any additonal information useful in tracking or documentation.
+    2. Also created is token **τ**, containing:
+        - a copy of **𝓔<sub>0</sub>**
+        - a copy of the community keyring, **[]K<sub>C</sub>**
+        - the private half of the keys in **𝓔<sub>0</sub>**
+        - bootstrapping information that allows **α** to gain connectivity to **𝓛<sub>C</sub>** (e.g. network addresses and other )
         - a token that bestows its bearer postage on **𝓛<sub>C</sub>**
-    - **τ**, secured with a symmetrical key, is given to **a** via any unsecured means (e.g. email, USB, OS file sharing)
-    - Via face-to-face communication, direct contact, or via other secure means, **m<sub>a</sub>** gives **a** the key to access **τ**.
-    - On a newly created "blank" node, **n<sub>a</sub>** (or an existing node of **C** in a logged-out state)
-        - **a** passes **τ** to the client
-        - the client prompts **a** for the key that decrypts **τ**
+    3. **τ** is encrypted with a password, and is passed to **α** via any non-secured means (USB device, email, file sharing)
+    4. Via face-to-face communication, direct contact, or via other secure means, **α** is passed the password to **τ**.
+    5. On a newly created "blank" node, **n<sub>α</sub>** (or an existing node of **C** in a logged-out state)
+        - **α** passes **τ** to the client
+        - the client prompts **α** for the password that decrypts **τ**
         - the client opens **τ** and, if applicable:
             - bootstraps **𝓛<sub>C</sub>**
-            - builds **𝓡<sub>a</sub>** using normal [channel entry validation](#Channel-Entry-Validation)
-        - when **𝓡<sub>a</sub>** is current, **n<sub>a</sub>**:
-            - generates a new set of private keys to be published.  
-            - posts a new `MemberEpoch` to **𝓛<sub>C</sub>**, also signed by **s<sub>a</sub>**, authenticating the new member epoch. 
-    - The nodes of **C**, verifying this, now regard the public keys in `MemberEpoch` as **a**'s latest public keys.
-        - Entries that are authored and signed by **a** any earlier than **Δ<sub>C</sub>** are rejected.
+            - builds **𝓡<sub>α</sub>** using normal [channel entry validation](#Channel-Entry-Validation)
+        - when **𝓡<sub>α</sub>** is current, **α** posts a successor `MemberEpoch` to the [Member Epoch Channel](#Member-Epoch-Channel), just as they would when [starting a new member epoch](#Starting-a-New-Member-Epoch).
 
 #### Delisting A Member from C
 - When **C** or admins of **C** decide that member **m** is to be "delisted", they want to immediately strip **m**'s ability to read and write to **C**.  
