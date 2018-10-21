@@ -11,7 +11,7 @@ P  L  A  N etwork
 
 In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or design rigorously satisfies a given set of specifications or claims.  The intention is to remove _all doubt_ that there exists a set of conditions such that the proposed method would _not_ meet all the specifications.
 
-Below, we express a [scenario](#scenario), list a [set of specifications](#Specifications-&-Requirements), and propose [a system of operation](#Proposed-System-of-Operation) intended to address the scanario and specifications.  We then proceed to demonstrate [correctness for each specification](#Proof-of-Requirements-&-Claims), citing how the system and its prescribed operation satisfies that specification.  
+Below, we express a [scenario](#scenario), list a [set of specifications](#Specifications-&-Requirements), and propose [a system of operation](#Proposed-System-of-Operation) intended to address the scenario and specifications.  We then proceed to demonstrate [correctness for each specification](#Proof-of-Requirements-&-Claims), citing how the system and its prescribed operation satisfies that specification.  
 
 Please note that the data structures listed below are intended to convey understanding and model correctness more than they are intended to be performant.  [go-plan](https://github.com/plan-tools/go-plan) is intended to be the latter.
 
@@ -28,12 +28,12 @@ Let **𝓛<sub>C</sub>** be a CRDT whose genesis is under exclusive control of t
 
 
 For example, a customized "private distro" of the [Ethereum](https://en.wikipedia.org/wiki/Ethereum) blockchain ("**⧫**") could be used to implement **𝓛** since:
-- The admins of **C**, on creating **⧫<sub>C</sub>**, would issue themselves large some bulk amount _C-Ether_ ("postage").
-- The admins of **C** would periodically distribute portions of _C-Ether_ to members of **C** (serving as a max postage quota).  
+- The admins of **C**, on creating **⧫<sub>C</sub>**, would issue themselves some large bulk amount _C-Ether_ (postage)
+- The admins of **C** would periodically distribute portions of _C-Ether_ to members of **C** (a postage quota).  
 - On **C**'s nodes, **⧫<sub>C</sub>**:
-    - Large client payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed.
-    - Any transaction that does not "burn" an amount of postage commensurate with the byte size of the payload would be rejected/dropped.
-    - Any transaction that attempts to transfer postage from a non-designated identities would be rejected/dropped.
+    - Large payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed.
+    - Any transaction that does not "burn" an amount of postage commensurate with the byte size of the payload would be dropped.
+    - Any transaction that attempts to transfer postage from a non-designated identities would be dropped.
 
 For context, consider watching the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video clip](https://www.youtube.com/watch?v=cidZRD3NzHg&t=1214s) speak about blockchain as an empowering distributed security and information technology.
 
@@ -43,20 +43,20 @@ For context, consider watching the distinguished [George Glider](https://en.wiki
 
 We acknowledge that even the most advanced and secure systems are vulnerable to private key loss or theft, socially engineered deception, or physical coercion.  That is, an adversary in possession of another's private keys without their knowledge, or an adversary manipulating or coercing others is difficult (or impossible) to prevent.  Biometric authentication systems can mitigate _some_ of these threats, but they also introduce additional surfaces that could be exploited (e.g. spoofing a biometric device or exploiting an engineering oversight).
 
-Security frameworks often don't analyze or provision for the loss of private keys since the implications are typically catastrophic, effectively making the issue someone else's intractable problem. Any system lacking such analysis and provisioning can only be considered incomplete for every-day use. The system of operation discussed here features swift countermeasures _once it becomes known_ that private keys have been compromised or suspect activity has occured.  Furhter, loss of private key scenaros are discussed in detail.  
+Security frameworks often don't analyze or provision for the loss of private keys since the implications are typically catastrophic, effectively making the issue someone else's intractable problem. Any system lacking such analysis and provisioning can only be considered incomplete for every-day use. The system of operation discussed here features swift countermeasures _once it becomes known_ that private keys have been compromised (or suspect activity has occurred). 
 
 
 ---
 
-## On Network Latency
+## On Network Connectivity
 
 In any system, replicated data transactions and messages take non-trivial periods of time to traverse and propagate across the network.  Also, any number of nodes could be offline for indefinite periods of time. 
 
-No assuptions are made about network connectivity or reachabilty in this proof, and propagation times are expressed in terms of **Δ<sub>C</sub>**:
-- Given the nodes of **C**, let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.9% chance that all _reachable_ nodes in **C** have received a given replicated transaction.   
-- For example, given a swarm of reachable nodes on a WAN, **Δ<sub>C</sub>** is in the neighborhood of 1-10 minutes, depending on how **𝓛<sub>C</sub>** implements transaction replication (even swarms larger than 10<sup>6</sup>) 
+No assumptions are made about network connectivity or reachability in this proof, and propagation times are expressed as "**Δ<sub>C</sub>**":
+- Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.9% chance that all _reachable_ nodes in **C** have received a given replicated transaction.   
+- For example, given a swarm of reachable nodes on a WAN, **Δ<sub>C</sub>** is in the neighborhood of 1-10 minutes, depending on how **𝓛<sub>C</sub>** implements transaction replication (even swarms larger than 10<sup>7</sup>).
 
-Note that the implmentation of **𝓛<sub>C</sub>** could impose strong requirements on network connectivity in the service of offering safety or consensus services.
+Like the way an operating system is _only_ as swift as its host storage system, this system's performance is dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s network profile and behavior. 
 
 ---
 
@@ -231,7 +231,7 @@ A small number of channel `UUID`s are hardcoded ("reserved") and are used to spe
 
 #### Member Invite Channel
 - Community-public read-only, where entries contain `MemberEpoch` records that enable new members to be added to **C**
-- The private half of the `.PubSigningKey` is used to autenticate a new member's initial `MemberEpoch` record, appearing in the reserved _Member Epoch Channel_ (below).  
+- The private half of the `.PubSigningKey` is used to authenticate a new member's initial `MemberEpoch` record, appearing in the reserved _Member Epoch Channel_ (below).  
 
 #### Member Epoch Channel
 - This channel serves two 
@@ -239,7 +239,7 @@ A small number of channel `UUID`s are hardcoded ("reserved") and are used to spe
     - `MemberEpoch` entries published to this channel specify essential information about each member, such as their public encryption and signing keys.
 - Each entry is this channel contains a `MemberEpoch`, **𝓔**, and is only considered valid if:
     - the member who signed the entry is either the `MemberID` that appears in **𝓔** or an authorized member delegated to do so, _and_
-    - the predecessor ("parent") epoch (**𝓔**`.ParentEpochID`) is, in fact, elligible to be succeeded.
+    - the predecessor ("parent") epoch (**𝓔**`.ParentEpochID`) is, in fact, eligible to be succeeded.
         - If **m** is a newly-invited member and is posting their first `MemberEpoch`, then the validating parent epoch of **𝓔** can be found in the [Member Invite Channel](#Member-Invite-Channel). 
 
  
@@ -257,7 +257,7 @@ A small number of channel `UUID`s are hardcoded ("reserved") and are used to spe
 - With a halt ordered on **[]K<sub>m</sub>**, an admin or automated agent [starts a new community epoch](#Starting-a-New-Community-Epoch) for **C**.
 - Any time later, admin(s) (or delegated members) review the situation.
     - When appropriate, **m** access is restored via a simplified variation of [adding a new member](#Adding-A-New-Member).
-    - In the case that an adversary in possession of **[]K<sub>m</sub>** transfers their postage (their privileges on **𝓛<sub>C</sub>**) to another identity _before_ a keyring halt is posted for **m**, entries using postage from the illicit postage coould be intentified and rejected.
+    - In the case that an adversary in possession of **[]K<sub>m</sub>** transfers their postage (their privileges on **𝓛<sub>C</sub>**) to another identity _before_ a keyring halt is posted for **m**, entries using postage from the illicit postage could be identified and rejected.
     - In the case that an a adversary in possession of **[]K<sub>m</sub>** [started a new member epoch](#Starting-a-New-Member-Epoch) (as **m**), then an admin in communication with **m** would issue new entries that replace/rescind the earlier entries as appropriate.  As normal [channel entry validation](#Channel-Entry-Validation) proceeds, this will automatically result in any dependent (adversary-authored) entries to be removed from "live" status.
 
 
@@ -273,12 +273,12 @@ A small number of channel `UUID`s are hardcoded ("reserved") and are used to spe
 
 #### Starting a New Community Epoch
 - Given: an admin, delegated member, or an automated agent wants to initiate a community-key "rekey" event, also known as _starting a new community epoch_.
-- The purpose of starting a new community epoch is so that any angent with unauthorized possession of even the latest community keyring will be unable to read community data.  In other words, the purpose is to deprecate the current community key and issue a replacement.
-- A new community epoch follows a member [keyring halt](#keyring-halt) or the [delisting of a member](#Delisting-A-member) since it's important to ensure that the current community key (and any actor in possession of it) will no longer be usefuel.  This is made so because once a new community key epoch is issued, all entries are expected to be encrypted with it. 
-- The admin, member, or agent starting a new communuiy epoch:
+- The purpose of starting a new community epoch is so that any agent with unauthorized possession of even the latest community keyring will be unable to read community data.  In other words, the purpose is to deprecate the current community key and issue a replacement.
+- A new community epoch follows a member [keyring halt](#keyring-halt) or the [delisting of a member](#Delisting-A-member) since it's important to ensure that the current community key (and any actor in possession of it) will no longer be useful.  This is made so because once a new community key epoch is issued, all entries are expected to be encrypted with it. 
+- The admin, member, or agent starting a new community epoch:
     - Generates a new symmetrical key
     - For each open/active `MemberEpoch` ("**𝓔<sub>m</sub>**") in the _Member Epoch Channel_ (i.e. for each current member of **C**)
-        - Ecrypt the community key using **𝓔<sub>m</sub>**`.PubEncryptKey`
+        - Encrypt the community key using **𝓔<sub>m</sub>**`.PubEncryptKey`
         - Place the encrypted community key in a new entry and post it to **𝓔<sub>m</sub>**`.KeyInboxChannel`
 - Each member's client, upon seeing a new entry in their `KeyInboxChannel`:
     - Decrypts the payload using the member's personal keyring.
@@ -291,18 +291,18 @@ A small number of channel `UUID`s are hardcoded ("reserved") and are used to spe
 
 #### Adding A New Member
 
-- Given the permissions and prerequisties are met on **C** are met to bestow member status to actor **α**:
+- Given the permissions and prerequisites are met on **C** are met to bestow member status to actor **α**:
     1. A root authority of **C** generates and posts a new `MemberEpoch`, **𝓔<sub>α0</sub>**, in the [Member Invite Channel](#Member-Invite-Channel), containing:
         - a newly generated `MemberID` for **α**.
         - the public half of newly generated keys. 
-        - any additonal information useful in tracking or documentation (e.g. signatures proving that the authority to invite **α** was granted by the appropriate collective authority of **C**).
+        - any additional information useful in tracking or documentation (e.g. signatures proving that the authority to invite **α** was granted by the appropriate collective authority of **C**).
     2. Also created is token **τ**, containing:
         - a copy of **𝓔<sub>a0</sub>**
         - a copy of the community keyring, **[]K<sub>C</sub>**
         - the private half of the newly generated keys in **𝓔<sub>a0</sub>**
         - network addresses and other bootstrapping information that allows **α** to gain connectivity to **𝓛<sub>C</sub>**
         - a token that bestows its bearer postage on **𝓛<sub>C</sub>**
-    3. **τ** is encrypted with a passphrase, and is passed to **α** via any unsecure means (USB device, email, file sharing)
+    3. **τ** is encrypted with a passphrase, and is passed to **α** via any non-secure means (USB device, email, file sharing)
     4. Using face-to-face communication, direct contact, or other secure means, **α** is passed the passphrase to **τ**.
     5. On a newly created "blank" node, **n<sub>α</sub>** (or an existing node of **C** in a logged-out state)
         - **α** passes **τ** to the client
