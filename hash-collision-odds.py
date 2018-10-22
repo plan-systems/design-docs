@@ -15,7 +15,8 @@
 #     Match 6 lottery combos:              1e7
 #     Seconds in a century:                3e9
 #     Seconds in all recorded history:     1e11
-#     Seconds since Big Bang:              1e18
+#     Seconds in a billion years:          3e16
+#     Seconds since Big Bang:              4e17
 #     Drops of water on Earth:             3e25
 #     Protons in your body:                1e28
 #     Possible BTC and ETH addresses:      1e48
@@ -36,7 +37,6 @@ count                 4.3e+09          1.8e+19          3.4e+38          1.5e+48
                       -------------    -------------    -------------    -------------    -------------    -------------    -------------
 Collision Odds
 --------------
-1 in 2                65536            4.3 billion      1.8e+19          1.2e+24          7.9e+28          3.4e+38          1.2e+77
 1 in 100              9269             607 million      2.6e+18          1.7e+23          1.1e+28          4.8e+37          1.6e+76
 1 in 1000             2931             192 million      8.2e+17          5.4e+22          3.5e+27          1.5e+37          5.2e+75
 1 in 10000            927              60 million       2.6e+17          1.7e+22          1.1e+27          4.8e+36          1.6e+75
@@ -63,7 +63,6 @@ N = 2^32
 probUnique = 1.0
 
 oddsList = [
-    2,
     100,
     1000,
     10000,
