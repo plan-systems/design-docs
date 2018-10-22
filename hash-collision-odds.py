@@ -6,7 +6,7 @@
 #    also known as the "birthday problem" in another form.  See above link.
 #
 # For example, in a hashspace size of 20 bytes, the chances of a hash collision occurring if you
-#    generate 10^17 random hashes is about the odds of a meteor hitting your home (~ 1 in 10 trillion).
+#    generate 10^17 random hashes is about the odds of a meteor hitting your home (1 in 10 trillion).
 #    In software design, this question appears as: what hashspace size do I need in order to effectively 
 #    rule out a hash collision, given that I expect there to be N "draws" in the hashspace and I want
 #    the odds to be no worse than P. 
@@ -23,6 +23,8 @@
 #
 # The talented and well-spoken Michael at Vsauce also speaks on this topic:
 #     https://www.youtube.com/watch?v=ObiqJzfyACM 
+#
+# ~ Drew O'Meara, Fall 2018
 #
 # Output:
 """
