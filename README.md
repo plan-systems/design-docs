@@ -11,7 +11,7 @@ P  L  A  N etwork
 
 [PLAN](http://plan.tools) is a multi-purpose communications and logistics planning tool for organizations and communities. PLAN is built on a “pluggable” architecture that integrates distributed services, encryption, and interoperable data-transport technologies — all inside a realtime visual interface. PLAN is an instrument for productivity, organization, and collaboration.
 
-PLAN is free and open-source (GPLv3). The purpose of components in PLAN being pluggable is to allow anyone to easily add, improve, or extend component functionality. The design principles of PLAN are focused on making information transport and delivery profoundly interoperable and extensible, similar and consistent with Tim Berners-Lee's vision for HTTP. We also acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which decisively improves how protocols, formats, and processes interoperate; `http://` becomes `/http/`.
+PLAN is free and open-source (GPLv3). The purpose of components in PLAN being pluggable is to allow anyone to easily add, improve, or extend component functionality. The design principles of PLAN are focused on making information transport and delivery openly interoperable and extensible, similar to how Tim Berners-Lee's HTTP sought to make information browsing interoperable. We also wish to acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), subtly but decisively improving how protocols, formats, and processes can be interoperably specified; `http://` becomes `/http/`.
 
 May PLAN empower organizations and individuals with little or no resources to intuitively, securely, and reliably communicate and self-organize.
 
@@ -21,7 +21,7 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 ## PLAN: A Synopsis
 
-PLAN will be useful to communities and organizers _only if_ non-technical users can use it easily. As software designers, we must acknowledge that distributed technologies, content-based addressing, and cryptography are alien concepts to most people. How does PLAN address this?
+PLAN will be useful to communities and organizers _only if_ non-technical users can use it easily. As software designers, we must acknowledge that distributed technologies, content-based addressing, and cryptography are alien concepts to most people. What does PLAN do about this?
 
 It’s not particularly important to an end-user where exactly data resides, how it's served, or how the encryption works — just that it's reliable and secure.  The primary objective of PLAN's architecture and user interface is to simplify the complex nature of trustless and distributed technologies with visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of a 2D-constrained and sandboxed web/browser experience, the end-user experiences PLAN through the [Unity](https://unity3d.com) 3D engine while [Go](https://golang.org) powers its p2p node.  The [PLAN Foundation](http://plan.tools) fully supports groups interested in developing a PLAN client in alternative environments, such as [Unreal](https://www.unrealengine.com) or [Electron](https://electronjs.org/).
 
