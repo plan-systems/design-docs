@@ -14,11 +14,11 @@
 # Some reference points:
 #     Match 6 lottery combos:              1e7
 #     Seconds in a century:                3e9
-#     Seconds in all of recorded history   1e11
+#     Seconds in all recorded history:     1e11
 #     Seconds since Big Bang:              1e18
 #     Protons in your body:                1e28
 #     Possible BTC and ETH addresses:      1e48
-#     Protons in the observable universe:  1e80
+#     Protons in observable universe:      1e80
 #
 # The talented and well-spoken Michael at Vsauce also speaks on this topic:
 #     https://www.youtube.com/watch?v=ObiqJzfyACM 
