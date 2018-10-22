@@ -39,9 +39,8 @@ Collision Odds
 1 in 1e+16            1                61               260.9 billion    1.7e+16          1.1e+21          4.8e+30          1.6e+69
 1 in 1e+17            1                20               82.5 billion     5.4e+15          3.5e+20          1.5e+30          5.2e+68
 1 in 1e+18            1                7                26.1 billion     1.7e+15          1.1e+20          4.8e+29          1.6e+68
-1 in 1e+19            1                2                8.2 billion      540.6 trillion   3.5e+19          1.5e+29          5.2e+67"""
-
-
+1 in 1e+19            1                2                8.2 billion      540.6 trillion   3.5e+19          1.5e+29          5.2e+67
+"""
 
 import math
 
