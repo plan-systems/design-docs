@@ -6,9 +6,9 @@
 #    also known as a the "birthday problem" in another form.  See the above link.
 #
 # For example, in a hashspace size of 2^160, the chances of a hash collision occurring if you
-#    generate 10^17 random hashes is about the odds of a meteor hitting your home. In software design, 
-#    this question appears as: what hashspace size do I need in order to effectively rule out
-#    hash collisions, given that I expect there to be N "draws" in the hashspace and I want
+#    generate 10^17 random hashes is about the odds of a meteor hitting your home (~ 1:100 trillion).
+#    In software design, this question appears as: what hashspace size do I need in order to effectively 
+#    rule out a hash collision, given that I expect there to be N "draws" in the hashspace and I want
 #    the odds to be no worse than P. 
 #
 # Output:
