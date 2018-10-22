@@ -16,7 +16,7 @@
 #     Seconds in a century:                3e9
 #     Seconds in all recorded history:     1e11
 #     Seconds since Big Bang:              1e18
-#     Drops of water on Earth              3e25
+#     Drops of water on Earth:             3e25
 #     Protons in your body:                1e28
 #     Possible BTC and ETH addresses:      1e48
 #     Protons in observable universe:      1e80
