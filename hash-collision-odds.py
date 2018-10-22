@@ -2,11 +2,11 @@
 #
 # Inspired by http://preshing.com/20110504/hash-collision-probabilities/
 #
-# The purpose of this script is to print out the hash collision odds various hashspace sizes,
-#    also known as a the "birthday problem" in another form.  See the above link.
+# The purpose of this script is to print out the hash collision odds of various hashspace sizes,
+#    also known as the "birthday problem" in another form.  See above link.
 #
-# For example, in a hashspace size of 2^160, the chances of a hash collision occurring if you
-#    generate 10^17 random hashes is about the odds of a meteor hitting your home (~ 1:100 trillion).
+# For example, in a hashspace size of 20 bytes, the chances of a hash collision occurring if you
+#    generate 10^17 random hashes is about the odds of a meteor hitting your home (~ 1:10 trillion).
 #    In software design, this question appears as: what hashspace size do I need in order to effectively 
 #    rule out a hash collision, given that I expect there to be N "draws" in the hashspace and I want
 #    the odds to be no worse than P. 
