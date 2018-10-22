@@ -13,9 +13,14 @@
 #
 # Output:
 """
-Collision Odds        4 bytes          8 bytes          16 bytes         20 bytes         24 bytes         32 bytes         64 bytes
---------- ----        - -----          - -----          -- -----         -- -----         -- -----         -- -----         -- -----
-
+Space Size
+----------
+bytes                 4 bytes          8 bytes          16 bytes         20 bytes         24 bytes         32 bytes         64 bytes
+bits                  32 bits          64 bits          128 bits         160 bits         192 bits         256 bits         512 bits
+count                 4.3e+09          1.8e+19          3.4e+38          1.5e+48          6.3e+57          1.2e+77          1.3e+154
+                      -------------    -------------    -------------    -------------    -------------    -------------    -------------
+Collision Odds
+--------------
 1 in 2                65536            4.3 billion      1.8e+19          1.2e+24          7.9e+28          3.4e+38          1.2e+77
 1 in 100              9269             607 million      2.6e+18          1.7e+23          1.1e+28          4.8e+37          1.6e+76
 1 in 1000             2931             192 million      8.2e+17          5.4e+22          3.5e+27          1.5e+37          5.2e+75
@@ -34,8 +39,7 @@ Collision Odds        4 bytes          8 bytes          16 bytes         20 byte
 1 in 1e+16            1                61               260.9 billion    1.7e+16          1.1e+21          4.8e+30          1.6e+69
 1 in 1e+17            1                20               82.5 billion     5.4e+15          3.5e+20          1.5e+30          5.2e+68
 1 in 1e+18            1                7                26.1 billion     1.7e+15          1.1e+20          4.8e+29          1.6e+68
-1 in 1e+19            1                2                8.2 billion      540.6 trillion   3.5e+19          1.5e+29          5.2e+67
-"""
+1 in 1e+19            1                2                8.2 billion      540.6 trillion   3.5e+19          1.5e+29          5.2e+67"""
 
 
 
@@ -96,21 +100,33 @@ def getPrettyInt(N):
     return "%-17s" % s
 
 
+print "\n\n\n"
+
 if 1:
-    line = "%-22s" % "Collision Odds"
+    print "Space Size\n----------"
+
+    line = "%-22s" % "bytes"
     for numBits in bitList:
         line += "%-17s" % ("%d bytes" % (numBits/8))
     print line
 
-    lineChars = []
-    for i in xrange(len(line)):
-        if line[i] == ' ':
-            lineChars.append( ' ' )
-        else:
-            lineChars.append( '-' )
+    line = "%-22s" % "bits"
+    for numBits in bitList:
+        line += "%-17s" % ("%d bits" % numBits)
+    print line
 
-    print "".join(lineChars)
-    print
+    line = "%-22s" % "count"
+    for numBits in bitList:
+        line += "%-17s" % ("%.1e" % float(pow(2., numBits)))
+    print line
+
+    line = "%-22s" % ""
+    for numBits in bitList:
+        line += "%-17s" % ("-------------")
+    print line
+
+    print "Collision Odds\n--------------"
+
 
 for odds in oddsList:
     line = '1 in ' + getPrettyInt(odds)
