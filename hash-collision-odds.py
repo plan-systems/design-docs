@@ -11,6 +11,18 @@
 #    rule out a hash collision, given that I expect there to be N "draws" in the hashspace and I want
 #    the odds to be no worse than P. 
 #
+# Some reference points:
+#     Match 6 lottery combos:              1e7
+#     Seconds in a century:                3e9
+#     Seconds in all of recorded history   1e11
+#     Seconds since Big Bang:              1e18
+#     Protons in your body:                1e28
+#     Possible BTC and ETH addresses:      1e48
+#     Protons in the observable universe:  1e80
+#
+# The talented and well-spoken Michael at Vsauce also speaks on this topic:
+#     https://www.youtube.com/watch?v=ObiqJzfyACM 
+#
 # Output:
 """
 Space Size
