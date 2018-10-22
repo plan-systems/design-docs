@@ -17,7 +17,7 @@ May PLAN empower organizations and individuals with little or no resources to in
 
 ## What's in This Repo?
 
-This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for developer-types ready to understand and vet PLAN's architecture and design.  A formal [proof of correctness](https://github.com/plan-tools/design-docs/blob/master/proof-of-correctness.md) for PLAN is also available for review.
+This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for technical-types ready to understand and vet PLAN's architecture and design.  A formal [proof of correctness](https://github.com/plan-tools/design-docs/blob/master/proof-of-correctness.md) for PLAN is also available for review.
 
 ## PLAN: A Synopsis
 
