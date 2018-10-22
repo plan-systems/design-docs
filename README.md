@@ -58,9 +58,9 @@ PLAN has two persistent pluggable storage layers, one characterized by append-on
    - PLAN's deterministic infrastructure to know which CFI items are in use ("pinned") and which can be unpinned/deallocated.
    - Seamless UI integration and interactivity.  In the client UI, a channel's wrapper identifier causes it to be presented as a single opaque object (like a traditional file), where its activation causes the latest revision to be fetched and consumed. This allows users to easily access community content while not having to have any understanding about what's happening under the hood.
 
-In sum, PLAN is a p2p community-centric node operating system, built on pluggable append-only and content-based addressing storage APIs, accessible via a _real-time_ visually intuitive interface — all within cryptographic layers of privacy. Its intentional channel, ACC, and crypto sub-systems provision for flexible, defensible, and first-class human access.
+In sum, PLAN is a p2p community-centric node operating system, built on pluggable append-only and content-based addressing storage APIs, accessible via a _real-time_ visually intuitive interface — all within cryptographic layers of privacy. Its open-ended channel and ACC sub-systems provision for flexible, defensible, and first-class human access.
 
-Using PLAN, communities arise from community organizers who value owning their own data, having a formidable crypto city wall, and the ability to continue operating in the face of Internet disruptions.  
+Using PLAN, communities arise from community organizers who value owning their own data, having a formidable crypto-city wall, and the ability to continue operating in the face of Internet disruptions.  
 
 
 EOF
