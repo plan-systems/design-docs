@@ -17,6 +17,7 @@
 #     Seconds in all recorded history:     1e11
 #     Seconds in a billion years:          3e16
 #     Seconds since Big Bang:              4e17
+#     Millimeters in a light year          1e18
 #     Drops of water on Earth:             3e25
 #     Protons in your body:                1e28
 #     Possible BTC and ETH addresses:      1e48
@@ -58,9 +59,6 @@ Collision Odds
 """
 
 import math
-
-N = 2^32
-probUnique = 1.0
 
 oddsList = [
     100,
@@ -135,7 +133,7 @@ if 1:
 
     line = "%-22s" % ""
     for numBits in bitList:
-        line += "%-17s" % ("-------------")
+        line += "%-17s" % ("------------")
     print line
 
     print "Collision Odds\n--------------"
