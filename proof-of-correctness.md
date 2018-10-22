@@ -32,8 +32,8 @@ For example, a customized "private distro" of the [Ethereum](https://en.wikipedi
 - The admins of **C** would periodically distribute portions of _C-Ether_ to members of **C** (a postage quota).  
 - On **C**'s nodes, **⧫<sub>C</sub>**:
     - Large payload buffers would be split into 32k segments (Ethereum's transaction size limit) and _then_ committed.
-    - Any transaction that does not "burn" an amount of postage commensurate with the byte size of the payload would be dropped.
-    - Any transaction that attempts to transfer postage from a non-designated identities would be dropped.
+    - Any transaction that does not "burn" an amount of postage commensurate with the byte size of the payload would be dropped/rejected.
+    - Any transaction that attempts to transfer postage from a non-designated identities would be dropped/rejected.
 
 For context, consider watching the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video clip](https://www.youtube.com/watch?v=cidZRD3NzHg&t=1214s) speak about blockchain as an empowering distributed security and information technology.
 
@@ -41,10 +41,9 @@ For context, consider watching the distinguished [George Glider](https://en.wiki
 
 ## On Digital Security
 
-We acknowledge that even the most advanced and secure systems are vulnerable to private key loss or theft, socially engineered deception, or physical coercion.  That is, an adversary in possession of another's private keys without their knowledge, or an adversary manipulating or coercing others is difficult (or impossible) to prevent.  Biometric authentication systems can mitigate _some_ of these threats, but they also introduce additional surfaces that could be exploited (e.g. spoofing a biometric device or exploiting an engineering oversight).
+We acknowledge that even the most advanced and secure systems are vulnerable to private key loss or theft, socially engineered deception, and physical coercion.  That is, an adversary in possession of another's private keys without their knowledge, or an adversary manipulating or coercing others is difficult (or impossible) to prevent.  Biometric authentication systems can mitigate _some_ of these threats, but they also introduce additional surfaces that could be exploited (e.g. spoofing a biometric device or exploiting an engineering oversight).
 
-Security frameworks often don't analyze or provision for the loss of private keys since the implications are typically catastrophic, effectively making the issue someone else's intractable problem. Any system lacking such analysis and provisioning can only be considered incomplete for every-day use. The system of operation discussed here features swift countermeasures _once it becomes known_ that private keys have been compromised (or suspect activity has occurred). 
-
+Security frameworks often don't analyze or provision for the loss of private keys since the implications are typically catastrophic, effectively making the issue someone else's intractable problem. Any system lacking such analysis and provisioning can only be considered incomplete for every-day use. The system of operation discussed here features swift countermeasures and recovery _once it becomes known_ that private keys have been compromised (or suspect activity has been witnessed). 
 
 ---
 
@@ -56,7 +55,7 @@ No assumptions are made about network connectivity or reachability in this proof
 - Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.9% chance that all _reachable_ nodes in **C** have received a given replicated transaction over **𝓛<sub>C</sub>**.
 - For example, given a swarm of reachable nodes on a WAN, **Δ<sub>C</sub>** is in the neighborhood of 1-10 minutes, depending on how **𝓛<sub>C</sub>** implements transaction replication (even swarms larger than 10<sup>7</sup>).
 
-Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s network profile and behavior. 
+Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s overall network profile and behavior. 
 
 ---
 
@@ -80,7 +79,7 @@ The members of **C** wish to assert...
 - A member can be "delisted" from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **𝓡** before the community entered this new security "epoch").
 
 #### Strong Eventual Consistency
-- For each node **n<sub>i</sub>** in **C**, it's local replica state ("**𝓡<sub>i</sub>**"), converges to a stable/monotonic state as **𝓛<sub>C</sub>** message traffic eventually "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **𝓡<sub>1</sub>**...**𝓡<sub>N</sub>** mutate such that strong eventual consistency (SEC) is guaranteed.  
+- For each node **n<sub>i</sub>** in **C**, it's local replica state ("**𝓡<sub>i</sub>**"), converges to a stable/monotonic state as **𝓛<sub>C</sub>** message traffic eventually "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **𝓡<sub>1</sub>**...**𝓡<sub>N</sub>** mutate such that strong eventual consistency ("SEC") is guaranteed.  
 
 #### Practical Security Provisioning
 - If/When it is discovered that a member's private keys are known to be either lost or possibly comprised, a "[member keyring halt](#keyring-halt)" can be immediately initiated such that any actor in possession of said keys will have no further read or write access to **C**.
@@ -111,17 +110,17 @@ The members of **C** present the following system of infrastructure...
 ## System Synopsis
 
 - The system proposed is "IRC-inspired" in that community and member information is organized into vast virtual channel addressing space.  However, instead of entries entered into channels just being rebroadcast to connected clients (as on an IRC server), entries _persist_ — and are stored as replicated transactions on **𝓛<sub>C</sub>**.    
-- When a channel is created, it is assigned a `ChannelProtocol` string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them.  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, affords graphical client interfaces rich and wide-open possibilities.
+- When a channel is created, it is assigned a protocol string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them (conceptually inspired from MIME types).  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, affords graphical client interfaces rich and wide-open possibilities.
 - Also inspired from IRC, each channel has its own permissions settings. Every channel is controlled by an "access control" channel ("ACC"), a channel that conforms to a protocol designed to specify channel permissions. Like other channels, each ACC designates a parent ACC, and so on, all the way up to **C**'s root-level ACC.  
-- Members, channels, and **C** itself uses security "epochs" to demarcate security events and furnish [permissions assurance](#permissions-assurance).
-- Each community node (**n<sub>i</sub>**) iteratively mutates its local replica (**𝓡<sub>i</sub>**) by replaying newly arriving entries from **𝓛<sub>C</sub>**, possibly rejecting entries or deferring entries for later processing as appropriate.
-- Hence, the entry processing pipeline forms a securely contained processing core system of operation above and outside **C**'s channel data space, like how a conventional OS kernel carefully maintains an internal pipeline of ordered operations. 
+- Members, channels, and **C** itself uses security "epochs" to demarcate security events, in effect furnishing [permissions assurance](#permissions-assurance).
+- In a flow known as [channel entry validation](#channel-entry-validation), each community node (**n<sub>i</sub>**) iteratively mutates its local replica (**𝓡<sub>i</sub>**) by attempting to merge newly arriving entries from **𝓛<sub>C</sub>**, deferring entries for later validation as appropriate.
+- In effect, the system presented here forms a secure and compartmentalized core outside **C**'s channel data space, like how an OS carefully maintains internal pipelines and hierarchies of operations and permissions in an attempt to serve user processes.
 
 
 ## System Security
 
 
-- Let `UUID` represent a constant-length independently generated identifier that ensures no reasonable chance of peer collision. Although it is difficult to express [collision odds](http://preshing.com/20110504/hash-collision-probabilities/) in meaningful human terms (even for "modest" probability spaces such as 1 in 2<sup>160</sup>), 20 to 32 pseudo-randomly generated bytes is more than sufficient to implement `UUID`.
+- Let `UUID` represent a constant-length independently generated identifier that ensures no reasonable chance of peer collision. Although it is difficult to express [collision odds](http://preshing.com/20110504/hash-collision-probabilities/) in meaningful human terms (even for "modest" probability spaces such as 1 in 2<sup>160</sup>), 20 to 32 pseudo-randomly generated bytes is [more than sufficient](hash-collision-odds.py) to implement `UUID`.
 - Each member, **m**, in **C** securely maintains custody of two "keyrings":
    1. **[]K<sub>m</sub>**, member **m**'s _personal keyring_, used to:
        - decrypt/encrypt information "sent" to/from that member
