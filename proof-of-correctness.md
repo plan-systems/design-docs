@@ -53,10 +53,10 @@ Security frameworks often don't analyze or provision for the loss of private key
 In any system, replicated data transactions and messages take non-trivial periods of time to traverse and propagate across the network.  Also, any number of nodes could be offline for indefinite periods of time. 
 
 No assumptions are made about network connectivity or reachability in this proof, and propagation times are expressed as "**Δ<sub>C</sub>**":
-- Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.9% chance that all _reachable_ nodes in **C** have received a given replicated transaction.   
+- Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.9% chance that all _reachable_ nodes in **C** have received a given replicated transaction over **𝓛<sub>C</sub>**.
 - For example, given a swarm of reachable nodes on a WAN, **Δ<sub>C</sub>** is in the neighborhood of 1-10 minutes, depending on how **𝓛<sub>C</sub>** implements transaction replication (even swarms larger than 10<sup>7</sup>).
 
-Like the way an operating system is _only_ as swift as its host storage system, this system's latency and liveness is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s network profile and behavior. 
+Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s network profile and behavior. 
 
 ---
 
@@ -110,12 +110,12 @@ The members of **C** present the following system of infrastructure...
 
 ## System Synopsis
 
-- The system proposed is "IRC-inspired" in that community and member information is organized into an infinitely large virtual channel addressing space.  However, instead of entries entered into channels just being rebroadcast to connected clients (as on an IRC server), entries _persist_ by being stored as replicated transactions on **𝓛<sub>C</sub>**.    
+- The system proposed is "IRC-inspired" in that community and member information is organized into vast virtual channel addressing space.  However, instead of entries entered into channels just being rebroadcast to connected clients (as on an IRC server), entries _persist_ — and are stored as replicated transactions on **𝓛<sub>C</sub>**.    
 - When a channel is created, it is assigned a `ChannelProtocol` string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them.  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, affords graphical client interfaces rich and wide-open possibilities.
-- Also like IRC, each channel has its own permissions settings. Every channel is controlled by an "access control" channel ("ACC"), a channel that conforms to a protocol designed to specify channel permissions. Like other channels, each ACC designates a parent ACC, all the way up to **C**'s root-level ACC.  
-- Members, channels, and **C** itself uses security "epochs" to demarcate security events and provide [permissions assurance](#permissions-assurance).
-- Each community node (**n<sub>i</sub>**) iteratively mutates its local replica (**𝓡<sub>i</sub>**) by "replaying" newly arriving entries from **𝓛<sub>C</sub>**, possibly rejecting entries or deferring entries for later processing as appropriate.
-- Hence, the entry processing pipeline forms a securely contained processing center system of operation above and outside **C**'s channel data space.
+- Also inspired from IRC, each channel has its own permissions settings. Every channel is controlled by an "access control" channel ("ACC"), a channel that conforms to a protocol designed to specify channel permissions. Like other channels, each ACC designates a parent ACC, and so on, all the way up to **C**'s root-level ACC.  
+- Members, channels, and **C** itself uses security "epochs" to demarcate security events and furnish [permissions assurance](#permissions-assurance).
+- Each community node (**n<sub>i</sub>**) iteratively mutates its local replica (**𝓡<sub>i</sub>**) by replaying newly arriving entries from **𝓛<sub>C</sub>**, possibly rejecting entries or deferring entries for later processing as appropriate.
+- Hence, the entry processing pipeline forms a securely contained processing core system of operation above and outside **C**'s channel data space, like how a conventional OS kernel carefully maintains an internal pipeline of ordered operations. 
 
 
 ## System Security
