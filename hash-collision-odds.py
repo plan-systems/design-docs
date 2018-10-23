@@ -12,21 +12,24 @@
 #    the odds to be no worse than P. 
 #
 # Some reference points:
-#     Match 6 lottery combos:              1e7
-#     Seconds in a century:                3e9
-#     Seconds in all recorded history:     1e11
-#     Seconds in a billion years:          3e16
-#     Seconds since Big Bang:              4e17
-#     Millimeters in a light year          1e18
-#     Drops of water on Earth:             3e25
-#     Protons in your body:                1e28
-#     Possible BTC and ETH addresses:      1e48
-#     Protons in observable universe:      1e80
+#     Match 6 lottery combos              1e7
+#     Seconds in a century                3e9
+#     Seconds in all recorded history     1e11
+#     Seconds in a billion years          3e16
+#     Seconds since Big Bang              4e17
+#     Millimeters in a light year         1e18
+#     Drops of water on Earth             3e25
+#     Protons in your body                1e28
+#     Diameter of the universe in mm      1e30
+#     Possible BTC and ETH addresses      1e48
+#     Possible 32 byte addresses          1e77
+#     Protons in observable universe      1e80
 #
-# The talented and well-spoken Michael at Vsauce also speaks on this topic:
-#     https://www.youtube.com/watch?v=ObiqJzfyACM 
+# The talented and well-spoken Michael at Vsauce delightfully shows how BIG these numbers really are:
+#     https://www.youtube.com/watch?v=ObiqJzfyACM&t=888s
 #
 # ~ Drew O'Meara, Fall 2018
+#
 #
 # Output:
 """
@@ -35,7 +38,7 @@ Space Size
 bytes                 4 bytes          8 bytes          16 bytes         20 bytes         24 bytes         32 bytes         64 bytes
 bits                  32 bits          64 bits          128 bits         160 bits         192 bits         256 bits         512 bits
 count                 4.3e+09          1.8e+19          3.4e+38          1.5e+48          6.3e+57          1.2e+77          1.3e+154
-                      -------------    -------------    -------------    -------------    -------------    -------------    -------------
+                      ------------     ------------     ------------     ------------     ------------     ------------     ------------
 Collision Odds
 --------------
 1 in 100              9269             607 million      2.6e+18          1.7e+23          1.1e+28          4.8e+37          1.6e+76
@@ -46,16 +49,16 @@ Collision Odds
 1 in 10 million       30               1 million        8.2e+15          5.4e+20          3.5e+25          1.5e+35          5.2e+73
 1 in 100 million      10               607401           2.6e+15          1.7e+20          1.1e+25          4.8e+34          1.6e+73
 1 in 1 billion        3                192077           825 trillion     5.4e+19          3.5e+24          1.5e+34          5.2e+72
-1 in 10 billion       1                60741            260.9 trillion   1.7e+19          1.1e+24          4.8e+33          1.6e+72
-1 in 100 billion      1                19208            82.5 trillion    5.4e+18          3.5e+23          1.5e+33          5.2e+71
-1 in 1 trillion       1                6075             26.1 trillion    1.7e+18          1.1e+23          4.8e+32          1.6e+71
-1 in 10 trillion      1                1921             8.2 trillion     5.4e+17          3.5e+22          1.5e+32          5.2e+70
-1 in 100 trillion     1                608              2.6 trillion     1.7e+17          1.1e+22          4.8e+31          1.6e+70
+1 in 10 billion       1                60741            261 trillion     1.7e+19          1.1e+24          4.8e+33          1.6e+72
+1 in 100 billion      1                19208            82 trillion      5.4e+18          3.5e+23          1.5e+33          5.2e+71
+1 in 1 trillion       1                6075             26 trillion      1.7e+18          1.1e+23          4.8e+32          1.6e+71
+1 in 10 trillion      1                1921             8 trillion       5.4e+17          3.5e+22          1.5e+32          5.2e+70
+1 in 100 trillion     1                608              3 trillion       1.7e+17          1.1e+22          4.8e+31          1.6e+70
 1 in 1e+15            1                193              825 billion      5.4e+16          3.5e+21          1.5e+31          5.2e+69
-1 in 1e+16            1                61               260.9 billion    1.7e+16          1.1e+21          4.8e+30          1.6e+69
-1 in 1e+17            1                20               82.5 billion     5.4e+15          3.5e+20          1.5e+30          5.2e+68
-1 in 1e+18            1                7                26.1 billion     1.7e+15          1.1e+20          4.8e+29          1.6e+68
-1 in 1e+19            1                2                8.2 billion      540.6 trillion   3.5e+19          1.5e+29          5.2e+67
+1 in 1e+16            1                61               261 billion      1.7e+16          1.1e+21          4.8e+30          1.6e+69
+1 in 1e+17            1                20               82 billion       5.4e+15          3.5e+20          1.5e+30          5.2e+68
+1 in 1e+18            1                7                26 billion       1.7e+15          1.1e+20          4.8e+29          1.6e+68
+1 in 1e+19            1                2                8 billion        541 trillion     3.5e+19          1.5e+29          5.2e+67
 """
 
 import math
@@ -99,9 +102,9 @@ def getPrettyInt(N):
     elif fN < 1e9:
         s = "%.1f million" % math.floor(fN/1e6)
     elif fN < 1e12:
-        s = "%.1f billion" % (fN/1e9)
+        s = "%.0f billion" % (fN/1e9)
     elif fN < 1e15:
-        s = "%.1f trillion" % (fN/1e12)
+        s = "%.0f trillion" % (fN/1e12)
     else:
         s = "%.1e" % fN
 
