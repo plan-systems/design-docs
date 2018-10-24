@@ -74,10 +74,10 @@ Using PLAN, communities arise from community organizers who value owning their o
 |  Babbage  | 2018 Q3 | [Proof of correctness](proof-of-correctness.md)  |
 |   Morse   | 2018 Q4  | [go-plan](https://github.com/plan-tools/go-plan) command line prototype & demo  |
 |   Kepler  | 2019 Q1 | [plan-unity](https://github.com/plan-tools/plan-unity) client prototype & demo  |
-| Fessenden | 2019 Q2 | Ethereum, DFINITY, or Hashgraph used as go-plan's first PDI implementation |
+| Fessenden | 2019 Q2 | Ethereum, DFINITY, or Hashgraph used for first PDI implementation |
 |  Lovelace | 2019 Q2 | Installer and GUI setup experience for macOS  |
-|   Turing  | 2019 Q3 | go-plan build support and QA for Linux | 
+|   Turing  | 2019 Q3 | go-plan support and QA for Linux | 
 |   ?  | 2019 Q3 | PLAN Foundation internally replaces Slack with PLAN  |
 |   ?  | 2019 Q4 | Installer and GUI setup experience for Windows  | 
 |   Barton  | 2020 Q1 | PLAN helps support [Art Community Builders](http://artcommunitybuilders.org/) |
-|     -     | 2020+ | PLAN helps support other all volunteer-run events  |
+|     -     | 2020+ | PLAN helps support other volunteer-run events  |
