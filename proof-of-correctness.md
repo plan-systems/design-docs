@@ -55,7 +55,7 @@ No assumptions are made about network connectivity or reachability in this proof
 - Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.9% chance that all _reachable_ nodes in **C** have received a given replicated transaction over **𝓛<sub>C</sub>**.
 - For example, given a swarm of reachable nodes on a WAN, **Δ<sub>C</sub>** is in the neighborhood of 1-10 minutes, depending on how **𝓛<sub>C</sub>** implements transaction replication (even swarms larger than 10<sup>7</sup>).
 
-Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s overall network profile and behavior. 
+Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s overall network properties and behavior. 
 
 ---
 
@@ -138,8 +138,8 @@ The members of **C** present the following system of infrastructure...
 ```
 type EntryCrypt struct {
     CommunityKeyID    UUID     // Identifies the community key used to encrypt .HeaderCrypt
-    HeaderCrypt       []byte   // Encrypted serialization of an EntryHeader, encypted with .CommunityKeyID
-    ContentCrypt      []byte   // Encrypted serialization of plan.Block, encypted with EntryHeader.ContentKeyID
+    HeaderCrypt       []byte   // Encrypted serialization of an EntryHeader, encrypted with .CommunityKeyID
+    ContentCrypt      []byte   // Encrypted serialization of plan.Block, encrypted with EntryHeader.ContentKeyID
     Sig               []byte   // Authenticates this entry; signature product of EntryHeader.AuthorMemberID
 }
 ```
@@ -157,7 +157,7 @@ type EntryHeader struct {
 ```
 - Each entry therefore specifies a destination `ChannelID` in **C**'s _virtual_ channel space to be merged into.  
 - On each community node **n<sub>i</sub>**, newly arriving entries from **𝓛<sub>C</sub>** are validated and merged into its locally stored `CommunityRepo` ("**𝓡<sub>i</sub>**") during [channel entry validation](#Channel-Entry-Validation).  
-- **𝓡<sub>i</sub>** conists of:
+- **𝓡<sub>i</sub>** consists of:
     - a datastore for each channel `UUID` that makes an appearance in **C** 
     - bookkeeping needed to resume sessions with **𝓛<sub>C</sub>**
     - handling infrastructure for "deferred" entries to be retried periodically
@@ -238,7 +238,7 @@ Channels are intended to be used for any purpose, and are the "client service" u
     - Because reserved channels have their own strict access control behavior, they are the only channels that don't solely rely on ACCs fro access control.
     - The number, purpose, and use of these channels can be expanded to meet future needs. 
 2. **General purpose channels** are the principal purpose of this entire system.
-    - Members create channels of various types (`.ChannelProtocol`), causing client UIs to consistently intrepet and present entries as appropriate. 
+    - Members create channels of various types (`.ChannelProtocol`), causing client UIs to consistently interpret and present entries as appropriate. 
     - Every channel specifies a governing access control channel ("parent ACC").  A channel's parent ACC effectively specifies a permission level for any given member `UUID`, allowing each node in **C** to carry out [channel entry validation](#channel-entry-validation).
     - General purpose channels can either be:
         - **community-public**, where channel entry content is encrypted with a community key, _or_
@@ -249,7 +249,7 @@ Channels are intended to be used for any purpose, and are the "client service" u
     - An ACC can be regarded as an access authority that specifies:
         - channel permissions for a given member `UUID`, _and_
         - default permissions (for members not explicitly specified)
-    - Like general purpose channels, each ACC must designate a parent ACC, and so on, all the way up to the _reserevd_ [root-level ACC](Root-Access-Control-Channel).
+    - Like general purpose channels, each ACC must designate a parent ACC, and so on, all the way up to the _reserved_ [root-level ACC](Root-Access-Control-Channel).
     
         
 
@@ -274,7 +274,7 @@ Channels are intended to be used for any purpose, and are the "client service" u
 #### Community Epoch Channel
 - This channel is where a community admin (or authorized agent) posts an entry that, in effect, replaces the current community key with a newly issued one. 
 - This channel contains a succession of entries that embed:
-    - an `EpochInfo` containing parmeters associated with the new community epoch, _and_
+    - an `EpochInfo` containing parameters associated with the new community epoch, _and_
     - a copy of the newly generated community key _for each_ member **m** in **C**, encrypted using **m**'s public latest encryption key.
 
 
@@ -302,7 +302,7 @@ Channels are intended to be used for any purpose, and are the "client service" u
     - **m** generates new encryption and signing key pairs and places the private keys into their personal keyring, **[]K<sub>m</sub>**.
     - **m** creates an newly updated `MemberEpoch`, **𝓔′**, and places the newly generated public keys into **𝓔′**.
     - **m** packages **𝓔′** into a new entry ("**e<sub>𝓔′</sub>**"), signs it, and posts it to **C**'s [Member Epoch Channel](#Member-Epoch-Channel).
-    - As **e<sub>𝓔′</sub>** propigates across **𝓛<sub>C</sub>** (and goes live on **n<sub>i</sub>**):
+    - As **e<sub>𝓔′</sub>** propagates across **𝓛<sub>C</sub>** (and goes live on **n<sub>i</sub>**):
         - [Channel Entry Validation](#Channel-Entry-Validation) requires that entries by **m** must use the most recently published signing key.
         - Members posting entry content to **m** securely use **m**'s latest public encryption key.
 
@@ -604,7 +604,7 @@ the community key channel (where is key is asymmetrically sent to each member st
 //    b) channel entry index (sqlite db)
 //        - for each channel entry: timestamp_secs (int64, ascending-indexed),  entry hashname (TINYTEXT), tome_file_pos, tome_entry_len
 //    c) list of the access control list history and when each one went into effect -- so it knows what to reject
-//        - when a user is "added" to the channel, the owner must grant master key acces for each rev of the control list into the past (or as far as the owner wants to go)
+//        - when a user is "added" to the channel, the owner must grant master key access for each rev of the control list into the past (or as far as the owner wants to go)
 
 
 
