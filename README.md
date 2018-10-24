@@ -21,17 +21,17 @@ May PLAN empower organizations and individuals with little or no resources to in
 
 This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for technical-types ready to understand and vet PLAN's architecture and design.  A formal [proof of correctness](proof-of-correctness.md) for PLAN is also available for review.
 
-## Development Roadmap
+## Roadmap
 
 | Milestone |  Status  | Description                                 |
 |:---------:|:--------:|---------------------------------------------|
-|   Gross   |  Q2 2018 | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model)             |
-|  Babbage  | Q3 2018  | [Proof of correctness](proof-of-correctness.md)                        |
-|   Morse   | Q4 2018  | go-plan + command line client prototype     |
-|   Kepler  | Q1 2019  | go-plan + Unity client prototype            |
-|    Jobs   | Q2 2019  | Installer and GUI setup for macOS           |
-|   Gustav  | Q3 2019  | PLAN Foundation uses PLAN in place of Slack |
-|   Allen   | Q4 2019  | Installer and GUI setup for Windows         |
+|   Gross   |  2018 Q2 | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model)             |
+|  Babbage  | 2018 Q3 | [Proof of correctness](proof-of-correctness.md)                        |
+|   Morse   | 2018 Q4  | [go-plan](https://github.com/plan-tools/go-plan) command line prototype & demo     |
+|   Kepler  | 2019 Q1 | [plan-unity](https://github.com/plan-tools/plan-unity) client prototype & demo          |
+|    Jobs   | 2019 Q2 | Installer and GUI setup for macOS           |
+|   Gustav  | 2019 Q3 | PLAN Foundation uses PLAN in place of Slack |
+|   Allen   | 2019 Q4 | Installer and GUI setup for Windows         |
 
 
 ## PLAN: A Synopsis
