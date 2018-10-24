@@ -32,6 +32,8 @@ This repo presents and discusses the layers, abstractions, and technologies that
 |    Jobs   | 2019 Q2 | Installer and GUI setup for macOS           |
 |   Gustav  | 2019 Q3 | PLAN Foundation uses PLAN in place of Slack |
 |   Allen   | 2019 Q4 | Installer and GUI setup for Windows         |
+|   Barton  | 2020 Q1 | PLAN helps support [Freezerburn](http://fzbtx.com/) |
+|     -     | 2020+ | PLAN helps support other all volunteer-run events       |
 
 
 ## PLAN: A Synopsis
