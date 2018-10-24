@@ -79,5 +79,5 @@ Using PLAN, communities arise from community organizers who value owning their o
 |  Torvalds | 2019 Q3 | go-plan build support and QA for Linux | 
 |   Gustav  | 2019 Q3 | PLAN Foundation internally replaces Slack with PLAN  |
 |   Turing  | 2019 Q4 | Installer and GUI setup experience for Windows  | 
-|   Barton  | 2020 Q1 | PLAN supports [Art Community Builders](#http://artcommunitybuilders.org/) |
+|   Barton  | 2020 Q1 | PLAN helps support [Art Community Builders](http://artcommunitybuilders.org/) |
 |     -     | 2020+ | PLAN helps support other all volunteer-run events  |
