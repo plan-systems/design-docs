@@ -21,19 +21,21 @@ May PLAN empower organizations and individuals with little or no resources to in
 
 This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for technical-types ready to understand and vet PLAN's architecture and design.  A formal [proof of correctness](proof-of-correctness.md) for PLAN is also available for review.
 
-## Roadmap
+## Milestones
 
 | Milestone |  Status  | Description                                 |
 |:---------:|:--------:|---------------------------------------------|
-|   Gross   |  2018 Q2 | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model)             |
-|  Babbage  | 2018 Q3 | [Proof of correctness](proof-of-correctness.md)                        |
-|   Morse   | 2018 Q4  | [go-plan](https://github.com/plan-tools/go-plan) command line prototype & demo     |
-|   Kepler  | 2019 Q1 | [plan-unity](https://github.com/plan-tools/plan-unity) client prototype & demo          |
-|    Jobs   | 2019 Q2 | Installer and GUI setup for macOS           |
-|   Gustav  | 2019 Q3 | PLAN Foundation uses PLAN in place of Slack |
-|   Allen   | 2019 Q4 | Installer and GUI setup for Windows         |
-|   Barton  | 2020 Q1 | PLAN helps support [Freezerburn](http://fzbtx.com/) |
-|     -     | 2020+ | PLAN helps support other all volunteer-run events       |
+|   Gross   |  2018 Q2 | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model) |
+|  Babbage  | 2018 Q3 | [Proof of correctness](proof-of-correctness.md)  |
+|   Morse   | 2018 Q4  | [go-plan](https://github.com/plan-tools/go-plan) command line prototype & demo  |
+|   Kepler  | 2019 Q1 | [plan-unity](https://github.com/plan-tools/plan-unity) client prototype & demo  |
+| Fessenden | 2019 Q2 | Ethereum, DFINITY, or Hashgraph used as go-plan's first PDI implementation |
+|    Jobs   | 2019 Q2 | Installer and GUI setup experience for macOS  |
+|  Torvalds | 2019 Q3 | go-plan build support and QA for Linux | 
+|   Gustav  | 2019 Q3 | PLAN Foundation internally replaces Slack with PLAN  |
+|   Allen   | 2019 Q4 | Installer and GUI setup experience for Windows  | 
+|   Barton  | 2020 Q1 | PLAN support for Art Community Builders |
+|     -     | 2020+ | PLAN helps support other all volunteer-run events  |
 
 
 ## PLAN: A Synopsis
