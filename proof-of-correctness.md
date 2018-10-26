@@ -240,7 +240,7 @@ Channels are intended to be used for any purpose, and are the "client service" u
         - **community-public**, where channel entry content is encrypted with a community key, _or_
         - **private**, where entry content is encrypted with the specified by **e<sub>hdr</sub>**`.ContentKeyID`.  
             - Key mechanics for private channels are similar to [starting a new community epoch](#issuing-a-new-Community-Epoch), except the channel owner updating the `ChannelEpoch` performs key generation and distribution.  
-            - Only members that have at least read-access are sent the keyring needed to access the channel
+            - Only members that have at least read-access are "sent" the keys needed in order to decrypt private channel entries
 3. **Access Control Channels** ("ACCs") are specialized channels used to express permissions for all other channels (including other ACCs)
     - An ACC can be regarded as an access authority that specifies:
         - channel permissions for a given member `UUID`, _and_
@@ -272,7 +272,7 @@ Channels are intended to be used for any purpose, and are the "client service" u
     - [adding new members](#Adding-A-New-Member) to **C**,
     - [delisting members](#Delisting-A-Member) from **C**, _and_
     - restoring a member's access to **C** following a [keyring halt](#keyring-halt) event.
-- If a [keyring halt](#keyring-halt) has been issued for **m**, any subsequient entries authored by **m** are deferred during [channel entry validation](#Channel-Entry-Validation).
+- If a [keyring halt](#keyring-halt) has been issued for **m**, any subsequent entries authored by **m** are deferred during [channel entry validation](#Channel-Entry-Validation).
     - This effectively suspends all further activity of **m** across **C**.
     - This continues until the issue is presumably resolved and a community authority [issues a new member epoch](#Issuing-a-New-member-Epoch) for **m**.
 
@@ -290,15 +290,15 @@ Channels are intended to be used for any purpose, and are the "client service" u
 - Given: member **m** (or their private keyring) is potentially under the control or influence of an adversary.
 - A "keyring halt" refers to an automated sequence of actions performed on **m**'s behalf once it's believed that their personal keyring ("**[]K<sub>m</sub>**") is in another's hands.  
 - The conditions/requisites needed in order to initiate a keyring halt on others' behalf can be arbitrarily based on security needs and situational circumstances.  
-- A keyring halt for **m** could be intitated by:
+- A keyring halt for **m** could be inititated by:
     - **m**, upon discovering that another actor has gained access to **[]K<sub>m</sub>**, _or_
-    - a community admin (or automated agent), noticing damning or malicious activity orinating from the holder of **[]K<sub>m</sub>**, _or_
+    - a community admin (or automated agent), noticing damning or malicious activity originating from the holder of **[]K<sub>m</sub>**, _or_
     - a peer of **m** (previously designated by **m**), who is personally contacted by **m** and asked to do so (in a situation where **m** does not have connectivity to **𝓛<sub>C</sub>**)
 - When a keyring halt is initiated:
     1. A special `MemberEpoch` entry is posted to the [member epoch channel](#member-epoch-channel), in effect, causing [channel entry validation](#Channel-Entry-Validation) (running on each node in **C**), to reject all subsequent entries authored by **[]K<sub>m</sub>**
     2. A special transaction is submitted to **𝓛<sub>C</sub>**, immediately "burning" the ability of **m** (or any actor in possession of **[]K<sub>m</sub>**) to post transactions.
         - As this propagates across **𝓛<sub>C</sub>**, subsequent transactions signed by **[]K<sub>m</sub>** will be rejected because post permission on **𝓛<sub>C</sub>** will no longer exist for **[]K<sub>m</sub>**.
-        - This removes an adversary's abilty to valdalize **𝓛<sub>C</sub>** by filling it with junk data.   
+        - This removes an adversary's ability to vandalize **𝓛<sub>C</sub>** by filling it with junk data.   
         - For example, for **⧫<sub>C</sub>**, the transaction would send all **m**'s _C-Ether_ to address `x0`.
     3. An admin, automated agent, or delegated member(s) would [issue a new community epoch](#issuing-a-new-Community-Epoch) for **C**.
         - In effect, this results in any holder of a community keyring ("**[]K<sub>C</sub>**") to effectively lose read access to **C** from then on since all new entries will use a newly issued community key.
@@ -441,8 +441,9 @@ Channels are intended to be used for any purpose, and are the "client service" u
 - Ideally, we want to devise a resolution scheme that produces the most favorable outcomes for natural conflicts but is resilient against adversary-induced conflicts. 
     
 
-#### Starting a New Channel Epoch 
+#### Issuing a New Channel Epoch 
  
+
 
 ---
 
@@ -509,41 +510,36 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 
 #### Proof of Practical Security Provisioning
 
-- Given member **m** in **C**, we wish to show that this system provisions for real-world security setbacks.
-- In the case **m** loses, misplaces, or inadvertently destroys their private keyring ("**[]K<sub>m</sub>**"):  
-    - **m** would reach out to a community admin (or delegated member), and a new `MemberEpoch` would be issued for **m** using a simplified variation of [adding a new member](#Adding-A-New-Member).
-    - In the case that the lost keyring is recovered _and_ **m**'s keyring passphrase was known:
-        - **m** keyring passphrase/key would be needed for key extraction
-        - 
-    
-    
-    decrypted using **m**'s keyring password
-- members losing their private keyring, _and_
-    - adversaries gaining access to a member's private keyring ("**[]K<sub>m</sub>**")
-- Given member **m** in **C**:
-
-        - If there is possibility that another actor can gain access to the lost **[]K<sub>m</sub>**, then the admin would also [issue a new community epoch](#issuing-a-new-Community-Epoch).
-    - Given member **m**, if an actor gains access to **m**'s private and community keyrings, they naturally would be able to:
-        - read community-public data on **C**
-        - author and entries in the name of **m**
-        - read private content intended to be for **m**
-    - In such a scenario, when **m**, a member peer of **m**, or automated agent noticing that something is amiss would initiate a "[keyring halt](#keyring-halt) on **m**"
-        - As discussed, once a keyring halt is ordered on **[]K<sub>m</sub>**, only an authority in **C** can 
-        - Some time later when the source of the concern is known or addressed, an admin, peers of **m**, a quorum of **C**, or an automated system would:
-        - [initiate a new community epoch](#issuing-a-new-Community-Epoch) for **C**.
-            - In effect, all subsequent community-public data in **C** uses a newly generated community key that is not in **[]K<sub>lost</sub>**.
-            - [start a new member epoch](#issuing-a-new-Member-Epoch) for **m**.
-        3. In effect, all subsequent transactions on **𝓛<sub>C</sub>** will be unreadable to any holder of the compromised keyring
-                - a secure token that would be transferred to **m** via a secure channel (or in person).  This token, when opened, would allow a new `MemberEpoch` to be accepted for **m**, allowing **m** to resume normal access to **𝓛<sub>C</sub>**.
-        In effect, all subsequent transactions on **𝓛<sub>C</sub>** will be unreadable to any holder of the compromised keyring is not is possession of any key that would gain them access to the newly issued community key or **m** newly issued keys.  **m** would regain
-        - In the event an admin posted a new `MemberEpoch` for **m** without permission, **m** would immediately be aware since **m**'s client would see the epoch issued (but not have the keys).   Note that hijacking another's identity as in this case would not allow the perpetrator to gain access to any of **m**'s private data since only **m** has possession of **[]K<sub>m</sub>**.
-    Note that the given adversary would only have access to community public data (with **[]K<sub>C</sub>**) and **m**'s particular data
-    - In the case that an adversary issues their own **e<sub>𝓔</sub>** _before_ **m** is able to initiate a _keyring halt_, **m** could work with an admin of **C** to:
-        - issue an entry that would rescind any entries in the _member epoch channel_ not authored by **m**
-    - Since a keyring halt only suspends a member's access to **C**, its liabilties (as a mechanism) are limited to a one-time denial of service (and can quickly be reversed).  
-        - An adversarial keyring halt could be easily undone by an admin, plus the offending member's integrity would immpediately move under a spotlight.  
-        - Basic imitations could be added to the [keyring halt procedure](#keyring-halt) that would guard against adversarial behavaior (e.g. a member is limited to ordering one halt per day).
-        - 
+- Given member **m** in **C**, we wish to show that this system provisions for even the _most extreme_ security setbacks: 
+    1. **m** loses their private keyring ("**[]K<sub>lost</sub>**")
+        - a community admin (or delegated member) would use a procedure similar to [adding a new member](#Adding-A-New-Member), resulting in a successor `MemberEpoch` to be issued for **m**
+        - If there is possibility that another actor could gain access to **[]K<sub>lost</sub>**, then the admin would also [issue a new community epoch](#issuing-a-new-Community-Epoch).
+        - Even if adversary **O** were to recover and unlock **[]K<sub>lost</sub>**, **O** would effectively, at most, have read-access up to when the new `MemberEpoch` was published.
+        - Although **m** would retain and resume their identity within **C**, **m** would be unable to decrypt entries from the past (since **m**'s new keyring would lack the private keys).
+        - However, for each private channel **𝘾𝒉<sub>p</sub>** that **m** lost the keys to, **m** would be able to regain access if _at least_ one other member had _at least_ read-access to **𝘾𝒉<sub>p</sub>** (since that would mean at least one other member could be petitioned for the channel keyring). 
+        - If **m** recovers **[]K<sub>lost</sub>**, access to past data would be restored with no further action. 
+    2. An adversary ("**O**") gains access to **m**'s private keyrings ("**[]K<sub>m</sub>**") through deception or coercion.
+        - **O** would naturally be able to:
+            - read community-public data on **C**
+            - author entries impersonating **m**
+            - read content intended to be private for **m**
+        - When **m**, a peer of **m**, an admin, or an automated agent notices that something is amiss, they would initiate a [keyring halt](#keyring-halt) on **m**
+            - As discussed, once a keyring halt is ordered on **[]K<sub>m</sub>**, only an authority in **C** can 
+            - Some time later when the source of the concern is known or addressed, an admin, peers of **m**, a quorum of **C**, or an automated system would:
+            - [initiate a new community epoch](#issuing-a-new-Community-Epoch) for **C**.
+                - In effect, all subsequent community-public data in **C** uses a newly generated community key that is not in **[]K<sub>lost</sub>**.
+                - [start a new member epoch](#issuing-a-new-Member-Epoch) for **m**.
+            3. In effect, all subsequent transactions on **𝓛<sub>C</sub>** will be unreadable to any holder of the compromised keyring
+                    - a secure token that would be transferred to **m** via a secure channel (or in person).  This token, when opened, would allow a new `MemberEpoch` to be accepted for **m**, allowing **m** to resume normal access to **𝓛<sub>C</sub>**.
+            In effect, all subsequent transactions on **𝓛<sub>C</sub>** will be unreadable to any holder of the compromised keyring is not is possession of any key that would gain them access to the newly issued community key or **m** newly issued keys.  **m** would regain
+            - In the event an admin posted a new `MemberEpoch` for **m** without permission, **m** would immediately be aware since **m**'s client would see the epoch issued (but not have the keys).   Note that hijacking another's identity as in this case would not allow the perpetrator to gain access to any of **m**'s private data since only **m** has possession of **[]K<sub>m</sub>**.
+        Note that the given adversary would only have access to community public data (with **[]K<sub>C</sub>**) and **m**'s particular data
+        - In the case that an adversary issues their own **e<sub>𝓔</sub>** _before_ **m** is able to initiate a _keyring halt_, **m** could work with an admin of **C** to:
+            - issue an entry that would rescind any entries in the _member epoch channel_ not authored by **m**
+        - Since a keyring halt only suspends a member's access to **C**, its liabilities (as a mechanism) are limited to a one-time denial of service (and can quickly be reversed).  
+            - An adversarial keyring halt could be easily undone by an admin, plus the offending member's integrity would immediately move under a spotlight.  
+            - Basic imitations could be added to the [keyring halt procedure](#keyring-halt) that would guard against adversarial behavior (e.g. a member is limited to ordering one halt per day).
+            - 
 
  (**[]K<sub>m</sub>**)
  gains access to becomes aware their community or personal keyring have been lost or compromised ("**[]K<sub>lost</sub>**")
@@ -557,7 +553,7 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 - The new admins of **C′** construct the following:
     1. Create a new CRDT ("**𝓛<sub>C′</sub>**") and allocate bulk postage identically to **𝓛<sub>C</sub>**'s genesis _in addition to_ allocating bulk postage for **[]a′**
     2. Copy the parameters from **C**'s genesis _in addition to_ granting admin status for **[]a′**.
-    3. Transfer entries from **𝓛<sub>C</sub>** to **𝓛<sub>C′</sub>** upto time **t<sub>C′</sub>** (omitting entries as desired)
+    3. Transfer entries from **𝓛<sub>C</sub>** to **𝓛<sub>C′</sub>** up to time **t<sub>C′</sub>** (omitting entries as desired)
     4. Use the credentials of **[]a′** to demote/delist **[]a** and any other desired members.
         - For each member demoted or delisted, reduce/burn their postage permissions on **𝓛<sub>C′</sub>** as appropriate.
 
