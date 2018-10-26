@@ -82,7 +82,7 @@ The members of **C** wish to assert...
 - For each node **n<sub>i</sub>** in **C**, it's local replica state ("**𝓡<sub>i</sub>**"), converges to a stable/monotonic state as **𝓛<sub>C</sub>** message traffic eventually "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **𝓡<sub>1</sub>**...**𝓡<sub>N</sub>** mutate such that strong eventual consistency ("SEC") is guaranteed.  
 
 #### Practical Security Provisioning
-- If/When it is discovered that a member's private keys are known to be either lost or possibly comprised, a "[member keyring halt](#keyring-halt)" can be immediately initiated such that any actor in possession of said keys will have no further read or write access to **C**.
+- If/When it is discovered that a member's private keys are known to be either lost or possibly comprised, a [keyring halt](#keyring-halt) can be immediately initiated such that any actor in possession of said keys will have no further read or write access to **C**.
 - Actors that can initiate a keyring halt include:
    - the afflicted member, _or_
    - a member peer (depending on community-global settings), _or even_
@@ -110,11 +110,11 @@ The members of **C** present the following system of infrastructure...
 ## System Synopsis
 
 - The system proposed embraces a multi-tier security model, meaning that in addition to their personal keyring, each community member also possess a community-common keyring.  In effect, this places most of the world outside a cryptographic "city wall" by default.
-- The system's data model is IRC-inspired in that community and member information is organized into vast virtual channel addressing space.  However, instead of entries entered into channels just being rebroadcast to connected clients (as on an IRC server), entries _persist_ — and are stored as replicated transactions on **𝓛<sub>C</sub>**.    
+- The system's data model is IRC-inspired in that community data is serially written to channels within a virtual channel addressing space.  However, instead of entries entered into channels just being rebroadcast to connected clients (as on an IRC server), entries _persist_ — and are stored as replicated transactions on **𝓛<sub>C</sub>**.    
 - When a channel is created, it is assigned a protocol string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them (conceptually inspired from MIME types).  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, affords graphical client interfaces rich and wide-open possibilities.
-- Also inspired from IRC, each channel has its own permissions settings. Every channel is controlled by an "access control" channel ("ACC"), a channel that conforms to a protocol designed to specify channel permissions. Like other channels, each ACC designates a parent ACC, and so on, all the way up to **C**'s root-level ACC.  
-- Members, channels, and **C** itself uses security "epochs" to demarcate security events, in effect furnishing [permissions assurance](#permissions-assurance).
-- In a flow known as [channel entry validation](#channel-entry-validation), each community node (**n<sub>i</sub>**) iteratively mutates its local replica (**𝓡<sub>i</sub>**) by attempting to merge newly arriving entries from **𝓛<sub>C</sub>**, deferring entries for later validation as appropriate.
+- Also inspired from IRC, each channel has its own permissions settings. Every channel is controlled by a access control channel ("ACC"), a channel that conforms to a protocol explicitly designed to specify channel permissions. Like other channels, each ACC designates a parent ACC, and so on, all the way up to **C**'s root-level ACC.  
+- Members, channels, and **C** administration itself uses security "epochs" to demarcate security events, in effect furnishing [permissions assurance](#permissions-assurance).
+- In a flow known as [channel entry validation](#channel-entry-validation), each community node (**n<sub>i</sub>**) iteratively mutates its local replica (**𝓡<sub>i</sub>**) by attempting to merge newly arriving entries from **𝓛<sub>C</sub>** and defers entries for later validation as required.
 - In effect, the system presented here forms a secure and compartmentalized core outside **C**'s channel data space, like how an OS carefully maintains internal pipelines and hierarchies of operations and permissions in an attempt to serve user processes.
 
 
@@ -241,11 +241,11 @@ Channels are intended to be used for any purpose, and are the "client service" u
         - **private**, where entry content is encrypted with the specified by **e<sub>hdr</sub>**`.ContentKeyID`.  
             - Key mechanics for private channels are similar to [starting a new community epoch](#issuing-a-new-Community-Epoch), except the channel owner updating the `ChannelEpoch` performs key generation and distribution.  
             - Only members that have at least read-access are "sent" the keys needed in order to decrypt private channel entries
-3. **Access Control Channels** ("ACCs") are specialized channels used to express permissions for all other channels (including other ACCs)
+3. **Access Control Channels** are specialized channels used to express permissions for all other channels, including other ACCs.
     - An ACC can be regarded as an access authority that specifies:
         - channel permissions for a given member `UUID`, _and_
-        - default permissions (for members not explicitly specified)
-    - Like general purpose channels, each ACC must designate a parent ACC, and so on, all the way up to the _reserved_ [root-level ACC](Root-Access-Control-Channel).
+        - default permissions for members not otherwise specified
+    - Like general purpose channels, each ACC must designate a parent ACC, and so on, all the way up to the _reserved_ [root ACC](#Root-Access-Control-Channel).
     
         
 
@@ -302,11 +302,13 @@ Channels are intended to be used for any purpose, and are the "client service" u
         - For example, for **⧫<sub>C</sub>**, the transaction would send all **m**'s _C-Ether_ to address `x0`.
     3. An admin, automated agent, or delegated member(s) would [issue a new community epoch](#issuing-a-new-Community-Epoch) for **C**.
         - In effect, this results in any holder of a community keyring ("**[]K<sub>C</sub>**") to effectively lose read access to **C** from then on since all new entries will use a newly issued community key.
-- Any time later, admin(s) or delegated members can review the situation:
+
+#### Keyring Halt Recovery
+- Given: a [keyring halt](#keyring-halt) was issued for **m**
+- Some time later, admin(s) or delegated members can review the situation:
     - When appropriate, **m** access is restored via a simplified variation of [adding a new member](#Adding-A-New-Member).
     - In the case that an adversary in possession of **[]K<sub>m</sub>** transfers their postage (their privileges on **𝓛<sub>C</sub>**) to another identity _before_ a keyring halt is posted for **m**, entries using postage from the illicit postage could be identified and rejected.
     - In the case that an a adversary in possession of **[]K<sub>m</sub>** [issued a new member epoch](#issuing-a-new-Member-Epoch) (impersonating **m**), then an admin in communication with **m** would issue new entries that rescind the earlier entries as appropriate.  As normal [channel entry validation](#Channel-Entry-Validation) proceeds, this will automatically result in any dependent (adversary-authored) entries to be removed from "live" status.
-
 
 
 #### Issuing a New Member Epoch
@@ -518,7 +520,7 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
         - Although **m** would retain and resume their identity within **C**, **m** would be unable to decrypt entries from the past (since **m**'s new keyring would lack the private keys).
         - However, for each private channel **𝘾𝒉<sub>p</sub>** that **m** lost the keys to, **m** would be able to regain access if _at least_ one other member had _at least_ read-access to **𝘾𝒉<sub>p</sub>** (since that would mean at least one other member could be petitioned for the channel keyring). 
         - If **m** recovers **[]K<sub>lost</sub>**, access to past data would be restored with no further action. 
-    2. An adversary ("**O**") gains access to **m**'s private keyrings ("**[]K<sub>m</sub>**") through deception or coercion.
+    2. An adversary ("**O**") gains access to **m**'s private keyrings ("**[]K<sub>m</sub>**") through deception, coercion, or priviledged access to **m** client device.
         - **O** would naturally be able to:
             - read community-public data on **C**
             - author entries impersonating **m**
