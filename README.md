@@ -41,7 +41,7 @@ For PLAN, this affords:
    - An extensible & resilient development platform
    - Embedding of key stacks, namely: [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [Ethereum](https://www.ethereum.org), and [Protobufs](https://developers.google.com/protocol-buffers)+[gRPC](https://grpc.io).
 
-The PLAN Unity client talks to a `pnode`, the name for PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes.  
+The PLAN Unity client talks to a `pnode`, the name for PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes.   So, to summerize, PLAN has a realtime 3D/visual frontend with a p2p backend written in Go that can use almost any blockchain/DLT as the storage layer.  
 
 What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, makerspace, artist collective, emotional support network, small business, or gaming group. That is, each member in a community holds a copy of the community keyring (in addition to their private keys for that community). In effect, the entire community's network traffic and infrastructure is inaccessible to all others, providing a fundamental cryptographic "city wall" to ensure privacy and security.  
 
@@ -66,18 +66,34 @@ PLAN is a p2p community-centric operating system, built on pluggable append-only
 
 Using PLAN, communities arise from community organizers who value owning their own data, having a formidable crypto-city wall, and the ability to continue operating in the face of Internet disruptions.  
 
+### Channel Protocol Examples
+
+| Protocol Descriptor | Entry Content-Type       | Example Client UI Experience                                                                                                                                                       |
+|---------------------|--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `/plan/ch/talk`       | txt \| rtf \| image        | Conventional vertical scroller where entries appear in wrapped glowing ovals                                                                                                       |
+| `/plan/ch/geo-plot`   | cords + (txt \| image)   | A map displays text and image annotations at each given geo-space position.                                                                                                        |
+| `/plan/ch/file/docx`  | ipfs \| binary-docx \| xml | An "opqaue" icon displays and tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened in Open Office on the local client. |
+
+
+
+        - For example, `/chType/chat` could be used to denote that entries are to be are plaintext, RTF, or html and rendered in a chat-style UI while `/chType/file/docx/ipfs` could be used to denote that each entry is an [IFPS](https://ipfs.io) hashname pointing to successive revisions of a `.docx` file. 
+
+
 ## Milestones
 
 | Milestone |  Status  | Description                                 |
 |:---------:|:--------:|---------------------------------------------|
-|   Gross   |  2018 Q2 | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model) |
+|   Newton  | 2018 Q2 | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model) |
 |  Babbage  | 2018 Q3 | [Proof of correctness](proof-of-correctness.md)  |
-|   Morse   | 2018 Q4  | [go-plan](https://github.com/plan-tools/go-plan) command line prototype & demo  |
+|   Morse   | 2018 Q4 | [go-plan](https://github.com/plan-tools/go-plan) command line prototype & demo  |
 |   Kepler  | 2019 Q1 | [plan-unity](https://github.com/plan-tools/plan-unity) client prototype & demo  |
-| Fessenden | 2019 Q2 | Ethereum, DFINITY, or Hashgraph used for first PDI implementation |
+| Fessenden | 2019 Q2 | Ethereum or DFINITY used for first PDI implementation |
 |  Lovelace | 2019 Q2 | Installer and GUI setup experience for macOS  |
 |   Turing  | 2019 Q3 | go-plan support and QA for Linux | 
-|   ?  | 2019 Q3 | PLAN Foundation internally replaces Slack with PLAN  |
-|   ?  | 2019 Q4 | Installer and GUI setup experience for Windows  | 
+|  Galileo  | 2019 Q3 | PLAN Foundation internally replaces Slack with PLAN  |
+| Hollerith | 2019 Q4 | Installer and GUI setup experience for Windows  | 
 |   Barton  | 2020 Q1 | PLAN helps support [Art Community Builders](http://artcommunitybuilders.org/) |
-|     -     | 2020+ | PLAN helps support other volunteer-run events  |
+|     -     |  2020+  | PLAN helps support other volunteer-run events  |
+
+
+
