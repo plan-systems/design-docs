@@ -68,15 +68,11 @@ Using PLAN, communities arise from community organizers who value owning their o
 
 ### Channel Protocol Examples
 
-| Protocol Descriptor | Entry Content-Type       | Example Client UI Experience                                                                                                                                                       |
+| Protocol Descriptor | Valid Entry Content-Type | Example Client UI Experience                                                                                                                                                       |
 |---------------------|--------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `/plan/ch/talk`       | txt \| rtf \| image        | Conventional vertical scroller where entries appear in wrapped glowing ovals                                                                                                       |
-| `/plan/ch/geo-plot`   | cords + (txt \| image)   | A map displays text and image annotations at each given geo-space position.                                                                                                        |
-| `/plan/ch/file/docx`  | ipfs \| binary-docx \| xml | An "opqaue" icon displays and tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened in Open Office on the local client. |
-
-
-
-        - For example, `/chType/chat` could be used to denote that entries are to be are plaintext, RTF, or html and rendered in a chat-style UI while `/chType/file/docx/ipfs` could be used to denote that each entry is an [IFPS](https://ipfs.io) hashname pointing to successive revisions of a `.docx` file. 
+| `/plan/ch/talk`       | `txt`\|`rtf`\|`image`        | Conventional vertical "chat scroller" where entries appear in stroked colored ovals                                                                                                       |
+| `/plan/ch/geo-plot`   | `cords`&(`txt`\|`image`)   | A map displays text and image annotations at each given geo-space position.                                                                                                        |
+| `/plan/ch/file/docx`  | `ipfs`\|`bin-docx`\|`xml` | An single icon displays and tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened in OpenOffice on the local client. |
 
 
 ## Milestones
