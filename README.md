@@ -70,9 +70,9 @@ Using PLAN, communities arise from community organizers who value owning their o
 
 | Channel Descriptor | Valid Entry Content-Type | Example Client UI Experience                                                                                                                                                       |
 |---------------------|----------------------|--------------------------------------|
-| `/plan/ch/talk`     | `txt|rtf|image`      | Conventional vertical "chat scroller" where entries appear in stroked colored ovals                       |
+| `/plan/ch/talk`     | `txt`\|`rtf`\|`image`      | Conventional vertical "chat scroller" where entries appear in stroked colored ovals                       |
 | `/plan/ch/geo-plot` | `cords+(txt`\|`image)`  | A map displays text and image annotations at each given geo-space coordinate entry.                             |
-| `/plan/ch/file/pdf`| `ipfs|binary`    | The client UI represents the channel as a single icon. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened as a PDF locally on the client. |
+| `/plan/ch/file/pdf`| `ipfs`\|`binary`    | The client UI represents the channel as a single icon. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened as a PDF locally on the client. |
 
 
 ## Milestones
