@@ -111,17 +111,17 @@ The members of **C** wish to assert...
 
 # Proposed System of Operation
 
-The members of **C** present the following system of infrastructure...
+The members of **C** present the following system of operation...
 
 ## System Synopsis
 
-- The system proposed embraces a multi-tier security model, where each community member possess a community-common keyring in addition to their personal keyring.  In effect, this places the entire system's infrastructure and transaction traffic inside a cryptographic "city wall".
-- The system's data model is IRC-inspired in that community data entries are written sequentially to channels within a virtual channel addressing space.  However, instead of channel entries just being rebroadcast to other connected clients (as on an IRC server), entries _persist_ as replicated transactions across **𝓛<sub>C</sub>**.  
-- When a channel is created, it is assigned a protocol descriptor string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them (functionally comparible to MIME types).  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, affords viusally-oriented client interfaces rich and wide-open possibilities.
-- Also inspired from IRC, each channel has its own permissions settings. Every channel is controlled by a access control channel ("ACC"), a channel that conforms to a protocol explicitly designed to specify channel permissions. Like other channels, each ACC designates a parent ACC, and so on, all the way up to **C**'s root-level ACC.  
+- The system embraces a multi-tier security model, where each community member possesses a community-common keyring as well as their private keyring.  In effect, this places the entire system's infrastructure and transaction traffic inside a cryptographic "city wall".
+- The system's data model is IRC-inspired in that member interaction takes the form of data entries written sequentially to channels within the a virtual channel addressing space.  However, instead of channel entries just being rebroadcast to other connected clients (as on an IRC server), entries _persist_ as transactions replicated across **𝓛<sub>C</sub>**.  
+- When a channel is created, it is assigned a protocol descriptor string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them (functionally comparible to MIME types).  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, creates many possibilities for visually-oriented client interfaces.
+- Also inspired from IRC, each channel has its own permissions settings. Each channel designates an access control channel ("ACC") to be used as an oracle for channel permissions.  An ACC is a special channel type that additionally conforms to a protocol designed to specify channel permissions. Like other channels, each ACC also designates a parent ACC, and so on, all the way up to **C**'s root-level ACC.  
 - Member, channel, and community security and key distribution uses "epochs" to demarcate security events, in effect furnishing [permissions assurance](#permissions-assurance).
-- In a flow known as [channel entry validation](#channel-entry-validation), each community node (**n<sub>i</sub>**) iteratively mutates its local replica (**𝓡<sub>i</sub>**) by attempting to merge newly arriving entries from **𝓛<sub>C</sub>** into **𝓡<sub>i</sub>**.  During validation, if **𝓡<sub>i</sub>** is not yet in a state to fully validate an incoming entry **e**,, then **e** is deferred for later processing.
-- In effect, the system presented here forms a secure and compartmentalized core outside **C**'s channel data space, like how a traditional OS carefully maintains internal pipelines and hierarchies of operations and permissions to serve and protect user processes.
+- In a flow known as [channel entry validation](#channel-entry-validation), each community node (**n<sub>i</sub>**) iteratively mutates its local replica (**𝓡<sub>i</sub>**) by attempting to merge newly arriving entries from **𝓛<sub>C</sub>** into **𝓡<sub>i</sub>**.  During validation, if **𝓡<sub>i</sub>** is not yet in a state to fully validate an incoming entry **e**, then **e** is said to be "deferred" for later processing.
+- This system, in effect, forms a secure and operational core outside **C**'s channel data space, comparible to how a traditional OS maintains internal pipelines and hierarchies of operations and permissions, designed to serve and protect user processes.
 
 
 ## System Security
@@ -130,43 +130,126 @@ The members of **C** present the following system of infrastructure...
 - Each member **m** in **C** securely maintains custody of two "keyrings":
    1. **[]K<sub>m</sub>**: **m**'s _personal keyring_, used to:
        - decrypt/encrypt information "sent" to/from **m**, _and_
-       - create signatures that authenticate all information authored by **m**.
-   2. **[]K<sub>C</sub>**: the _community keyring_, used to protect all "community public" data.
+       - create signatures that authenticate information authored by **m**.
+   2. **[]K<sub>C</sub>**: the _community keyring_, used to secure **C**'s "community-public" data so that _only_ members of **C** can read it.
        - Each entry authored by **m** is encrypted by **m**'s local client using the latest community encryption key on **[]K<sub>C</sub>**.
         - That is, **[]K<sub>C</sub>** encrypts/decrypts `EntryCrypt` traffic to/from **𝓛<sub>C</sub>** and **𝓡<sub>i</sub>** 
         - Newly [issued community keys](#Issuing-a-New-Community-Epoch) are securely distributed to members via the [community epoch channel](#Community-Epoch-Channel).
-- As **m** accesses **C**, it is presumed  that **m**'s local client has access to these keyrings (though they can be implemented in ways that further compartmentalize security, such as using a hardware dongle or a key server). 
+- As **m** accesses **𝓛<sub>C</sub>**, it is presumed  that **m**'s local client has access to these keyrings (though they can be implemented in ways that further compartmentalize security, such as hardware dongles or a key server). 
 
 
 
-## Channel Overview
-Channels are intended to be used for any purpose and serve members as containers for persistent [channel entries](#channel-entries) (through channel "drivers" running on member clients).  The system itself collectively uses specialized "reserved" channels to carry out critical member and community security controls.  
 
-1. **Reserved channels** are specialized channels used by the system intenrally to carry out critical security controls. 
-    - Reserved channels specify root-level information and permissions, namely admin and member records and community key distribution. 
-    - These channels are special in that entries must meet additional security/signing requirements and used internally for explicit purposes.  
-    - Because reserved channels have their own strict access control behavior, they are the _only_ channels that don't solely rely on ACCs for access control.
-    - The number, purpose, and use of these channels can be expanded to meet future needs. 
-2. **General purpose channels** are the principal purpose of the entire system.
-    - Members create channels of various types (`.ChannelProtocol`), directing client UIs to consistently interpret and present entries as appropriate. 
-    - Every channel specifies a governing access control channel ("parent ACC").  A channel's parent ACC effectively specifies a permission level for any given member `UUID`, allowing each node in **C** to carry out [channel entry validation](#channel-entry-validation).
-    - General purpose channels can either be:
-        - **community-public**, where channel entry content is encrypted with a community key, _or_
-        - **private**, where entry content is encrypted with the specified by **e<sub>hdr</sub>**`.ContentKeyID`.  
-            - Key mechanics for private channels are similar to [starting a new community epoch](#issuing-a-new-Community-Epoch), except the channel owner updating the `ChannelEpoch` performs key generation and distribution.  
-            - Only members that have at least read-access are "sent" the keys needed in order to decrypt private channel entries.
-                - Even community admins _do not_ have the authority or means to gain access to a private channel's key.   
-                - This ensures that _only the members that have been explicitly given access_ are the ones who could possibly have access to the private channel's key.
-3. **Access Control Channels** are specialized channels used to express permissions for all other channels, including other ACCs.
+## Channel Entries
+
+- Each transaction residing in **𝓛<sub>C</sub>** contains a serialization of an `EntryCrypt`:
+    ```
+    type EntryCrypt struct {
+        CommunityKeyID    UUID     // The community key used to encrypt .HeaderCrypt
+        HeaderCrypt       []byte   // An EntryHeader, encrypted with .CommunityKeyID
+        ContentCrypt      []byte   // Channel content, encrypted with EntryHeader.ContentKeyID
+        Sig               []byte   // Authenticates this entry; signed by EntryHeader.AuthorMemberID
+    }
+    ```
+- Given entry **e** arriving from **𝓛<sub>C</sub>**, **e**`.HeaderCrypt` is decrypted into an `EntryHeader` ("**e<sub>hdr</sub>**") using **[]K<sub>C</sub>** :
+    ```
+    type EntryHeader struct {
+        EntryOp           int32    // Entry opcode. Typically, POST_CONTENT
+        TimeAuthored      int64    // When this header was sealed/signed
+        ChannelID         UUID     // Channel that this entry is posted to (or operates on)
+        ChannelEpochID    UUID     // Epoch of the channel in effect when entry was authored
+        AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
+        AuthorMemberEpoch UUID     // Epoch of the author's identity when entry was authored
+        ContentKeyID      UUID     // Identifies the key used to encrypt EntryCrypt.ContentCrypt
+    }
+    ```
+- Every entry specifies a destination `ChannelID` within **C**'s channel space to be merged into. 
+- During [channel entry validation](#Channel-Entry-Validation) on each community node, newly arriving entries from **𝓛<sub>C</sub>** are validated and merged into the node's locally stored `CommunityRepo` ("**𝓡<sub>i</sub>**") 
+- **𝓡<sub>i</sub>** consists of:
+    - a datastore for each channel `UUID` that makes an appearance in **C** 
+    - bookkeeping needed to resume sessions with **𝓛<sub>C</sub>**
+    - a queue of entries to be merged in accordance with [channel entry validation](#Channel-Entry-Validation).
+    - infrastructure for "deferred" entries to be retried periodically
+    ```
+    // CommunityRepo is a node's replica/repo/𝓡i
+    type CommunityRepo struct {
+        ChannelsByID      map[UUID]ChannelStore
+    }
+
+    // ChannelStore stores entries for a given channel and provides rapid access to them
+    type ChannelStore struct {
+        ChannelID         UUID
+        ChannelProtocol   string          // "/chType/ACC" or "/chType/desc/<protocol-desc>"
+        EpochHistory      []ChannelEpoch  // Record of all past channel epochs
+        EntryTable        []EntryIndex    // Entry info indexed by TimeAuthored and hashname
+        ContentTome       ContentTome     // Entry content store/db for channel
+    }
+
+    // EntryIndex packages the the essential parts of an entry, plus status information.
+    type EntryIndex struct {
+        EntryHeader      EntryHeader
+        EntryStatus      EntryStatus      // Status of entry (e.g. LIVE, DEFERRED)
+        ContentPos       uint64           // Byte offset into ..ContentTome
+        ContentLen       uint32           // SByte length at .ContentPos in ..ContentTome
+    }
+    ```
+
+
+
+## Channel Epochs
+
+- In an append-only storage environment, the mechanism that gives rise to mutable access controls centers around a channel's latest `ChannelEpoch`. 
+- In a procedure known as [issuing a new channel epoch](#Issuing-a-New-Channel-Epoch), the owner of channel **𝘾𝒉** posts a `ChannelEpoch` revision to **𝘾𝒉** in order to:
+    - customize permissions on **𝘾𝒉**, _or_
+    - designate a different parent ACC for **𝘾𝒉**.
+- Naturally, part of [channel entry validation](#channel-entry-validation) is to reject entries from members that lack the appropriate permissions to issue a new `ChannelEpoch` for a given channel. 
+    ```
+    // Specifies general epoch parameters and info
+    type EpochInfo struct {
+        TimeStarted       timestamp
+        TimeClosed        timestamp
+        EpochID           UUID
+        ParentEpochID     UUID            // 0 if this is the first epoch.
+        TransitionSecs    int             // Epoch transition params, etc
+        ...
+    }
+
+    // ChannelEpoch represents a "rev" to a channel's security properties.
+    type ChannelEpoch struct {
+        EpochInfo         EpochInfo
+        AccessChannelID   UUID            // This is channel's parent ACC; cannot form circuit
+    }
+    ```
+
+
+
+## Channels
+Channels are intended for any purpose and are general-purpose containers for [channel entries](#channel-entries), though the system intermally uses channels for administration and permissions controls.
+
+
+1. **Access Control Channels** (ACCs) are specialized channels used to express permissions for all other channels, including other ACCs.
     - An ACC can be regarded as an access authority that specifies:
         - channel permissions for a given member `UUID`, _and_
         - default permissions for members not otherwise specified
     - Like general purpose channels, each ACC must designate a parent ACC, and so on, all the way up to the _reserved_ [root ACC](#Root-Access-Control-Channel).
-    
-        
+    - Multiple channels can name the _same_ ACC as their parent ACC, allowing a single ACC to conveniently manage permissions for any number of channels.  
+2. **Reserved channels** are specialized channels used by the system to internally carry out commuinity governance and member administration.
+    - Reserved channels specify root-level information and permissions, namely admin and member records and community key distribution. 
+    - Entries in these channls must meet additional security/signing requirements and serve prescribed purposes.  
+    - Because reserved channels have nuanced specificaitons, they are the _only_ channels that do not solely rely on ACCs for access controls.
+    - The number, purpose, and use of these channels can be expanded to meet future needs. 
+3. **General purpose channels**, alas, are the product of the this system.
+    - The creator (and hence owner) of new channel specifies a protocol descriptor, directing client UIs to consistently interpret and present channel entries appropriately.  
+    - Each channel also names a governing access control channel ("parent ACC").  A channel's parent ACC is chraged with returning a permission level for any given member `UUID`, allowing each node in **C** to independently carry out [channel entry validation](#channel-entry-validation).
+    - General purpose channels can either be:
+        - **community-public**, where channel entry content is encrypted with the latest community key, _or_
+        - **private**, where entry content is encrypted with the key identified by **e<sub>hdr</sub>**`.ContentKeyID`.  
+            - Key mechanics for private channels are similar to [starting a new community epoch](#issuing-a-new-Community-Epoch), except the channel owner updating the `ChannelEpoch` performs key generation and distribution.  
+            - Only members that have at least read-access are "sent" the keys needed in order to decrypt private channel entries.
+                - Even community admins _do not_ have the authority or means to gain access to a private channel's key.   
+                - This ensures that _only the members that have been explicitly given access_ could possibly have access to the private channel's key.
 
-### Reserved Channels
-
+## Reserved Channels
 
 #### Root Access Control Channel
 - This is **C**'s root access channel, effectively specifying which members are admins.
@@ -210,82 +293,6 @@ Channels are intended to be used for any purpose and serve members as containers
     - the newly generated community key _for each_ member **m** in **C**, encrypted using **m**'s public latest encryption key published in the [member epoch channel](#Member-Epoch-Channel).
 
 using asymmetric encryption (the community admin that issues a new community key separately "sends" the key to each member in **C**'s member registry channel, encrypting the new key with the recipient members's latest public key, which is also available in the member registry channel)
-
-
-
-## Channel Entries
-
-- Each transaction residing in **𝓛<sub>C</sub>** contains a serialization of an `EntryCrypt`:
-    ```
-    type EntryCrypt struct {
-        CommunityKeyID    UUID     // The community key used to encrypt .HeaderCrypt
-        HeaderCrypt       []byte   // An EntryHeader, encrypted with .CommunityKeyID
-        ContentCrypt      []byte   // Channel content, encrypted with EntryHeader.ContentKeyID
-        Sig               []byte   // Authenticates this entry; signed by EntryHeader.AuthorMemberID
-    }
-    ```
-- Given entry **e** arriving from **𝓛<sub>C</sub>**, **e**`.HeaderCrypt` is decrypted into an `EntryHeader` ("**e<sub>hdr</sub>**") using **[]K<sub>C</sub>** :
-    ```
-    type EntryHeader struct {
-        EntryOp           int32    // Entry opcode. Typically, POST_CONTENT
-        TimeAuthored      int64    // When this header was sealed/signed
-        ChannelID         UUID     // Channel that this entry is posted to (or operates on)
-        ChannelEpochID    UUID     // Epoch of the channel in effect when entry was authored
-        AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
-        AuthorMemberEpoch UUID     // Epoch of the author's identity when entry was authored
-        ContentKeyID      UUID     // Identifies the key used to encrypt EntryCrypt.ContentCrypt
-    }
-    ```
-- Every entry specifies a destination `ChannelID` within **C**'s channel space to be merged into. 
-- During [channel entry validation](#Channel-Entry-Validation) on each community node, newly arriving entries from **𝓛<sub>C</sub>** are validated and merged into the node's locally stored `CommunityRepo` ("**𝓡<sub>i</sub>**") 
-- **𝓡<sub>i</sub>** consists of:
-    - a datastore for each channel `UUID` that makes an appearance in **C** 
-    - bookkeeping needed to resume sessions with **𝓛<sub>C</sub>**
-    - a queue of entries to be merged in accordance with [channel entry validation](#Channel-Entry-Validation).
-    - infrastructure for "deferred" entries to be retried periodically
-    ```
-    // CommunityRepo is a node's replica/repo/𝓡i
-    type CommunityRepo struct {
-        ChannelsByID      map[UUID]ChannelStore
-    }
-
-    // ChannelStore stores entries for a given channel and provides rapid access to them
-    type ChannelStore struct {
-        ChannelID         UUID
-        EpochHistory      []ChannelEpoch  // Record of all past channel epochs
-        EntryTable        []EntryIndex    // Entry info indexed by TimeAuthored and hashname
-        ContentTome       ContentTome     // Entry content store
-    }
-
-    // EntryIndex packages the the essential parts of an entry, plus status information.
-    type EntryIndex struct {
-        EntryHeader      EntryHeader
-        EntryStatus      EntryStatus      // Status of entry (e.g. LIVE, DEFERRED)
-        ContentPos       uint64           // Byte offset into ..ContentTome
-        ContentLen       uint32           // SByte length at .ContentPos in ..ContentTome
-    }
-    ```
-- The epoch mechanism is how access controls can arise in an append-only storage environment.  When the owner of a channel posts a new `ChannelEpoch` to that channel, is to assign a parent ACC for a given 
-
-```
-// Specifies general epoch parameters and info
-type EpochInfo struct {
-    TimeStarted       timestamp
-    TimeClosed        timestamp
-    EpochID           UUID
-    ParentEpochID     UUID            // 0 if this is the first epoch.
-    TransitionSecs    int             // Epoch transition params, etc
-    ...
-}
-
-// ChannelEpoch represents a "rev" of a given channel's security properties.
-type ChannelEpoch struct {
-    EpochInfo         EpochInfo
-    ChannelProtocol   string          // If access control channel: "/chtype/ACC", else: "/chtype/client/*"
-    AccessChannelID   UUID            // This is channel's parent ACC; cannot form circuit
-}
-
-```
 
 
 
