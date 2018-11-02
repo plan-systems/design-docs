@@ -135,14 +135,13 @@ The members of **C** present the following system of operation...
        - Each entry authored by **m** is encrypted by **m**'s local client using the latest community encryption key on **[]K<sub>C</sub>**.
         - That is, **[]K<sub>C</sub>** encrypts/decrypts `EntryCrypt` traffic to/from **𝓛<sub>C</sub>** and **𝓡<sub>i</sub>** 
         - Newly [issued community keys](#Issuing-a-New-Community-Epoch) are securely distributed to members via the [community epoch channel](#Community-Epoch-Channel).
-- As **m** accesses **𝓛<sub>C</sub>**, it is presumed  that **m**'s local client has access to these keyrings (though they can be implemented in ways that further compartmentalize security, such as hardware dongles or a key server). 
 
 
 
 
 ## Channel Entries
 
-- Each transaction residing in **𝓛<sub>C</sub>** contains a serialization of an `EntryCrypt`:
+- Each transaction residing in **𝓛<sub>C</sub>** contains one or more `EntryCrypt`:
     ```
     type EntryCrypt struct {
         CommunityKeyID    UUID     // The community key used to encrypt .HeaderCrypt
@@ -169,7 +168,7 @@ The members of **C** present the following system of operation...
     - a datastore for each channel `UUID` that makes an appearance in **C** 
     - bookkeeping needed to resume sessions with **𝓛<sub>C</sub>**
     - a queue of entries to be merged in accordance with [channel entry validation](#Channel-Entry-Validation).
-    - infrastructure for "deferred" entries to be retried periodically
+    - a mechanism for "deferred" entries to be retried periodically
     ```
     // CommunityRepo is a node's replica/repo/𝓡i
     type CommunityRepo struct {
@@ -190,7 +189,7 @@ The members of **C** present the following system of operation...
         EntryHeader      EntryHeader
         EntryStatus      EntryStatus      // Status of entry (e.g. LIVE, DEFERRED)
         ContentPos       uint64           // Byte offset into ..ContentTome
-        ContentLen       uint32           // SByte length at .ContentPos in ..ContentTome
+        ContentLen       uint32           // Byte length at .ContentPos in ..ContentTome
     }
     ```
 
@@ -198,7 +197,7 @@ The members of **C** present the following system of operation...
 
 ## Channel Epochs
 
-- In an append-only storage environment, the mechanism that gives rise to mutable access controls centers around a channel's latest `ChannelEpoch`. 
+- Under an append-only storage model, the mechanism that gives rise to mutable access controls centers around a channel's latest `ChannelEpoch`. 
 - In a procedure known as [issuing a new channel epoch](#Issuing-a-New-Channel-Epoch), the owner of channel **𝘾𝒉** posts a `ChannelEpoch` revision to **𝘾𝒉** in order to:
     - customize permissions on **𝘾𝒉**, _or_
     - designate a different parent ACC for **𝘾𝒉**.
@@ -224,13 +223,13 @@ The members of **C** present the following system of operation...
 
 
 ## Channels
-Channels are intended for any purpose and are general-purpose containers for [channel entries](#channel-entries), though the system intermally uses channels for administration and permissions controls.
+Channels are intended for any purpose and are general-purpose containers for [channel entries](#channel-entries), and the system uses channels intermally for administration and permissions controls.
 
 
 1. **Access Control Channels** (ACCs) are specialized channels used to express permissions for all other channels, including other ACCs.
     - An ACC can be regarded as an access authority that specifies:
         - channel permissions for a given member `UUID`, _and_
-        - default permissions for members not otherwise specified
+        - default permissions for members not otherwise specified.
     - Like general purpose channels, each ACC must designate a parent ACC, and so on, all the way up to the _reserved_ [root ACC](#Root-Access-Control-Channel).
     - Multiple channels can name the _same_ ACC as their parent ACC, allowing a single ACC to conveniently manage permissions for any number of channels.  
 2. **Reserved channels** are specialized channels used by the system to internally carry out commuinity governance and member administration.
@@ -238,7 +237,7 @@ Channels are intended for any purpose and are general-purpose containers for [ch
     - Entries in these channls must meet additional security/signing requirements and serve prescribed purposes.  
     - Because reserved channels have nuanced specificaitons, they are the _only_ channels that do not solely rely on ACCs for access controls.
     - The number, purpose, and use of these channels can be expanded to meet future needs. 
-3. **General purpose channels**, alas, are the product of the this system.
+3. **General purpose channels**, alas, are the system's purpose and comprise most of 
     - The creator (and hence owner) of new channel specifies a protocol descriptor, directing client UIs to consistently interpret and present channel entries appropriately.  
     - Each channel also names a governing access control channel ("parent ACC").  A channel's parent ACC is chraged with returning a permission level for any given member `UUID`, allowing each node in **C** to independently carry out [channel entry validation](#channel-entry-validation).
     - General purpose channels can either be:
@@ -611,7 +610,9 @@ a fixed provable accuracy of when the network witnessed it sent (as it travels f
 ### scrap/work area
 
 
+- **m** uses a client that connects with a trusted community node (meaning a node that **m** trusts with the community keyring). 
 
+ a client session with **𝓛<sub>C</sub>**, **m**'s local client node is presumed to have access to these keyrings (though they can be implemented in ways that further compartmentalize security, such as hardware dongles or a key server). 
 
 
 And since a new channel security epoch entails sending each member a newly generated   This means if the entry that removes Oscar's access from the private channel is withheld, then ._ he idea is that if the entry that removed Oscar's access has yet to be merged into **𝓡<sub>i</sub>**, then Oscar   This case is somewhat of a trick question and reveals the nature of this operating system: "private channels" are really just a matter of whom has been securely sent the keys.  Hence, in this system, any time an ACC is mutated in the _more restrictive_ direction,  o read all   Hence,    _provided that an ACC mutation also initiates a new channel security epoch_.  This means that 
