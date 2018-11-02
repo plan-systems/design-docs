@@ -106,7 +106,7 @@ A given community is likely to be interested in making explict parts of it acces
         Subs       []*Block
     }
     ```
-- As with most public data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers) in [plan.proto](../go-plan/plan/plan.proto).  This means boilerplate serialization and network handling code can be [trivially generated](../plan-protobufs) for most major languages and environments, such as C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby. 
+- As with most public data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers) in [plan.proto](../../go-plan/plan/plan.proto).  This means boilerplate serialization and network handling code can be [trivially generated](../../plan-protobufs) for most major languages and environments, such as C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby. 
     - Each protobuf struct ("message") can be composed of primitive data types and other user-defined message types.
     - Each field in a protobuf message is explicitly and strongly typed.
     - Revisions to a message schema are backward-compatible with previous revisions.
