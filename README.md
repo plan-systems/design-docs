@@ -27,7 +27,7 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 PLAN will be useful to communities and organizers _only if_ non-technical users can use it easily. As software designers, we must acknowledge that distributed technologies, content-based addressing, and cryptography are alien concepts to most people. What does PLAN do about this?
 
-It’s not particularly important to an end-user where exactly data resides, how it's served, or how the encryption works — just that it's reliable and secure.  The primary objective of PLAN's architecture and user interface is to simplify the complex nature of trustless and distributed technologies with visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of a 2D-constrained and sandboxed web/browser experience, the end-user experiences PLAN through the [Unity](https://unity3d.com) 3D engine while [Go](https://golang.org) powers its p2p node.  The [PLAN Foundation](http://plan.tools) fully supports groups interested in developing a PLAN client in alternative environments, such as [Unreal](https://www.unrealengine.com) or [Electron](https://electronjs.org/).
+It’s not particularly important to an end-user where exactly data resides, how it's served, or how the encryption works — just that it's reliable and secure.  The primary objective of PLAN's architecture and user interface is to simplify the complex nature of "trustless" and distributed technologies with visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of a 2D-constrained and sandboxed web/browser experience, the end-user experiences PLAN through the [Unity](https://unity3d.com) 3D engine while [Go](https://golang.org) powers its p2p node.  The [PLAN Foundation](http://plan.tools) fully supports groups interested in developing a PLAN client in alternative environments, such as [Unreal](https://www.unrealengine.com) or [Electron](https://electronjs.org/).
 
 For the end-user, using a graphics engine affords:
    - A realtime, visual, and spatially-oriented interface
@@ -42,11 +42,11 @@ For PLAN, this affords:
    - An extensible & resilient development platform
    - Embedding of key stacks, namely: [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), [Ethereum](https://www.ethereum.org), and [Protobufs](https://developers.google.com/protocol-buffers)+[gRPC](https://grpc.io).
 
-The PLAN Unity client talks to a `pnode`, the name for PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes.   So, to summerize, PLAN has a realtime 3D/visual frontend with a p2p backend written in Go that can use almost any blockchain/DLT as the storage layer.  
+The PLAN Unity client talks to a `pnode`, the name for PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes.   So, to summarize, PLAN has a realtime 3D/visual frontend with a p2p backend written in Go that can use almost any blockchain/DLT as the storage layer.  
 
-What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, makerspace, artist collective, emotional support network, small business, or gaming group. That is, each member in a community holds a copy of the community keyring (in addition to their private keys for that community). In effect, the entire community's network traffic and infrastructure is inaccessible to all others, providing a fundamental cryptographic "city wall" to ensure privacy and security.  
+What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. That is, each member in a community holds a copy of the community keyring (in addition to their private keys for that community). In effect, the entire community's network traffic and infrastructure is inaccessible to all others, providing a fundamental cryptographic "city wall" to ensure privacy and security.  
 
-Each member of a (self-hosted and -organized) community running the PLAN client software has copy of the community keyring, giving them the abilty to decrypt community data.  Anyone _without_ this keyring — anyone _not_ in the community — is _outside_ the community's cryptographic city wall. Inside a community's city wall, residing on each community `pnode`, lives an IRC-inspired channel infrastructure. Each PLAN channel entry is composed of content data and an accompanying header that serves like HTTP headers. When a PLAN channel is created, it's assigned a protocol identifier. A channel's protocol implies the _kind_ of entries that are expected to appear that channel and _how_ they are interpreted. For example, an entry consisting of a geographical position could appear in a channel of type `/plan/channel/chat`, or in a channel of type `/plan/channel/geospace`, and the UI can handle the entry differently. In the PLAN graphical client, each channel protocol identifier maps to a particular "channel UI driver", allowing the client to select from any available drivers. So instead of people requiring a web browser, PLAN is an open platform that offers users the ability to select or add channel UI drivers that suit their interests, taste, or needs.
+Each member of a (self-hosted and -organized) community running the PLAN client software has copy of the community keyring, giving them the ability to decrypt community data.  Anyone _without_ this keyring — anyone _not_ in the community — is _outside_ the community's cryptographic city wall. Inside a community's city wall, residing on each community `pnode`, lives an IRC-inspired channel infrastructure. Each PLAN channel entry is composed of content data and an accompanying header that serves like HTTP headers. When a PLAN channel is created, it's assigned a protocol identifier. A channel's protocol implies the _kind_ of entries that are expected to appear that channel and _how_ they are interpreted. For example, an entry consisting of a geographical position could appear in a channel of type `/plan/channel/chat`, or in a channel of type `/plan/channel/geospace`, and the UI can handle the entry differently. In the PLAN graphical client, each channel protocol identifier maps to a particular "channel UI driver", allowing the client to select from any available drivers. So instead of people requiring a web browser, PLAN is an open platform that offers users the ability to select or add channel UI drivers that suit their interests, taste, or needs.
 
 In addition to the entry protocol a channel is assigned, a PLAN channel is _also_ assigned an owning access control channel (ACC) that specifies channel permissions, limits, and behavior. A channel's controlling ACC, like all channels, also cites its own controlling ACC, and so on — up to the community's root ACC. A community's root ACC, is one of several "hard&nbsp;wired" channels that serve core community functions and can only be altered by community admins. Another such channel, for example, is the community registry channel, containing the member ID and public keys of each community member. Functions such as community member key recovery (i.e. a member "epoch" change) and other forms of private key exchange are carried out through community channels explicitly reserved for these purposes.
 
@@ -75,47 +75,47 @@ A technology is only as interesting as how it can be harnessed and applied to ou
 
 ## Community Public Access 
 
-A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publically accessible services to serve community content scalably (as a distrubited system) alongside traditional web or internet services.  For example:
-- A musical artist uses PLAN to serve past show recordings and offical track releases 
-- A documentary production uses PLAN to serve the film's trailer and the full film iteself to users bearing a "paid" token.
-- A PLAN deamon periodcially renders out a map image with spatial annotations from a communuty geo-space channel, served in a browsable web page.
-- A PLAN email gateway deamon bridges access to the memebrs of a PLAN community and the outwide world.  Unlike email, however, each incoming email contains unique access token that the recipient prevously issued the sender, effectively eliminating unsolicited messages/spam.  Further, a sender who abuses their priviliedges (or loses or resells their token to a spammer), can be blocked without concern of messages from other senders being inadvertently filtered/blocked.
+A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publicly accessible services to serve community content scalably (as a distributed system) alongside traditional web or internet services.  For example:
+- A musical artist uses PLAN to serve past show recordings and official track releases 
+- A documentary production uses PLAN to serve the film's trailer and the full film itself to users bearing a "paid" token.
+- A PLAN daemon periodically renders out an image of a map with spatial annotations from a community geo-space channel, served as a web page.
+- A PLAN email gateway daemon bridges access to the members of a PLAN community and the outside world.  Unlike email, however, each incoming email contains an access token that the recipient previously issued the sender, effectively eliminating unsolicited messages/spam.  Further, a sender who abuses their privileges (or loses or resells their token to a spammer), can be blocked without any concern of messages from other senders being inadvertently filtered/blocked.
 
 ## Interoperable Data Structures
 
-- The standard unit of information exchange in PLAN is `plan.Block`:
+- PLAN's standard unit of information exchange is `plan.Block`:
 
     ```
-    // A portable, compact, self-describing, nestable data container inspired from HTTP.
+    // A portable, compact, self-describing, nest-able data container inspired from HTTP.
     type Block struct {
 
         // An optional, name/label for this Block (i.e. a field-name).
         // A Block's label conforms to the context/protocol it's being with (as applicable).
         Label      string
 
-        // Like to a MIME type, this descriptor self-describes the data format of Block.content.
+        // Like a MIME type, this descriptor self-describes the data format of Block.Content.
         // Anyone handed this Block uses this field to accurately process/deserialize its content.
-        // This field is a "multicodec path" -- see: https://github.com/multiformats/multistream
+        // This is a "multicodec path" -- see: https://github.com/multiformats/multistream
         Codec      string
 
         // This is a reserved integer alternative to Block.Codec.
         // See: https://github.com/multiformats/multicodec/blob/master/table.csv
         CodecCode  uint32
         
-        // Payload data, serialized in accordance with the accompanying codec descriptor (above).
+        // Payload data, serialized in accordance with the accompanying codec descriptors (above).
         Content    []byte 
 
-        // A Block can also contain nested "sub" blocks.  A Block's sub blocks
+        // A Block can optionally contain nested "sub" blocks.  A Block's sub-blocks
         //    can be interpreted or employed any way a client or protocol sees fit.
         Subs       []*Block
     }
     ```
-- As with most public data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, such as C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby. 
-    - Protobufs are faster, simpler, more compact, and more efficient forms of JSON and XML.
-    - A protobuf struct ("message") is composed of primitive data types and/or other user-defined message types.
-    - Each field in a protobuf message is explicitly and strongly typed.
-    - Revisions to a message schema are backward-compatible with previous revisions.
-    - Protobufs work closely with [gRPC](https://grpc.io), opening up language and platform-agnostic network transport.
+- As with most public data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, including C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby.  Not bad!
+    - Protobufs are faster, simpler, safer, more compact, and more efficient forms of JSON and XML.
+    - A protobuf struct ("message") is composed of primitive data types or user-defined message types.
+    - Field of a protobuf message are explicitly and strongly typed.
+    - Revisions to a protobuf message are backward-compatible with previous revisions.
+    - Protobufs work well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
 - PLAN's protobuf-based data stuctures:
     - [go-plan/plan/plan.proto](http://github.com/plan-tools/go-plan/blob/master/plan/plan.proto)
     - [go-plan/pdi/pdi.proto](http://github.com/plan-tools/go-plan/blob/master/pdi/pdi.proto)
@@ -126,12 +126,13 @@ A community using PLAN will inevitably be interested in making some of its parts
 
 ## Channel Protocol Examples
 
+
 | Example Channel Descriptor | Valid Entry Content-Types | Example Client UI Experience                                                                                                                                                       |
 |---------------------|----------------------|--------------------------------------|
 | `/plan/ch/talk`     | `txt`\|`rtf`\|`image`      | A conventional vertical scroller where new entries appear in colored ovals at the bottom and past entries scroll upward.                     |
 | `/plan/ch/geoplot` | `cords+(txt`\|`image)`  | A map displays text and image annotations at each given geo-coordinate entry.  Tapping on an annotation causes a box to appear displaying who made the entry and when.  |
 | `/plan/ch/file/pdf`| `ipfs`\|`binary`    | The client UI represents the channel as a single monolithic object. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened locally on the client using a PDF viewing application. |
-
+| `/plan/ch/calandar`| `text/ifb`\|`text/ics`    | The client UI presents a familiar calendar idiom where posted calendar events (entries) appear on the appropriate days etc. The user interacts with channel UI in real-time, scrolling from week to week, or day to day as the user zooms in "closer".
 
 ## Milestones
 
