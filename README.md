@@ -73,16 +73,20 @@ Using PLAN, communities arise from community organizers who value owning their o
 
 A technology is only as interesting as how it can be harnessed and applied to our world.  
 
-## Intra-Community Services
+## Community Public Access 
 
-A given community is likely to be interested in making explict parts of it accessible to the global public.  
+A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publically accessible services to serve community content scalably (as a distrubited system) alongside traditional web or internet services.  For example:
+- A musical artist uses PLAN to serve past show recordings and offical track releases 
+- A documentary production uses PLAN to serve the film's trailer and the full film iteself to users bearing a "paid" token.
+- A PLAN deamon periodcially renders out a map image with spatial annotations from a communuty geo-space channel, served in a browsable web page.
+- A PLAN email gateway deamon bridges access to the memebrs of a PLAN community and the outwide world.  Unlike email, however, each incoming email contains unique access token that the recipient prevously issued the sender, effectively eliminating unsolicited messages/spam.  Further, a sender who abuses their priviliedges (or loses or resells their token to a spammer), can be blocked without concern of messages from other senders being inadvertently filtered/blocked.
 
 ## Interoperable Data Structures
 
 - The standard unit of information exchange in PLAN is `plan.Block`:
 
     ```
-    // A portable, self-describing, nestable data container inspired from HTTP and Protocol Lab's multistream.
+    // A portable, compact, self-describing, nestable data container inspired from HTTP.
     type Block struct {
 
         // An optional, name/label for this Block (i.e. a field-name).
@@ -94,10 +98,10 @@ A given community is likely to be interested in making explict parts of it acces
         // This field is a "multicodec path" -- see: https://github.com/multiformats/multistream
         Codec      string
 
-        // This is an alternative reserved integer repesentation of Block.codec.
-        // For a list of codes: https://github.com/multiformats/multicodec/blob/master/table.csv
+        // This is a reserved integer alternative to Block.Codec.
+        // See: https://github.com/multiformats/multicodec/blob/master/table.csv
         CodecCode  uint32
-        `
+        
         // Payload data, serialized in accordance with the accompanying codec descriptor (above).
         Content    []byte 
 
@@ -106,13 +110,18 @@ A given community is likely to be interested in making explict parts of it acces
         Subs       []*Block
     }
     ```
-- As with most public data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers) in [plan.proto](../../go-plan/plan/plan.proto).  This means boilerplate serialization and network handling code can be [trivially generated](../../plan-protobufs) for most major languages and environments, such as C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby. 
-    - Each protobuf struct ("message") can be composed of primitive data types and other user-defined message types.
+- As with most public data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, such as C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby. 
+    - Protobufs are faster, simpler, more compact, and more efficient forms of JSON and XML.
+    - A protobuf struct ("message") is composed of primitive data types and/or other user-defined message types.
     - Each field in a protobuf message is explicitly and strongly typed.
     - Revisions to a message schema are backward-compatible with previous revisions.
-    - Effectively faster, simpler, more compact, and more efficient forms of JSON and XML.
-    - Protobufs are closely compatible with [gRPC](https://grpc.io), opening up language and platform-agnostic network transport.
-- You can review PLAN's other's public data stuctures in:
+    - Protobufs work closely with [gRPC](https://grpc.io), opening up language and platform-agnostic network transport.
+- PLAN's protobuf-based data stuctures:
+    - [go-plan/plan/plan.proto](http://github.com/plan-tools/go-plan/blob/master/plan/plan.proto)
+    - [go-plan/pdi/pdi.proto](http://github.com/plan-tools/go-plan/blob/master/pdi/pdi.proto)
+    - [go-plan/ski/ski.proto](http://github.com/plan-tools/go-plan/blob/master/ski/ski.proto)
+    - [go-plan/pservice/pservice.proto](http://github.com/plan-tools/go-plan/blob/master/pservice/pservice.proto)
+
 
 
 ## Channel Protocol Examples
