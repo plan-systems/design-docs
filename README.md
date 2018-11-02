@@ -21,8 +21,9 @@ May PLAN empower organizations and individuals with little or no resources to in
 
 This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for technical-types ready to understand and vet PLAN's architecture and design.  A formal [proof of correctness](proof-of-correctness.md) for PLAN is also available for review.
 
+---
 
-## PLAN: A Synopsis
+# PLAN: A Synopsis
 
 PLAN will be useful to communities and organizers _only if_ non-technical users can use it easily. As software designers, we must acknowledge that distributed technologies, content-based addressing, and cryptography are alien concepts to most people. What does PLAN do about this?
 
@@ -66,9 +67,57 @@ PLAN is a p2p community-centric operating system, built on pluggable append-only
 
 Using PLAN, communities arise from community organizers who value owning their own data, having a formidable crypto-city wall, and the ability to continue operating in the face of Internet disruptions.  
 
-### Channel Protocol Examples
+---
 
-| Channel Descriptor | Valid Entry Content-Types | Example Client UI Experience                                                                                                                                                       |
+# Applying PLAN
+
+A technology is only as interesting as how it can be harnessed and applied to our world.  
+
+## Intra-Community Services
+
+A given community is likely to be interested in making explict parts of it accessible to the global public.  
+
+## Interoperable Data Structures
+
+- The standard unit of information exchange in PLAN is `plan.Block`:
+
+    ```
+    // A portable, self-describing, nestable data container inspired from HTTP and Protocol Lab's multistream.
+    type Block struct {
+
+        // An optional, name/label for this Block (i.e. a field-name).
+        // A Block's label conforms to the context/protocol it's being with (as applicable).
+        Label      string
+
+        // Like to a MIME type, this descriptor self-describes the data format of Block.content.
+        // Anyone handed this Block uses this field to accurately process/deserialize its content.
+        // This field is a "multicodec path" -- see: https://github.com/multiformats/multistream
+        Codec      string
+
+        // This is an alternative reserved integer repesentation of Block.codec.
+        // For a list of codes: https://github.com/multiformats/multicodec/blob/master/table.csv
+        CodecCode  uint32
+        `
+        // Payload data, serialized in accordance with the accompanying codec descriptor (above).
+        Content    []byte 
+
+        // A Block can also contain nested "sub" blocks.  A Block's sub blocks
+        //    can be interpreted or employed any way a client or protocol sees fit.
+        Subs       []*Block
+    }
+    ```
+- As with most public data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers) in [plan.proto](../go-plan/plan/plan.proto).  This means boilerplate serialization and network handling code can be [trivially generated](../plan-protobufs) for most major languages and environments, such as C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby. 
+    - Each protobuf struct ("message") can be composed of primitive data types and other user-defined message types.
+    - Each field in a protobuf message is explicitly and strongly typed.
+    - Revisions to a message schema are backward-compatible with previous revisions.
+    - Effectively faster, simpler, more compact, and more efficient forms of JSON and XML.
+    - Protobufs are closely compatible with [gRPC](https://grpc.io), opening up language and platform-agnostic network transport.
+- You can review PLAN's other's public data stuctures in:
+
+
+## Channel Protocol Examples
+
+| Example Channel Descriptor | Valid Entry Content-Types | Example Client UI Experience                                                                                                                                                       |
 |---------------------|----------------------|--------------------------------------|
 | `/plan/ch/talk`     | `txt`\|`rtf`\|`image`      | A conventional vertical scroller where new entries appear in colored ovals at the bottom and past entries scroll upward.                     |
 | `/plan/ch/geoplot` | `cords+(txt`\|`image)`  | A map displays text and image annotations at each given geo-coordinate entry.  Tapping on an annotation causes a box to appear displaying who made the entry and when.  |
@@ -83,7 +132,7 @@ Using PLAN, communities arise from community organizers who value owning their o
 |  Babbage  | 2018 Q3 | [Proof of correctness](proof-of-correctness.md)  |
 |   Morse   | 2018 Q4 | [go-plan](https://github.com/plan-tools/go-plan) command line prototype & demo  |
 |   Kepler  | 2019 Q1 | [plan-unity](https://github.com/plan-tools/plan-unity) client prototype & demo  |
-| Fessenden | 2019 Q2 | Ethereum or DFINITY used for first PDI implementation |
+| Fessenden | 2019 Q2 | Ethereum or DFINITY used for next PDI implementation |
 |  Lovelace | 2019 Q2 | Installer and GUI setup experience for macOS  |
 |   Turing  | 2019 Q3 | go-plan support and QA for Linux | 
 |  Galileo  | 2019 Q3 | PLAN Foundation internally replaces Slack with PLAN  |
