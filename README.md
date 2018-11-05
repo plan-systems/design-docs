@@ -127,13 +127,15 @@ A community using PLAN will inevitably be interested in making some of its parts
 ## Channel Protocol Examples
 
 
-| Example Channel Descriptor | Expected Channel Entry Content-Types | Example Client UI Experience                                                                                                                                                       |
-|---------------------|----------------------|--------------------------------------|
-| `/plan/ch/talk`     | `txt`\|`rtf`\|`image`      | A conventional vertical scroller where new entries appear in colored ovals at the bottom and past entries scroll upward.                     |
-| `/plan/ch/geoplot` | `cords+(txt`\|`image)`  | A map displays text and image annotations at each given geo-coordinate entry.  Tapping on an annotation causes a box to appear displaying who made the entry and when.  |
-| `/plan/ch/file/pdf`| `ipfs`\|`binary`    | The client UI represents the channel as a single monolithic object. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened locally on the client using a PDF viewing application. |
-| `/plan/ch/file/audio`| `mpg`\|`aac`\|`ogg`\|`wav` |  |
-| `/plan/ch/calandar`| `text/ifb`\|`text/ics`    | The client UI presents a familiar visual calendar idiom where posted calendar events (entries) are graphically rendered on the appropriate days etc. The user interacts with channel UI in real-time, scrolling from week to week, or day to day as the user zooms in "closer".
+| Example Channel Descriptor | Expected Channel Entry ContentTypes | Example Client UI Experience  |
+|----------------------|----------------------|--------------------------------------|
+| `/plan/ch/talk`      | `txt`\|`rtf`\|`image`              | A conventional vertical scroller where new entries appear in colored ovals at the bottom and past entries scroll upward. |
+| `/plan/ch/geoplot`   | `cords+(txt`\|`image)`             | A map displays text and image annotations at each given geo-coordinate entry.  Tapping on an annotation causes a box to appear displaying who made the entry and when. |
+| `/plan/ch/file/pdf`  | `ipfs`\|`binary`                   | The client UI represents the channel as a single monolithic object. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened locally on the client using a PDF viewing application. |
+| `/plan/ch/file/audio`| `ipfs`\|`mpg`\|`aac`\|`ogg`\|`wav` |  |
+| `/plan/ch/feed/rss`  | `xml`                              |  |
+| `/plan/ch/feed/atom` | `xml`                              |  |
+| `/plan/ch/calandar`  | `text/ifb`\|`text/ics`             | The client UI presents a familiar visual calendar idiom where posted calendar events (entries) are graphically rendered on the appropriate days etc. The user interacts with channel UI in real-time, scrolling from week to week, or day to day as the user zooms in "closer". |
 
 ## Milestones
 
