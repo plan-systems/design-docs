@@ -46,7 +46,7 @@ The PLAN Unity client talks to a `pnode`, the name for PLAN's p2p client-serving
 
 What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. That is, each member in a community holds a copy of the community keyring (in addition to their private keys for that community). In effect, the entire community's network traffic and infrastructure is inaccessible to all others, providing a fundamental cryptographic "city wall" to ensure privacy and security.  
 
-Each member of a (self-hosted and -organized) community running the PLAN client software has copy of the community keyring, giving them the ability to decrypt community data.  Anyone _without_ this keyring — anyone _not_ in the community — is _outside_ the community's cryptographic city wall. Inside a community's city wall, residing on each community `pnode`, lives an IRC-inspired channel infrastructure. Each PLAN channel entry is composed of content data and an accompanying header that serves like HTTP headers. When a PLAN channel is created, it's assigned a protocol identifier. A channel's protocol implies the _kind_ of entries that are expected to appear that channel and _how_ they are interpreted. For example, an entry consisting of a geographical position could appear in a channel of type `/plan/channel/chat`, or in a channel of type `/plan/channel/geospace`, and the UI can handle the entry differently. In the PLAN graphical client, each channel protocol identifier maps to a particular "channel UI driver", allowing the client to select from any available drivers. So instead of people requiring a web browser, PLAN is an open platform that offers users the ability to select or add channel UI drivers that suit their interests, taste, or needs.
+Each member of a (self-hosted and -organized) community running the PLAN client software has copy of the community keyring, giving them the ability to decrypt community data.  Anyone _without_ this keyring — anyone _not_ in the community — is _outside_ the community's cryptographic city wall. Inside a community's city wall, residing on each community `pnode`, lives an IRC-inspired channel infrastructure. Each PLAN channel entry is composed of content data and an accompanying header that serves like HTTP headers. When a PLAN channel is created, it's assigned a protocol identifier. A [channel's protocol](#channel-protocols) implies the _kind_ of entries that are expected to appear that channel and _how_ they are interpreted. For example, an entry consisting of a geographical position could appear in a channel of type `/plan/channel/chat`, or in a channel of type `/plan/channel/geospace`, and the UI can handle the entry differently. In the PLAN graphical client, each channel protocol identifier maps to a particular "channel UI driver", allowing the client to select from any available drivers. So instead of people requiring a web browser, PLAN is an open platform that offers users the ability to select or add channel UI drivers that suit their interests, taste, or needs.
 
 In addition to the entry protocol a channel is assigned, a PLAN channel is _also_ assigned an owning access control channel (ACC) that specifies channel permissions, limits, and behavior. A channel's controlling ACC, like all channels, also cites its own controlling ACC, and so on — up to the community's root ACC. A community's root ACC, is one of several "hard&nbsp;wired" channels that serve core community functions and can only be altered by community admins. Another such channel, for example, is the community registry channel, containing the member ID and public keys of each community member. Functions such as community member key recovery (i.e. a member "epoch" change) and other forms of private key exchange are carried out through community channels explicitly reserved for these purposes.
 
@@ -116,15 +116,20 @@ A community using PLAN will inevitably be interested in making some of its parts
     - Field of a protobuf message are explicitly and strongly typed.
     - Revisions to a protobuf message are backward-compatible with previous revisions.
     - Protobufs work well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
+- Importantly, a `plan.Block` can embed an arbitrarily-structured hierarchary of sub-blocks.  Because each block element content can be accompanied by a label, codec description, or sub-blocks, `plan.Block`  has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Consider thst Protobufs makes serialization and deserialization of _any_ `plan.Block` (and its complete sub-hierarchary) available using a single line of code, _using any language or environment_.
 - PLAN's protobuf-based data stuctures:
-    - [go-plan/plan/plan.proto](http://github.com/plan-tools/go-plan/blob/master/plan/plan.proto)
-    - [go-plan/pdi/pdi.proto](http://github.com/plan-tools/go-plan/blob/master/pdi/pdi.proto)
-    - [go-plan/ski/ski.proto](http://github.com/plan-tools/go-plan/blob/master/ski/ski.proto)
-    - [go-plan/pservice/pservice.proto](http://github.com/plan-tools/go-plan/blob/master/pservice/pservice.proto)
+    | PLAN Protobuf File | Purpose                                         |
+    |--------------------|-------------------------------------------------|
+    | [go-plan/plan/plan.proto](http://github.com/plan-tools/go-plan/blob/master/plan/plan.proto)                  | PLAN general purpose data structures            |
+    | [go-plan/pdi/pdi.proto](http://github.com/plan-tools/go-plan/blob/master/pdi/pdi.proto)                      | Persistent Data Interface (PDI) data structures |
+    | [go-plan/ski/ski.proto](http://github.com/plan-tools/go-plan/blob/master/ski/ski.proto)                      | Secure Key Interface (SKI) data structures      |
+    | [go-plan/pservice/pservice.proto](http://github.com/plan-tools/go-plan/blob/master/pservice/pservice.proto)  | GRPC network services and data structures       |
 
+---
 
+## Channel Protocols
 
-## Channel Protocol Examples
+PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files on an conventional operating system, users and produtivity workflows in PLAN create new channels and new channel types all the time.  However, as PLAN's client UI interacts with a given channel and its content entries, PLAN does not use filename extensions, content-embedded markers, or assume that the content is just stored as a specific form.  PLAN channel are _self-describing_ and are a profound step towards interoperabilty in the way that HTTP headers self-describe content.  PLAN channels are composed of channel entries, and both channel "epochs" and channel entries embed a `plan.Block`.  Since `plan.Block` can store any number of sub-blocks s a container for content.  Since  and therefore deeply extensible and flexible.
 
 
 | Example Channel Descriptor | Expected Channel Entry ContentTypes | Example Client UI Experience  |
@@ -134,8 +139,9 @@ A community using PLAN will inevitably be interested in making some of its parts
 | `/plan/ch/file/pdf`  |            `ipfs`\|`binary`         | The client UI represents this channel as a single monolithic object. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened locally on the client using a PDF viewing application.  Power users can open and review earlier revisions. |
 | `/plan/ch/file/audio`| `ipfs`\|`mpg`\|`aac`\|`ogg`\|`flac` | Like other PLAN "file" channels, this client UI displays this channel as a single object, where opening/activating it causes the most recent entry to be fetched and played using the default media player app or using PLAN's integrated media player support.  |  
 | `/plan/ch/feed/rss`  |                 `xml`               | This channel is used to publish a sequence of text, audio, or video items with accompanying meta elements (e.g. title, link, and description).  This channel's epoch properties house [RSS](https://en.wikipedia.org/wiki/RSS) channel elements, and channel entries are xml and correspond to RSS `item` elements.  |
-| `/plan/ch/feed/atom` |                 `xml`               | Similar to `/plan/ch/feed/rss` a channel, but each xml entry instead conforms to [Atom](https://en.wikipedia.org/wiki/Atom_(Web_standard)). |
-| `/plan/ch/calandar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom where posted calendar events (entries) are graphically rendered on the appropriate days etc. The user interacts with channel UI in real-time, scrolling from week to week, or day to day as the user zooms in "closer". |
+| `/plan/ch/feed/atom` |                 `xml`               | Similar to a `feed/rss` channel, but each xml channel entry instead conforms to [Atom](https://en.wikipedia.org/wiki/Atom_(Web_standard)). |
+| `/plan/ch/caland
+---
 
 ## Milestones
 
