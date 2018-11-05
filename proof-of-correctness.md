@@ -123,6 +123,7 @@ The members of **C** present the following system of operation...
 - In a flow known as [channel entry validation](#channel-entry-validation), each community node ("**n<sub>i</sub>**") iteratively mutates its local replica ("**𝓡<sub>i</sub>**") by attempting to merge newly arriving entries from **𝓛<sub>C</sub>** into **𝓡<sub>i</sub>**.  During validation, if **𝓡<sub>i</sub>** is not yet in a state to fully validate an incoming entry **e**, then **e** is said to be "deferred" for later processing.
 - This system, in effect, forms a secure and operational core outside **C**'s channel data space, comparible to how a traditional OS maintains internal pipelines and hierarchies of operations and permissions, designed to serve and protect user processes.
 
+---
 
 ## System Security
 
@@ -134,10 +135,10 @@ The members of **C** present the following system of operation...
    2. **[]K<sub>C</sub>**: the _community keyring_, which ensures **C**'s "community-public" data is only readable by members of **C**.
         - Each entry authored by **m** is encrypted by **m**'s local client using the latest community key on **[]K<sub>C</sub>**.
         - That is, **[]K<sub>C</sub>** encrypts/decrypts `EntryCrypt` traffic to/from **𝓛<sub>C</sub>** and **𝓡<sub>i</sub>** 
-        - Newly [issued community keys](#Issuing-a-New-Community-Epoch) are securely distributed to members via the [community epoch channel](#Community-Epoch-Channel).
+        - Newly [issued community keys](#Issuing-a-New-Community-Epoch) are securely distributed to members via the [Community Epoch Channel](#Community-Epoch-Channel).
 
 
-
+---
 
 ## Channel Entries
 
@@ -193,13 +194,13 @@ The members of **C** present the following system of operation...
     }
     ```
 
-
+---
 
 ## Channel Epochs
 
 Under an append-only storage model, the mechanism that gives rise to mutable permissions and access controls is centered around `ChannelEpoch`. 
-- In a procedure known as [issuing a new channel epoch](#Issuing-a-New-Channel-Epoch), the owner of channel **𝘾𝒉** posts a `ChannelEpoch` revision to **𝘾𝒉** in order to:
-    - customize permissions on **𝘾𝒉**, _or_
+- In a procedure known as [issuing a new channel epoch](#Issuing-a-New-Channel-Epoch), an owner of channel **𝘾𝒉** posts a new revision to **𝘾𝒉**'s current `ChannelEpoch` to:
+    - edit properties specific to **𝘾𝒉**, _or_
     - designate a different parent ACC for **𝘾𝒉**.
 - Naturally, part of [channel entry validation](#channel-entry-validation) is to reject entries from members that lack the appropriate permissions to issue a new `ChannelEpoch` for a given channel. 
     ```
@@ -222,47 +223,48 @@ Under an append-only storage model, the mechanism that gives rise to mutable per
     }
     ```
 
-
+---
 
 ## Channels
-Channels are intended as general-purpose containers for [channel entries](#channel-entries) of all forms.  Even this system uses channels intermally for administration and permissions controls.
+Channels are intended as general-purpose containers for [channel entries](#channel-entries) of all forms.  This system uses channels internally for administration and permissions controls.
 
 
 1. **Access Control Channels** (ACCs) are specialized channels used to express permissions for all other channels, including other ACCs.
-    - An ACC serves as is an access authority that specifies:
+    - An ACC serves as an access authority that specifies:
         - channel permissions for a given member `UUID`, _and_
         - default permissions for members not otherwise specified.
     - Like general purpose channels, each ACC must designate a parent ACC, and so on, all the way up to the _reserved_ [root ACC](#Root-Access-Control-Channel).
     - Multiple channels can name the _same_ ACC as their parent ACC, allowing a single ACC to conveniently manage permissions for any number of channels.
-    - ACCs also are the vehicle for key distribution, where a channel owner "sends" a newly issued private channel key to another member using their public key.
+    - ACCs also are the vehicle for key distribution, where a channel owner "sends" a newly issued private channel to each member with access, using their public key.
 2. **Reserved channels** are specialized channels used by the system to internally carry out commuinity governance and member administration.
     - Reserved channels specify root-level information and permissions, namely admin and member records.
     - Entries in these channls must meet additional security/signing requirements and serve prescribed purposes.  
-    - Because reserved channels have nuanced specificaitons, they are the _only_ channels that do not solely rely on ACCs for access controls.
+    - Because reserved channels have nuanced specificaitons, they do not solely rely on ACCs for access controls.
     - The number, purpose, and use of these channels can be expanded to meet future needs. 
-3. **General purpose channels**, alas, are the system's primary service deliverable and comprised mosts channels in **C**.
-    - When a new channel is created, the creator (and hence owner) specifies a "protocol descriptor", a string directing client UIs to consistently interpret, handle, and present channel entries appropriately and inline with the intention of the channel protocol.  
-    - Each channel also names a governing access control channel ("parent ACC").  A channel's parent ACC is chraged with returning a permission level for any given member `UUID`, allowing each node in **C** to independently carry out [channel entry validation](#channel-entry-validation).
-    - General purpose channels can either be:
+3. **General purpose channels**, alas, are the system's primary service deliverable, comprising most channels in **C**.
+    - When a new channel is created, the creator (and hence owner) specifies a "protocol descriptor", a string directing client UIs to consistently interpret, handle, and present channel entries in accordance with the expectations associated with the channel's protocol.  
+    - Each channel also names a governing access control channel ("parent ACC").  A channel's parent ACC is chraged with returning a permission level for any given member `UUID`, allowing  nodes in **C** to independently carry out [channel entry validation](#channel-entry-validation).
+    - General purpose channels are either:
         - **community-public**, where channel entry content is encrypted with the latest community key, _or_
         - **private**, where entry content is encrypted with the key identified by **e<sub>hdr</sub>**`.ContentKeyID`.  
             - Key mechanics for private channels are similar to [starting a new community epoch](#issuing-a-new-Community-Epoch), except the channel owner updating the `ChannelEpoch` performs key generation and distribution.  
             - Only members that have at least read-access are "sent" the keys needed in order to decrypt private channel entries.
-                - Even community admins _do not_ have the authority or means to gain access to a private channel's key.   
-                - This ensures that _only the members that have been explicitly given access_ could possibly have access to the private channel's key.
+                - By default, community admins _do not_ have the authority/means to gain access to a private channel's key.   
+                - This ensures that _only the members that have been explicitly given channel access_ could possibly have access to the channel's key.
 
 ## Reserved Channels
 
 #### Root Access Control Channel
-- This is **C**'s root access channel, effectively specifying which members are admins.
-- All other channels, including channels that are access control channels (channels purposed to specify permissions
-- Automated machinery in **C** could optionally be geared to use smart contracts on **𝓛<sub>C</sub>** to add entries to this channel.
-    - e.g. a majority vote of admins could be required in order to add a new admin to the root access channel. 
+- This is **C**'s root access channel, effectively specifying which members are recognized as community authorities ("admins").
+- All community-public channels, including ACCs, implictly are under authority of this channel.
+- When a new community is formed ("community genesis"), the initial entries this channel are auto-generated in accordance with the parameters and policies provided.
+- Automated machinery in **C** can optionally be geared to use smart contracts on **𝓛<sub>C</sub>** to manage, monitor, or validate entries in this channel.
+    - E.g. a majority vote of existing admins could be required in order to add a new admin to the root access channel. 
         
 
 #### Member Epoch Channel
-- This is a special channel where members post revisions to their published member "epoch" record.  
-    - A `MemberEpoch` contains essential information about a specific member, such as their most recently published public keys and their "home" channel `UUID`
+- This is a special channel where members post revisions to their currently published `MemberEpoch`.
+    - `MemberEpoch` contains essential information about a specific member, such as their most recently published public keys and their "home" channel `UUID`
         ```
         // MemberEpoch contains a member's community-public info
         type MemberEpoch struct {
@@ -275,186 +277,251 @@ Channels are intended as general-purpose containers for [channel entries](#chann
         }
         ```
 - Each entry is this channel embeds a `MemberEpoch`, **𝓔**, and is only considered valid if:
-    - the member who signed the entry is either the `MemberID` that appears in **𝓔** or an authorized member delegated to do so, _and_
-    - the predecessor ("parent") epoch (**𝓔**`.ParentEpochID`) is evaluated to be eligible to be succeeded.
-- Since a `MemberEpoch` specifies a member's public keys, each node in **C** maintains a database from the entries in this channel to:
+    - the member who signed the entry matches the `MemberID` that appears in **𝓔** (or is an authorized member delegated to do so), _and_
+    - the predecessor ("parent") epoch of **𝓔** is eligible to be succeeded.
+- `MemberEpoch` importantly publishes a member's public keys to the rest of the community, allowing each node in **C** to maintain a database used to:
     - authenticate signatures on each `EntryCrypt`
-    - encrypt entry content exclusively for a given member (e.g. key exchange)
+    - encrypt entry content exclusively for a given member (used for key distribution)
 - Only a community admin (or certified delegate) is permitted to post a `MemberEpoch` for members _other than themselves_. This provides the means for:
     - [adding new members](#Adding-A-New-Member) to **C**,
     - [delisting members](#Delisting-A-Member) from **C**, _and_
     - restoring a member's access to **C** following a [member halt](#member-halt).
-- When a [member halt](#member-halt) has been issued for **m**, an special `MemberEpoch` entry is posted to this channel.
-    - Once this entry is live in **𝓡<sub>i</sub>**'s member epoch channel, all subsequent entries with **m**'s signature are deferred during [channel entry validation](#Channel-Entry-Validation).
-    - When the cause for concern is addresssed, a community authority would [issue a new member epoch](#Issuing-a-New-member-Epoch) for **m**.
+- When a [member halt](#member-halt) has been issued on **m**, an special `MemberEpoch` entry is posted to this channel.
+    - Once this entry is live on **𝓡<sub>i</sub>**, all subsequent entries with **m**'s signature are deferred during [channel entry validation](#Channel-Entry-Validation).
+    - When the cause for concern is addresssed, a community authority [issues a new member epoch](#Issuing-a-New-member-Epoch) for **m**.
 
 #### Community Epoch Channel
-- This channel is where a community admin (or authorized agent) posts an entry that, in effect, replaces the current community key with a newly issued symmetric key. 
+- This channel is where a community admin (or authorized agent) posts an entry that, in effect, replaces the current community key with a newly issued key. 
 - This channel contains a succession of entries that embed:
     - an `EpochInfo` containing parameters associated with the new community epoch, _and_
-    - the newly generated community key _for each_ member **m** in **C**, encrypted using **m**'s public latest encryption key published in the [member epoch channel](#Member-Epoch-Channel).
+    - a newly generated symmetric key _for each_ member **m** in **C**, encrypted using **m**'s latest public key published in **C**'s [Member Epoch Channel](#Member-Epoch-Channel):
+        ```
+        // KeyIssue is the vessel used to securely pass a ski.KeyEntry to another member
+        type KeyIssue struct {
+            MemberID          UUID      // Specifies the recipient 
+            MemberEpochID     UUID      // Implies which key was used to encrypt .KeyEntryCrypt
+            KeyEntryCrypt     []byte    // Encrypted ski.KeyEntry
+        }
+        ```
 
-using asymmetric encryption (the community admin that issues a new community key separately "sends" the key to each member in **C**'s member registry channel, encrypting the new key with the recipient members's latest public key, which is also available in the member registry channel)
-
-
+---
 
 ## Standard Procedures
-
-#### Member Halt
-- Given: member **m** (or their private keyring) is potentially under the control or influence of an adversary.
-- A "member halt" refers to an automated sequence of actions performed on **m**'s behalf once it's believed that their personal keyring ("**[]K<sub>m</sub>**") is under the influence of another.  
-- The conditions/requisites needed in order to initiate a member halt on others' behalf can be arbitrarily based on security needs and situational circumstances.  
-- A member halt for **m** could be inititated by:
-    - **m**, delivers a message under address to a trusted peer. duress signal?
-    - **m**, upon discovering that another actor has gained access to **[]K<sub>m</sub>**, _or_
-    - a community admin (or automated agent), noticing damning or malicious activity originating from the holder of **[]K<sub>m</sub>**, _or_
-    - a peer of **m** (previously designated by **m**), who is personally contacted by **m** and asked to do so (in a situation where **m** does not have connectivity to **𝓛<sub>C</sub>**)
-- When a member halt is initiated:
-    1. A special entry is posted to the [member epoch channel](#member-epoch-channel), signaling the nodes in **C** to defer all further entries signed by **[]K<sub>m</sub>**.  
-        - In effect, this halts any actor in possession of **[]K<sub>m</sub>** from posting _any_ entries in _any_ channel on **C**.
-        - The [member epoch channel](#Member-Epoch-Channel) allows a grace period for older (predecessor) member signining keys to be used.  This provisions against an adversary in possession of **[]K<sub>m</sub>** from "locking out" **m** by [issuing a new member epoch](#Issuing-a-New-Member-Epoch).
-    2. A special transaction is submitted to **𝓛<sub>C</sub>**, immediately "burning" the ability of **m** (or any actor in possession of **[]K<sub>m</sub>**) to post transactions.
-        - As this propagates across **𝓛<sub>C</sub>**, subsequent transactions signed by **[]K<sub>m</sub>** will be rejected because post permission on **𝓛<sub>C</sub>** will no longer exist for **[]K<sub>m</sub>**.
-        - This removes an adversary's ability to vandalize **𝓛<sub>C</sub>** by filling it with junk data.   
-        - For example, for **⧫<sub>C</sub>**, the transaction would send all **m**'s _C-Ether_ to address `x0`.
-    3. An admin, automated agent, or delegated member(s) would [issue a new community epoch](#issuing-a-new-Community-Epoch) for **C**.
-        - Since newly issued community keys _aren't_ set to halted members, anyone in possession of **[]K<sub>m</sub>** would lose all further read access to **𝓛<sub>C</sub>**.
-
-
-
-#### Member Halt Recovery
-- Given: a [member halt](#member-halt) was issued for **m**
-- Some time later, admin(s) or delegated members can review the situation:
-    - When appropriate, **m** access is restored via a simplified variation of [adding a new member](#Adding-A-New-Member).
-    - In the case that an adversary in possession of **[]K<sub>m</sub>** transfers their postage (their privileges on **𝓛<sub>C</sub>**) to another identity _before_ a member halt is posted for **m**, entries using postage from the illicit postage could be identified and rejected.
-    - In the case that an a adversary in possession of **[]K<sub>m</sub>** [issued a new member epoch](#issuing-a-new-Member-Epoch) (impersonating **m**), then an admin in communication with **m** would issue new entries that rescind the earlier entries as appropriate.  As normal [channel entry validation](#Channel-Entry-Validation) proceeds, this will automatically result in any dependent (adversary-authored) entries to be removed from "live" status.
 
 
 #### Issuing a New Member Epoch
 
 - Given: member **m** wishes to replace their currently published `MemberEpoch` with a new revision:
     - **m** generates new encryption and signing key pairs and places the private keys into their personal keyring, **[]K<sub>m</sub>**.
-    - **m** creates an newly updated `MemberEpoch`, **𝓔′**, and places the newly generated public keys into **𝓔′**.
-    - **m** packages **𝓔′** into a new entry ("**e<sub>𝓔′</sub>**"), signs it, and posts it to **C**'s [Member Epoch Channel](#Member-Epoch-Channel).
-    - As **e<sub>𝓔′</sub>** propagates across **𝓛<sub>C</sub>** (and goes live on **n<sub>i</sub>**):
-        - [Channel Entry Validation](#Channel-Entry-Validation) requires that entries by **m** must use the most recently published signing key.
-        - Members posting entry content to **m** securely use **m**'s latest public encryption key.
-- If a [member halt](#member-halt) has been ordered on **m**, then a community admin (or delegate) intervention is required in order for **m** 
+    - **m** prepares a replacement `MemberEpoch`, **𝓔′**, placing the newly generated public keys into **𝓔′**.
+    - **m** packages **𝓔′** into a new entry ("**e<sub>𝓔′</sub>**"), signs it, and posts it to **C**'s [member epoch channel](#Member-Epoch-Channel).
+    - As **e<sub>𝓔′</sub>** propagates across **𝓛<sub>C</sub>** (and goes live on **𝓡<sub>i</sub>**):
+        - [Channel entry validation](#Channel-Entry-Validation) now requires that entries authored by **m** must use the newly published signing key.
+        - Other member clients intending to securely pass keys or content to **m** would use **m**'s updated public encryption key.
+- If a [member halt](#member-halt) has been ordered on **m**, then admin (or community authority) intervention is required before **m** is permitted to post a new `MemberEpoch`.
 
 
 #### Issuing a New Community Epoch
-- Given: an admin, delegated member, or an automated agent wants to initiate a community-key "rekey" event, also known as _starting a new community epoch_.
-- The purpose of starting this new "community epoch" is so that an actor with unauthorized possession of the community keyring will no longer have access to community data.  In other words, the purpose is to deprecate the current community key and issue a successor.
-- A new community epoch follows a member [member halt](#member-halt) or the [delisting of a member](#Delisting-A-member) since it's important to ensure that the current community key (and any actor in possession of it) will no longer be useful.  This is made so because once a new community key epoch is issued, all entries are expected to be encrypted with it. 
-- The admin, member, or agent starting a new community epoch:
-    - Generates a new symmetrical key
-    - For each open/active `MemberEpoch` ("**𝓔<sub>m</sub>**") in the _Member Epoch Channel_ (i.e. for each current member of **C**)
-        - Encrypt the community key using **𝓔<sub>m</sub>**`.PubEncryptKey`
-        - Place the encrypted community key in a new entry and post it to **𝓔<sub>m</sub>**`.KeyInboxChannel`
-- Each member's client, upon seeing a new entry in their `KeyInboxChannel`:
-    - Decrypts the payload using the member's personal keyring.
-    - Adds the new key to the member's community keyring.
-    - Uses the community key to encrypt all subsequent entries for **C**
-- Within **Δ<sub>C</sub>**, newly authored transactions are _only_ readable by the registered members of **C**.
-    - An actor in possession of a halted keyring or any keys from old member epochs would be unable to decrypt the new community key.
+- Given: an admin, delegated member, or an automated agent wants to issue a new/replacement community key and deprecate the previously issued communuty key.
+- The purpose of starting this new "community epoch" is so that an actor in possession of the community keyring ("**[]K<sub>C</sub>**") will no longer be able to decrypt community-public data on **C** _unless they are currently a member of **C**_.  This typically applies after a [member halt](#member-halt) or after [delisting a member](#Delisting-A-member) since it's important that the currently active community key (and an actor in possession of it) is longer used to encrypted community traffic.  
+- As the newly posted community key epoch goes live across the nodes of **C**, all new `EntryCrypt` on **𝓛<sub>C</sub>** are encrypted using it. 
+- The admin, permissioned member or agent does the following:
+    1. Generates a new symmetrical key to serve as the next community key ("**k<sub>C</sub>**").
+    2. Prepares a new entry containing an `EpochInfo` ("**𝓔<sub>C</sub>**").
+    3. For each open/active `MemberEpoch` ("**𝓔<sub>m</sub>**") in the [Member Epoch Channel](#Member-Epoch-Channel) (for each member  **m** in **C**):
+        - Creates a new `KeyIssue` (intended for **m**), encrypting **k<sub>C</sub>** using **𝓔<sub>m</sub>**`.PubEncryptKey`, 
+        - Appends the `KeyIssue` key to **𝓔<sub>C</sub>**'s content body.
+    4. Posts **𝓔<sub>C</sub>** to the [Community Epoch Channel](#Community-Epoch-Channel).
+- Member **m**'s client, upon seeing **𝓔<sub>C</sub>** go live:
+    1. Searches the content body of **𝓔<sub>C</sub>** for a `KeyIssue` matching **m**'s member ID.
+    2. Recovers **k<sub>C</sub>** from the `KeyIssue` using the member's private keyring.
+    3. Adds **k<sub>C</sub>** to **m**'s own community keyring.
+    4. Uses **k<sub>C</sub>** to encrypt all subsequent authored entries bound for **𝓛<sub>C</sub>**
+- Within **Δ<sub>C</sub>**, newly authored transactions are _strictly only_ readable by the current members of **C**.
+    - An actor in possession of a halted keyring or any keys past member epochs will not have any of the keys needed to extract **k<sub>C</sub>**.
     - If **𝓛<sub>C</sub>** favors safety, then **C** could additionally be configured to reject entries encrypted with a community key older than **Δ<sub>C</sub>** since offline nodes effectively remain in a halted state until they regain access to a critical threshold of central validators.  
+
+#### Issuing a New Channel Epoch 
+- Given: an owner of channel **𝘾𝒉** decides to alter permissions on **𝘾𝒉**, such as:
+    - editing **𝘾𝒉**'s default access permissions to be more restrictive, _or_
+    - removing access permissions for explicitly named members, _or_
+    - making **𝘾𝒉** private and granting access to only specifically listed members of **C**.
+- Similar to [issuing a new member epoch](#Issuing-a-New-Member-Epoch), **𝘾𝒉**'s owner posts an entry to **𝘾𝒉** intended to revise the current `ChannelEpoch`.
+- If **𝘾𝒉** is private, a procedure similar to [issuing a new community epoch](#issuing-a-new-Community-Epoch) distributes **𝘾𝒉**'s latest access key to members that have at least read-only access to **𝘾𝒉**.
+
+#### Member Halt
+- Given: member **m** (or their private keyring) is potentially under the control or influence of an another.
+- A "member halt" refers to an automated sequence of actions performed on **m**'s behalf once it's believed that their personal keyring ("**[]K<sub>m</sub>**") is under the influence of another.  
+- The conditions/requisites needed in order to initiate a Member Halt on another's behalf can be arbitrarily based on security needs and situational circumstances.  
+- A Member Halt on **m** could be inititated by:
+    - **m**, upon discovering that another actor has gained access to **[]K<sub>m</sub>**, _or_
+    - a peer of **m** (previously designated by **m**), upon recieving an email, phone call, text message, or signal of duress from **m**, _or_
+    - a community admin or automated agent, noticing damning or malicious activity originating from a holder of **[]K<sub>m</sub>**.
+- Once a Member Halt is initiated om **m**:
+    1. A special entry is posted to the [Member Epoch Channel](#member-epoch-channel), signaling to all nodes in **C** to defer all further entries signed by **[]K<sub>m</sub>**.  
+        - In effect, this halts any actor in possession of **[]K<sub>m</sub>** from posting _any_ entries to _any_ channel on **C**.
+        - The [Member Epoch Channel](#Member-Epoch-Channel) has a grace period for older (predecessor) member keys to be used to authorize a Member Halt.  This provisions against an adversary in possession of **[]K<sub>m</sub>** from "locking out" **m** by [issuing a new member epoch](#Issuing-a-New-Member-Epoch).
+    2. A special transaction is submitted to **𝓛<sub>C</sub>**, immediately "burning" the ability of **m** (or any actor in possession of **[]K<sub>m</sub>**) to post further transactions.
+        - As this propagates across **𝓛<sub>C</sub>**, subsequent transactions signed by **[]K<sub>m</sub>** will be rejected because post permission on **𝓛<sub>C</sub>** will no longer exist for **[]K<sub>m</sub>**.
+        - This removes an adversary's ability to vandalize **𝓛<sub>C</sub>** (e.g filling it with junk data).
+        - For example, for **⧫<sub>C</sub>**, the transaction would send all **m**'s _C-Ether_ to address `x0`.
+    3. An admin, automated agent, or delegated member(s) would [issue a new community epoch](#issuing-a-new-Community-Epoch) for **C**.
+        - Since newly issued community keys _aren't_ posted for halted members, any agent(s) in possession of **[]K<sub>m</sub>** would lose all further read access to **𝓛<sub>C</sub>** since they would not have a key to extract the newly issued community key for **C**.
+
+
+
+#### Member Halt Recovery
+- Given: a [member halt](#member-halt) was issued on **m**.
+- Some time later, admin(s) or delegated members can review the situation:
+    - When appropriate, **m**'s access is restored and new keys issued using a variant of [adding a new member](#Adding-A-New-Member).
+    - In the case that an adversary in possession of **[]K<sub>m</sub>** transfers their postage (their privileges on **𝓛<sub>C</sub>**) to another identity _before_ a Member Halt is issued on **m**, entries using postage from the illicit postage could be identified and rejected.
+    - In the case that an a adversary in possession of **[]K<sub>m</sub>** [issued a new member epoch](#issuing-a-new-Member-Epoch) (impersonating **m**), then an admin in communication with **m** would issue new entries that rescind the earlier entries as appropriate.  As normal [channel entry validation](#Channel-Entry-Validation) proceeds, this will automatically result in any dependent (adversary-authored) entries to be removed from "live" status.
+
 
 
 #### Adding A New Member
 
-- Given the permissions and prerequisites are met on **C** are met to bestow member status to actor **α**:
-    1. A root authority of **C** generates and posts a special `MemberEpoch`, **𝓔<sub>α0</sub>**, in the [Member Epoch Channel](#Member-Epoch-Channel), containing:
+- Given: the permissions/prerequisites on **C** are met to bestow member status to actor **α**:
+    1. A designated authority of **C** generates and posts a special `MemberEpoch`, **𝓔<sub>α0</sub>**, in the [Member Epoch Channel](#Member-Epoch-Channel), containing:
         - a newly generated `MemberID` for **α**.
-        - the public half of newly generated keys. 
-        - any additional information useful in tracking or documentation (e.g. signatures proving that the authority to invite **α** was granted by the appropriate collective authority of **C**).
+        - newly generated public keys. 
+        - information on **α**'s invitation, such as:
+            - documentation of which authorities in **C** were connected to **α**'s invitation.
+            - proof that **α**'s invitation was granted by the collective authority of **C**.
     2. Also created is token **τ**, containing:
-        - a copy of **𝓔<sub>a0</sub>**
-        - a copy of the community keyring, **[]K<sub>C</sub>**
-        - the private half of the newly generated keys in **𝓔<sub>a0</sub>**
-        - network addresses and other bootstrapping information that allows **α** to gain connectivity to **𝓛<sub>C</sub>**
-        - a token that bestows its bearer postage on **𝓛<sub>C</sub>**
-    3. **τ** is encrypted with a passphrase, and is passed to **α** via any non-secure means (USB device, email, file sharing)
+        - a copy of **𝓔<sub>a0</sub>**, _and_
+        - a copy of the community keyring, **[]K<sub>C</sub>**, _and_
+        - the private half of public keys in **𝓔<sub>a0</sub>**, _and_
+        - network addresses and other bootstrapping information needed in order to connect to **𝓛<sub>C</sub>**, _and_
+        - a token that bestows its bearer postage on **𝓛<sub>C</sub>**.
+    3. **τ** is encrypted with a passphrase, and is passed to **α** via any non-secure means (USB device, email, file sharing).
     4. Using face-to-face communication, direct contact, or other secure means, **α** is passed the passphrase to **τ**.
-    5. On a newly created "blank" node, **n<sub>α</sub>** (or an existing node of **C** in a logged-out state)
-        - **α** passes **τ** to the client
-        - the client prompts for the passphrase that decrypts **τ**
-        - the client opens **τ**, and if applicable:
+    5. On a newly created "blank" node, **n<sub>α</sub>** (or an existing node of **C** in a logged-out state):
+        1. **α** passes **τ** to the client
+        2. the client prompts for the passphrase that decrypts **τ**
+        3. the client opens **τ**, and as applicable:
             - bootstraps **𝓛<sub>C</sub>**
-            - builds **𝓡<sub>α</sub>** normally
-        - Once that **𝓡<sub>α</sub>** is up to date (i.e. with **𝓔<sub>α0</sub>** live in the _Member Epoch Channel_), **α** immediately posts a successor `MemberEpoch`, just as they would when [starting a new member epoch](#issuing-a-new-Member-Epoch).  
+            - builds/upates **𝓡<sub>α</sub>** normally
+        4. Once that **𝓡<sub>α</sub>** is up to date (i.e. once **𝓔<sub>α0</sub>** is live in the _Member Epoch Channel_), **α** posts a successor `MemberEpoch` as they would when [starting a new member epoch](#issuing-a-new-Member-Epoch).  
 
 #### Delisting A Member
-- Situation: **C** or admins of **C** decide that member **m** is to be "delisted", they want to immediately strip **m**'s ability to read and write to **C**.  
-    - read **C** content
-    - author content in **C** 
+- Given: the admins and/or collective authority of **C** decide that member **m** is to be "delisted", meaning that **m**'s access **C** is to be immediately rescinded.  
+- The designated authority of **C** performs a procedure identical to the [Member Halt](#member-halt) procedure.  In effect:
+    1. Any subseqient entries authored by **m** will be rejected, _and_
+    2. **m** will be unable to post any transactions to **𝓛<sub>C</sub>**, _and_
+    4. All new entries on **𝓛<sub>C</sub>** will be unreadable to **m** within **Δ<sub>C</sub>**.
 
-
-
-
-- Entries that are malformed (e.g. an invalid signature) are permanently rejected. These rejections are cause for concern and could be logged to discern bad actor patterns.
 
 #### Channel Entry Validation
-- Given node **n<sub>i</sub>** in **C**, let **𝓡<sub>i</sub>** denote the local replica state of **𝓛<sub>C</sub>** on **n<sub>i</sub>** at a given time.
-- "Channel Entry Validation" is the process of merging incoming entries from **𝓛<sub>C</sub>** into **𝓡<sub>i</sub>** such that all "live" entries and channels of **𝓡<sub>i</sub>** are compliant and are in integrity with each author and admin's intent and security/privacy expectations. 
-- Entries that do not conform to channel properties or governing access controls are placed in a "deferred" state within **𝓡<sub>i</sub>** and do not go live.  A node periodically reattempts to merge deferred entries as later-arriving entries may alter **𝓡<sub>i</sub>** such that previously deferred or rejected entries now fully validate. 
-- When an entry is "deferred":
-    - Since entries can arrive in a semi-arbitrary order at **n<sub>i</sub>**, an entry may arrive whose successful processing may depend on other entries that have _yet_ to arrive (or finish processing).
-    - This means that as **n<sub>i</sub>** attempts to merge entries from **𝓛<sub>C</sub>** into **𝓡<sub>i</sub>**, it will sometimes encounter an incoming entry **e** that it cannot yet assuredly merge or reject.  In this situation, **e** is moved into an appropriate `RetryPool` such that  **n<sub>i</sub>** will retry merging it at a later time (we say "**e** is deferred").
-- When an entry is "rejected":
-    - As **n<sub>i</sub>** processes entries from **𝓛<sub>C</sub>**, there are specific conditions that, if not met, will cause **n<sub>i</sub>** to "hard" reject an entry.
-    - If a "hard" requirement is not met, such as an entry having an authentic signature, then the entry is considered to be permanently rejected/discarded (we say "**e** is rejected"). 
+- Given node **n<sub>i</sub>** in **C**, let **𝓡<sub>i</sub>** denote the local replica state of **𝓛<sub>C</sub>** on node **n<sub>i</sub>** at a given time.
+- _Channel entry validation_ is the process of merging incoming entries arriving from **𝓛<sub>C</sub>** such that entries placed into "live" status (on **𝓡<sub>i</sub>**) comply and are in integrity with all relevant author and channel permissions and intent.
+- Since entries can arrive at **n<sub>i</sub>** in arbitrary order from **𝓛<sub>C</sub>**, entries will arrive whose validation will depend on other entries that have not yet been processed — _on entries yet to even arrive_.
+- As node **n<sub>i</sub>** processes an incoming entry **e** to be merged with **𝓡<sub>i</sub>**:
+    - If **e** satisfies _all channel properties and parent ACC permissions_, then **e** is placed into "live" status.
+    - Otherwise, if for whatever reason **e** cannot complete validatation (or **e** depends on an unresolved [ambiguous conflict](#Ambiguous-conflict-resolution)), then **e** is placed into "deferred" status.
+        - Node **n<sub>i</sub>** will periodically reattempt to validate **e** as subsequent entries mutate **𝓡<sub>i</sub>** and as any conflicts resolve.  
+        - Unless **e** was crafted with malicous intent, it would be unexpected for **e** to remain indefinately deferred.
 - For each new entry **e** arriving from **𝓛<sub>C</sub>** (or is locally authored and also submitted to **𝓛<sub>C</sub>**):
-    - Authenticate **e**:
+    1. Authenticate **e**:
         1. **e<sub>digest</sub>** ⇐  ComputeDigest(**e**`.CommunityKeyID`,   **e**`.HeaderCrypt`,  **e**.`ContentCrypt`)
-        2. **e<sub>hdr</sub>** ⇐ `EntryHeader` ⇐ Decrypt(**e**`.HeaderCrypt`,  **𝓡<sub>i</sub>**.LookupKey(**e**`.CommunityKeyID`))
-            - if the specified community key is not found, **e** is deferred.
-        3. **𝓔<sub>auth</sub>** ⇐ **𝓡<sub>i</sub>**.LookupMemberEpoch(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
-            - if **𝓔<sub>auth</sub>** = `nil`, then **e** is deferred. 
-            - if **e<sub>hdr</sub>**`.TimeAuthored` is after **𝓔<sub>auth</sub>**`.EpochInfo.TimeClosed`, then **e** is deferred.
-        3. **e<sub>authPubKey</sub>** ⇐ **𝓡<sub>i</sub>**.LookupKeyFor(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
-            - if **e<sub>authPubKey</sub>** = `nil`, then **e** is deferred. 
-        4. ValidateSig(**e<sub>digest</sub>**, **e**`.Sig`, **e<sub>authPubKey</sub>**)
-            - if **e**`.Sig` is invalid, then **e** is rejected.
-    - "Channel-Validate" **e**:
-        1. **𝘾𝒉<sub>dst</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore( **e<sub>hdr</sub>**.`ChannelID` )
+        2. **e<sub>hdr</sub>** ⇐ `EntryHeader` ⇐ Decrypt(**e**`.HeaderCrypt`,  **[]K<sub>C</sub>**.LookupKey(**e**`.CommunityKeyID`)
+            - if the community key is not found, then **e** is deferred.
+        3. **𝓔<sub>author</sub>** ⇐ **𝓡<sub>i</sub>**.LookupMemberEpoch(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
+            - if **𝓔<sub>author</sub>** = `nil`, then **e** is deferred. 
+            - if **e<sub>hdr</sub>**`.TimeAuthored` falls outside the scope of **𝓔<sub>author</sub>**, then **e** is deferred.
+        3. **k<sub>pub</sub>** ⇐ **𝓡<sub>i</sub>**.LookupPublicKey(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
+            - if **k<sub>pub</sub>** = `nil`, then **e** is deferred. 
+        4. ValidateSig(**e<sub>digest</sub>**, **e**`.Sig`, **k<sub>pub</sub>**)
+            - if **e**`.Sig` is invalid, then **e** is deferred.
+    2. Validate **e** in its destination channel:
+        1. **𝘾𝒉<sub>dst</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore(**e<sub>hdr</sub>**.`ChannelID`)
             - if **𝘾𝒉<sub>dst</sub>** = `nil`, then **e** is deferred.
-        2. Validate the `ChannelEpoch` cited by **e**:
-            - **𝓔<sub>cited</sub>** ⇐ **𝘾𝒉<sub>dst</sub>**.LookupEpoch( **e<sub>hdr</sub>**.`ChannelEpochID` )
+        2. Check that **e** cites an agreeable `ChannelEpoch`:
+            - **𝓔<sub>cited</sub>** ⇐ **𝘾𝒉<sub>dst</sub>**.LookupEpoch(**e<sub>hdr</sub>**.`ChannelEpochID`)
                 - if **𝓔<sub>cited</sub>** = `nil`, then **e** is deferred.
-            - if **𝓔<sub>cited</sub>**.CanAccept(**e<sub>hdr</sub>**`.TimeAuthored`), then proceed, else **e** is rejected.
-                - this ensures that authors aren't risking security by using an excessively old `ChannelEpoch` 
-        3. **𝘾𝒉<sub>acc</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore(  **𝓔<sub>cited</sub>**.`AccessChannelID` )
-        4. **ℓ<sub>auth</sub>** ⇐ **𝘾𝒉<sub>acc</sub>**.LookupAccessLevelFor( **e<sub>hdr</sub>**.`AuthorMemberID` )
-            - if  **ℓ<sub>auth</sub>** does not permit **e<sub>hdr</sub>**`.EntryOp`, then **e** is deferred.
-    - Merge **e** into **𝓡<sub>i</sub>**:
-        - if inserting **e** introduces an "ambiguous conflict", then perform [ambiguous conflict resolution](#ambiguous-conflict-resolution). 
-        - if **𝘾𝒉<sub>dst</sub>** is an ACC and will be _more_ restrictive with **e**, then [initiate a new channel epoch](Initiating-a-New-Channel-Epoch) for **𝘾𝒉<sub>dst</sub>**
+            - if **e<sub>hdr</sub>**`.TimeAuthored` falls outside the scope of **𝓔<sub>cited</sub>**, then **e** is deferred.
+            - if **𝓔<sub>cited</sub>**.CanAccept(**e<sub>hdr</sub>**), then proceed, otherwise **e** is deferred.
+        3. Check that **𝘾𝒉<sub>dst</sub>**'s parent ACC permits **e**:
+            - **𝘾𝒉<sub>AC</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore(**𝓔<sub>cited</sub>**.`AccessChannelID`)
+            - **𝓅<sub>author</sub>** ⇐ **𝘾𝒉<sub>AC</sub>**.LookupPermissions(**e<sub>hdr</sub>**.`AuthorMemberID`)
+            - if  **𝓅<sub>author</sub>** does not allow **e<sub>hdr</sub>**`.EntryOp`, then **e** is deferred.
+        4. If **e** inserts a permissions change but does not [issue a new channel epoch](#issuing-a-New-Channel-Epoch) as required, then **e** is deferred.
+        5. If **e** will introduce an ambiguous or contradictory conflict, then perform [ambiguous conflict resolution](#ambiguous-conflict-resolution). 
+    3. Merge **e** into **𝓡<sub>i</sub>**:
         - **𝘾𝒉<sub>dst</sub>**.InsertEntry(**e**)
-    - Propagate the mutation of **𝘾𝒉<sub>dst</sub>** ("revalidation"):
-        - if  **𝘾𝒉<sub>dst</sub>** is now _equally_ or _less_ restrictive, then `return` since no changes would possibly precipitate.
+    4. Propagate the mutation of **𝘾𝒉<sub>dst</sub>** as required ("revalidation"):
+        - if  **𝘾𝒉<sub>dst</sub>** is now _equally_ or _less_ restrictive, then `return` since dependencies that are live will be unaffected.
         - if  **𝘾𝒉<sub>dst</sub>** is now _more_ restrictive, then revalidate dependent channels:
-            - Let **t<sub>rev</sub>** ⇐ **e<sub>hdr</sub>**`.TimeAuthored`
+            - **t<sub>rev</sub>** ⇐ **e<sub>hdr</sub>**`.TimeAuthored`
             - **[]𝘾𝒉<sub>dep</sub>** ⇐ **𝘾𝒉<sub>dst</sub>**.GetDependentChannels(**t<sub>rev</sub>**)
-                - Note: only ACCs have dependencies
             - for each **𝘾𝒉<sub>j</sub>** in **[]𝘾𝒉<sub>dep</sub>**:
                 - Scanning forward from **t<sub>rev</sub>** in  **𝘾𝒉<sub>j</sub>**, for each entry **e<sub>k</sub>**:
-                    - [re]validate **e<sub>k</sub>** (steps 1-4 above)
+                    - [re]validate **e<sub>k</sub>** (steps 1-5 above)
                     - if **e<sub>k</sub>** is now deferred:
                         - **𝘾𝒉<sub>j</sub>**.RemoveEntry(**e<sub>k</sub>**)
                         - Defer **e<sub>k</sub>** normally
                         - Propagate the mutation of **𝘾𝒉<sub>j</sub>**
-        - Although there are edge cases where change propagation _could_ result in a cascading workload, in almost all cases the amount of work is either n/a or negligible.  This is because:
-            - Revalidation is only needed if:
-                - the channel is an ACC (since only ACCs have dependencies), _and_
-                - the entry mutation makes an ACC _more_ restrictive 
-            - Most activity in **C** is presumably content, not access-control related.  (e.g. compare the number of ACL-related files stored on a workstation to the _total_ number of files)
-            - Mutations to a channel tend to occur close to the present time (⇒ only O(1) of all entry history is affected)
-            - Revalidation can be strategically scheduled, allowing multiple ACC mutations to require only a single revalidation pass.
+        - Although there are edge cases where change propagation could result in a cascading workload, the amount of work is generally either n/a or negligible.  This is because:
+            - Most entries are content-related, not access-control related.
+                - Revalidation only needs to proceed if an entry makes a channel _more_ restrictive.
+                - For example, compare the number of ACL-related files stored on a conventional workstation to the _total_ number of files.
+                - Only ACCs tend to have dependent channels.
+            - Mutations to a channel occur close to the present time, so only O(1) of all entry history typically needs to be revalidated.
+        - Revalidation can also be strategically managed, where multiple ACC mutations are scheduled such that only a single revalidation pass is needed.
 
 
 
 
 #### Ambiguous Conflict Resolution
+
+- Because community nodes can get transactions from **𝓛<sub>C</sub>** in an arbitrary order, it is possible for two different repos, **𝓡<sub>i</sub>** and **𝓡<sub>j</sub>**, to be in a state where members using them author conflicting entries that cannot be resolved.  
+- In order to support strong eventual consistency, conflicts must always be deterministically resolved _only_ using information all nodes are guarunteed to eventually possess. 
+- Given: 
+    - entry **e<sub>0</sub>** is currently "live" in **𝓡<sub>i</sub>**, _and_
+    - entry **e<sub>1</sub>** being processed by [channel entry validation](#Channel-Entry-Validation) and ambiguous conflicts with **e<sub>0</sub>** (i.e. either entry could be the "winner" but both can't)
+- If/When node **n<sub>i</sub>** observes that **e<sub>1</sub>** is in ambiguous conflict with **e<sub>0</sub>**:
+    - This means only one entry can be regarded as the "winner"
+    - **n<sub>i</sub>** posts an entry in the Conflict Resolution Channels
+
+- Note, in the case that **𝓛<sub>C</sub>** offers consensus timestamps for transactions (which is common), this alone is enough to radically 
+    - For example, resolution couldn't depend on the arrival time of each entry from **𝓛<sub>C</sub>** unless 
+    not depend on _when_ each entry arrived from **𝓛<sub>C</sub>**, _and_
+    - 
+
+- WE DONT HAVE SO SOLVE ALL CONFLICTS (like collab doc)
+    - we just have to cover the system ones -- we can enumerate them all:
+        - always choose the grant-access direction?  (vs revoke direction)
+it follows that each repo across **C** will vary .  If part of the network is recovering from a partition, it becomes more possible for two members to author entries that 
+- Examples:
+    - **e<sub>0</sub>**
+
+**𝓡<sub>i</sub>**  across **C** can be in vario states
+
+
+- IF the entry 
+- If the entries are in separate channels
+- Ambiguous conflicts can _also_ be adversary-induced, so we must alalyze. 
+    - The obvious objective for an adversary to induce ambigous conflicts would be to disupt **C** by crafting entries designed to invalidate "high value" root entries that would cause a cascade of entry invalidations to occur.  For example, suppose member **m** is granted the permission level of supermoderator in an ACC used for 
+    
+    posting an entry into a high-level ACC used across **C** dated a year ago causing 
+
+two or more entries having "equal authority" conflict in that if they are live, then there is an inconsistency and/or contradiction.  
+    - When two entries are back with "equal authority", the permissions levels 
+- To unpack this, we consider two categories of ambigous conflicts:
+   - **Natural**, where network latency between the nodes of **C** resulted in a situation where two separate nodes authored entries 
+   
+   what is mildly similar to a race condition.
+        - While each entry will have a globally-known author timestamp, they could arrive at a node in any order and with any delay.  
+        - While there are an expotential number of permutions for how 
+        
+         permutations of the order entries arrive, however, seldom result in an ambigous conflict since:
+            - the entries are 
+     However, in this case, each entry will me timestamped 
+
+
+       - In this case, we assume the intention and timestamp on the entries are accurate and well intentioned. 
+   - Adversary-Induced
+       - In this case, w
 
 - The consensus properties of **C** are effectively called into action here.  By default, entries in conflict with each other are each given a score based on the seniority of each member and the time delta of the entries.  There is either deterministic "winner" or "tie". In a tie, both entries in conflict are nullified.  
     - Implementation note: nullified entries, although effectively rejected, remain 
@@ -464,12 +531,9 @@ using asymmetric encryption (the community admin that issues a new community key
        - In this case, we assume the intention and timestamp on the entries are accurate and well intentioned. 
    - Adversary-Induced
        - In this case, we assume one or more of the entries in conflict have forged `TimeAuthored` and are mal-intentioned.
-- Ideally, we want to devise a resolution scheme that produces the most favorable outcomes for natural conflicts but is resilient against adversary-induced conflicts. 
+- Ideally, we want to devise a resolution scheme that produces the most fair and reasonable outcomes for natural conflicts but is resilient against adversary-induced conflicts. 
     
 
-#### Issuing a New Channel Epoch 
- 
-#### Key Petittioning
 
 ---
 
