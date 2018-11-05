@@ -83,10 +83,10 @@ A community using PLAN will inevitably be interested in making some of its parts
 
 ## Interoperable Data Structures
 
-- PLAN's standard unit of information exchange is `plan.Block`:
+- PLAN's standard unit of information is `plan.Block`:
 
     ```
-    // A portable, compact, self-describing, nest-able data container inspired from HTTP.
+    // A portable, compact, self-describing, nestable information container inspired from HTTP.
     type Block struct {
 
         // An optional, name/label for this Block (i.e. a field-name).
