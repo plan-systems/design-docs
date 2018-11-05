@@ -116,7 +116,7 @@ A community using PLAN will inevitably be interested in making some of its parts
     - Field of a protobuf message are explicitly and strongly typed.
     - Revisions to a protobuf message are backward-compatible with previous revisions.
     - Protobufs work well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
-- Importantly, a `plan.Block` can embed an arbitrarily-structured hierarchy of sub-blocks.  Because each element can also be accompanied by a label, codec description, or additional sub-blocks, `plan.Block` has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Consider that Protobufs makes serialization and deserialization of _any_ `plan.Block` (and its sub-hierarchy) available with a single line of code, _in any language or environment_.
+- Importantly, a `plan.Block` can embed an arbitrarily-structured hierarchy of sub-blocks.  Because each element can also be accompanied by a label, codec description, or additional sub-blocks, `plan.Block` has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Thanks to Protobufs, any `plan.Block` (and its sub-hierarchy) can be efficiently serialized and deserialized using a single line of code, _in any language or environment_.
 - PLAN's Protobuf-based data structures:
 
     | Protobuf File      | Purpose                                         |
@@ -130,7 +130,7 @@ A community using PLAN will inevitably be interested in making some of its parts
 
 ## Channel Protocols
 
-PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and productivity workflows in PLAN create new channels and new channel types all the time.  However, as a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or assume that content is just stored in a specific format.  PLAN channels and channel entries are _self-describing_ and are a profound step towards interoperability in the way that HTTP headers self-describe content during a web page load.  Both channel "epochs" and channel entries each embed a `plan.Block`, making each a flexible and extensible container for _any_ form of content.
+PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and productivity workflows in PLAN create new channels and new channel types all the time.  However, as a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or just assume that content is stored in some format.  PLAN channels and channel entries are _self-describing_ and are a profound step towards interoperability in the way that HTTP headers self-describe content during a web page load.  Both channel "epochs" and channel entries each embed a `plan.Block`, making each a flexible and extensible container for _any_ form of content.
 
 | Example Channel Descriptor | Expected Channel Entry ContentTypes | Example Client UI Experience  |
 |----------------------|:--------------------:|--------------------------------------|
