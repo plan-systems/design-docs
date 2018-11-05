@@ -130,7 +130,7 @@ A community using PLAN will inevitably be interested in making some of its parts
 
 ## Channel Protocols
 
-PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and productivity workflows in PLAN create new channels and new channel types all the time.  However, as a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or just assume that content is stored in some format.  PLAN channels and channel entries are _self-describing_ and are a profound step towards interoperability in the way that HTTP headers self-describe content during a web page load.  Both channel "epochs" and channel entries each embed a `plan.Block`, making each a flexible and extensible container for _any_ form of content.
+PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and productivity workflows in PLAN create new channels and new channel types all the time.  However, as a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or just assume that content is stored in some format.  PLAN channels and channel entries are [_self-describing_](https://multiformats.io/) and are a profound step towards interoperability in the way that HTTP headers self-describe content during a web page load.  Both channel "epochs" and channel entries each embed a `plan.Block`, making each a flexible and extensible container for _any_ form of content.
 
 | Example Channel Descriptor | Expected Channel Entry ContentTypes | Example Client UI Experience  |
 |----------------------|:--------------------:|--------------------------------------|
