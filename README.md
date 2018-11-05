@@ -112,11 +112,11 @@ A community using PLAN will inevitably be interested in making some of its parts
     ```
 - As with most public data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, including C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby.  Not bad!
     - Protobufs are faster, simpler, safer, more compact, and more efficient forms of JSON and XML.
-    - A protobuf struct ("message") is composed of primitive data types or user-defined message types.
-    - Field of a protobuf message are explicitly and strongly typed.
+    - A protobuf struct (message) can be composed of primitive data types or user-defined messages.
+    - Fields of a protobuf message are explicitly and strongly typed.
     - Revisions to a protobuf message are backward-compatible with previous revisions.
-    - Protobufs work well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
-- Importantly, a `plan.Block` can embed an arbitrarily-structured hierarchy of sub-blocks.  Because each element can also be accompanied by a label, codec description, or additional sub-blocks, `plan.Block` has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Thanks to Protobufs, any `plan.Block` (and its sub-hierarchy) can be efficiently serialized and deserialized using a single line of code, _in any language or environment_.
+    - Protobufs pair well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
+- Importantly, a `plan.Block` can embed an arbitrarily-structured hierarchy of sub-blocks.  Because elements can be accompanied by a label, codec description, or additional sub-blocks, `plan.Block` has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Thanks to Protobufs, an intricate `plan.Block` hierarchy can be efficiently serialized and deserialized using a single line of code — _in any language or environment_.
 - `plan.Block` is [self-describing](https://multiformats.io/), allowing it (and any hierarchy of sub-blocks) to be easily and efficiently embedded in a data structure since each element contains information allowing it to be safely analyzed or processed further.
 - PLAN's Protobuf-based data structures:
 
@@ -141,7 +141,7 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 | `/plan/ch/file/audio`| `ipfs`\|`mpg`\|`aac`\|`ogg`\|`flac` | Like other PLAN "file" channels, this client UI displays this channel as a single object, where opening/activating it causes the most recent entry to be fetched and played using the default media player app or using PLAN's integrated AV player.  |  
 | `/plan/ch/feed/rss`  |                 `xml`               | This channel is used to publish a sequence of text, audio, or video items with accompanying meta elements (e.g. title, link, thumbnail, and description).  This channel's epoch content block houses [RSS](https://en.wikipedia.org/wiki/RSS) channel elements, and channel entries correspond to RSS `item` elements (xml).  |
 | `/plan/ch/feed/atom` |                 `xml`               | Similar to `feed/rss`, but channel entries instead conform to [Atom](https://en.wikipedia.org/wiki/Atom_(Web_standard)) xml. |
-| `/plan/ch/calendar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom containing events (entries) are graphically rendered on the appropriate days and times. The user interacts with channel UI in real-time, scrolling from week to week, or day to day as the user zooms in "closer". |
+| `/plan/ch/calendar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom containing events (entries) that are graphically rendered on the appropriate days and times. The user interacts with channel UI in real-time, scrolling from week to week, or day to day as the user zooms in "closer". |
 
 ---
 
