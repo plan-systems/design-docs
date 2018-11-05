@@ -110,14 +110,15 @@ A community using PLAN will inevitably be interested in making some of its parts
         Subs       []*Block
     }
     ```
+- Importantly, each `plan.Block` instance is [self-describing](https://multiformats.io/) and can embed sub-blocks. Because each element is accompanied by a label, codec description, or additional sub-blocks, `plan.Block` has the _simplicity and flexibility_ of JSON but with the _efficiency and compactness_ of binary serialization.  This means any hierarchy of information and content can be structured dynamically, and each element contains enough meta information to allow it to be safely analyzed and processed further.
 - As with most public data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, including C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby.  Not bad!
     - Protobufs are faster, simpler, safer, more compact, and more efficient forms of JSON and XML.
     - A protobuf struct (message) can be composed of primitive data types or user-defined messages.
     - Fields of a protobuf message are explicitly and strongly typed.
     - Revisions to a protobuf message are backward-compatible with previous revisions.
     - Protobufs pair well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
-- Importantly, a `plan.Block` can embed a hierarchy of sub-blocks.  Because a `plan.Block` element is accompanied by a label, codec description, or additional sub-blocks, it has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Thanks to Protobufs, an intricate and dynamic data structure stored as a `plan.Block` hierarchy can be efficiently serialized/deserialized using a single line of code — _in every major language or environment_.
-- `plan.Block` is [self-describing](https://multiformats.io/), allowing it (and any hierarchy of sub-blocks) to be easily and efficiently embedded in a data structure since each element contains information allowing it to be safely analyzed or processed further.
+    - A rich `plan.Block` hierarchy can be efficiently serialized/deserialized using a single line of code — _in every major language and environment_.
+
 - PLAN's Protobuf-based data structures:
 
     | Protobuf File      | Purpose                                         |
