@@ -118,7 +118,7 @@ A community using PLAN will inevitably be interested in making some of its parts
     - Protobufs work well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
 
 - Importantly, a `plan.Block` can embed an arbitrarily-structured hierarchy of sub-blocks.  Because each element can also be accompanied by a label, codec description, or additional sub-blocks, `plan.Block` has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Thanks to Protobufs, any `plan.Block` (and its sub-hierarchy) can be efficiently serialized and deserialized using a single line of code, _in any language or environment_.
-- `plan.Block` is [self-describing](https://multiformats.io/), allowing it (and any hierarchy sub-blocks) to easily be embedded in any data structure since it self-contains information allowing it safely and reliably be analyzed, processed, or decoded further.
+- `plan.Block` is [self-describing](https://multiformats.io/), allowing it (and a hierarchy of sub-blocks) to be easily and efficiently embedded in a data structure since each element contains information allowing it to be safely analyzed or processed further.
 - PLAN's Protobuf-based data structures:
 
     | Protobuf File      | Purpose                                         |
@@ -142,7 +142,7 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 | `/plan/ch/file/audio`| `ipfs`\|`mpg`\|`aac`\|`ogg`\|`flac` | Like other PLAN "file" channels, this client UI displays this channel as a single object, where opening/activating it causes the most recent entry to be fetched and played using the default media player app or using PLAN's integrated AV player.  |  
 | `/plan/ch/feed/rss`  |                 `xml`               | This channel is used to publish a sequence of text, audio, or video items with accompanying meta elements (e.g. title, link, thumbnail, and description).  This channel's epoch content block houses [RSS](https://en.wikipedia.org/wiki/RSS) channel elements, and channel entries are xml and correspond to RSS `item` elements.  |
 | `/plan/ch/feed/atom` |                 `xml`               | Similar to `feed/rss`, but each xml channel entry instead conforms to [Atom](https://en.wikipedia.org/wiki/Atom_(Web_standard)). |
-| `/plan/ch/calandar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom where posted calendar events (entries) are graphically rendered on the appropriate days etc. The user interacts with channel UI in real-time, scrolling from week to week, or day to day as the user zooms in "closer". |
+| `/plan/ch/calendar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom where posted calendar events (entries) are graphically rendered on the appropriate days etc. The user interacts with channel UI in real-time, scrolling from week to week, or day to day as the user zooms in "closer". |
 
 ---
 
