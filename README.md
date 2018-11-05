@@ -116,12 +116,12 @@ A community using PLAN will inevitably be interested in making some of its parts
     - Field of a protobuf message are explicitly and strongly typed.
     - Revisions to a protobuf message are backward-compatible with previous revisions.
     - Protobufs work well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
-- Importantly, a `plan.Block` can embed an arbitrarily-structured hierarchary of sub-blocks.  Because each element can also be accompanied by a label, codec description, or additional sub-blocks, `plan.Block` has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Consider that Protobufs makes serialization and deserialization of _any_ `plan.Block` (and its sub-hierarchary) available with a single line of code, in any language or environment_.
-- PLAN's protobuf-based data stuctures:
+- Importantly, a `plan.Block` can embed an arbitrarily-structured hierarchy of sub-blocks.  Because each element can also be accompanied by a label, codec description, or additional sub-blocks, `plan.Block` has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Consider that Protobufs makes serialization and deserialization of _any_ `plan.Block` (and its sub-hierarchy) available with a single line of code, _in any language or environment_.
+- PLAN's Protobuf-based data structures:
 
-    | PLAN Protobuf File | Purpose                                         |
+    | Protobuf File      | Purpose                                         |
     |--------------------|-------------------------------------------------|
-    | [go-plan/plan/plan.proto](http://github.com/plan-tools/go-plan/blob/master/plan/plan.proto)                  | PLAN general purpose data structures            |
+    | [go-plan/plan/plan.proto](http://github.com/plan-tools/go-plan/blob/master/plan/plan.proto)                  | PLAN-wide general purpose data structures       |
     | [go-plan/pdi/pdi.proto](http://github.com/plan-tools/go-plan/blob/master/pdi/pdi.proto)                      | Persistent Data Interface (PDI) data structures |
     | [go-plan/ski/ski.proto](http://github.com/plan-tools/go-plan/blob/master/ski/ski.proto)                      | Secure Key Interface (SKI) data structures      |
     | [go-plan/pservice/pservice.proto](http://github.com/plan-tools/go-plan/blob/master/pservice/pservice.proto)  | GRPC network services and data structures       |
@@ -130,17 +130,18 @@ A community using PLAN will inevitably be interested in making some of its parts
 
 ## Channel Protocols
 
-PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and produtivity workflows in PLAN create new channels and new channel types all the time.  However, as a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or assume that content is just stored in a specific format.  PLAN channels are _self-describing_ and are a profound step towards interoperabilty in the way that HTTP headers self-describe content during a web page load.  PLAN channels are composed of channel "entries", and both channel "epochs" and channel entries embed a `plan.Block`, making each a flexible and extensible container for_any_ form of content.
+PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and productivity workflows in PLAN create new channels and new channel types all the time.  However, as a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or assume that content is just stored in a specific format.  PLAN channels and channel entries are _self-describing_ and are a profound step towards interoperability in the way that HTTP headers self-describe content during a web page load.  Both channel "epochs" and channel entries each embed a `plan.Block`, making each a flexible and extensible container for _any_ form of content.
 
 | Example Channel Descriptor | Expected Channel Entry ContentTypes | Example Client UI Experience  |
 |----------------------|:--------------------:|--------------------------------------|
-| `/plan/ch/talk`      |          `txt`\|`rtf`\|`image`      | A conventional vertical scroller where new entries appear in colored ovals at the bottom and previous entries scroll upward. |
+| `/plan/ch/talk`      |          `txt`\|`rtf`\|`image`      | A familiar "vertical scroller" where new entries appear in colored ovals at the bottom and previous entries vertically scroll upward to make room. |
 | `/plan/ch/geoplot`   |          `cords+(txt`\|`image)`     | A map displays text and image annotations at each given geo-coordinate entry.  Clicking/Tapping on an annotation causes a box to appear displaying who made the entry and when. |
 | `/plan/ch/file/pdf`  |            `ipfs`\|`binary`         | The client UI represents this channel as a single monolithic object. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened locally on the client using a PDF viewing application.  Power users can open and review earlier revisions. |
-| `/plan/ch/file/audio`| `ipfs`\|`mpg`\|`aac`\|`ogg`\|`flac` | Like other PLAN "file" channels, this client UI displays this channel as a single object, where opening/activating it causes the most recent entry to be fetched and played using the default media player app or using PLAN's integrated media player support.  |  
-| `/plan/ch/feed/rss`  |                 `xml`               | This channel is used to publish a sequence of text, audio, or video items with accompanying meta elements (e.g. title, link, and description).  This channel's epoch properties house [RSS](https://en.wikipedia.org/wiki/RSS) channel elements, and channel entries are xml and correspond to RSS `item` elements.  |
-| `/plan/ch/feed/atom` |                 `xml`               | Similar to a `feed/rss` channel, but each xml channel entry instead conforms to [Atom](https://en.wikipedia.org/wiki/Atom_(Web_standard)). |
-| `/plan/ch/caland
+| `/plan/ch/file/audio`| `ipfs`\|`mpg`\|`aac`\|`ogg`\|`flac` | Like other PLAN "file" channels, this client UI displays this channel as a single object, where opening/activating it causes the most recent entry to be fetched and played using the default media player app or using PLAN's integrated AV player.  |  
+| `/plan/ch/feed/rss`  |                 `xml`               | This channel is used to publish a sequence of text, audio, or video items with accompanying meta elements (e.g. title, link, thumbnail, and description).  This channel's epoch content block houses [RSS](https://en.wikipedia.org/wiki/RSS) channel elements, and channel entries are xml and correspond to RSS `item` elements.  |
+| `/plan/ch/feed/atom` |                 `xml`               | Similar to `feed/rss`, but each xml channel entry instead conforms to [Atom](https://en.wikipedia.org/wiki/Atom_(Web_standard)). |
+| `/plan/ch/calandar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom where posted calendar events (entries) are graphically rendered on the appropriate days etc. The user interacts with channel UI in real-time, scrolling from week to week, or day to day as the user zooms in "closer". |
+
 ---
 
 ## Milestones
