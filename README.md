@@ -116,7 +116,7 @@ A community using PLAN will inevitably be interested in making some of its parts
     - Fields of a protobuf message are explicitly and strongly typed.
     - Revisions to a protobuf message are backward-compatible with previous revisions.
     - Protobufs pair well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
-- Importantly, a `plan.Block` can embed an arbitrarily-structured hierarchy of sub-blocks.  Because elements can be accompanied by a label, codec description, or additional sub-blocks, `plan.Block` has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Thanks to Protobufs, an intricate `plan.Block` hierarchy can be efficiently serialized and deserialized using a single line of code — _in any language or environment_.
+- Importantly, a `plan.Block` can embed a hierarchy of sub-blocks.  Because elements can be accompanied by a label, codec description, or additional sub-blocks, `plan.Block` has the expressive simplicity and strength of JSON with the efficiency and compactness of binary serialization.  Thanks to Protobufs, an intricate and dynamic data structure stored as a `plan.Block` hierarchy can be efficiently serialized and deserialized using a single line of code — _in any language or environment_.
 - `plan.Block` is [self-describing](https://multiformats.io/), allowing it (and any hierarchy of sub-blocks) to be easily and efficiently embedded in a data structure since each element contains information allowing it to be safely analyzed or processed further.
 - PLAN's Protobuf-based data structures:
 
