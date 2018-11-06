@@ -167,4 +167,4 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 # FAQ
 
 #### Q: Why PLAN? Aren't there enough blockchain and DLTs already?
-Yes, the number of promising DLT projects can fill a page and span various feautures.  However, _PLAN is not a blockchain or DLT_.  PLAN is a information organizational and permissions layer _built on top_ of existing DLTs. Consider: `PLAN is to blockchain, as Linux is to harddrive.`
+Yes, there are dozens of advanced DLT projects packed with features.  _However, PLAN is not a blockchain or distributed ledger technology._  The lower half of PLAN is an information organizational and permissions system that is _built on top_ of an existing DLT. Consider: _PLAN is to blockchain as Linux is to harddrive._
