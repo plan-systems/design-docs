@@ -83,7 +83,7 @@ A community using PLAN will inevitably be interested in making some of its parts
 
 ## Interoperable Data Structures
 
-- PLAN's standard unit of information exchange and storage is `plan.Block`:
+- PLAN's standard unit of information storage and transport is `plan.Block`:
 
     ```
     // A portable, compact, self-describing, nestable information container inspired from HTTP.
@@ -111,13 +111,13 @@ A community using PLAN will inevitably be interested in making some of its parts
     }
     ```
 - Importantly, each `plan.Block` instance is [self-describing](https://multiformats.io/) and can also contain sub-blocks. Because each element is accompanied by a label, codec descriptor, or additional sub-blocks, `plan.Block` has the _simplicity and flexibility_ of JSON but the _efficiency and compactness_ of binary serialization.  This means any hierarchy of information or content can be structured dynamically, and each element contains enough meta information for it to be safely analyzed and processed further.
-- As with most public data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, including C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby.  Not bad!
-    - Protobufs are faster, simpler, safer, more compact, and more efficient forms of JSON and XML.
-    - A protobuf struct (message) can be composed of primitive data types or user-defined messages.
+- Like other foundational data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, including C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby.  Not bad!
+    - A protobuf struct ("message") can be composed of primitive data types or user-defined messages.
     - Fields of a protobuf message are explicitly and strongly typed.
     - Revisions to a protobuf message are backward-compatible with previous revisions.
+    - Protobufs are faster, simpler, safer, more compact, and more efficient than JSON and XML.
     - Protobufs pair well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
-    - A rich `plan.Block` hierarchy can be efficiently serialized/deserialized using a single line of code — _in every major language and environment_.
+    - An entire `plan.Block` hierarchy can be efficiently serialized/deserialized using a single line of code — _in every major language and environment_.
 
 - PLAN's Protobuf-based data structures:
 
@@ -132,17 +132,17 @@ A community using PLAN will inevitably be interested in making some of its parts
 
 ## Channel Protocols
 
-PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and productivity workflows in PLAN create new channels and new channel types all the time.  However, as a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or blindly assume that content is in a particular form.   Both PLAN channel "epochs" and channel entries each embed a `plan.Block`, making each a flexible _self-describing container for any form of content_.  This offers profound interoperability in the way that HTTP headers _self-describe_ content for a HTTP response. 
+PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and productivity workflows in PLAN create new channels and new channel types all the time.  However, as a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or blindly assume that content is in a particular form.   Both PLAN channel "epochs" and channel entries each embed a `plan.Block`, making each a flexible self-describing container for content and information.  _This offers profound interoperability in the way that HTTP headers also self-describe content for a HTTP response._
 
 | Example Channel Descriptor | Expected Channel Entry Content Codecs | Example Client UI Experience  |
 |----------------------|:--------------------:|--------------------------------------|
 | `/plan/ch/talk`      |          `txt`\|`rtf`\|`image`      | A familiar "vertical scroller" where new entries appear in colored ovals at the bottom and previous entries vertically scroll upward to make room. |
 | `/plan/ch/geoplot`   |         `cords + (txt`\|`image)`    | A map displays text and image annotations at each given geo-coordinate entry.  Clicking/Tapping on an annotation causes a box to appear displaying who made the entry and when. |
-| `/plan/ch/file/pdf`  |            `ipfs`\|`binary`         | The client UI represents this channel as a single monolithic object. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened locally on the client using a PDF viewing application.  Power users can open and review earlier revisions. |
+| `/plan/ch/file/pdf`  |            `ipfs`\|`binary`         | The client UI represents this channel as a single monolithic object. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened locally on the client using a PDF viewing application.  Power users can learn to open previous revisions of this "file". |
 | `/plan/ch/file/audio`| `ipfs`\|`mpg`\|`aac`\|`ogg`\|`flac` | Like other PLAN "file" channels, this client UI displays this channel as a single object, where opening/activating it causes the most recent entry to be fetched and played using the default media player app or using PLAN's integrated AV player.  |  
-| `/plan/ch/feed/rss`  |                 `xml`               | This channel is used to publish a sequence of text, audio, or video items with accompanying meta elements (e.g. title, link, thumbnail, and description).  This channel's epoch content block houses [RSS](https://en.wikipedia.org/wiki/RSS) channel elements, and channel entries correspond to RSS `item` elements (xml).  |
-| `/plan/ch/feed/atom` |                 `xml`               | Similar to `feed/rss`, but channel entries instead conform to [Atom](https://en.wikipedia.org/wiki/Atom_(Web_standard)) xml. |
-| `/plan/ch/calendar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom containing events (entries) that are graphically rendered on the appropriate days and times. The user interacts with channel UI in real-time, scrolling from week to week, or day to day as the user zooms in "closer". |
+| `/plan/ch/feed/rss`  |                 `xml`               | This channel is used to publish a sequence of text, audio, or video items with accompanying meta elements (e.g. title, link, thumbnail, and description).  This channel's epoch content `Block` houses [RSS](https://en.wikipedia.org/wiki/RSS) channel information while PLAN channel entries correspond to xml RSS `item` elements.  |
+| `/plan/ch/feed/atom` |                 `xml`               | Similar to `feed/rss`, but PLAN channel entries instead conform to [Atom](https://en.wikipedia.org/wiki/Atom_(Web_standard)) xml. |
+| `/plan/ch/calendar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom containing events (entries) that are graphically rendered on the appropriate days and times. The user interacts with channel UI in real-time, scrolling from week to week, to day to day as the user zooms in "closer". |
 
 ---
 
@@ -154,7 +154,7 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 |  Babbage  | 2018 Q3 | [Proof of correctness](proof-of-correctness.md)  |
 |   Morse   | 2018 Q4 | [go-plan](https://github.com/plan-tools/go-plan) command line prototype & demo  |
 |   Kepler  | 2019 Q1 | [plan-unity](https://github.com/plan-tools/plan-unity) client prototype & demo  |
-| Fessenden | 2019 Q2 | Ethereum or DFINITY used for next PDI implementation |
+| Fessenden | 2019 Q2 | Ethereum, DFINITY, or another established DLT used for next PDI implementation |
 |  Lovelace | 2019 Q2 | Installer and GUI setup experience for macOS  |
 |   Turing  | 2019 Q3 | go-plan support and QA for Linux | 
 |  Galileo  | 2019 Q3 | PLAN Foundation internally replaces Slack with PLAN  |
@@ -164,3 +164,7 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 
 
 
+# FAQ
+
+#### Q: Why PLAN? Aren't there enough blockchain and DLTs to choose from?
+Yes, the number of promising DLT projects can fill a page and span various feautures.  However, _PLAN is not a blockchain or DLT_.  PLAN is a information organizational and permissions layer _built on top_ of existing DLTs. PLAN is to a blockchain, as Linux is to a harddrive.
