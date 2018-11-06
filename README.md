@@ -140,7 +140,7 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 | `/plan/ch/geoplot`   |         `cords + (txt`\|`image)`    | A map displays text and image annotations at each given geo-coordinate entry.  Clicking/Tapping on an annotation causes a box to appear displaying who made the entry and when. |
 | `/plan/ch/file/pdf`  |            `ipfs`\|`binary`         | The client UI represents this channel as a single monolithic object. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened locally on the client using a PDF viewing application.  Power users can learn to open previous revisions of this "file". |
 | `/plan/ch/file/audio`| `ipfs`\|`mpg`\|`aac`\|`ogg`\|`flac` | Like other PLAN "file" channels, this client UI displays this channel as a single object, where opening/activating it causes the most recent entry to be fetched and played using the default media player app or using PLAN's integrated AV player.  |  
-| `/plan/ch/feed/rss`  |                 `xml`               | This channel is used to publish a sequence of text, audio, or video items with accompanying meta elements (e.g. title, link, thumbnail, and description).  This channel's epoch content `Block` houses [RSS](https://en.wikipedia.org/wiki/RSS) channel information while PLAN channel entries correspond to xml RSS `item` elements.  |
+| `/plan/ch/feed/rss`  |                 `xml`               | This channel is used to publish a sequence of text, audio, or video items with accompanying meta elements (e.g. title, link, thumbnail, and description).  This channel's epoch content `Block` houses [RSS](https://en.wikipedia.org/wiki/RSS) channel information while PLAN channel entries correspond to familiar RSS `item` elements in xml.  |
 | `/plan/ch/feed/atom` |                 `xml`               | Similar to `feed/rss`, but PLAN channel entries instead conform to [Atom](https://en.wikipedia.org/wiki/Atom_(Web_standard)) xml. |
 | `/plan/ch/calendar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom containing events (entries) that are graphically rendered on the appropriate days and times. The user interacts with channel UI in real-time, scrolling from week to week, to day to day as the user zooms in "closer". |
 
@@ -154,7 +154,7 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 |  Babbage  | 2018 Q3 | [Proof of correctness](proof-of-correctness.md)  |
 |   Morse   | 2018 Q4 | [go-plan](https://github.com/plan-tools/go-plan) command line prototype & demo  |
 |   Kepler  | 2019 Q1 | [plan-unity](https://github.com/plan-tools/plan-unity) client prototype & demo  |
-| Fessenden | 2019 Q2 | Ethereum, DFINITY, or another established DLT used for next PDI implementation |
+| Fessenden | 2019 Q2 | Ethereum, DFINITY, Holochain, or another established DLT used for next PDI implementation |
 |  Lovelace | 2019 Q2 | Installer and GUI setup experience for macOS  |
 |   Turing  | 2019 Q3 | go-plan support and QA for Linux | 
 |  Galileo  | 2019 Q3 | PLAN Foundation internally replaces Slack with PLAN  |
@@ -166,5 +166,5 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 
 # FAQ
 
-#### Q: Why PLAN? Aren't there enough blockchain and DLTs to choose from?
-Yes, the number of promising DLT projects can fill a page and span various feautures.  However, _PLAN is not a blockchain or DLT_.  PLAN is a information organizational and permissions layer _built on top_ of existing DLTs. PLAN is to a blockchain, as Linux is to a harddrive.
+#### Q: Why PLAN? Aren't there enough blockchain and DLTs already?
+Yes, the number of promising DLT projects can fill a page and span various feautures.  However, _PLAN is not a blockchain or DLT_.  PLAN is a information organizational and permissions layer _built on top_ of existing DLTs. Consider: `PLAN is to blockchain, as Linux is to harddrive.`
