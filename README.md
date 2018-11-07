@@ -116,8 +116,8 @@ A community using PLAN will inevitably be interested in making some of its parts
     - Fields of a protobuf message are explicitly and strongly typed.
     - Revisions to a protobuf message are backward-compatible with previous revisions.
     - Protobufs are faster, simpler, safer, more compact, and more efficient than JSON and XML.
-    - Protobufs pair well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network transport.
-    - An entire `plan.Block` hierarchy can be efficiently serialized/deserialized using a single line of code — _in every major language and environment_.
+    - Protobufs pair well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network support.
+    - An entire `plan.Block` hierarchy can be serialized or deserialized using a single line of code — _in every major language and environment_.
 
 - PLAN's Protobuf-based data structures:
 
@@ -167,4 +167,4 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 # FAQ
 
 #### Q: Why PLAN? Aren't there enough blockchain and DLTs already?
-Yes, there are dozens of advanced DLT projects packed with features.  _However, PLAN is not a blockchain or distributed ledger technology._  The lower half of PLAN is an information organizational and permissions system that is _built on top_ of an existing DLT. Consider: _PLAN is to blockchain as Linux is to harddrive._
+Indeed, there are dozens of advanced DLT projects out there.  _However, PLAN at its heart is not a distributed ledger technology._  The lower half of PLAN is an information organizational and permissions system that is _built on top_ of an existing DLT. Consider: _PLAN is to blockchain as Linux is to harddrive._
