@@ -544,35 +544,48 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 
 #### Proof of Signal Opacity
 
-- Given that each `EntryCrypt` of **C** residing within transactions stored on **𝓛<sub>C</sub>** and considered to be "in the clear", what information is being made available or is discernible to an actors who are _not_ members of **C**?
-- An actor _not_ a member of **C** by definition does not possess the community keyring, **[]K<sub>C</sub>**, containing the latest community keys.  Thus, the _only_ information available to actors outside of **C** is the `UUID` of the community key used to encrypt a given `EntryCrypt` stored on **𝓛<sub>C</sub>**. This implies:
-    - Only members of **C** effectively have read-access to **C**'s content.
-    - Information opacity is maximized since all other information resides within `HeaderCrypt` or `ContentCrypt`, _with the exception that_  adversaries snooping **𝓛<sub>C</sub>** could discern _when_ a new community security epoch began (by noting the appearance of new `UUID`).  However, this is weak information since such an event could correspond to any number of circumstances.
-    - If actor **a** is formerly a member of **C** (or gained access to a member's keys), then **a**'s access is limited to read-access up to until the time when a new community security epoch was initiated.   In order for **a** to receive the latest community key, **a** must possess the _latest_ private key of a member currently in **C** (see [Starting a New Community Epoch](#issuing-a-new-Community-Epoch)). 
-        - In the case that **a**'s copy of the keys matches the current **C** security epoch, this represents the members of **C** are _unaware_ of the security breach (otherwise a member would have initiated a [member halt](#member-halt) or at least [started a new community security epoch](#issuing-a-new-Community-Epoch)).  
+- Given that (a) all community channel entries reside within transactions stored on **𝓛<sub>C</sub>**, _and_ (b) transactions are considered to be "in the clear":
+    - What information is available or otherwise discernable to non-members of **C**?
+- Let **α** be an actor that is _not_ a member of **C**, implying that **α** does not possess the latest community keys.  
+    - ⇒ the _only_ information directly available to **α** is the `UUID` of the key used to encrypt each `EntryCrypt` stored on **𝓛<sub>C</sub>**.
+        1. ⇒ information opacity is maximized in that all other information resides within an entry's `HeaderCrypt` and `ContentCrypt`.
+            - Adversaries snooping **𝓛<sub>C</sub>** can only discern _when_ a new community security epoch began (by noting the appearance of a new community key `UUID`).  However, this is weak information since such an event could correspond to any number of circumstances.
+        2. ⇒ _only_ members of **C** effectively have read-access to **C**'s content and member activity.
+    - If **α** is a former member of **C**, then **α**'s access is limited to read-only up to when  **α** was [delisted](#Delisting-A-Member) (when the [new community epoch was issued](#issuing-a-new-Community-Epoch) as part of delisting a member).
+
 
 #### Proof of Access Exclusivity
 
 - _Read-Access Exclusivity_
-    - Only an actor is possession of **[]K<sub>C</sub>** has the ability to read the encrypted content residing on **𝓛<sub>C</sub>**.  See [Proof of Signal Opacity](#proof-of-signal-opacity).
-- _Append-Access Exclusivity_
-    - Given **𝓛<sub>C</sub>**, in order for a storage transaction **txn<sub>C</sub>** to be accepted by **𝓛<sub>C</sub>**, by definition it must:
-        - contain a valid signature that proves the data and author borne by **txn<sub>C</sub>** is authentic, _and_
-        - specify an author that **𝓛<sub>C</sub>** recognizes as having permission to post a transaction of that size.
-    - Given that each member **m** of **C** is in sole possession of their personal keyring, it follows that _only_ **m** can author and sign transactions that **𝓛<sub>C</sub>** will accept.  
-    - In the case where **m**'s private keys are lost or compromised, **m** would immediately initiate a [member member halt](#member-halt), leaving any actor in possession of **m**'s keys unable to post a transaction to **𝓛<sub>C</sub>**.
+    - Only an actor is possession of the community keyring ("**[]K<sub>C</sub>**") has the ability to read community-public content residing on **𝓛<sub>C</sub>**.  See [Proof of Signal Opacity](#proof-of-signal-opacity).
+- _Write-Access Exclusivity_
+    - There are _three_ layers that prevent the unauthorized mutation of **𝓛<sub>C</sub>** or a community replica/repo  ("**𝓡<sub>i</sub>**"):
+        1. **𝓛<sub>C</sub> Postage**, the mechanism ensuring that **𝓛<sub>C</sub>** will only accept storage transaction **txn<sub>j</sub>** if:
+            - **txn<sub>j</sub>** bears an author that **𝓛<sub>C</sub>** recognizes as having permission to post a transaction of that size, _and_
+            - **txn<sub>j</sub>** bears a valid signature that proves the contents and author borne by **txn<sub>j</sub>** is authentic.
+        2.  **Community Keyring Access**, referring to that _only_ communuty members are issued **[]K<sub>C</sub>**.  
+            - So even if actor **α** is able procure postage on **𝓛<sub>C</sub>**, they must also submit an `EntryCrypt` containing an `EntryHeader` encrypted using a recent community key — otherwise **𝓡<sub>i</sub>** will reject it.
+        3. **Channel Entry Validation**, referring to "deep" validation of entries arriving from **𝓛<sub>C</sub>**.  Part of this flow is verifying that:
+            - the signature contained in a given `EntryCrypt` is a valid signature from the member `UUID` borne by its `EntryHeader`, _and_
+            - the member is a valid/current member of **C** (based on **𝓡<sub>i</sub>**'s [Member Epoch Channel](#Member-Epoch-Channel)).
+    - Given that each member **m** of **C** is in sole possession of their private keys ⇒ _only_ members of **C** can mutate **𝓛<sub>C</sub>** or **𝓡<sub>i</sub>**.
+    - In the case where **m**'s private keys are possibly compromised, **m** would immediately initiate a [member halt](#member-halt), leaving any actor in possession of **m**'s keys challenged or unable to move past the above layers. 
+        - For in-depth security scenario analysis, see [Proof of Practical Security Provisioning](#Proof-of-Practical-Security-Provisioning). 
 
 #### Proof of Permissions Assurance
 
-- All "live" entries in a node's local replica ("**𝓡<sub>i</sub>**") must pass [Channel Entry Validation](#Channel-Entry-Validation).  This implies each successive state of **𝓡<sub>i</sub>** is, exclusively, a valid mutation of its previous state.  
-- However, transactions arriving from **𝓛<sub>C</sub>** ("entries") will naturally arrive somewhat out of order — or they could be intentionally modified, reordered, or withheld by an adversary.   
-- First, we rule out the corruption/alteration of entries since any entry with an invalid signature is immediately and permanently rejected.
-    - The case where an adversary covertly has possession of a member's private keys is addressed later on.
- - So, could the reordering, blocking, or withholding of entries from **𝓛<sub>C</sub>** ("withholding") cause **𝓡<sub>i</sub>** to pass through a state such that one of the access controls or grants established by members of **C** could be circumvented or exploited?  We consider two categories of failures:
+- In order for an entry to go "live" in a node's repo ("**𝓡<sub>i</sub>**"), ot must must repeatedly survive [Channel Entry Validation](#Channel-Entry-Validation).  
+    - ⇒ each successive state of **𝓡<sub>i</sub>** is, exclusively, an authorized mutation from its previous state.  
+- However, if an important entry was withheld from node **n<sub>i</sub>**, it is easy to imagine dependent entries piling up and **𝓡<sub>i</sub>** being at a standstill.  
+- So, in addition to transactions arriving out of order from **𝓛<sub>C</sub>** naturally, entries could be intentionally altered, reordered, or withheld by adversaries manipulating communications signals or infrastructure.   
+- First, we rule out corruption or alteration of entries since each `EntryCrypt` bears a signature dependent on its contents, so altered entries would be immediately rejected.
+    - The case where an adversary covertly has possession of a member's private keys is discussed in [Proof of Practical Security Provisioning](#Proof-of-Practical-Security-Provisioning). 
+ - So then, could the _reordering, blocking, or withholding_ ("withholding") of entries from **𝓛<sub>C</sub>** cause **𝓡<sub>i</sub>** to pass through a state such that access controls or grants established by members of **C** could be circumvented or exploited?  We separate the possibilties into two categories:
     1. **Unauthorized key, channel, or content access**
-        - These scenarios are characterized by gaining unauthorized access to a key that in turn allows access to encrypted contents on **𝓡<sub>i</sub>**.
-        - Since any withholding of entries couldn't result in any _additional_  generation/grant of permissions, the remaining possibility is that withholding entries would somehow result in  **𝓡<sub>i</sub>** not mutating in a way where privileged data remains accessible.  However, this is precluded since any ACC mutation that is restrictive in nature automatically [starts a new channel security epoch](#issuing-a-new-Channel-Epoch), where _only_ members listed for access are each explicitly sent the new private channel key (using each recipient's public key).  This summarizes how member access is "removed" in an append-only system: the delisted member isn't issued the  key for the new security epoch.    
-    2. **Access control violation**
+        - These scenarios are characterized by gaining unauthorized access to a privileged key that in turn allows read access to restricted content within **𝓡<sub>i</sub>**.
+        - Since any withholding of entries can't result in the _additional_  generation/grant of permissions, the remaining possibility is that withholding entries somehow result in  **𝓡<sub>i</sub>** not mutating such that privileged data somehow remains accessible.  This analysis is legitmate, however, it is precluded since [Channel Entry Validation](#Channel-Entry-Validation) requires that any mutation that is access-restrictive in nature is required to [issue a new channel security epoch](#issuing-a-new-Channel-Epoch).  In this flow, _only_ members with access privilidges are (securely) issued the newly generated private channel key.  Likewise, this is why a [new community epoch is issued](#Issuing-a-New-Community-Epoch) when a member is [delisted](#Delisting-A-Member) or a [member halt](#Member-halt) is issued (but not when a new member is [added](#adding-a-new-member_)).
+        - ⇒ In the event where an entry restricting permissions in some way was _withheld_ from **n<sub>i</sub>**, there is no possibilty that subsequent entries could reveal restricted material (after **Δ<sub>C</sub>**) since they would be encrypted with a newly issued member, channel or community key.
+    2. **Unauthorized access control modification**
         - This implies, there exists a way for member **m** (or an adversary covertly in possession of **m**'s keys) to author one or more channel entries such that one or more channel permissions can be altered in an unauthorized way or otherwise circumvented.
         - This can be expressed as an entry being validated, and thus merged, into a channel when it should instead be rejected.  How could an entry ever be merged in a channel whose ACC denies access?  [Channel Entry Validation](#Channel-Entry-Validation) ensures that entries that do not validate under their host channel's ACC will never be "live".
         - An adversary in possession of **m**'s keys could forge an entry to a community-public channel that **m** does not have write access to, but [Channel Entry Validation](#Channel-Entry-Validation) running on others' nodes would reject this entry.  
@@ -584,8 +597,9 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 
 #### Proof of Membership Fluidity
 
-- Both [adding a new member](#adding-A-New-Member) and [delisting a member](#delisting-a-member) are implemented using standard entries in **C**'s channel system entries undergo normal [channel entry validation](#Channel-Entry-Validation).
-- This implies that all the properties, assurances, and security afforded by channel entry validation extend to all aspects of membership fluidity.  In other words, membership fluidity is just a specialized form of [permissions assurance](#Permissions-Assurance).
+- Both [adding a new member](#adding-A-New-Member) and [delisting a member](#delisting-a-member) are implemented using standard entries in **C**'s channel system and undergo [Channel Entry Validation](#Channel-Entry-Validation) like other standard entries _in addition to further checks and restrictions_.
+- This implies that all the properties, assurances, and protection afforded by Channel Entry Validation extend to all aspects of membership fluidity.  This is to say that membership fluidity is a specialized form of [Permissions Assurance](#Permissions-Assurance) and so is thus addressed in [Proof of Permissions Assurance](#Proof-of-Permissions-Assurance).
+
 
 #### Proof of Strong Eventual Consistency
 
@@ -647,7 +661,7 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 - Suppose **C** wishes to switch to an alternative CRDT technology.
 - Using a weaker form of the steps listed in [proof of independence assurance](#proof-of-independence-assurance), **C** can coordinate a switch to a new CRDT medium almost transparently.  
 - Using steps similar to the steps in the [proof of independence assurance](#proof-of-independence-assurance), the admins of **C** can coordinate a switch to a new CRDT medium almost transparently.  
-- This is to say that **𝓛** is to **C** as a hard drive is to a workstation.  **C**'s "hard drive" can be replaced:
+- This is to say that **𝓛** is to **C** as a hard drive is to an operating system.  **C**'s "hard drive" can be replaced:
     - with the same exact model
     - with a different "brand"
     - with a different storage technology all together
@@ -694,7 +708,7 @@ PDIEntryCrypt.CommunityKeyID specifies which community key was used to encrypt P
 If/when an admin of a community issues a new community key,  each member is securely sent this new key via
 the community key channel (where is key is asymmetrically sent to each member still "in" the community. 
 
-
+    - In the case that **α** has gained possession of the _latest_ community key for whatever reason, this reflects that the members of **C** are _unaware_ of a security breach (otherwise a member or authority in **C** would have initiated a [member halt](#member-halt) or [started a new community epoch](#issuing-a-new-Community-Epoch)).  
 /*
 
 
