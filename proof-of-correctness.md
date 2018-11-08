@@ -80,9 +80,14 @@ The members of **C** wish to assert...
 - There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
 - Consider the case where a number of members are (or become) covert adversaries of **C** (or are otherwise coerced).  Even if working in concert, it must still be impossible to: impersonate other members, insert unauthorized permission or privilege changes, gain access to others' private keys or information, or alter **𝓛<sub>C</sub>** in any way that poisons or destroys community content.
 
+#### Integrity Assurance
+- The members of **C** are confident and can rest assured that members in positions of authority are:
+    - **accountable**, in that any exercise of their authority or privileges is community-public information and cannot be concealed, _and_
+    - **bound**, in that they cannot circumvent **C**'s preestablished decision-making structure.
+
 #### Membership Fluidity
 - New members can be invited to and join **C** at any time (given that **C** policies and permissions are met).
-- A member can be "delisted" from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that delisted members can retain their copies of **𝓡** before the community entered this new security "epoch").
+- A member can be "dismissed" from **C** such that they become equivalent to an actor that has never been a member of **C** (aside that dismissed members can retain their copies of **𝓡** before the community entered this new security "epoch").
 
 #### Strong Eventual Consistency
 - For each node **n<sub>i</sub>** in **C**, it's local replica state ("**𝓡<sub>i</sub>**"), converges to a stable/monotonic state as **𝓛<sub>C</sub>** message traffic eventually "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **𝓡<sub>1</sub>**...**𝓡<sub>N</sub>** mutate such that strong eventual consistency ("SEC") is guaranteed.  
@@ -100,7 +105,7 @@ The members of **C** wish to assert...
     - an adversary gains access to admin/root private keys and hijacks **C**, _or_
     - one or more admins becomes adversarial towards **C**, _or_ 
     - **𝓛<sub>C</sub>** is otherwise corrupted or vandalized, 
-- ...then **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state, where specified members are delisted from the member registry and others are granted admin permission.
+- ...then **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state, where specified members are struck from the member registry and others are granted admin permission.
 
 #### Storage Portability
 - **C**, led by a coordinated admin effort, always has the ability to swap out CRDT technologies. 
@@ -121,7 +126,7 @@ The members of **C** present the following system of operation...
 - Also inspired from IRC, each channel has its own permissions settings. Each channel designates an access control channel ("ACC") to be used as an oracle for channel permissions.  An ACC is a special channel type that additionally conforms to a protocol designed to specify channel permissions. Like other channels, each ACC also designates a parent ACC, and so on, all the way up to **C**'s root-level ACC.  
 - Member, channel, and community security and key distribution uses "epochs" to demarcate security events, in effect furnishing [permissions assurance](#permissions-assurance).
 - In a flow known as [channel entry validation](#channel-entry-validation), each community node ("**n<sub>i</sub>**") iteratively mutates its local replica ("**𝓡<sub>i</sub>**") by attempting to merge newly arriving entries from **𝓛<sub>C</sub>** into **𝓡<sub>i</sub>**.  During validation, if **𝓡<sub>i</sub>** is not yet in a state to fully validate an incoming entry **e**, then **e** is said to be "deferred" for later processing.
-- This system, in effect, forms a secure and operational core outside **C**'s channel data space, comparible to how a traditional OS maintains internal pipelines and hierarchies of operations and permissions, designed to serve and protect user processes.
+- This system, in effect, forms a secure and operational core outside **C**'s channel data space, comparable to how a traditional OS maintains internal pipelines and hierarchies of operations and permissions, designed to serve and protect user processes.
 
 ---
 
@@ -236,14 +241,14 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     - Like general purpose channels, each ACC must designate a parent ACC, and so on, all the way up to the _reserved_ [root ACC](#Root-Access-Control-Channel).
     - Multiple channels can name the _same_ ACC as their parent ACC, allowing a single ACC to conveniently manage permissions for any number of channels.
     - ACCs also are the vehicle for key distribution, where a channel owner "sends" a newly issued private channel to each member with access, using their public key.
-2. **Reserved channels** are specialized channels used by the system to internally carry out commuinity governance and member administration.
+2. **Reserved channels** are specialized channels used by the system to internally carry out community governance and member administration.
     - Reserved channels specify root-level information and permissions, namely admin and member records.
-    - Entries in these channls must meet additional security/signing requirements and serve prescribed purposes.  
-    - Because reserved channels have nuanced specificaitons, they do not solely rely on ACCs for access controls.
+    - Entries in these channels must meet additional security/signing requirements and serve prescribed purposes.  
+    - Because reserved channels have nuanced specifications, they do not solely rely on ACCs for access controls.
     - The number, purpose, and use of these channels can be expanded to meet future needs. 
 3. **General purpose channels**, alas, are the system's primary service deliverable, comprising most channels in **C**.
     - When a new channel is created, the creator (and hence owner) specifies a "protocol descriptor", a string directing client UIs to consistently interpret, handle, and present channel entries in accordance with the expectations associated with the channel's protocol.  
-    - Each channel also names a governing access control channel ("parent ACC").  A channel's parent ACC is chraged with returning a permission level for any given member `UUID`, allowing  nodes in **C** to independently carry out [channel entry validation](#channel-entry-validation).
+    - Each channel also names a governing access control channel ("parent ACC").  A channel's parent ACC is charged with returning a permission level for any given member `UUID`, allowing  nodes in **C** to independently carry out [channel entry validation](#channel-entry-validation).
     - General purpose channels are either:
         - **community-public**, where channel entry content is encrypted with the latest community key, _or_
         - **private**, where entry content is encrypted with the key identified by **e<sub>hdr</sub>**`.ContentKeyID`.  
@@ -254,9 +259,10 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 ## Reserved Channels
 
+
 #### Root Access Control Channel
 - This is **C**'s root access channel, effectively specifying which members are recognized as community authorities ("admins").
-- All community-public channels, including ACCs, implictly are under authority of this channel.
+- All community-public channels, including ACCs, implicitly are under authority of this channel.
 - When a new community is formed ("community genesis"), the initial entries this channel are auto-generated in accordance with the parameters and policies provided.
 - Automated machinery in **C** can optionally be geared to use smart contracts on **𝓛<sub>C</sub>** to manage, monitor, or validate entries in this channel.
     - E.g. a majority vote of existing admins could be required in order to add a new admin to the root access channel. 
@@ -284,11 +290,11 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     - encrypt entry content exclusively for a given member (used for key distribution)
 - Only a community admin (or certified delegate) is permitted to post a `MemberEpoch` for members _other than themselves_. This provides the means for:
     - [adding new members](#Adding-A-New-Member) to **C**,
-    - [delisting members](#Delisting-A-Member) from **C**, _and_
+    - [dismissing members](#dismissing-A-Member) from **C**, _and_
     - restoring a member's access to **C** following a [member halt](#member-halt).
 - When a [member halt](#member-halt) has been issued on **m**, an special `MemberEpoch` entry is posted to this channel.
     - Once this entry is live on **𝓡<sub>i</sub>**, all subsequent entries with **m**'s signature are deferred during [channel entry validation](#Channel-Entry-Validation).
-    - When the cause for concern is addresssed, a community authority [issues a new member epoch](#Issuing-a-New-member-Epoch) for **m**.
+    - When the cause for concern is addressed, a community authority [issues a new member epoch](#Issuing-a-New-member-Epoch) for **m**.
 
 #### Community Epoch Channel
 - This channel is where a community admin (or authorized agent) posts an entry that, in effect, replaces the current community key with a newly issued key. 
@@ -323,9 +329,9 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 #### Issuing a New Community Epoch
 - Given: an admin, delegated member, or an automated agent wants to issue a new/replacement community key and deprecate the previously issued communuty key.
-- The purpose of starting this new "community epoch" is so that an actor in possession of the community keyring ("**[]K<sub>C</sub>**") will no longer be able to decrypt community-public data on **C** _unless they are currently a member of **C**_.  This typically applies after a [member halt](#member-halt) or after [delisting a member](#Delisting-A-member) since it's important that the currently active community key (and an actor in possession of it) is longer used to encrypted community traffic.  
+- The purpose of starting this new "community epoch" is so that an actor in possession of the community keyring ("**[]K<sub>C</sub>**") will no longer be able to decrypt community-public data on **C** _unless they are currently a member of **C**_.  This typically applies after a [member halt](#member-halt) or after [dismissing a member](#dismissing-A-member) since it's important that the currently active community key (and an actor in possession of it) is longer used to encrypted community traffic.  
 - As the newly posted community key epoch goes live across the nodes of **C**, all new `EntryCrypt` on **𝓛<sub>C</sub>** are encrypted using it. 
-- The admin, permissioned member or agent does the following:
+- The admin or permissioned member or agent does the following:
     1. Generates a new symmetrical key to serve as the next community key ("**k<sub>C</sub>**").
     2. Prepares a new entry containing an `EpochInfo` ("**𝓔<sub>C</sub>**").
     3. For each open/active `MemberEpoch` ("**𝓔<sub>m</sub>**") in the [Member Epoch Channel](#Member-Epoch-Channel) (for each member  **m** in **C**):
@@ -353,11 +359,11 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 - Given: member **m** (or their private keyring) is potentially under the control or influence of an another.
 - A "member halt" refers to an automated sequence of actions performed on **m**'s behalf once it's believed that their personal keyring ("**[]K<sub>m</sub>**") is under the influence of another.  
 - The conditions/requisites needed in order to initiate a Member Halt on another's behalf can be arbitrarily based on security needs and situational circumstances.  
-- A Member Halt on **m** could be inititated by:
+- A Member Halt on **m** could be initiated by:
     - **m**, upon discovering that another actor has gained access to **[]K<sub>m</sub>**, _or_
-    - a peer of **m** (previously designated by **m**), upon recieving an email, phone call, text message, or signal of duress from **m**, _or_
+    - a peer of **m** (previously designated by **m**), upon receiving an email, phone call, text message, or signal of duress from **m**, _or_
     - a community admin or automated agent, noticing damning or malicious activity originating from a holder of **[]K<sub>m</sub>**.
-- Once a Member Halt is initiated om **m**:
+- Once a Member Halt is initiated on **m**:
     1. A special entry is posted to the [Member Epoch Channel](#member-epoch-channel), signaling to all nodes in **C** to defer all further entries signed by **[]K<sub>m</sub>**.  
         - In effect, this halts any actor in possession of **[]K<sub>m</sub>** from posting _any_ entries to _any_ channel on **C**.
         - The [Member Epoch Channel](#Member-Epoch-Channel) has a grace period for older (predecessor) member keys to be used to authorize a Member Halt.  This provisions against an adversary in possession of **[]K<sub>m</sub>** from "locking out" **m** by [issuing a new member epoch](#Issuing-a-New-Member-Epoch).
@@ -401,13 +407,13 @@ Channels are intended as general-purpose containers for [channel entries](#chann
         2. the client prompts for the passphrase that decrypts **τ**
         3. the client opens **τ**, and as applicable:
             - bootstraps **𝓛<sub>C</sub>**
-            - builds/upates **𝓡<sub>α</sub>** normally
+            - builds/updates **𝓡<sub>α</sub>** normally
         4. Once that **𝓡<sub>α</sub>** is up to date (i.e. once **𝓔<sub>α0</sub>** is live in the _Member Epoch Channel_), **α** posts a successor `MemberEpoch` as they would when [starting a new member epoch](#issuing-a-new-Member-Epoch).  
 
-#### Delisting A Member
-- Given: the admins and/or collective authority of **C** decide that member **m** is to be "delisted", meaning that **m**'s access **C** is to be immediately rescinded.  
+#### Dismissing A Member
+- Given: the admins and/or collective authority of **C** decide that member **m** is to be "dismissed", meaning that **m**'s access **C** is to be immediately rescinded.  
 - The designated authority of **C** performs a procedure identical to the [Member Halt](#member-halt) procedure.  In effect:
-    1. Any subseqient entries authored by **m** will be rejected, _and_
+    1. Any subsequent entries authored by **m** will be rejected, _and_
     2. **m** will be unable to post any transactions to **𝓛<sub>C</sub>**, _and_
     4. All new entries on **𝓛<sub>C</sub>** will be unreadable to **m** within **Δ<sub>C</sub>**.
 
@@ -418,9 +424,9 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 - Since entries can arrive at **n<sub>i</sub>** in arbitrary order from **𝓛<sub>C</sub>**, entries will arrive whose validation will depend on other entries that have not yet been processed — _on entries yet to even arrive_.
 - As node **n<sub>i</sub>** processes an incoming entry **e** to be merged with **𝓡<sub>i</sub>**:
     - If **e** satisfies _all channel properties and parent ACC permissions_, then **e** is placed into "live" status.
-    - Otherwise, if for whatever reason **e** cannot complete validatation (or **e** depends on an unresolved [ambiguous conflict](#Ambiguous-conflict-resolution)), then **e** is placed into "deferred" status.
+    - Otherwise, if for whatever reason **e** cannot complete validation (or **e** depends on an unresolved [ambiguous conflict](#Ambiguous-conflict-resolution)), then **e** is placed into "deferred" status.
         - Node **n<sub>i</sub>** will periodically reattempt to validate **e** as subsequent entries mutate **𝓡<sub>i</sub>** and as any conflicts resolve.  
-        - Unless **e** was crafted with malicous intent, it would be unexpected for **e** to remain indefinately deferred.
+        - Unless **e** was crafted with malicious intent, it would be unexpected for **e** to remain indefinitely deferred.
 - For each new entry **e** arriving from **𝓛<sub>C</sub>** (or is locally authored and also submitted to **𝓛<sub>C</sub>**):
     1. Authenticate **e**:
         1. **e<sub>digest</sub>** ⇐  ComputeDigest(**e**`.CommunityKeyID`,   **e**`.HeaderCrypt`,  **e**.`ContentCrypt`)
@@ -472,68 +478,6 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 
 
-#### Ambiguous Conflict Resolution
-
-- Because community nodes can get transactions from **𝓛<sub>C</sub>** in an arbitrary order, it is possible for two different repos, **𝓡<sub>i</sub>** and **𝓡<sub>j</sub>**, to be in a state where members using them author conflicting entries that cannot be resolved.  
-- In order to support strong eventual consistency, conflicts must always be deterministically resolved _only_ using information all nodes are guarunteed to eventually possess. 
-- Given: 
-    - entry **e<sub>0</sub>** is currently "live" in **𝓡<sub>i</sub>**, _and_
-    - entry **e<sub>1</sub>** being processed by [channel entry validation](#Channel-Entry-Validation) and ambiguous conflicts with **e<sub>0</sub>** (i.e. either entry could be the "winner" but both can't)
-- If/When node **n<sub>i</sub>** observes that **e<sub>1</sub>** is in ambiguous conflict with **e<sub>0</sub>**:
-    - This means only one entry can be regarded as the "winner"
-    - **n<sub>i</sub>** posts an entry in the Conflict Resolution Channels
-
-- Note, in the case that **𝓛<sub>C</sub>** offers consensus timestamps for transactions (which is common), this alone is enough to radically 
-    - For example, resolution couldn't depend on the arrival time of each entry from **𝓛<sub>C</sub>** unless 
-    not depend on _when_ each entry arrived from **𝓛<sub>C</sub>**, _and_
-    - 
-
-- WE DONT HAVE SO SOLVE ALL CONFLICTS (like collab doc)
-    - we just have to cover the system ones -- we can enumerate them all:
-        - always choose the grant-access direction?  (vs revoke direction)
-it follows that each repo across **C** will vary .  If part of the network is recovering from a partition, it becomes more possible for two members to author entries that 
-- Examples:
-    - **e<sub>0</sub>**
-
-**𝓡<sub>i</sub>**  across **C** can be in vario states
-
-
-- IF the entry 
-- If the entries are in separate channels
-- Ambiguous conflicts can _also_ be adversary-induced, so we must alalyze. 
-    - The obvious objective for an adversary to induce ambigous conflicts would be to disupt **C** by crafting entries designed to invalidate "high value" root entries that would cause a cascade of entry invalidations to occur.  For example, suppose member **m** is granted the permission level of supermoderator in an ACC used for 
-    
-    posting an entry into a high-level ACC used across **C** dated a year ago causing 
-
-two or more entries having "equal authority" conflict in that if they are live, then there is an inconsistency and/or contradiction.  
-    - When two entries are back with "equal authority", the permissions levels 
-- To unpack this, we consider two categories of ambigous conflicts:
-   - **Natural**, where network latency between the nodes of **C** resulted in a situation where two separate nodes authored entries 
-   
-   what is mildly similar to a race condition.
-        - While each entry will have a globally-known author timestamp, they could arrive at a node in any order and with any delay.  
-        - While there are an expotential number of permutions for how 
-        
-         permutations of the order entries arrive, however, seldom result in an ambigous conflict since:
-            - the entries are 
-     However, in this case, each entry will me timestamped 
-
-
-       - In this case, we assume the intention and timestamp on the entries are accurate and well intentioned. 
-   - Adversary-Induced
-       - In this case, w
-
-- The consensus properties of **C** are effectively called into action here.  By default, entries in conflict with each other are each given a score based on the seniority of each member and the time delta of the entries.  There is either deterministic "winner" or "tie". In a tie, both entries in conflict are nullified.  
-    - Implementation note: nullified entries, although effectively rejected, remain 
-    - and that occur within a given time window are rejected.  
-- In accessing ambiguous conflict resolution, we separate them into to categories:
-   - Legitimate/Natural
-       - In this case, we assume the intention and timestamp on the entries are accurate and well intentioned. 
-   - Adversary-Induced
-       - In this case, we assume one or more of the entries in conflict have forged `TimeAuthored` and are mal-intentioned.
-- Ideally, we want to devise a resolution scheme that produces the most fair and reasonable outcomes for natural conflicts but is resilient against adversary-induced conflicts. 
-    
-
 
 ---
 
@@ -545,13 +489,13 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 #### Proof of Signal Opacity
 
 - Given that (a) all community channel entries reside within transactions stored on **𝓛<sub>C</sub>**, _and_ (b) transactions are considered to be "in the clear":
-    - What information is available or otherwise discernable to non-members of **C**?
+    - What information is available or otherwise discernible to non-members of **C**?
 - Let **α** be an actor that is _not_ a member of **C**, implying that **α** does not possess the latest community keys.  
     - ⇒ the _only_ information directly available to **α** is the `UUID` of the key used to encrypt each `EntryCrypt` stored on **𝓛<sub>C</sub>**.
         1. ⇒ information opacity is maximized in that all other information resides within an entry's `HeaderCrypt` and `ContentCrypt`.
             - Adversaries snooping **𝓛<sub>C</sub>** can only discern _when_ a new community security epoch began (by noting the appearance of a new community key `UUID`).  However, this is weak information since such an event could correspond to any number of circumstances.
         2. ⇒ _only_ members of **C** effectively have read-access to **C**'s content and member activity.
-    - If **α** is a former member of **C**, then **α**'s access is limited to read-only up to when  **α** was [delisted](#Delisting-A-Member) (when the [new community epoch was issued](#issuing-a-new-Community-Epoch) as part of delisting a member).
+    - If **α** is a former member of **C**, then **α**'s access is limited to read-only up to when  **α** was [dismissed](#dismissing-A-Member) (when the [new community epoch was issued](#issuing-a-new-Community-Epoch) as part of dismissing a member).
 
 
 #### Proof of Access Exclusivity
@@ -563,7 +507,7 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
         1. **𝓛<sub>C</sub> Postage**, the mechanism ensuring that **𝓛<sub>C</sub>** will only accept storage transaction **txn<sub>j</sub>** if:
             - **txn<sub>j</sub>** bears an author that **𝓛<sub>C</sub>** recognizes as having permission to post a transaction of that size, _and_
             - **txn<sub>j</sub>** bears a valid signature that proves the contents and author borne by **txn<sub>j</sub>** is authentic.
-        2.  **Community Keyring Access**, referring to that _only_ communuty members are issued **[]K<sub>C</sub>**.  
+        2.  **Community Keyring Access**, referring to that _only_ community members are issued **[]K<sub>C</sub>**.  
             - So even if actor **α** is able procure postage on **𝓛<sub>C</sub>**, they must also submit an `EntryCrypt` containing an `EntryHeader` encrypted using a recent community key — otherwise **𝓡<sub>i</sub>** will reject it.
         3. **Channel Entry Validation**, referring to "deep" validation of entries arriving from **𝓛<sub>C</sub>**.  Part of this flow is verifying that:
             - the signature contained in a given `EntryCrypt` is a valid signature from the member `UUID` borne by its `EntryHeader`, _and_
@@ -574,30 +518,46 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 
 #### Proof of Permissions Assurance
 
-- In order for an entry to go "live" in a node's repo ("**𝓡<sub>i</sub>**"), ot must must repeatedly survive [Channel Entry Validation](#Channel-Entry-Validation).  
+- In order for an entry to be "live" in a node's repo ("**𝓡<sub>i</sub>**"), it must repeatedly survive [Channel Entry Validation](#Channel-Entry-Validation).  
     - ⇒ each successive state of **𝓡<sub>i</sub>** is, exclusively, an authorized mutation from its previous state.  
-- However, if an important entry was withheld from node **n<sub>i</sub>**, it is easy to imagine dependent entries piling up and **𝓡<sub>i</sub>** being at a standstill.  
-- So, in addition to transactions arriving out of order from **𝓛<sub>C</sub>** naturally, entries could be intentionally altered, reordered, or withheld by adversaries manipulating communications signals or infrastructure.   
-- First, we rule out corruption or alteration of entries since each `EntryCrypt` bears a signature dependent on its contents, so altered entries would be immediately rejected.
+- However, if an important entry is withheld from node **n<sub>i</sub>**, it is easy to imagine dependent entries piling up and **𝓡<sub>i</sub>** being at a standstill.  
+- In addition to transactions arriving out of order from **𝓛<sub>C</sub>** naturally, we must consider if entries are altered, reordered, or withheld by adversaries manipulating communications signals or infrastructure.
+- We can rule out corruption or alteration of entries since each `EntryCrypt` bears a signature dependent on its contents, so altered entries would be immediately rejected.
     - The case where an adversary covertly has possession of a member's private keys is discussed in [Proof of Practical Security Provisioning](#Proof-of-Practical-Security-Provisioning). 
- - So then, could the _reordering, blocking, or withholding_ ("withholding") of entries from **𝓛<sub>C</sub>** cause **𝓡<sub>i</sub>** to pass through a state such that access controls or grants established by members of **C** could be circumvented or exploited?  We separate the possibilties into two categories:
+ - So then, could the _reordering, blocking, or withholding_ ("withholding") of entries from **𝓛<sub>C</sub>** cause **𝓡<sub>i</sub>** to pass through a state such that access controls or grants established by members of **C** could be circumvented or exploited?  We separate the possibilities into two categories:
     1. **Unauthorized key, channel, or content access**
         - These scenarios are characterized by gaining unauthorized access to a privileged key that in turn allows read access to restricted content within **𝓡<sub>i</sub>**.
-        - Since any withholding of entries can't result in the _additional_  generation/grant of permissions, the remaining possibility is that withholding entries somehow result in  **𝓡<sub>i</sub>** not mutating such that privileged data somehow remains accessible.  This analysis is legitmate, however, it is precluded since [Channel Entry Validation](#Channel-Entry-Validation) requires that any mutation that is access-restrictive in nature is required to [issue a new channel security epoch](#issuing-a-new-Channel-Epoch).  In this flow, _only_ members with access privilidges are (securely) issued the newly generated private channel key.  Likewise, this is why a [new community epoch is issued](#Issuing-a-New-Community-Epoch) when a member is [delisted](#Delisting-A-Member) or a [member halt](#Member-halt) is issued (but not when a new member is [added](#adding-a-new-member_)).
-        - ⇒ In the event where an entry restricting permissions in some way was _withheld_ from **n<sub>i</sub>**, there is no possibilty that subsequent entries could reveal restricted material (after **Δ<sub>C</sub>**) since they would be encrypted with a newly issued member, channel or community key.
-    2. **Unauthorized access control modification**
-        - This implies, there exists a way for member **m** (or an adversary covertly in possession of **m**'s keys) to author one or more channel entries such that one or more channel permissions can be altered in an unauthorized way or otherwise circumvented.
-        - This can be expressed as an entry being validated, and thus merged, into a channel when it should instead be rejected.  How could an entry ever be merged in a channel whose ACC denies access?  [Channel Entry Validation](#Channel-Entry-Validation) ensures that entries that do not validate under their host channel's ACC will never be "live".
-        - An adversary in possession of **m**'s keys could forge an entry to a community-public channel that **m** does not have write access to, but [Channel Entry Validation](#Channel-Entry-Validation) running on others' nodes would reject this entry.  
+        - Since any withholding of entries can't result in the _additional_  generation/grant of permissions, the remaining possibility is that withholding entries somehow result in  **𝓡<sub>i</sub>** not mutating such that privileged data somehow remains accessible. This is a legitimate concern, however, [Channel Entry Validation](#Channel-Entry-Validation) requires that any mutation that is access-restrictive in nature must also [issue a new channel security epoch](#issuing-a-new-Channel-Epoch).  In this process flow, _only_ members with access privileges are (securely) issued the newly generated private channel key.   Similarly, this is why a [new community epoch is issued](#Issuing-a-New-Community-Epoch) when a member is [dismissed](#dismissing-A-Member) or a [member halt](#Member-halt) is issued (but not when a [new member is added](#adding-a-new-member)).
+        - ⇒ In the case where entries are _withheld_ from **n<sub>i</sub>**, there is no possibility that subsequent entries could reveal restricted material since new peer entries would be encrypted with a newly issued member, channel or community key (after **Δ<sub>C</sub>**) .
+    2. **Circumventing access controls**
+        - These scenarios are characterized by manipulating the state of **𝓡<sub>i</sub>** with the intention of circumventing access controls.
+        - Given [Proof of Access Exclusivity](#Proof-of-Access-Exclusivity), we know that in order for **𝓡<sub>i</sub>** to be mutated (or maliciously manipulated), the perpetrating actor must possess _both_ an active member and community keyring.    
+        - ⇒ there exists a way for member **m** (or an adversary covertly in possession of **m**'s keys) to author channel entries such that access controls are circumvented.
+        - ⇒ this would start with a set of malicious passing [Channel Entry Validation](#Channel-Entry-Validation) and going live.  How could an entry go live across **C** whose parent ACC denies access?  [Channel Entry Validation](#Channel-Entry-Validation) ensures that entries that do not validate under their host channel's ACC will never be "live".
+        - **m** (or an adversary in possession of **m**'s keys) _could manually forge_ an entry that performs an operation not permitted by **m** and submit it to **𝓛<sub>C</sub>**, but [Channel Entry Validation](#Channel-Entry-Validation) running on every other community node would see that the entry's author does not have the required access privileges and would indefinitely defer the forged entry. 
         - In cases where there is an "ambiguous conflict" (e.g. an admin grants Alice moderator access to channel 𝘾𝒉 at the same exact time a different admin grants Alice standard access to 𝘾𝒉) then deterministic [ambiguous conflict resolution](#ambiguous-conflict-resolution) occurs. 
             - Although ambiguous conflicts are rare, we assume here that an adversary would induce ambiguous conflicts in an attempt to circumvent access controls on **C**.  
             - The scope of uncertainty around an ambiguous conflict ("**ψ**") is proportional to the specific scope of the conflict (e.g. the contended status of who moderates **C**'s lost and found channel does not affect other areas of **C**).  In other words, given ambiguous conflict **ψ**, the superposition of all possible states of **𝓡** in **C** only depends on states entangled with **ψ**.
             - Given this, and that ambiguous conflicts are [deterministically resolved](#ambiguous-conflict-resolution) in a symmetrical, access-neutral) way, adversary **O** is _at most_ limited to denial of service.  Further, **O** could only do so in proportion to **O**'s level of access within **C**.  For example, if **O** only has standard member permissions in **C**, then **O** couldn't even create an entry able to be in ambiguous conflict since **O**'s sphere of access control is not even large enough to contend with another member. 
             - Given the low probability of repeated naturally occurring ambiguous conflicts, a protective watchdog service for **C** could raise an admin alert under certain conditions — or  auto-initiate a [member member halt](#member-halt).
 
+#### Proof of Integrity Assurance
+
+[Integrity Assurance](#Integrity-Assurance) specifies that members in positions of authority are accountable and remain bound to community expectations.
+- Every member action (mutation) on **C** is manifested as a channel entry, whether that is a routine content entry or a specially signed entry in the [Member Epoch Channel](#Member-Epoch-Channel).
+    - ⇒ every member interaction (channel entry) is replicated across **𝓛<sub>C</sub>**, an append-only storage layer, and available for review _to all other members of **C**_.
+    - ⇒ any attempt of member **m** to conceal or rescind a previous entry will not result in the original entry being altered.
+    - ⇒ all actions in community-public channels, which includes all community administrative [reserved channels](#reserved-channels), are available for member review and scrutiny.  
+- In private channels, entry content is encrypted and _only_ members granted access by the channel's owner will be able to read the channel's content.  By default, _not even community admins or authorities_ can gain access private channel content unless they have been granted access.  
+    - So although the actions of members in a private channel are _not_ able to be witnessed or reviewed by others, a participant of a private channel could be be ordered by community authorities to turn over the channel's keyring (or face community [dismissal](#dismissing-a-member]) or other "real-life" repercussions).
+    - Community authorities are free to make use of private channels (just like all other community members), but any action affecting reserved or community-public channels would be publicly available information and would be part of the permanent record that is **𝓛<sub>C</sub>**.
+- Important channels, such as [reserved channels](#reserved-channels) or channels used to conduct community governance, can harness the dependable and predictable nature of "smart contracts" on **𝓛<sub>C</sub>**.  For example:
+    - **C** has only one community admin account, but it (and its private keys) are wired into a smart contract on **𝓛<sub>C</sub>** such that ⅔ of **C**'s "council" members need to sign a proposition before the smart contract's "threshold" signature will make it possible to execute as this community-representative agent.
+
+
 #### Proof of Membership Fluidity
 
-- Both [adding a new member](#adding-A-New-Member) and [delisting a member](#delisting-a-member) are implemented using standard entries in **C**'s channel system and undergo [Channel Entry Validation](#Channel-Entry-Validation) like other standard entries _in addition to further checks and restrictions_.
+- Both [adding a new member](#adding-A-New-Member) and [dismissing a member](#dismissing-a-member) are implemented using standard entries in **C**'s channel system and undergo [Channel Entry Validation](#Channel-Entry-Validation) like other standard entries _in addition to further checks and restrictions_.
 - This implies that all the properties, assurances, and protection afforded by Channel Entry Validation extend to all aspects of membership fluidity.  This is to say that membership fluidity is a specialized form of [Permissions Assurance](#Permissions-Assurance) and so is thus addressed in [Proof of Permissions Assurance](#Proof-of-Permissions-Assurance).
 
 
@@ -633,13 +593,13 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
             - **m** would _still_ be able to issue a member halt (see [member halt](#member-halt)), _and_
             - an admin of **C**, in communication with **m**, would later rescind any entries in the [member epoch channel](#member-epoch-channel) not authored by **m**.
     3. Scenario: admin ("**O**") on **C** covertly wishes to snoop on **m**.
-        - At no point would **O** ever have access to **[]K<sub>m</sub>** since it never leaves **m**'s local client space (in any form).  This implies that **O** has _no_ abilty to gain access to content encrypted for **m** _or_  the keys to any private channels that **m** has access to.  
+        - At no point would **O** ever have access to **[]K<sub>m</sub>** since it never leaves **m**'s local client space (in any form).  This implies that **O** has _no_ ability to gain access to content encrypted for **m** _or_  the keys to any private channels that **m** has access to.  
         - In the event an admin posts a new `MemberEpoch` for **m** without permission, **m** would immediately be aware since **m**'s client would see the epoch issued (but not have the keys).   Note that hijacking another's identity as in this case would not allow the perpetrator to gain access to any of **m**'s private data since only **m** has possession of **[]K<sub>m</sub>**.
         Note that the given adversary would only have access to community public data (with **[]K<sub>C</sub>**) and **m**'s particular data
 
     4. Scenario: multiple adversaries infiltrate **C** 
         - Plan A: denial of service by abusing [member halt](#member-halt)
-            - Since a member halt only suspends a member's access to **C**, its liabily (as a mechanism) is limited to a one-time denial of service.    
+            - Since a member halt only suspends a member's access to **C**, its liability (as a mechanism) is limited to a one-time denial of service.    
             - An adversarial member halt could be easily undone by an admin, and the offending member's integrity would immediately move under a spotlight.  
             - Limitations could be added to the [member halt procedure](#member-halt) that would guard against adversarial behavior (e.g. a member is limited to ordering one halt per day).
     
@@ -653,8 +613,8 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
     1. Create a new CRDT ("**𝓛<sub>C′</sub>**") and allocate bulk postage identically to **𝓛<sub>C</sub>**'s genesis _in addition to_ allocating bulk postage for **[]a′**
     2. Copy the parameters from **C**'s genesis _in addition to_ granting admin status for **[]a′**.
     3. Transfer entries from **𝓛<sub>C</sub>** to **𝓛<sub>C′</sub>** up to time **t<sub>C′</sub>** (omitting entries as desired)
-    4. Use the credentials of **[]a′** to demote/delist **[]a** and any other desired members.
-        - For each member demoted or delisted, reduce/burn their postage permissions on **𝓛<sub>C′</sub>** as appropriate.
+    4. Use the credentials of **[]a′** to demote/dismiss **[]a** and any other desired members.
+        - For each member demoted or dismissed, reduce/burn their postage permissions on **𝓛<sub>C′</sub>** as appropriate.
 
 #### Proof of Storage Portability
 
@@ -689,6 +649,73 @@ a fixed provable accuracy of when the network witnessed it sent (as it travels f
 
 
 ### scrap/work area
+
+
+
+
+#### Ambiguous Conflict Resolution
+
+- Because community nodes can get transactions from **𝓛<sub>C</sub>** in an arbitrary order, it is possible for two different repos, **𝓡<sub>i</sub>** and **𝓡<sub>j</sub>**, to be in a state where members using them author conflicting entries that cannot be resolved.  
+- In order to support strong eventual consistency, conflicts must always be deterministically resolved _only_ using information all nodes are guaranteed to eventually possess. 
+- Given: 
+    - entry **e<sub>0</sub>** is currently "live" in **𝓡<sub>i</sub>**, _and_
+    - entry **e<sub>1</sub>** being processed by [channel entry validation](#Channel-Entry-Validation) and ambiguous conflicts with **e<sub>0</sub>** (i.e. either entry could be the "winner" but both can't)
+- If/When node **n<sub>i</sub>** observes that **e<sub>1</sub>** is in ambiguous conflict with **e<sub>0</sub>**:
+    - This means only one entry can be regarded as the "winner"
+    - **n<sub>i</sub>** posts an entry in the Conflict Resolution Channels
+
+- Note, in the case that **𝓛<sub>C</sub>** offers consensus timestamps for transactions (which is common), this alone is enough to radically 
+    - For example, resolution couldn't depend on the arrival time of each entry from **𝓛<sub>C</sub>** unless 
+    not depend on _when_ each entry arrived from **𝓛<sub>C</sub>**, _and_
+    - 
+
+- WE DONT HAVE SO SOLVE ALL CONFLICTS (like collab doc)
+    - we just have to cover the system ones -- we can enumerate them all:
+        - always choose the grant-access direction?  (vs revoke direction)
+it follows that each repo across **C** will vary .  If part of the network is recovering from a partition, it becomes more possible for two members to author entries that 
+- Examples:
+    - **e<sub>0</sub>**
+
+**𝓡<sub>i</sub>**  across **C** can be in vario states
+
+
+- IF the entry 
+- If the entries are in separate channels
+- Ambiguous conflicts can _also_ be adversary-induced, so we must analyze. 
+    - The obvious objective for an adversary to induce ambiguous conflicts would be to disrupt **C** by crafting entries designed to invalidate "high value" root entries that would cause a cascade of entry invalidations to occur.  For example, suppose member **m** is granted the permission level of supermoderator in an ACC used for 
+    
+    posting an entry into a high-level ACC used across **C** dated a year ago causing 
+
+two or more entries having "equal authority" conflict in that if they are live, then there is an inconsistency and/or contradiction.  
+    - When two entries are back with "equal authority", the permissions levels 
+- To unpack this, we consider two categories of ambiguous conflicts:
+   - **Natural**, where network latency between the nodes of **C** resulted in a situation where two separate nodes authored entries 
+   
+   what is mildly similar to a race condition.
+        - While each entry will have a globally-known author timestamp, they could arrive at a node in any order and with any delay.  
+        - While there are an exponential number of permutations for how 
+        
+         permutations of the order entries arrive, however, seldom result in an ambiguous conflict since:
+            - the entries are 
+     However, in this case, each entry will me timestamped 
+
+
+       - In this case, we assume the intention and timestamp on the entries are accurate and well intentioned. 
+   - Adversary-Induced
+       - In this case, w
+
+- The consensus properties of **C** are effectively called into action here.  By default, entries in conflict with each other are each given a score based on the seniority of each member and the time delta of the entries.  There is either deterministic "winner" or "tie". In a tie, both entries in conflict are nullified.  
+    - Implementation note: nullified entries, although effectively rejected, remain 
+    - and that occur within a given time window are rejected.  
+- In accessing ambiguous conflict resolution, we separate them into to categories:
+   - Legitimate/Natural
+       - In this case, we assume the intention and timestamp on the entries are accurate and well intentioned. 
+   - Adversary-Induced
+       - In this case, we assume one or more of the entries in conflict have forged `TimeAuthored` and have maliciously intentions.
+- Ideally, we want to devise a resolution scheme that produces the most fair and reasonable outcomes for natural conflicts but is resilient against adversary-induced conflicts. 
+    
+
+
 
 
 - **m** uses a client that connects with a trusted community node (meaning a node that **m** trusts with the community keyring). 
