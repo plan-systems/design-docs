@@ -385,7 +385,6 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 
 #### Adding A New Member
-
 - Given: the permissions/prerequisites on **C** are met to bestow member status to actor **α**:
     1. A designated authority of **C** generates and posts a special `MemberEpoch`, **𝓔<sub>α0</sub>**, in the [Member Epoch Channel](#Member-Epoch-Channel), containing:
         - a newly generated `MemberID` for **α**.
@@ -424,7 +423,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 - As node **n<sub>i</sub>** processes an incoming entry **e** to be merged with **𝓡<sub>i</sub>**:
     - If **e** satisfies _all channel properties and parent ACC permissions_, then **e** is placed into "live" status.
     - Otherwise, if for whatever reason **e** cannot complete validation (or **e** depends on an unresolved [ambiguous conflict](#Ambiguous-conflict-resolution)), then **e** is placed into "deferred" status.
-        - Node **n<sub>i</sub>** will periodically reattempt to validate **e** as subsequent entries mutate **𝓡<sub>i</sub>** and as any conflicts resolve.  
+        - Node **n<sub>i</sub>** periodically reattempts to validate **e** as other entries go live on **𝓡<sub>i</sub>**.  
         - Unless **e** was crafted with malicious intent, it would be unexpected for **e** to remain indefinitely deferred.
 - For each new entry **e** arriving from **𝓛<sub>C</sub>** (or is locally authored and also submitted to **𝓛<sub>C</sub>**):
     1. Authenticate **e**:
@@ -479,8 +478,13 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 ## Liveness versus Safety
 
-"[Liveness](https://en.wikipedia.org/wiki/Liveness) versus [safety](https://en.wikipedia.org/wiki/Safety_property)" refers to canonical tradeoffs when implementing a distributed system.  Here, it refers to the tradeoffs that a given **𝓛<sub>C</sub>** implementation has codified:
+"[Liveness](https://en.wikipedia.org/wiki/Liveness) versus [safety](https://en.wikipedia.org/wiki/Safety_property)" refers to canonical tradeoffs made in the design of a distributed system.  In this context, it refers to the tradeoffs that a given **𝓛<sub>C</sub>** implementation codifies:
 
+- If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
+    1. **Δ<sub>C</sub>** will reflect network latency and topology
+    2. [Channel Entry Validation](#Channel-Entry-Validation) could potentially encounter an important but late-arriving entry, triggering a cascade of entry revalidation.
+    3. The nodes of **C** are "offline-first" and can operate in "cells" depending on network connectivity.  
+        - As partitions rejoin after some time and synchronize, each **𝓡<sub>i</sub>** will receive new batches of old transactions (from other partitions).
 - If **𝓛<sub>C</sub>** favors _safety over liveness_ (such as a central server, [EOS](https://eos.io/), [DFINITY](https://dfinity.org/), [Hashgraph](https://www.hedera.com/)), then **𝓛<sub>C</sub>** by definition integrates a consensus mechanism that enforces a trailing timestamp boundary ("**t<sub>b</sub>**") for transactions.  This implies:
     1. **Δ<sub>C</sub>** will be helpfully low (e.g. 10 seconds)
     2. [Channel Entry Validation](#Channel-Entry-Validation) can finalize choices older than **t<sub>b</sub>** since later-arriving entries are not possible.
@@ -488,18 +492,12 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     3. However, the nodes of **C** _require central network connectivity_ in order to operate.  If a set of nodes partition from the central network:
         - their **𝓛<sub>C</sub>** nodes will _**halt**, even though the nodes still have connectivity with each other_, and
         - their **𝓛<sub>C</sub>** nodes will _only resume_ if/when the partition rejoins the central network.
-- If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
-    1. **Δ<sub>C</sub>** will reflect network latency and topology
-    2. [Channel Entry Validation](#Channel-Entry-Validation) could potentially encounter a late-arriving entry triggering a cascade of entry revalidation.
-    3. However, the nodes of **C** are "offline-first" and can operate in "cells" depending on network connectivity.  
-        - As partitions rejoin after some time and synchronize, each **𝓡<sub>i</sub>** will receive new batches of old transactions (from other partitions).
-
 
 ---
 
 ## Proof of Requirements & Claims
 
-_Each item here corresponds to each item in the [Specifications & Requirements](#Specifications-&-Requirements) section_.
+_Each item below corresponds to each item in the [Specifications & Requirements](#Specifications-&-Requirements) section_.
 
 
 #### Proof of Signal Opacity
@@ -507,10 +505,10 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 [Signal Opacity](#signal-opacity) asserts that outside actors can't infer material information by analyzing community message traffic.
 
 - Given that (a) all community channel entries reside within transactions stored on **𝓛<sub>C</sub>**, _and_ (b) transactions are considered to be "in the clear":
-    - What information is available or otherwise discernible to non-members of **C**?
+    - What information is discernible to actors outside of **C**?
 - Let **α** be an actor that is _not_ a member of **C**, implying that **α** does not possess the latest community keys.  
-    - ⇒ the _only_ information directly available to **α** is the `UUID` of the key used to encrypt each `EntryCrypt` stored on **𝓛<sub>C</sub>**.
-        1. ⇒ information opacity is maximized in that all other information resides within an entry's `HeaderCrypt` and `ContentCrypt`.
+    - ⇒ the _only_ information directly available to **α** is the `UUID` of the encryption key used for each `EntryCrypt` on **𝓛<sub>C</sub>**.
+        1. ⇒ information opacity is maximized since all other information resides within `HeaderCrypt` and `ContentCrypt`.
             - Adversaries snooping **𝓛<sub>C</sub>** can only discern _when_ a new community security epoch began (by noting the appearance of a new community key `UUID`).  However, this is weak information since such an event could correspond to any number of circumstances.
         2. ⇒ _only_ members of **C** effectively have read-access to **C**'s content and member activity.
     - If **α** is a former member of **C**, then **α**'s access is limited to read-only up to when  **α** was [deactivated](#deactivating-A-Member) (when the [new community epoch was issued](#issuing-a-new-Community-Epoch) as part of deactivating a member).
@@ -532,7 +530,7 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
         3. **Channel Entry Validation**, referring to "deep" validation of entries arriving from **𝓛<sub>C</sub>**.  Part of this flow is verifying that:
             - the signature contained in a given `EntryCrypt` is a valid signature from the member `UUID` borne by its `EntryHeader`, _and_
             - the member is a valid/current member of **C** (based on **𝓡<sub>i</sub>**'s [Member Epoch Channel](#Member-Epoch-Channel)).
-    - Given that each member **m** of **C** is in sole possession of their private keys ⇒ _only_ members of **C** can mutate **𝓛<sub>C</sub>** or **𝓡<sub>i</sub>**.
+    - Given that the members of **C** maintain exclusive possession of their private keys, _only_ they can mutate **𝓛<sub>C</sub>** or **𝓡<sub>i</sub>**.
     - In the case where **m**'s private keys are possibly compromised, **m** would immediately initiate a [Member Halt](#member-halt), leaving any actor in possession of **m**'s keys challenged or unable to move past the above layers. 
         - For in-depth security scenario analysis, see [Proof of Practical Security Provisioning](#Proof-of-Practical-Security-Provisioning). 
 
@@ -561,13 +559,13 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
         - What if Alice is granted moderator privileges for channel 𝘾𝒉 at the same moment she is granted a _different_ set of privileges for 𝘾𝒉 by another?  In this and other cases of where there is an "ambiguous conflict", then deterministic [Ambiguous Conflict Resolution](#ambiguous-conflict-resolution) ("ACR") is invoked. 
             - Because ACR must be compatible with [Strong Eventual Consistency](#Strong-Eventual-Consistency) it must be time and state symmetric.  
             - Although natural ambiguous conflicts are rare, it is assumed that an adversary would induce ambiguous conflicts in an attempt to circumvent access controls in **C** (and take this to be the more limiting analysis). 
-            - Let **ψ** represent two or more entries that cross a threshold that places them into "ambiguous conflict" status.
+            - Let **ψ** be two or more entries that cross a threshold that places them into "ambiguous conflict" status.
             - We observe that the scope of possibilities implied by **ψ** grows with the specific scope of the conflict.  
                 - In the above example with Alice, although there is uncertainty around _Alice's permissions in 𝘾𝒉_, there _isn't_ uncertainty around Bob's permissions in 𝘾𝒉 or Alice's permissions in a separate channel. 
                 - Likewise, an ambiguous conflict about Charlie's member status in **C** means there is uncertainty around the liveness of _every entry_ he authored following the the timestamp of the conflict.  This example represents cascading dependencies on **ψ**.
             - ⇒ the superposition of all possible states of **𝓡** _only_ depends on states entangled with **ψ**.
             - We consider adversary **O** in possession of one or more member active private keyrings, wishing to attack **C**.
-                1. **O** could only induce ACR in proportion to the access privileges of the keyrings they control within **C**.
+                1. **O** can only induce ambiguous comflicts commensurate with the access level of the keyrings they control.
                     - For example, if **O** _only_ had basic member permissions within **C**, then **O** _wouldn't even have the potential_ to induce an ambiguous conflict since **O**'s sphere of access control isn't large enough to be in contention with another member. 
                 2. Since ACR is time and state symmetric, **O** is limited to what resembles denial of service.  
                    - Given the vanishingly low probability of repeated naturally occurring ambiguous conflicts, a protective watchdog service in **C** could raise an alert upon clear tripwires, or could auto-initiate a [Member Halt](#member-halt) on the keyring(s) clearly inducing unnatural rates of conflict.           
@@ -579,7 +577,7 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 
 - Every member action (mutation) on **C** is manifested as a channel entry, whether that is a routine content entry or a specially-signed entry in the [Member Epoch Channel](#Member-Epoch-Channel).
     - ⇒ every member interaction (channel entry) is replicated across **𝓛<sub>C</sub>**, an append-only storage layer, and available for review _to all other members of **C**_.
-    - ⇒ any attempt of a member to conceal or rescind a previous entry will not result in the original entry being altered.
+    - ⇒ entries are immutable on **𝓛<sub>C</sub>** and any attempt to conceal or rescind an entry will not alter the original entry.
     - ⇒ all actions in community-public channels, which includes all community administrative [reserved channels](#reserved-channels), are always openly visible for peer review and scrutiny.  
 - In private channels, entry content is encrypted and _only_ members granted access by the channel's owner can read the channel's content.  
     - By default, _not even community admins or authorities_ can gain access private channel content unless they have been granted access.  
@@ -618,8 +616,8 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 1. Scenario: **m** loses/erases all copies of their private keyring ("**[]k<sub>lost</sub>**").
     - A community admin (or delegated member) would use a procedure similar to [adding a new member](#Adding-A-New-Member), resulting in a successor `MemberEpoch` to be issued for **m**.
     - ⇒ **m** would fully retain and resume their identity in **C**, however **m** would lack the private keys needed to access their private channels.
-        - Fortunately, for each private channel **𝘾𝒉<sub>p</sub>** that **m** had access to, **m** would be able to regain access if _at least_ one other member had _at least_ read-access to **𝘾𝒉<sub>p</sub>** (since that would **m** could be petition for the channel's keyring). 
-        - This could be automated and implemented in various ways, but **m** would not regain keys to private channels if the members are no longer active (since their client would be needed to issue entries in response to **m**'s petition).
+        - Fortunately, for each private channel **𝘾𝒉<sub>p</sub>** that **m** had access to, **m** could regain access if _at least_ one other member has _at least_ read-access to **𝘾𝒉<sub>p</sub>** (allowing **m** to successfully petition for the channel's keyring). 
+        - This could be automated and implemented in various ways, but **m** would not regain keys to private channels if the members are no longer active (since their client would need to be active to package keys into an entry in response to **m**'s petition).
     - If **m** were to someday recover **[]k<sub>lost</sub>**, access to past data would be fully restored at no disadvantage.
     - If an adversary were to somehow recover **[]k<sub>lost</sub>** in an _unlocked state_, they would, at most, have read-access up to the time when the new `MemberEpoch` was published.
         - Entries signed by **[]k<sub>lost</sub>** and processed by **𝓡<sub>i</sub>** would be rejected since the `MemberEpoch` associated with the latest private key in **[]k<sub>lost</sub>** would be superseded.
