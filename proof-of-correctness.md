@@ -7,11 +7,6 @@
 P  L  A  N etwork
 ```
 
-## UNDER CONSTRUCTION
-
-Please note that this document is currently **under construction** and is incomplete.  Rough draft is expected by November 9th, 2018.
-
-
 
 ## What is this?
 
@@ -61,7 +56,7 @@ No assumptions are made about network connectivity or reachability in this proof
 - Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.9% chance that all _reachable_ nodes in **C** have received a given replicated transaction over **𝓛<sub>C</sub>**.
 - For example, given a swarm of reachable nodes on a WAN, **Δ<sub>C</sub>** is in the neighborhood of 1-10 minutes, depending on how **𝓛<sub>C</sub>** implements transaction replication (even swarms larger than 10<sup>7</sup>).
 
-Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s overall network properties and behavior. 
+Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s overall network properties and behavior.  [Liveness versus Safety](#liveness-versus-safety) discusses tradeoffs for various choices of **𝓛**.
 
 ---
 
@@ -78,7 +73,11 @@ The members of **C** wish to assert...
 
 #### Permissions Assurance
 - There is a hierarchy of member admin policies and permissions that asserts itself in order to arrive at successive states (and cannot be circumvented).
-- Consider the case where a number of members are (or become) covert adversaries of **C** (or are otherwise coerced).  Even if working in concert, it must still be impossible to: impersonate other members, insert unauthorized permission or privilege changes, gain access to others' private keys or information, or alter **𝓛<sub>C</sub>** in any way that poisons or destroys community content.
+- Even if multiple members are (or become) covert adversaries of **C** or are otherwise coerced, it must still be impossible to: 
+    - impersonate other members, 
+    - insert unauthorized permission or privilege changes, 
+    - gain access to others' private keys or information, or 
+    - alter **𝓛<sub>C</sub>** in any way that poisons or destroys community content.
 
 #### Integrity Assurance
 - The members of **C** are confident and can rest assured that members in positions of authority are:
@@ -93,12 +92,12 @@ The members of **C** wish to assert...
 - For each node **n<sub>i</sub>** in **C**, it's local replica state ("**𝓡<sub>i</sub>**"), converges to a stable/monotonic state as **𝓛<sub>C</sub>** message traffic eventually "catches up", for any set of network traffic delivery conditions (natural or adversarial). That is, **𝓡<sub>1</sub>**...**𝓡<sub>N</sub>** mutate such that strong eventual consistency ("SEC") is guaranteed.  
 
 #### Practical Security Provisioning
-- If/When it is discovered that a member's private keys are known to be either lost or possibly comprised, a [member halt](#member-halt) can be immediately initiated such that any actor in possession of said keys will have no further read or write access to **C**.
-- Actors that can initiate a member halt include:
+- If/When it is discovered that a member's private keys are known to be either lost or possibly comprised, a "[Member Halt](#member-halt)" can be immediately initiated such that any actor in possession of said keys will have no further read or write access to **C**.
+- Actors that can initiate a Member Halt include:
    - the afflicted member, _or_
    - a member peer (depending on community-global settings), _or even_
    - an automated watchdog system on **C** (responding to abnormal or malicious activity)
-- Following a member halt, the afflicted member's security state enters new "epoch" and incurs no additional security liability.  That is, there are no potential "gotchas" sometime down the road if an adversary gains access to previously compromised keys.
+- Following a Member Halt, the afflicted member's security state enters new "epoch" and incurs no additional security liability.  That is, there are no potential "gotchas" sometime down the road if an adversary gains access to previously compromised keys.
 
 #### Independence Assurance
 - In the event that:
@@ -108,8 +107,8 @@ The members of **C** wish to assert...
 - ...then **C** can elect to "hard fork" **𝓛<sub>C</sub>** to an earlier time state, where specified members are struck from the member registry and others are granted admin permission.
 
 #### Storage Portability
-- **C**, led by a coordinated admin effort, always has the ability to swap out CRDT technologies. 
-- For example, **𝓛<sub>C</sub>** may automatically halt under suspicious network conditions or insufficient peer connectivity, but earlier in its history when it had to be more agile, **C** used a CRDT that favored "liveness" over safety).
+- **C**, led by a coordinated admin effort, always has the ability to switch CRDT technologies. 
+- For example, suppose **𝓛<sub>C</sub>** has the safety feature such that it automatically halts under suspicious network conditions or insufficient peer connectivity.  However, earlier in **C**'s history, a CRDT that favored "liveness" over safety was chosen because **C** needed to be agile and often be "offline-first".
 
 
 ---
@@ -122,7 +121,7 @@ The members of **C** present the following system of operation...
 
 - The system embraces a multi-tier security model, where each community member possesses a community-common keyring as well as their private keyring.  In effect, this places the entire system's infrastructure and transaction traffic inside a cryptographic "city wall".
 - The system's data model is IRC-inspired in that member interaction takes the form of data entries written sequentially to channels within the a virtual channel addressing space.  However, instead of channel entries just being rebroadcast to other connected clients (as on an IRC server), entries _persist_ as transactions replicated across **𝓛<sub>C</sub>**.  
-- When a channel is created, it is assigned a protocol descriptor string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them (functionally comparible to MIME types).  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, creates many possibilities for visually-oriented client interfaces.
+- When a channel is created, it is assigned a protocol descriptor string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them (functionally comparable to MIME types).  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, creates many possibilities for visually-oriented client interfaces.
 - Also inspired from IRC, each channel has its own permissions settings. Each channel designates an access control channel ("ACC") to be used as an oracle for channel permissions.  An ACC is a special channel type that additionally conforms to a protocol designed to specify channel permissions. Like other channels, each ACC also designates a parent ACC, and so on, all the way up to **C**'s root-level ACC.  
 - Member, channel, and community security and key distribution uses "epochs" to demarcate security events, in effect furnishing [permissions assurance](#permissions-assurance).
 - In a flow known as [channel entry validation](#channel-entry-validation), each community node ("**n<sub>i</sub>**") iteratively mutates its local replica ("**𝓡<sub>i</sub>**") by attempting to merge newly arriving entries from **𝓛<sub>C</sub>** into **𝓡<sub>i</sub>**.  During validation, if **𝓡<sub>i</sub>** is not yet in a state to fully validate an incoming entry **e**, then **e** is said to be "deferred" for later processing.
@@ -284,15 +283,15 @@ Channels are intended as general-purpose containers for [channel entries](#chann
         ```
 - Each entry is this channel embeds a `MemberEpoch`, **𝓔**, and is only considered valid if:
     - the member who signed the entry matches the `MemberID` that appears in **𝓔** (or is an authorized member delegated to do so), _and_
-    - the predecessor ("parent") epoch of **𝓔** is eligible to be succeeded.
+    - the predecessor ("parent") epoch of **𝓔** is eligible to be supersede.
 - `MemberEpoch` importantly publishes a member's public keys to the rest of the community, allowing each node in **C** to maintain a database used to:
     - authenticate signatures on each `EntryCrypt`
     - encrypt entry content exclusively for a given member (used for key distribution)
 - Only a community admin (or certified delegate) is permitted to post a `MemberEpoch` for members _other than themselves_. This provides the means for:
     - [adding new members](#Adding-A-New-Member) to **C**,
     - [deactivating members](#deactivating-A-Member) from **C**, _and_
-    - restoring a member's access to **C** following a [member halt](#member-halt).
-- When a [member halt](#member-halt) has been issued on **m**, an special `MemberEpoch` entry is posted to this channel.
+    - restoring a member's access to **C** following a [Member Halt](#member-halt).
+- When a [Member Halt](#member-halt) has been issued on **m**, an special `MemberEpoch` entry is posted to this channel.
     - Once this entry is live on **𝓡<sub>i</sub>**, all subsequent entries with **m**'s signature are deferred during [channel entry validation](#Channel-Entry-Validation).
     - When the cause for concern is addressed, a community authority [issues a new member epoch](#Issuing-a-New-member-Epoch) for **m**.
 
@@ -324,14 +323,14 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     - As **e<sub>𝓔′</sub>** propagates across **𝓛<sub>C</sub>** (and goes live on **𝓡<sub>i</sub>**):
         - [Channel entry validation](#Channel-Entry-Validation) now requires that entries authored by **m** must use the newly published signing key.
         - Other member clients intending to securely pass keys or content to **m** would use **m**'s updated public encryption key.
-- If a [member halt](#member-halt) has been ordered on **m**, then admin (or community authority) intervention is required before **m** is permitted to post a new `MemberEpoch`.
+- If a [Member Halt](#member-halt) has been ordered on **m**, then admin (or community authority) intervention is required before **m** is permitted to post a new `MemberEpoch`.
 
 
 #### Issuing a New Community Epoch
-- Given: an admin, delegated member, or an automated agent wants to issue a new/replacement community key and deprecate the previously issued communuty key.
-- The purpose of starting this new "community epoch" is so that an actor in possession of the community keyring ("**[]k<sub>C</sub>**") will no longer be able to decrypt community-public data on **C** _unless they are currently a member of **C**_.  This typically applies after a [member halt](#member-halt) or after [deactivating a member](#deactivating-A-member) since it's important that the currently active community key (and an actor in possession of it) is longer used to encrypted community traffic.  
+- Given: an admin, delegated member, or an automated agent wants to issue a new/replacement community key and deprecate the previously issued community key.
+- The purpose of starting this new "community epoch" is so that an actor in possession of the community keyring ("**[]k<sub>C</sub>**") will no longer be able to decrypt community-public data on **C** _unless they are currently a member of **C**_.  This typically applies after a [Member Halt](#member-halt) or after [deactivating a member](#deactivating-A-member) since it's important that the currently active community key (and an actor in possession of it) is longer used to encrypted community traffic.  
 - As the newly posted community key epoch goes live across the nodes of **C**, all new `EntryCrypt` on **𝓛<sub>C</sub>** are encrypted using it. 
-- The admin or permissioned member or agent does the following:
+- A community authority or agent does the following:
     1. Generates a new symmetrical key to serve as the next community key ("**k<sub>C</sub>**").
     2. Prepares a new entry containing an `EpochInfo` ("**𝓔<sub>C</sub>**").
     3. For each open/active `MemberEpoch` ("**𝓔<sub>m</sub>**") in the [Member Epoch Channel](#Member-Epoch-Channel) (for each member  **m** in **C**):
@@ -357,7 +356,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 #### Member Halt
 - Given: member **m** (or their private keyring) is potentially under the control or influence of an another.
-- A "member halt" refers to an automated sequence of actions performed on **m**'s behalf once it's believed that their personal keyring ("**[]k<sub>m</sub>**") is under the influence of another.  
+- A "Member Halt" refers to an automated sequence of actions performed on **m**'s behalf once it's believed that their personal keyring ("**[]k<sub>m</sub>**") is under the influence of another.  
 - The conditions/requisites needed in order to initiate a Member Halt on another's behalf can be arbitrarily based on security needs and situational circumstances.  
 - A Member Halt on **m** could be initiated by:
     - **m**, upon discovering that another actor has gained access to **[]k<sub>m</sub>**, _or_
@@ -377,7 +376,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 
 #### Member Halt Recovery
-- Given: a [member halt](#member-halt) was issued on **m**.
+- Given: a [Member Halt](#member-halt) was issued on **m**.
 - Some time later, admin(s) or delegated members can review the situation:
     - When appropriate, **m**'s access is restored and new keys issued using a variant of [adding a new member](#Adding-A-New-Member).
     - In the case that an adversary in possession of **[]k<sub>m</sub>** transfers their postage (their privileges on **𝓛<sub>C</sub>**) to another identity _before_ a Member Halt is issued on **m**, entries using postage from the illicit postage could be identified and rejected.
@@ -473,10 +472,27 @@ Channels are intended as general-purpose containers for [channel entries](#chann
                 - For example, compare the number of ACL-related files stored on a conventional workstation to the _total_ number of files.
                 - Only ACCs tend to have dependent channels.
             - Mutations to a channel occur close to the present time, so only O(1) of all entry history typically needs to be revalidated.
+            - If **𝓛<sub>C</sub>** favors safety over liveness, then there a highly limting trailing time boundary for how "late" an entry can arrive (e.g. 10 seconds).  
         - Revalidation can also be strategically managed, where multiple ACC mutations are scheduled such that only a single revalidation pass is needed.
 
 
 
+## Liveness versus Safety
+
+"[Liveness](https://en.wikipedia.org/wiki/Liveness) versus [safety](https://en.wikipedia.org/wiki/Safety_property)" refers to canonical tradeoffs when implementing a distributed system.  Here, it refers to the tradeoffs that a given **𝓛<sub>C</sub>** implementation has codified:
+
+- If **𝓛<sub>C</sub>** favors _safety over liveness_ (such as a central server, [EOS](https://eos.io/), [DFINITY](https://dfinity.org/), [Hashgraph](https://www.hedera.com/)), then **𝓛<sub>C</sub>** by definition integrates a consensus mechanism that enforces a trailing timestamp boundary ("**t<sub>b</sub>**") for transactions.  This implies:
+    1. **Δ<sub>C</sub>** will be helpfully low (e.g. 10 seconds)
+    2. [Channel Entry Validation](#Channel-Entry-Validation) can finalize choices older than **t<sub>b</sub>** since later-arriving entries are not possible.
+        - Also, the probability of an entry entering into a state of ambiguous conflict collapses to zero past **t<sub>b</sub>**.
+    3. However, the nodes of **C** _require central network connectivity_ in order to operate.  If a set of nodes partition from the central network:
+        - their **𝓛<sub>C</sub>** nodes will _**halt**, even though the nodes still have connectivity with each other_, and
+        - their **𝓛<sub>C</sub>** nodes will _only resume_ if/when the partition rejoins the central network.
+- If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
+    1. **Δ<sub>C</sub>** will reflect network latency and topology
+    2. [Channel Entry Validation](#Channel-Entry-Validation) could potentially encounter a late-arriving entry triggering a cascade of entry revalidation.
+    3. However, the nodes of **C** are "offline-first" and can operate in "cells" depending on network connectivity.  
+        - As partitions rejoin after some time and synchronize, each **𝓡<sub>i</sub>** will receive new batches of old transactions (from other partitions).
 
 
 ---
@@ -487,6 +503,8 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 
 
 #### Proof of Signal Opacity
+
+[Signal Opacity](#signal-opacity) asserts that outside actors can't infer material information by analyzing community message traffic.
 
 - Given that (a) all community channel entries reside within transactions stored on **𝓛<sub>C</sub>**, _and_ (b) transactions are considered to be "in the clear":
     - What information is available or otherwise discernible to non-members of **C**?
@@ -499,6 +517,8 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 
 
 #### Proof of Access Exclusivity
+
+[Access Exclusivity](#Access-Exclusivity) asserts that only members of **C** can read and write to the shared data store.
 
 - _Read-Access Exclusivity_
     - Only an actor is possession of the community keyring ("**[]k<sub>C</sub>**") has the ability to read community-public content residing on **𝓛<sub>C</sub>**.  See [Proof of Signal Opacity](#proof-of-signal-opacity).
@@ -513,10 +533,12 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
             - the signature contained in a given `EntryCrypt` is a valid signature from the member `UUID` borne by its `EntryHeader`, _and_
             - the member is a valid/current member of **C** (based on **𝓡<sub>i</sub>**'s [Member Epoch Channel](#Member-Epoch-Channel)).
     - Given that each member **m** of **C** is in sole possession of their private keys ⇒ _only_ members of **C** can mutate **𝓛<sub>C</sub>** or **𝓡<sub>i</sub>**.
-    - In the case where **m**'s private keys are possibly compromised, **m** would immediately initiate a [member halt](#member-halt), leaving any actor in possession of **m**'s keys challenged or unable to move past the above layers. 
+    - In the case where **m**'s private keys are possibly compromised, **m** would immediately initiate a [Member Halt](#member-halt), leaving any actor in possession of **m**'s keys challenged or unable to move past the above layers. 
         - For in-depth security scenario analysis, see [Proof of Practical Security Provisioning](#Proof-of-Practical-Security-Provisioning). 
 
 #### Proof of Permissions Assurance
+
+[Permissions Assurance](#Permissions-Assurance) asserts the access controls on **C** remain in effect and cannot be circumvented.
 
 - In order for an entry to be "live" in a node's repo ("**𝓡<sub>i</sub>**"), it must repeatedly survive [Channel Entry Validation](#Channel-Entry-Validation).  
     - ⇒ each successive state of **𝓡<sub>i</sub>** is, exclusively, an authorized mutation from its previous state.  
@@ -527,40 +549,41 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
  - So then, could the _reordering, blocking, or withholding_ ("withholding") of entries from **𝓛<sub>C</sub>** cause **𝓡<sub>i</sub>** to pass through a state such that access controls or grants established by members of **C** could be circumvented or exploited?  We separate the possibilities into two categories:
     1. **Unauthorized key, channel, or content access**
         - These scenarios are characterized by gaining unauthorized access to a privileged key that in turn allows read access to restricted content within **𝓡<sub>i</sub>**.
-        - Since any withholding of entries can't result in the _additional_  generation/grant of permissions, the remaining possibility is that withholding entries somehow result in  **𝓡<sub>i</sub>** not mutating such that privileged data somehow remains accessible. This is a legitimate concern, however, [Channel Entry Validation](#Channel-Entry-Validation) requires that any mutation that is access-restrictive in nature must also [issue a new channel security epoch](#issuing-a-new-Channel-Epoch).  In this process flow, _only_ members with access privileges are (securely) issued the newly generated private channel key.   Similarly, this is why a [new community epoch is issued](#Issuing-a-New-Community-Epoch) when a member is [deactivated](#deactivating-A-Member) or a [member halt](#Member-halt) is issued (but not when a [new member is added](#adding-a-new-member)).
+        - Since any withholding of entries can't result in the _additional_  generation/grant of permissions, the remaining possibility is that withholding entries somehow result in  **𝓡<sub>i</sub>** not mutating such that privileged data somehow remains accessible. This is a legitimate concern, however, [Channel Entry Validation](#Channel-Entry-Validation) requires that any mutation that is access-restrictive in nature must also [issue a new channel security epoch](#issuing-a-new-Channel-Epoch).  In this process flow, _only_ members with access privileges are (securely) issued the newly generated private channel key.   Similarly, this is why a [new community epoch is issued](#Issuing-a-New-Community-Epoch) when a member is [deactivated](#deactivating-A-Member) or a [Member Halt](#Member-halt) is issued (but not when a [new member is added](#adding-a-new-member)).
         - ⇒ In the case where entries are _withheld_ from **n<sub>i</sub>**, there is no possibility that subsequent entries could reveal restricted material since new peer entries would be encrypted with a newly issued member, channel or community key (after **Δ<sub>C</sub>**) .
     2. **Circumventing access controls**
-        - These scenarios are characterized by posting malicously architected channel entries on **C** intended to circumvent access controls.
+        - These scenarios are characterized by posting maliciously architected channel entries on **C** intended to circumvent access controls.
         - Given [Proof of Access Exclusivity](#Proof-of-Access-Exclusivity), we know that in order for **𝓡<sub>i</sub>** to be mutated (or maliciously manipulated), the perpetrating actor must possess _both_ an active member and community keyring.    
             - ⇒ this would start with **m** (or an adversary covertly in possession of **m**'s keys) authoring and submitting said entries in an attempt to somehow sidestep an aspect of the system's channel permissions enforcement.   How could an entry go live across **C** whose parent ACC denies access?  [Channel Entry Validation](#Channel-Entry-Validation)'s primary purpose is to _ensure that **only** entries that validate under the parent channel's ACC are placed into "live" status_.
-        - What if **m** (or an adversary in possession of **m**'s keys) "hotwires" their node or manually crafts an entry to perform an operation not allowed by **m**?  
-            - Athough **m** would be able to submit doctored entries to **𝓛<sub>C</sub>**, [Channel Entry Validation](#Channel-Entry-Validation) running on _every other_ community node would see that **m** does not have the required privileges and would indefinitely defer (reject) the entry.   
-            - This is analogous to submitting a transaction on the global Bitcoin or Ethereum blockchain that transfers coinage from an ID that does ont have sufficient funds — the transaction will never validate. 
-        - What if Alice is granted moderator priviledes for channel 𝘾𝒉 at the same moment she is granted a _different_ set of priviledes for 𝘾𝒉 by another?  In this and other cases of where there is an "ambiguous conflict", then deterministic [Ambiguous Conflict Resolution](#ambiguous-conflict-resolution) ("ACR") is invoked. 
+        - What if **m** (or an adversary in possession of **m**'s keys) "hot-wires" their node or manually crafts an entry to perform an operation not allowed by **m**?  
+            - Although **m** would be able to submit doctored entries to **𝓛<sub>C</sub>**, [Channel Entry Validation](#Channel-Entry-Validation) running on _every other_ community node would see that **m** does not have the required privileges and would indefinitely defer (reject) the entry.   
+            - This is analogous to submitting a transaction on the global Bitcoin or Ethereum blockchain that transfers coinage from an ID that does not have sufficient funds — the transaction will never validate. 
+        - What if Alice is granted moderator privileges for channel 𝘾𝒉 at the same moment she is granted a _different_ set of privileges for 𝘾𝒉 by another?  In this and other cases of where there is an "ambiguous conflict", then deterministic [Ambiguous Conflict Resolution](#ambiguous-conflict-resolution) ("ACR") is invoked. 
             - Because ACR must be compatible with [Strong Eventual Consistency](#Strong-Eventual-Consistency) it must be time and state symmetric.  
             - Although natural ambiguous conflicts are rare, it is assumed that an adversary would induce ambiguous conflicts in an attempt to circumvent access controls in **C** (and take this to be the more limiting analysis). 
             - Let **ψ** represent two or more entries that cross a threshold that places them into "ambiguous conflict" status.
-            - We observe that the scope of possibilties implied by **ψ** grows with the specific scope of the conflict.  
+            - We observe that the scope of possibilities implied by **ψ** grows with the specific scope of the conflict.  
                 - In the above example with Alice, although there is uncertainty around _Alice's permissions in 𝘾𝒉_, there _isn't_ uncertainty around Bob's permissions in 𝘾𝒉 or Alice's permissions in a separate channel. 
-                - Likewise, an ambigous conflict about Charlie's member status in **C** means there is uncertainty around the liveness of _every entry_ he authored following the the timestamp of the conflict.  This example represents cascading dependencies on **ψ**.
+                - Likewise, an ambiguous conflict about Charlie's member status in **C** means there is uncertainty around the liveness of _every entry_ he authored following the the timestamp of the conflict.  This example represents cascading dependencies on **ψ**.
             - ⇒ the superposition of all possible states of **𝓡** _only_ depends on states entangled with **ψ**.
             - We consider adversary **O** in possession of one or more member active private keyrings, wishing to attack **C**.
-                1. **O** could only induce ACR in proportion to the access priviledges of the keyrings they control within **C**.
+                1. **O** could only induce ACR in proportion to the access privileges of the keyrings they control within **C**.
                     - For example, if **O** _only_ had basic member permissions within **C**, then **O** _wouldn't even have the potential_ to induce an ambiguous conflict since **O**'s sphere of access control isn't large enough to be in contention with another member. 
                 2. Since ACR is time and state symmetric, **O** is limited to what resembles denial of service.  
-                   - Given the vanishingly low probability of repeated naturally occurring ambiguous conflicts, a protective watchdog service in **C** could raise an alert upon clear tripwires, or could auto-initiate a [member halt](#member-halt) on the keyring(s) clearly inducing unnatural rates of conflict.           
+                   - Given the vanishingly low probability of repeated naturally occurring ambiguous conflicts, a protective watchdog service in **C** could raise an alert upon clear tripwires, or could auto-initiate a [Member Halt](#member-halt) on the keyring(s) clearly inducing unnatural rates of conflict.           
             
 
 #### Proof of Integrity Assurance
 
-[Integrity Assurance](#Integrity-Assurance) specifies that members in positions of authority are accountable and remain bound to community policies and expectations.
+[Integrity Assurance](#Integrity-Assurance) asserts that members in positions of authority are accountable and remain bound to community policies and expectations.
+
 - Every member action (mutation) on **C** is manifested as a channel entry, whether that is a routine content entry or a specially-signed entry in the [Member Epoch Channel](#Member-Epoch-Channel).
     - ⇒ every member interaction (channel entry) is replicated across **𝓛<sub>C</sub>**, an append-only storage layer, and available for review _to all other members of **C**_.
     - ⇒ any attempt of a member to conceal or rescind a previous entry will not result in the original entry being altered.
     - ⇒ all actions in community-public channels, which includes all community administrative [reserved channels](#reserved-channels), are always openly visible for peer review and scrutiny.  
 - In private channels, entry content is encrypted and _only_ members granted access by the channel's owner can read the channel's content.  
     - By default, _not even community admins or authorities_ can gain access private channel content unless they have been granted access.  
-    - Although the actions of a member in private channel **𝘾𝒉<sub>p</sub>** cannot be witnessed or reviewed by memebers outside of that channel, _any participant_ of **𝘾𝒉<sub>p</sub>** could be pressured by community authorities to turn over the channel's keyring (or face [deactivation](#deactivating-a-member]) or social/legal repercussions).
+    - Although the actions of a member in private channel **𝘾𝒉<sub>p</sub>** cannot be witnessed or reviewed by members outside of that channel, _any participant_ of **𝘾𝒉<sub>p</sub>** could be pressured by community authorities to turn over the channel's keyring (or face [deactivation](#deactivating-a-member]) or social/legal repercussions).
     - Community authorities are free to make use of private channels (just like other community members), but any action affecting reserved or community-public channels would be publicly available information and would be part of the permanent record that is **𝓛<sub>C</sub>**.
 - Important channels, such as [reserved channels](#reserved-channels) or channels used to conduct community governance, could harness the dependable and predictable nature of "smart contracts" on **𝓛<sub>C</sub>**.  For example:
     - **C** has a _special_ community admin account capable of executing community propositions.  This virtual agent (and its private keys) are wired into a smart contract on **𝓛<sub>C</sub>** such that ⅔ of **C**'s "council" members are needed to sign a proposition before the contract's "threshold" signature triggers the proposition to be executed with admin permissions.
@@ -569,54 +592,73 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 
 #### Proof of Membership Fluidity
 
-- Both [adding a new member](#adding-A-New-Member) and [deactivating a member](#deactivating-a-member) are implemented using standard entries in **C**'s channel system and undergo [Channel Entry Validation](#Channel-Entry-Validation) like all other standard entries _in addition to further checks and restrictions_.
-- This implies that all the properties, assurances, and protection afforded by Channel Entry Validation extend to all aspects of membership fluidity.  This is to say that membership fluidity is a specialized form of [Permissions Assurance](#Permissions-Assurance) and so is thus addressed in [Proof of Permissions Assurance](#Proof-of-Permissions-Assurance).
+[Membership Fluidity](#Membership-Fluidity) asserts that members can be added and deactivated at any time.
+
+- Both [Adding a New Member](#adding-A-New-Member) and [Deactivating a Member](#deactivating-a-member) procedures are implemented using standard entries in **C**'s channel system.  These entries, like all other channel entries, undergo [Channel Entry Validation](#Channel-Entry-Validation) plus _additional_ checks and restrictions.
+    - ⇒ Membership Fluidity is just a specific form of [Permissions Assurance](#Permissions-Assurance) and is thus addressed in [Proof of Permissions Assurance](#Proof-of-Permissions-Assurance).
+    - ⇒ all the properties, assurances, and protection afforded by Channel Entry Validation extends to the ability for community authorities to add and deactivate members.
 
 
 #### Proof of Strong Eventual Consistency
 
-- For each node **n<sub>i</sub>** in **C**, it's local replica state ("**𝓡<sub>i</sub>**") at a given moment in time is dependent on:
-    - The set and order of entries that have arrived from **𝓛<sub>C</sub>**
-    - The set and order of entries that have been authored locally (and have then been submitted to **𝓛<sub>C</sub>**)
-    - [Channel Entry Validation](#Channel-Entry-Validation) continuously occurring on **n<sub>i</sub>** (and presumed to be running on other nodes of **C**). 
-- Natural or adversarial network conditions could effectively cause entries to and from **𝓛<sub>C</sub>** to be delayed (or withheld). However, given sufficient time and network connectivity, when _all_ of replicated entries across **𝓛<sub>C</sub>** _eventually_ arrive at **n<sub>1</sub>**...**n<sub>N</sub>**, are **𝓡<sub>1</sub>**...**𝓡<sub>N</sub>** each in an equivalent ("consistent") state?  
-- In short, we start with this systems's [Proof of Permissions Assurance](#proof-of-Permissions-Assurance) and then demonstrate that it is commutative, implying that the eventual state of **𝓡<sub>i</sub>** is _independent_ of the order of arrival of entries from **𝓛<sub>C</sub>**.
-- It should be noted that if **𝓛<sub>C</sub>** favors safety over liveness (e.g. DFINITY, Hashgraph), then there is ceiling time window for transactions to clear.  This implies there is a ceiling to the superposition of possible states of any given **𝓡<sub>i</sub>**.  In other words, after a known time period, **𝓡<sub>i</sub>** can rule out any late-arriving entries.  
+[Strong Eventual Consistency](#Strong-Eventual-Consistency) asserts that community replicas eventually arrive at the same state and are independent of network delivery.
+
+- For each node **n<sub>i</sub>** in **C**, it's local replica state ("**𝓡<sub>i</sub>**") at a given time is dependent on:
+    - The set and order of entries that have arrived from **𝓛<sub>C</sub>** and have been authored locally.
+    - [Channel Entry Validation](#Channel-Entry-Validation) reviewing newly arrived entries and entries previously deferred.
+- Given that natural or adversarial network conditions could cause entries to and from **𝓛<sub>C</sub>** to be delayed or withheld:
+    - Once _all_ entries replicated across **𝓛<sub>C</sub>** _eventually_ arrive at **n<sub>1</sub>**...**n<sub>N</sub>**, are **𝓡<sub>1</sub>**...**𝓡<sub>N</sub>** _each_ in an equivalent ("consistent") state?  
+- This system's [Proof of Permissions Assurance](#proof-of-Permissions-Assurance) implies that the eventual state of **𝓡<sub>i</sub>** is _independent_ of the order of arrival of entries from **𝓛<sub>C</sub>**.
 
 
 #### Proof of Practical Security Provisioning
 
-- Given member **m** in **C**, we wish to show that this system provisions for even the worst security scenarios: 
-    1. Scenario: **m** loses/erases all copies of their private keyring ("**[]k<sub>lost</sub>**").
-        - A community admin (or delegated member) would use a procedure similar to [adding a new member](#Adding-A-New-Member), resulting in a successor `MemberEpoch` to be issued for **m**.
-        - Even if an adversary were to recover _and_ extract keys from a locked **[]k<sub>lost</sub>**, they would, at most, have read-access up to when the new `MemberEpoch` was published.
-        - Although **m** would importantly be able to retain and resume their identity within **C**, **m** would be unable to decrypt some entries from the past (since **m**'s new keyring would lack the keys).
-        - Fortunately, for each private channel **𝘾𝒉<sub>p</sub>** that **m** had belonged to, **m** would be able to regain access if _at least_ one other member had _at least_ read-access to **𝘾𝒉<sub>p</sub>** (since that would **m** could be petition for the channel's keyring). 
-        - If **m** every recovers **[]k<sub>lost</sub>**, access to past data would be restored with no additional action. 
-    2. Scenario: an adversary ("**O**") gains access to **m**'s private keyrings ("**[]k<sub>m</sub>**") through deception, coercion, or covert access to **m**'s client device.
-        - **O** would naturally be able to:
-            - read community-public data on **C**
-            - author entries impersonating **m**
-            - read content intended to be private for **m**
-        - When **m**, a peer of **m**, an admin, or an automated notices something is amiss, they would initiate a [member halt](#member-halt) on **m**, resulting in:
-            - **O** losing append/post access to **C** (twofold: no postage _and_ **m**'s `MemberEpoch` suspended), _and_
-            - **O** losing further read access to **𝓛<sub>C</sub>** once a new community epoch is issued.
-        - In the case that **O** [issues a new member epoch](#issuing-a-new-Member-Epoch) (as **m**) _before_ a member halt is issued:
-            - **m** would _still_ be able to issue a [member halt](#member-halt), _and_
-            - an admin of **C**, in communication with **m**, would later rescind any entries in the [Member Epoch Channel](#member-epoch-channel) not authored by **m**.
-    3. Scenario: admin ("**O**") on **C** covertly wishes to snoop on **m**.
-        - At no point would **O** ever have access to **[]k<sub>m</sub>** since it never leaves **m**'s local client space (in any form).  This implies that **O** has _no_ ability to gain access to content encrypted for **m** _or_  the keys to any private channels that **m** has access to.  
-        - In the event an admin posts a new `MemberEpoch` for **m** without permission, **m** would immediately be aware since **m**'s client would see the epoch issued (but not have the keys).   Note that hijacking another's identity as in this case would not allow the perpetrator to gain access to any of **m**'s private data since only **m** has possession of **[]k<sub>m</sub>**.
-        Note that the given adversary would only have access to community public data (with **[]k<sub>C</sub>**) and **m**'s particular data
+[Practical Security Provisioning](#Practical-Security-Provisioning) refers a system's inherent ability to address real-world security incidents.  Given member **m** in **C**, this system provisions for even the worst security scenarios: 
 
-    4. Scenario: multiple adversaries infiltrate **C** 
-        - Plan A: denial of service by abusing [member halt](#member-halt)
-            - Since a member halt only suspends a member's access to **C**, its liability (as a mechanism) is limited to a one-time denial of service.    
-            - An adversarial member halt could be easily undone by an admin, and the offending member's integrity would immediately move under a spotlight.  
-            - Limitations could be added to the [member halt procedure](#member-halt) that would guard against adversarial behavior (e.g. a member is limited to ordering one halt per day).
+1. Scenario: **m** loses/erases all copies of their private keyring ("**[]k<sub>lost</sub>**").
+    - A community admin (or delegated member) would use a procedure similar to [adding a new member](#Adding-A-New-Member), resulting in a successor `MemberEpoch` to be issued for **m**.
+    - ⇒ **m** would fully retain and resume their identity in **C**, however **m** would lack the private keys needed to access their private channels.
+        - Fortunately, for each private channel **𝘾𝒉<sub>p</sub>** that **m** had access to, **m** would be able to regain access if _at least_ one other member had _at least_ read-access to **𝘾𝒉<sub>p</sub>** (since that would **m** could be petition for the channel's keyring). 
+        - This could be automated and implemented in various ways, but **m** would not regain keys to private channels if the members are no longer active (since their client would be needed to issue entries in response to **m**'s petition).
+    - If **m** were to someday recover **[]k<sub>lost</sub>**, access to past data would be fully restored at no disadvantage.
+    - If an adversary were to somehow recover **[]k<sub>lost</sub>** in an _unlocked state_, they would, at most, have read-access up to the time when the new `MemberEpoch` was published.
+        - Entries signed by **[]k<sub>lost</sub>** and processed by **𝓡<sub>i</sub>** would be rejected since the `MemberEpoch` associated with the latest private key in **[]k<sub>lost</sub>** would be superseded.
+2. Scenario: an adversary ("**O**") gains access to **m**'s private keys ("**[]k<sub>m</sub>**") through deception, coercion, or covert access to **m**'s client device.
+    - **O** would naturally be able to:
+        - read all community-public data on **C**
+        - author entries impersonating **m**
+        - read content intended to be private for **m**
+    - When **m**, a peer of **m**, an admin, or an automated notices something is amiss, they would initiate a [Member Halt](#member-halt) on **m**.  As part of the Member Halt:
+        1. **O** would lose append/post access to **C** (twofold: no postage _and_ **m**'s `MemberEpoch` suspended), _and_
+        2. **O** would lose further read access to **𝓛<sub>C</sub>** once a [new community epoch is issued](#Issuing-a-New-Community-Epoch).
+    - In the case that **O** [issues a new member epoch](#issuing-a-new-Member-Epoch) (impersonating **m**) _before_ a Member Halt is issued:
+        - **m** would _still_ be able to issue a [Member Halt](#member-halt), _and_
+        - an authority within **C**, in communication with **m**, would later rescind any entries in the [Member Epoch Channel](#member-epoch-channel) authored by **O**.
+3. Scenario: a dishonest community authority ("**O**") within **C** covertly wishes to snoop on **m**.
+    - At no point would **O** have had access to **[]k<sub>m</sub>** since **m**'s private keys never leave **m**'s client process space by design. 
+        - ⇒ **O** has _no_ ability to gain access to content encrypted for **m**, including content in **m**'s private channels.  
+    - In the event that **O** posts a new `MemberEpoch` for **m** without permission, **m** would immediately become aware once **m**'s client sees the epoch issued.   
+        - Hijacking another's identity as in this case would not allow the perpetrator to gain access to any of **m**'s private data since only **m** has possession of **[]k<sub>m</sub>**.  
+        - ⇒ **O** would only gain the abilty to impersonate **m** only as long as **m** remains offline.
+4. Scenario: multiple adversaries covertly infiltrate **C**.
+    - Plan A: _Surgical Misuse of [Member Halt](#member-halt)_
+        - Since a member halt only suspends a member's access to **C**, its utility as an attack vector is limited to a one-time DoS for the targeted member.   
+        - This attack can be quickly be undone by an admin, and the offending member's integrity would immediately move under a spotlight.  
+        - Limitations could be added to the Member Halt procedure that would guard against adversarial behavior.  Examples:
+            - a member could be limited to ordering one Member Halt per day
+            - members could limit _whom_ could order a halt on them, limiting anonymous misuse            
+    - Plan B: _Vandalization of **C**_
+        - The authorities of **C** could:
+            1. manually rescind the offending entries.
+            2. retroactively deactivate the `MemberEpoch` of the offending members, resulting in a _revalidation cascade_ as [Channel Entry Validation](#Channel-Entry-Validation) propagates the change. 
+                - Each offending entries would automatically be placed into rejected status on each community node as propagation proceeds.
+            3. hard fork **𝓛<sub>C</sub>** to an earlier state if the vandalism was pervasive (e.g. gigabytes of junk somehow appended to **𝓛<sub>C</sub>**).
+                - [Proof of Independence Assurance](#Proof-of-Independence-Assurance) describes variations of this path in more detail.
     
 
 #### Proof of Independence Assurance
+
+[Independence Assurance](#Independence-Assurance) asserts that any subset of **C** has the ability to make their own independent fork of **C**.
 
 - Suppose a set of members of **C** decide, for whatever reason, that they are better off in their own community **C′** with an alternative pact of governance or leadership.  They desire **C′** to be equivalent to a **C** where at time **t<sub>C′</sub>**, the admins of **C** ("**[]a**") are demoted to standard member status and a new set of members ("**[]a′**")  are endowed with admin status.  
     - It is assumed that the members of **C′** do not have unauthorized access or the private keys of others in **C**.
@@ -630,6 +672,8 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 
 #### Proof of Storage Portability
 
+[Storage Portability](#Storage-Portability) asserts that **C** is not bound any particular storage layer implementation. 
+
 - Suppose **C** wishes to switch to an alternative CRDT technology.
 - Using a weaker form of the steps listed in [proof of independence assurance](#proof-of-independence-assurance), **C** can coordinate a switch to a new CRDT medium almost transparently.  
 - Using steps similar to the steps in the [proof of independence assurance](#proof-of-independence-assurance), the admins of **C** can coordinate a switch to a new CRDT medium almost transparently.  
@@ -640,13 +684,6 @@ _Each item here corresponds to each item in the [Specifications & Requirements](
 - Alternatively a repo **𝓡** could be ported and run under a different processing system implementation.
 
      
-
-### further
-
-
-
-note: although TimeAuthored is used to index entries, some Lc implementations may optionally provide a time index value that converges to within
-a fixed provable accuracy of when the network witnessed it sent (as it travels further into the past).  TimeConsensus (Dfinity, Hashgraph).  For a given transaction **t**, let **t<sub>t </sub>**
 
 
 ### Version History
@@ -660,14 +697,11 @@ a fixed provable accuracy of when the network witnessed it sent (as it travels f
 |         |          |                        |
 
 
-### scrap/work area
 
-**𝓡<sub>c</sub>**
-**𝓡<sub>m</sub>**
-**𝓛<sub>c</sub>**
+### UNDER CONSTRUCTION
 
-**[]k<sub>c</sub>**
-**[]k<sub>m</sub>**
+
+
 
 #### Ambiguous Conflict Resolution
 
@@ -698,7 +732,7 @@ it follows that each repo across **C** will vary .  If part of the network is re
 - IF the entry 
 - If the entries are in separate channels
 - Ambiguous conflicts can _also_ be adversary-induced, so we must analyze. 
-    - The obvious objective for an adversary to induce ambiguous conflicts would be to disrupt **C** by crafting entries designed to invalidate "high value" root entries that would cause a cascade of entry invalidations to occur.  For example, suppose member **m** is granted the permission level of supermoderator in an ACC used for 
+    - The obvious objective for an adversary to induce ambiguous conflicts would be to disrupt **C** by crafting entries designed to invalidate "high value" root entries that would cause a cascade of entry invalidations to occur.  For example, suppose member **m** is granted the permission level of super-moderator in an ACC used for 
     
     posting an entry into a high-level ACC used across **C** dated a year ago causing 
 
@@ -751,7 +785,7 @@ PDIEntryCrypt.CommunityKeyID specifies which community key was used to encrypt P
 If/when an admin of a community issues a new community key,  each member is securely sent this new key via
 the community key channel (where is key is asymmetrically sent to each member still "in" the community. 
 
-    - In the case that **α** has gained possession of the _latest_ community key for whatever reason, this reflects that the members of **C** are _unaware_ of a security breach (otherwise a member or authority in **C** would have initiated a [member halt](#member-halt) or [started a new community epoch](#issuing-a-new-Community-Epoch)).  
+    - In the case that **α** has gained possession of the _latest_ community key for whatever reason, this reflects that the members of **C** are _unaware_ of a security breach (otherwise a member or authority in **C** would have initiated a [Member Halt](#member-halt) or [started a new community epoch](#issuing-a-new-Community-Epoch)).  
 /*
 
 
