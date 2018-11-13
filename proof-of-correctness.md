@@ -422,7 +422,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 - Since entries can arrive at **n<sub>i</sub>** in arbitrary order from **𝓛<sub>C</sub>**, entries will arrive whose validation will depend on other entries that have not yet been processed — _on entries yet to even arrive_.
 - As node **n<sub>i</sub>** processes an incoming entry **e** to be merged with **𝓡<sub>i</sub>**:
     - If **e** satisfies _all channel properties and parent ACC permissions_, then **e** is placed into "live" status.
-    - Otherwise, if for whatever reason **e** cannot complete validation (or **e** depends on an unresolved [ambiguous conflict](#Ambiguous-conflict-resolution)), then **e** is placed into "deferred" status.
+    - Otherwise, if for whatever reason **e** cannot complete validation, then **e** is placed into "deferred" status.
         - Node **n<sub>i</sub>** periodically reattempts to validate **e** as other entries go live on **𝓡<sub>i</sub>**.  
         - Unless **e** was crafted with malicious intent, it would be unexpected for **e** to remain indefinitely deferred.
 - For each new entry **e** arriving from **𝓛<sub>C</sub>** (or is locally authored and also submitted to **𝓛<sub>C</sub>**):
@@ -450,7 +450,6 @@ Channels are intended as general-purpose containers for [channel entries](#chann
             - **𝓅<sub>author</sub>** ⇐ **𝘾𝒉<sub>AC</sub>**.LookupPermissions(**e<sub>hdr</sub>**.`AuthorMemberID`)
             - if  **𝓅<sub>author</sub>** does not allow **e<sub>hdr</sub>**`.EntryOp`, then **e** is deferred.
         4. If **e** inserts a permissions change but does not [issue a new channel epoch](#issuing-a-New-Channel-Epoch) as required, then **e** is deferred.
-        5. If **e** will introduce an ambiguous or contradictory conflict, then perform [ambiguous conflict resolution](#ambiguous-conflict-resolution). 
     3. Merge **e** into **𝓡<sub>i</sub>**:
         - **𝘾𝒉<sub>dst</sub>**.InsertEntry(**e**)
     4. Propagate the mutation of **𝘾𝒉<sub>dst</sub>** as required ("revalidation"):
@@ -478,7 +477,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 ## Liveness versus Safety
 
-"[Liveness](https://en.wikipedia.org/wiki/Liveness) versus [safety](https://en.wikipedia.org/wiki/Safety_property)" refers to canonical tradeoffs made in the design of a distributed system.  In this context, it refers to the tradeoffs that a given **𝓛<sub>C</sub>** implementation codifies:
+"[Liveness](https://en.wikipedia.org/wiki/Liveness) versus [safety](https://en.wikipedia.org/wiki/Safety_property)" refers to canonical tradeoffs made in the design of a distributed system.  Here in this context, it refers to the tradeoffs that a given **𝓛<sub>C</sub>** implementation codifies:
 
 - If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
     1. **Δ<sub>C</sub>** will reflect network latency and topology
@@ -486,9 +485,8 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     3. The nodes of **C** are "offline-first" and can operate in "cells" depending on network connectivity.  
         - As partitions rejoin after some time and synchronize, each **𝓡<sub>i</sub>** will receive new batches of old transactions (from other partitions).
 - If **𝓛<sub>C</sub>** favors _safety over liveness_ (such as a central server, [EOS](https://eos.io/), [DFINITY](https://dfinity.org/), [Hashgraph](https://www.hedera.com/)), then **𝓛<sub>C</sub>** by definition integrates a consensus mechanism that enforces a trailing timestamp boundary ("**t<sub>b</sub>**") for transactions.  This implies:
-    1. **Δ<sub>C</sub>** will be helpfully low (e.g. 10 seconds)
-    2. [Channel Entry Validation](#Channel-Entry-Validation) can finalize choices older than **t<sub>b</sub>** since later-arriving entries are not possible.
-        - Also, the probability of an entry entering into a state of ambiguous conflict collapses to zero past **t<sub>b</sub>**.
+    1. **Δ<sub>C</sub>** will be helpfully low (1-10 seconds)
+    2. [Channel Entry Validation](#Channel-Entry-Validation) has the luxury to finialize entries older than **t<sub>b</sub>** since later-arriving entries are not possible.
     3. However, the nodes of **C** _require central network connectivity_ in order to operate.  If a set of nodes partition from the central network:
         - their **𝓛<sub>C</sub>** nodes will _**halt**, even though the nodes still have connectivity with each other_, and
         - their **𝓛<sub>C</sub>** nodes will _only resume_ if/when the partition rejoins the central network.
@@ -502,7 +500,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
 
 #### Proof of Signal Opacity
 
-[Signal Opacity](#signal-opacity) asserts that outside actors can't infer material information by analyzing community message traffic.
+[Signal Opacity](#signal-opacity) asserts that outside actors can't infer material information by analyzing community wire traffic.
 
 - Given that (a) all community channel entries reside within transactions stored on **𝓛<sub>C</sub>**, _and_ (b) transactions are considered to be "in the clear":
     - What information is discernible to actors outside of **C**?
@@ -556,20 +554,6 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
         - What if **m** (or an adversary in possession of **m**'s keys) "hot-wires" their node or manually crafts an entry to perform an operation not allowed by **m**?  
             - Although **m** would be able to submit doctored entries to **𝓛<sub>C</sub>**, [Channel Entry Validation](#Channel-Entry-Validation) running on _every other_ community node would see that **m** does not have the required privileges and would indefinitely defer (reject) the entry.   
             - This is analogous to submitting a transaction on the global Bitcoin or Ethereum blockchain that transfers coinage from an ID that does not have sufficient funds — the transaction will never validate. 
-        - What if Alice is granted moderator privileges for channel 𝘾𝒉 at the same moment she is granted a _different_ set of privileges for 𝘾𝒉 by another?  In this and other cases of where there is an "ambiguous conflict", then deterministic [Ambiguous Conflict Resolution](#ambiguous-conflict-resolution) ("ACR") is invoked. 
-            - Because ACR must be compatible with [Strong Eventual Consistency](#Strong-Eventual-Consistency) it must be time and state symmetric.  
-            - Although natural ambiguous conflicts are rare, it is assumed that an adversary would induce ambiguous conflicts in an attempt to circumvent access controls in **C** (and take this to be the more limiting analysis). 
-            - Let **ψ** be two or more entries that cross a threshold that places them into "ambiguous conflict" status.
-            - We observe that the scope of possibilities implied by **ψ** grows with the specific scope of the conflict.  
-                - In the above example with Alice, although there is uncertainty around _Alice's permissions in 𝘾𝒉_, there _isn't_ uncertainty around Bob's permissions in 𝘾𝒉 or Alice's permissions in a separate channel. 
-                - Likewise, an ambiguous conflict about Charlie's member status in **C** means there is uncertainty around the liveness of _every entry_ he authored following the the timestamp of the conflict.  This example represents cascading dependencies on **ψ**.
-            - ⇒ the superposition of all possible states of **𝓡** _only_ depends on states entangled with **ψ**.
-            - We consider adversary **O** in possession of one or more member active private keyrings, wishing to attack **C**.
-                1. **O** can only induce ambiguous conflicts commensurate with the access level of the keys controlled.
-                    - For example, if **O** _only_ had basic member permissions within **C**, then **O** _wouldn't even have the potential_ to induce an ambiguous conflict since **O**'s sphere of access control isn't large enough to be in contention with another member. 
-                2. Since ACR is time and state symmetric, **O** is limited to what resembles denial of service.  
-                   - Given the vanishingly low probability of repeated naturally occurring ambiguous conflicts, a protective watchdog service in **C** could raise an alert upon clear tripwires, or could auto-initiate a [Member Halt](#member-halt) on the keyring(s) clearly inducing unnatural rates of conflict.           
-            
 
 #### Proof of Integrity Assurance
 
@@ -622,7 +606,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
     - If an adversary were to somehow recover **[]k<sub>lost</sub>** in an _unlocked state_, they would, at most, have read-access up to the time when the new `MemberEpoch` was published.
         - Entries signed by **[]k<sub>lost</sub>** and processed by **𝓡<sub>i</sub>** would be rejected since the `MemberEpoch` associated with the latest private key in **[]k<sub>lost</sub>** would be superseded.
 2. Scenario: an adversary ("**O**") gains access to **m**'s private keys ("**[]k<sub>m</sub>**") through deception, coercion, or covert access to **m**'s client device.
-    - **O** would naturally be able to:
+    - as expected, **O** would be able to:
         - read all community-public data on **C**
         - author entries impersonating **m**
         - read content intended to be private for **m**
@@ -639,7 +623,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
         - Hijacking another's identity as in this case would not allow the perpetrator to gain access to any of **m**'s private data since only **m** has possession of **[]k<sub>m</sub>**.  
         - ⇒ **O** would only gain the abilty to impersonate **m** only as long as **m** remains offline.
 4. Scenario: multiple adversaries covertly infiltrate **C**.
-    - Plan A: _Surgical Misuse of [Member Halt](#member-halt)_
+    - Plan A: _Surgical [Member Halt](#member-halt) Attack_
         - Since a member halt only suspends a member's access to **C**, its utility as an attack vector is limited to a one-time DoS for the targeted member.   
         - This attack can be quickly be undone by an admin, and the offending member's integrity would immediately move under a spotlight.  
         - Limitations could be added that would guard against adversarial behavior.  Examples:
@@ -649,40 +633,45 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
         - The authorities of **C** could:
             1. manually rescind the offending entries.
             2. retroactively deactivate the `MemberEpoch` of the offending members, resulting in a _revalidation cascade_ as [Channel Entry Validation](#Channel-Entry-Validation) propagates the change. 
-                - Each offending entries would automatically be placed into rejected status on each community node as propagation proceeds.
-            3. hard fork **𝓛<sub>C</sub>** to an earlier state if the vandalism was pervasive (e.g. gigabytes of junk somehow appended to **𝓛<sub>C</sub>**).
-                - [Proof of Independence Assurance](#Proof-of-Independence-Assurance) describes variations of this path in more detail.
+                - Each dependent entry would automatically be placed into rejected status on each community node during propagation.
+            3. hard fork **𝓛<sub>C</sub>** to an earlier state if the vandalism was pervasive (e.g. though postage guards against this, gigabytes of junk appended to **𝓛<sub>C</sub>**).
+                - [Proof of Independence Assurance](#Proof-of-Independence-Assurance) describes variations of this recovery flow.
     
 
 #### Proof of Independence Assurance
 
-[Independence Assurance](#Independence-Assurance) asserts that any subset of **C** has the ability to make their own independent fork of **C**.
+[Independence Assurance](#Independence-Assurance) asserts that any member subset of **C** can independently fork **C** with a replacement governance or leadership structure.
 
-- Suppose a set of members of **C** decide, for whatever reason, that they are better off in their own community **C′** with an alternative pact of governance or leadership.  They desire **C′** to be equivalent to a **C** where at time **t<sub>C′</sub>**, the admins of **C** ("**[]a**") are demoted to standard member status and a new set of members ("**[]a′**")  are endowed with admin status.  
-    - It is assumed that the members of **C′** do not have unauthorized access or the private keys of others in **C**.
-- Since **𝓛<sub>C</sub>** is append-only CRDT, each transaction is assumed to have a timestamp and identifying UUID, implying **𝓛<sub>C</sub>** is characterized as a sequence of sealed data transactions that can be partitioned at any arbitrary time index.  
-- The new admins of **C′** construct the following:
-    1. Create a new CRDT ("**𝓛<sub>C′</sub>**") and allocate bulk postage identically to **𝓛<sub>C</sub>**'s genesis _in addition to_ allocating bulk postage for **[]a′**
-    2. Copy the parameters from **C**'s genesis _in addition to_ granting admin status for **[]a′**.
-    3. Transfer entries from **𝓛<sub>C</sub>** to **𝓛<sub>C′</sub>** up to time **t<sub>C′</sub>** (omitting entries as desired)
-    4. Use the credentials of **[]a′** to demote/deactivate **[]a** and any other desired members.
-        - For each member demoted or deactivated, reduce/burn their postage permissions on **𝓛<sub>C′</sub>** as appropriate.
+- Suppose some members of **C** decide, for whatever reason, that they are better off in their own community ("**C′**"), with their own pact of governance or leadership.  
+- They desire **C′** to be the equivalent of **C** but _only up to a given time_ ("**t<sub>C′</sub>**") — at which time the authority structure or membership is arbitrarily altered.
+    - Let **[]a** be the admins of **C** at time **t<sub>C′</sub>**
+    - Let **[]a′** be the founders (and admins-to-be) of **C′**
+- Given that **𝓛<sub>C</sub>** is append-only CRDT, each transaction is assumed to have a timestamp and identifying ID.
+    - ⇒  **𝓛<sub>C</sub>** is characterized as a set of sealed data transactions and can be partitioned at any given time index.  
+- The founders of **C′** do the following:
+    1. Instantiate a new CRDT ("**𝓛<sub>C′</sub>**") and allocate bulk postage identically to **𝓛<sub>C</sub>**'s genesis _in addition to_ allocating bulk postage to **[]a′**.
+    2. Instantiate Copy the parameters from **C**'s genesis _in addition to_ granting admin status to **[]a′**.
+    3. Transfer entries from **𝓛<sub>C</sub>** to **𝓛<sub>C′</sub>** up to time **t<sub>C′</sub>** (omitting entries as desired).
+        - Allocations from step (1) ensure that transactions copied from **𝓛<sub>C</sub>** and posted to **𝓛<sub>C′</sub>** will clear.
+    4. Once is **𝓛<sub>C′</sub>** updated up to desired time, **[]a′** can effectively assert control:
+        1. They demote or deactivate **[]a** (and any other desired members), _and_
+        2. For each member demoted/deactivated, reduce/burn their postage allocation on **𝓛<sub>C′</sub>** as appropriate. 
+- ⇒ **C′** is free to operate independently of  **C** and under the authority of **[]a′**.
+    - Although **C′** is now operating under altered governance or leadership, the privacy of all legacy encrypted entry content is preserved.  Otherwise, members from **C** would have had to share their private keys.   
 
 #### Proof of Storage Portability
 
-[Storage Portability](#Storage-Portability) asserts that **C** is not bound any particular storage layer implementation. 
+[Storage Portability](#Storage-Portability) asserts that **C** is not permanently bound to its storage layer implementation.
 
 - Suppose **C** wishes to switch to an alternative CRDT technology.
-- Using a weaker form of the steps listed in [proof of independence assurance](#proof-of-independence-assurance), **C** can coordinate a switch to a new CRDT medium almost transparently.  
-- Using steps similar to the steps in the [proof of independence assurance](#proof-of-independence-assurance), the admins of **C** can coordinate a switch to a new CRDT medium almost transparently.  
+- Using a simplified form of the steps listed in [Proof of Independence Assurance](#proof-of-independence-assurance), **C** can coordinate a switch to a new CRDT medium almost transparently.  
 - This is to say that **𝓛** is to **C** as a hard drive is to an operating system.  **C**'s "hard drive" can be replaced:
-    - with the same exact model
-    - with a different "brand"
-    - with a different storage technology all together
-- Alternatively a repo **𝓡** could be ported and run under a different processing system implementation.
+    - with the an updated model, _or_
+    - with a different "brand", _or_
+    - with a different storage technology all together.
 
-     
 
+---
 
 ### Version History
 
@@ -693,146 +682,4 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
 | Nov 2018 | Initial publication    |
 |          |                        |
 
-
-
-### UNDER CONSTRUCTION
-
-
-
-
-#### Ambiguous Conflict Resolution
-
-- Because community nodes can get transactions from **𝓛<sub>C</sub>** in an arbitrary order, it is possible for two different repos, **𝓡<sub>i</sub>** and **𝓡<sub>j</sub>**, to be in a state where members using them author conflicting entries that cannot be resolved.  
-- In order to support strong eventual consistency, conflicts must always be deterministically resolved _only_ using information all nodes are guaranteed to eventually possess. 
-- Given: 
-    - entry **e<sub>0</sub>** is currently "live" in **𝓡<sub>i</sub>**, _and_
-    - entry **e<sub>1</sub>** being processed by [channel entry validation](#Channel-Entry-Validation) and ambiguous conflicts with **e<sub>0</sub>** (i.e. either entry could be the "winner" but both can't)
-- If/When node **n<sub>i</sub>** observes that **e<sub>1</sub>** is in ambiguous conflict with **e<sub>0</sub>**:
-    - This means only one entry can be regarded as the "winner"
-    - **n<sub>i</sub>** posts an entry in the Conflict Resolution Channels
-
-- Note, in the case that **𝓛<sub>C</sub>** offers consensus timestamps for transactions (which is common), this alone is enough to radically 
-    - For example, resolution couldn't depend on the arrival time of each entry from **𝓛<sub>C</sub>** unless 
-    not depend on _when_ each entry arrived from **𝓛<sub>C</sub>**, _and_
-    - 
-
-- WE DONT HAVE SO SOLVE ALL CONFLICTS (such as in a collab doc)
-    - we JUST have to cover the system ones -- we can enumerate them all:
-        - always choose the grant-access direction?  (vs revoke direction)
-it follows that each repo across **C** will vary .  If part of the network is recovering from a partition, it becomes more possible for two members to author entries that 
-- Examples:
-    - **e<sub>0</sub>**
-
-**𝓡<sub>i</sub>**  across **C** can be in vario states
-
-
-- IF the entry 
-- If the entries are in separate channels
-- Ambiguous conflicts can _also_ be adversary-induced, so we must analyze. 
-    - The obvious objective for an adversary to induce ambiguous conflicts would be to disrupt **C** by crafting entries designed to invalidate "high value" root entries that would cause a cascade of entry invalidations to occur.  For example, suppose member **m** is granted the permission level of super-moderator in an ACC used for 
-    
-    posting an entry into a high-level ACC used across **C** dated a year ago causing 
-
-two or more entries having "equal authority" conflict in that if they are live, then there is an inconsistency and/or contradiction.  
-    - When two entries are back with "equal authority", the permissions levels 
-- To unpack this, we consider two categories of ambiguous conflicts:
-   - **Natural**, where network latency between the nodes of **C** resulted in a situation where two separate nodes authored entries 
-   
-   what is mildly similar to a race condition.
-        - While each entry will have a globally-known author timestamp, they could arrive at a node in any order and with any delay.  
-        - While there are an exponential number of permutations for how 
-        
-         permutations of the order entries arrive, however, seldom result in an ambiguous conflict since:
-            - the entries are 
-     However, in this case, each entry will me timestamped 
-
-
-       - In this case, we assume the intention and timestamp on the entries are accurate and well intentioned. 
-   - Adversary-Induced
-       - In this case, w
-
-- The consensus properties of **C** are effectively called into action here.  By default, entries in conflict with each other are each given a score based on the seniority of each member and the time delta of the entries.  There is either deterministic "winner" or "tie". In a tie, both entries in conflict are nullified.  
-    - Implementation note: nullified entries, although effectively rejected, remain 
-    - and that occur within a given time window are rejected.  
-- In accessing ambiguous conflict resolution, we separate them into to categories:
-   - Legitimate/Natural
-       - In this case, we assume the intention and timestamp on the entries are accurate and well intentioned. 
-   - Adversary-Induced
-       - In this case, we assume one or more of the entries in conflict have forged `TimeAuthored` and have maliciously intentions.
-- Ideally, we want to devise a resolution scheme that produces the most fair and reasonable outcomes for natural conflicts but is resilient against adversary-induced conflicts. 
-    
-
-
-
-
-- **m** uses a client that connects with a trusted community node (meaning a node that **m** trusts with the community keyring). 
-
- a client session with **𝓛<sub>C</sub>**, **m**'s local client node is presumed to have access to these keyrings (though they can be implemented in ways that further compartmentalize security, such as hardware dongles or a key server). 
-
-
-And since a new channel security epoch entails sending each member a newly generated   This means if the entry that removes Oscar's access from the private channel is withheld, then ._ he idea is that if the entry that removed Oscar's access has yet to be merged into **𝓡<sub>i</sub>**, then Oscar   This case is somewhat of a trick question and reveals the nature of this operating system: "private channels" are really just a matter of whom has been securely sent the keys.  Hence, in this system, any time an ACC is mutated in the _more restrictive_ direction,  o read all   Hence,    _provided that an ACC mutation also initiates a new channel security epoch_.  This means that 
-        enters a state where  **Trudy**  How could an absence of transactions ("entries") from **𝓛<sub>C</sub>** result in 
-
-
-
-
-A community KeyID identifies a specific shared "community-global" symmetric key.
-When a PLAN client starts a session with a pnode, the client sends the pnode her community-public keys.
-PDIEntryCrypt.CommunityKeyID specifies which community key was used to encrypt PDIEntryCrypt.Header.
-If/when an admin of a community issues a new community key,  each member is securely sent this new key via
-the community key channel (where is key is asymmetrically sent to each member still "in" the community. 
-
-    - In the case that **α** has gained possession of the _latest_ community key for whatever reason, this reflects that the members of **C** are _unaware_ of a security breach (otherwise a member or authority in **C** would have initiated a [Member Halt](#member-halt) or [started a new community epoch](#issuing-a-new-Community-Epoch)).  
-/*
-
-
-
-// A channel access control list (PDIEntry.accessCtrlRef)
-//     - Effectively allows a composite user and group access control mapping be built (in effect specifying users and groups that have read, write, ownership permission).
-//     - Maps to a keyring entry in each user's SKI containing the corresponding master key to encrypt/decrypt channel entries when that ACL was in effect
-//     - Any community user can be...
-//          ...issued the channel msg master key (read access)
-//              - Entries contain the user's pubkey and their "verify" pubkey (allowing signatures to be authenticated)
-//              - These users are issued new master keys if/when a channel moves to newly generated access control list
-//          ...placed on the channel's write list (write access)
-//              - Although a user could hack their client so that they're on this write list, other nodes will not have this alteration and will reject the entry.
-//          ...placed on a ban list.  Similar to the a write access hack, a banned user's entry will be rejected by other swarm nodes.
-//              - This allows a channel to be offer community-public write access, except for explicitly named user or group id.
-
-
-
-*/
-
-
-
-
-// Every Channel keeps the following files:
-//    a) channel data tome (unstructured binary file)
-//        - the data body of incoming channel entries is first appended to this file
-//        - read+append access to this file is used to optimize performance and caching (since data is never altered, only appended)
-//    b) channel entry index (sqlite db)
-//        - for each channel entry: timestamp_secs (int64, ascending-indexed),  entry hashname (TINYTEXT), tome_file_pos, tome_entry_len
-//    c) list of the access control list history and when each one went into effect -- so it knows what to reject
-//        - when a user is "added" to the channel, the owner must grant master key access for each rev of the control list into the past (or as far as the owner wants to go)
-
-
-
-
-https://github.com/protocol/research-RFPs/blob/master/RFPs/rfp-4-CRDT-ACL.md
-
-
-https://github.com/protocol/research-RFPs/blob/master/RFPs/rfp-5-optimized-CmRDT.md
-
-https://github.com/protocol/research/blob/master/README.md
-
-https://github.com/protocol/research-RFPs/blob/master/RFP-application-instructions.md
-
-https://github.com/ipfs/research-CRDT/tree/master/research
-
-https://github.com/ipfs/research-CRDT
-
-https://github.com/protocol/research/issues/8
-
-
-https://github.com/protocol/research-RFPs/blob/master/RFP-application-instructions.md
 
