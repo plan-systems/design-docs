@@ -120,7 +120,7 @@ The members of **C** present the following system of operation...
 ## System Synopsis
 
 - The system embraces a multi-tier security model, where each community member possesses a community-common keyring as well as their private keyring.  In effect, this places the entire system's infrastructure and transaction traffic inside a cryptographic "city wall".
-- The system's data model is IRC-inspired in that member interaction takes the form of data entries written sequentially to channels within the a virtual channel addressing space.  However, instead of channel entries just being rebroadcast to other connected clients (as on an IRC server), entries _persist_ as transactions replicated across **𝓛<sub>C</sub>**.  
+- The system's data model is IRC-inspired in that member interaction takes the form of data entries written sequentially to channels within a virtual channel address space.  However, instead of channel entries just being rebroadcast to other connected clients (as on an IRC server), entries _persist_ as transactions replicated across **𝓛<sub>C</sub>**.  
 - When a channel is created, it is assigned a protocol descriptor string, specifying the _kind_ of entries that are expected to appear that channel and _how_ UI clients should interpret them (functionally comparable to MIME types).  This, plus the ability for _any_ channel entry to include arbitrary HTTP-style headers, creates many possibilities for visually-oriented client interfaces.
 - Also inspired from IRC, each channel has its own permissions settings. Each channel designates an access control channel ("ACC") to be used as an oracle for channel permissions.  An ACC is a special channel type that additionally conforms to a protocol designed to specify channel permissions. Like other channels, each ACC also designates a parent ACC, and so on, all the way up to **C**'s root-level ACC.  
 - Member, channel, and community security and key distribution uses "epochs" to demarcate security events, in effect furnishing [permissions assurance](#permissions-assurance).
@@ -260,7 +260,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 
 #### Root Access Control Channel
-- This is **C**'s root access channel, effectively specifying which members are recognized as community authorities ("admins").
+- This is **C**'s root access channel, specifying which members are community authorities ("admins").
 - All community-public channels, including ACCs, implicitly are under authority of this channel.
 - When a new community is formed ("community genesis"), the initial entries this channel are auto-generated in accordance with the parameters and policies provided.
 - Automated machinery in **C** can optionally be geared to use smart contracts on **𝓛<sub>C</sub>** to manage, monitor, or validate entries in this channel.
@@ -292,7 +292,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     - [deactivating members](#deactivating-A-Member) from **C**, _and_
     - restoring a member's access to **C** following a [Member Halt](#member-halt).
 - When a [Member Halt](#member-halt) has been issued on **m**, an special `MemberEpoch` entry is posted to this channel.
-    - Once this entry is live on **𝓡<sub>i</sub>**, all subsequent entries with **m**'s signature are deferred during [channel entry validation](#Channel-Entry-Validation).
+    - Once this entry is live, subsequent entries with **m**'s signature are deferred during [Channel Entry Validation](#Channel-Entry-Validation).
     - When the cause for concern is addressed, a community authority [issues a new member epoch](#Issuing-a-New-member-Epoch) for **m**.
 
 #### Community Epoch Channel
@@ -351,7 +351,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     - editing **𝘾𝒉**'s default access permissions to be more restrictive, _or_
     - removing access permissions for explicitly named members, _or_
     - making **𝘾𝒉** private and granting access to only specifically listed members of **C**.
-- Similar to [issuing a new member epoch](#Issuing-a-New-Member-Epoch), **𝘾𝒉**'s owner posts an entry to **𝘾𝒉** intended to revise the current `ChannelEpoch`.
+- Similar to [issuing a new member epoch](#Issuing-a-New-Member-Epoch), **𝘾𝒉**'s owner posts an entry to **𝘾𝒉** to revise the current `ChannelEpoch`.
 - If **𝘾𝒉** is private, a procedure similar to [issuing a new community epoch](#issuing-a-new-Community-Epoch) distributes **𝘾𝒉**'s latest access key to members that have at least read-only access to **𝘾𝒉**.
 
 #### Member Halt
@@ -360,8 +360,8 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 - The conditions/requisites needed in order to initiate a Member Halt on another's behalf can be arbitrarily based on security needs and situational circumstances.  
 - A Member Halt on **m** could be initiated by:
     - **m**, upon discovering that another actor has gained access to **[]k<sub>m</sub>**, _or_
-    - a peer of **m** (previously designated by **m**), upon receiving an email, phone call, text message, or signal of duress from **m**, _or_
-    - a community admin or automated agent, noticing damning or malicious activity originating from a holder of **[]k<sub>m</sub>**.
+    - a peer of **m** (previously designated by **m**), upon receiving a message or signal of duress from **m**, _or_
+    - a community automated agent, noticing damning/malicious activity originating from a holder of **[]k<sub>m</sub>**.
 - Once a Member Halt is initiated on **m**:
     1. A special entry is posted to the [Member Epoch Channel](#member-epoch-channel), signaling to all nodes in **C** to defer all further entries signed by **[]k<sub>m</sub>**.  
         - In effect, this halts any actor in possession of **[]k<sub>m</sub>** from posting _any_ entries to _any_ channel on **C**.
@@ -398,7 +398,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
         - the private half of public keys in **𝓔<sub>a0</sub>**, _and_
         - network addresses and other bootstrapping information needed in order to connect to **𝓛<sub>C</sub>**, _and_
         - a token that bestows its bearer postage on **𝓛<sub>C</sub>**.
-    3. **τ** is encrypted with a passphrase, and is passed to **α** via any non-secure means (USB device, email, file sharing).
+    3. **τ** is encrypted with a passphrase, and is passed to **α** via USB device, email, file sharing, etc.
     4. Using face-to-face communication, direct contact, or other secure means, **α** is passed the passphrase to **τ**.
     5. On a newly created "blank" node, **n<sub>α</sub>** (or an existing node of **C** in a logged-out state):
         1. **α** passes **τ** to the client
@@ -508,7 +508,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
     - What information is discernible to actors outside of **C**?
 - Let **α** be an actor that is _not_ a member of **C**, implying that **α** does not possess the latest community keys.  
     - ⇒ the _only_ information directly available to **α** is the `UUID` of the encryption key used for each `EntryCrypt` on **𝓛<sub>C</sub>**.
-        1. ⇒ information opacity is maximized since all other information resides within `HeaderCrypt` and `ContentCrypt`.
+        1. ⇒ information opacity is maximized since all information resides within `HeaderCrypt` and `ContentCrypt`.
             - Adversaries snooping **𝓛<sub>C</sub>** can only discern _when_ a new community security epoch began (by noting the appearance of a new community key `UUID`).  However, this is weak information since such an event could correspond to any number of circumstances.
         2. ⇒ _only_ members of **C** effectively have read-access to **C**'s content and member activity.
     - If **α** is a former member of **C**, then **α**'s access is limited to read-only up to when  **α** was [deactivated](#deactivating-A-Member) (when the [new community epoch was issued](#issuing-a-new-Community-Epoch) as part of deactivating a member).
@@ -565,7 +565,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
                 - Likewise, an ambiguous conflict about Charlie's member status in **C** means there is uncertainty around the liveness of _every entry_ he authored following the the timestamp of the conflict.  This example represents cascading dependencies on **ψ**.
             - ⇒ the superposition of all possible states of **𝓡** _only_ depends on states entangled with **ψ**.
             - We consider adversary **O** in possession of one or more member active private keyrings, wishing to attack **C**.
-                1. **O** can only induce ambiguous comflicts commensurate with the access level of the keyrings they control.
+                1. **O** can only induce ambiguous conflicts commensurate with the access level of the keys controlled.
                     - For example, if **O** _only_ had basic member permissions within **C**, then **O** _wouldn't even have the potential_ to induce an ambiguous conflict since **O**'s sphere of access control isn't large enough to be in contention with another member. 
                 2. Since ACR is time and state symmetric, **O** is limited to what resembles denial of service.  
                    - Given the vanishingly low probability of repeated naturally occurring ambiguous conflicts, a protective watchdog service in **C** could raise an alert upon clear tripwires, or could auto-initiate a [Member Halt](#member-halt) on the keyring(s) clearly inducing unnatural rates of conflict.           
@@ -642,7 +642,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
     - Plan A: _Surgical Misuse of [Member Halt](#member-halt)_
         - Since a member halt only suspends a member's access to **C**, its utility as an attack vector is limited to a one-time DoS for the targeted member.   
         - This attack can be quickly be undone by an admin, and the offending member's integrity would immediately move under a spotlight.  
-        - Limitations could be added to the Member Halt procedure that would guard against adversarial behavior.  Examples:
+        - Limitations could be added that would guard against adversarial behavior.  Examples:
             - a member could be limited to ordering one Member Halt per day
             - members could limit _whom_ could order a halt on them, limiting anonymous misuse            
     - Plan B: _Vandalization of **C**_
@@ -688,11 +688,10 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
 
 
 
-| Version |   Date   | Description of Changes |
-|:-------:|:--------:|------------------------|
-|   0.1   | Oct 2018 | Under construction     |
-|         |          |                        |
-|         |          |                        |
+| Revision | Description of Changes |
+|:--------:|------------------------|
+| Nov 2018 | Initial publication    |
+|          |                        |
 
 
 
