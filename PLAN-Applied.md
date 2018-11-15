@@ -19,7 +19,7 @@ A community using PLAN will inevitably be interested in making some of its parts
 
 ## Interoperable Data Structures
 
-- PLAN's standard unit of information storage and transport is `plan.Block`:
+- PLAN's standard unit of information storage, structure, and transport is `plan.Block`:
 
     ```
     // A portable, compact, self-describing, nestable information container inspired from HTTP.
