@@ -168,4 +168,5 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 
 
 
-EOF
+
+[Back to Table of Contents](README.md)
