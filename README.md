@@ -15,11 +15,11 @@ PLAN is free and open-source (GPLv3). The purpose of components in PLAN being pl
 
 We wish to acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which subtly but decisively improves how protocols, paths, and formats can be expressed as to invite interoperability; `http://` becomes `/http/`.
 
- May PLAN empower organizations and individuals with little or no resources to self-organize.
+May PLAN empower organizations and individuals with little or no resources to self-organize.
 
 ## What's in This Repo?
 
-This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and explore our other supporting documents:
+This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and then explore our other supporting documents:
 1. [PLAN Appiled](PLAN-Applied.md)
 2. [PLAN Proof of Correctness](PLAN-Proof-of-Correctness.md)
 
