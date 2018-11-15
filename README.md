@@ -19,13 +19,13 @@ We wish to acknowledge the principles surrounding [multistream](https://github.c
 
 ## What's in This Repo?
 
-This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for technical-types ready to understand and vet PLAN's architecture and design.  
+This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audiance ready to understand and vet PLAN's architecture and design.  
 
 
 # Table of Contents
 
 1. [PLAN Engineering Overview](overview.md)
-2. [PLAN Proof Correctness](proof-of-correctness.md)
+2. [PLAN Proof of Correctness](proof-of-correctness.md)
 
 
 
