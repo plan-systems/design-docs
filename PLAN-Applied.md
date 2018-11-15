@@ -87,7 +87,7 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 | Milestone |  Timeframe  | Description                                                                               |
 |:---------:|:-----------:|-------------------------------------------------------------------------------------------|
 |   Newton  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model)     |
-|  Babbage  |   2018 Q3   | [PLAN proof of correctness](PLAN-proof-of-correctness.md) complete                        |
+|  Babbage  |   2018 Q3   | [PLAN Proof of Correctness](PLAN-proof-of-correctness.md) complete                        |
 |   Morse   |   2018 Q4   | [go-plan](https://github.com/plan-tools/go-plan) command line proof of concept demo       |
 |  Mercator |   2018 Q4   | PLAN architecture visualization exhibit in Unity                                          |
 |   Kepler  |   2019 Q1   | [plan-unity](https://github.com/plan-tools/plan-unity) client proof of concept demo       |
