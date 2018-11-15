@@ -24,7 +24,7 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 # Table of Contents
 
-1. [PLAN Overview](overview.md)
+1. [PLAN Engineering Overview](overview.md)
 2. [PLAN Proof Correctness](proof-of-correctness.md)
 
 ---

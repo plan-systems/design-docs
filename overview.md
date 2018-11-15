@@ -1,4 +1,4 @@
-# PLAN - Overview
+# PLAN - Engineering Overview
 
 ```
          P urposeful
@@ -57,11 +57,11 @@ Using PLAN, communities arise from community organizers who value owning their o
 
 # Applying PLAN
 
-A technology is only as interesting as how it can be harnessed and applied to our world.  
+A technology is only as interesting as how it can be harnessed and applied in our world.  
 
 ## Community Public Access 
 
-A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publicly accessible services to serve community content scalably (as a distributed system) alongside traditional web or internet services.  For example:
+A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publicly accessible services to serve community content and scale (as a distributed system) alongside traditional web or internet services.  For example:
 - A musical artist uses PLAN to serve past show recordings and official track releases 
 - A documentary production uses PLAN to serve the film's trailer and the full film itself to users bearing a "paid" token.
 - A PLAN daemon periodically renders out an image of a map with spatial annotations from a community geo-space channel, served as a web page.
@@ -155,12 +155,12 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 #### Q: Why PLAN? Aren't there enough blockchain and DLTs already?
 - Indeed, there are dozens of advanced DLT projects available.  _However, PLAN at its heart is not a distributed ledger technology._  The lower-level of PLAN is an information organizational and permissions system that is _built on top of an existing distributed technology_. Consider: _PLAN is to blockchain as Linux is to harddrive._
 
-#### Q: But PLAN doesn't do X, fullfill need Y, or address use case Z.  How will PLAN address this?
-- PLAN is not meant to be _all_ things to _all_ people.  PLAN first intends to target the small and micro-sized organizations that currently have _no_ choices when it comes to a multi-platform, secure, real-time, and free integrated operations platform.  PLAN is about offering a reliable and easy-to-use logisitcs and planning tool for organizations with little or no resources.
+#### Q: But PLAN doesn't do X, fulfill need Y, or address use case Z.  How will PLAN address this?
+- PLAN is not meant to be _all_ things to _all_ people.  PLAN first intends to target the small and micro-sized organizations that currently have _no_ choices when it comes to a multi-platform, secure, real-time, and free integrated operations platform.  PLAN is about offering a reliable and easy-to-use logistics and planning tool for organizations with little or no resources.
 
 #### Q: Does a PLAN community admin wield all the power and control?
 - Not unless you want it that way.  The phrase "community admin" is used in these docs to refer to an agent acting in accordance with community policies and bylaws on behalf of the community's already-established leadership.  This means that a community can operate as strictly or as loosely as the founding members want, but those agreements are visible to the entire community.  
-- For example, community **C** could be founded such that a majority vote persistent, member-appoointed "elders" are required to disperse funds.  This would be enforced by a smart contract wired into **C**'s storage layer.   See PLAN's [Proof of Integrity Assurance](proof-of-correctness.md#Proof-of-Integrity-Assurance) for more detail.
+- For example, community **C** could be founded such that a majority vote persistent, member-appointed "elders" are required to disperse funds.  This would be enforced by a smart contract wired into **C**'s storage layer.   See PLAN's [Proof of Integrity Assurance](proof-of-correctness.md#Proof-of-Integrity-Assurance) for more detail.
 
 
 #### Q: How is PLAN's Persistent Data Interface (PDI) implemented?
