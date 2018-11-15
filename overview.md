@@ -7,9 +7,9 @@
 P  L  A  N etwork
 ```
 
-## Tenets & Objectives
+## Goals & Objectives
 
-PLAN will be useful to communities and organizers _only if_ non-technical users can use it easily. As software designers, we must acknowledge that distributed technologies, content-based addressing, and cryptography are alien concepts to most people. What does PLAN do about this?
+PLAN can only be useful to organizations and community organizers if non-technical users can use it easily. As software designers, we must acknowledge that distributed technologies, content-based addressing, and cryptography are alien concepts to most people. What does PLAN do about this?
 
 It’s not particularly important to an end-user where exactly data resides, how it's served, or how the encryption works — but that it is reliable and secure.  The primary objective of PLAN's architecture and user interface is to simplify the complex nature of "trustless" and distributed technologies with visual idioms that blend into the user experience as seamlessly and invisibly as possible. Instead of a 2D-constrained and sandboxed web/browser experience, the end-user experiences PLAN through the [Unity](https://unity3d.com) 3D engine while [Go](https://golang.org) powers its p2p node.  The [PLAN Foundation](http://plan.tools) fully supports groups interested in developing a PLAN client in alternative environments, such as [Unreal](https://www.unrealengine.com) or [Electron](https://electronjs.org/).
 
