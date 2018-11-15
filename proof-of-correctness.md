@@ -1,4 +1,4 @@
- # Proof of Correctness for PLAN
+ # PLAN - Proof of Correctness
 
 ```
          P urposeful
@@ -7,14 +7,63 @@
 P  L  A  N etwork
 ```
 
-
 ## What is this?
 
 In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or design rigorously satisfies a given set of specifications or claims.  The intention is to remove _all doubt_ that there exists a set of conditions such that the proposed method would _not_ meet all the specifications.
 
 Below, we express a [scenario](#scenario), list a [set of specifications](#Specifications-&-Requirements), and propose [a system of operation](#Proposed-System-of-Operation) intended to address the scenario and specifications.  We then proceed to demonstrate [correctness for each specification](#Proof-of-Requirements-&-Claims), citing how the system and its prescribed operation satisfies that specification.  
 
-Please note that the data structures listed below are intended to convey understanding and model correctness more than they are intended to be performant.  [go-plan](https://github.com/plan-tools/go-plan) is intended to be the latter.
+This document, although labeled "proof", is not perfect and contains areas needing deeper analysis. It is intended to be a blueprint and serve as an ongoing open analysis of a pluggable, distributed, and extensible system.  The data structures listed here are intended to convey understanding and model correctness more than they are intended to be performant. 
+
+
+## Table of Contents
+
+
+- [Scenario](#scenario)
+    - [On Digital Security](#on-digital-security)
+    - [On Network Connectivity](#on-network-connectivity)
+    - [Liveness vs Safety](#liveness-vs-safety)
+- [Specifications & Requirements](#specifications--requirements)
+    - [Signal Opacity](#signal-opacity)
+    - [Access Exclusivity](#access-exclusivity)
+    - [Permissions Assurance](#permissions-assurance)
+    - [Integrity Assurance](#integrity-assurance)
+    - [Membership Fluidity](#membership-fluidity)
+    - [Strong Eventual Consistency](#strong-eventual-consistency)
+    - [Practical Security Provisioning](#practical-security-provisioning)
+    - [Independence Assurance](#independence-assurance)
+    - [Storage Portability](#storage-portability)
+- [Proposed System of Operation](#proposed-system-of-operation)
+    - [System Synopsis](#system-synopsis)
+    - [System Security](#system-security)
+    - [Channel Entries](#channel-entries)
+    - [Channel Epochs](#channel-epochs)
+    - [Channels](#channels)
+    - [Reserved Channels](#reserved-channels)
+        - [Root Access Control Channel](#root-access-control-channel)
+        - [Member Epoch Channel](#member-epoch-channel)
+        - [Community Epoch Channel](#community-epoch-channel)
+- [Standard Procedures](#standard-procedures)
+    - [Issuing a New Member Epoch](#issuing-a-new-member-epoch)
+    - [Issuing a New Community Epoch](#issuing-a-new-community-epoch)
+    - [Issuing a New Channel Epoch](#issuing-a-new-channel-epoch)
+    - [Member Halt](#member-halt)
+    - [Member Halt Recovery](#member-halt-recovery)
+    - [Adding A New Member](#adding-a-new-member)
+    - [Deactivating A Member](#deactivating-a-member)
+    - [Channel Entry Validation](#channel-entry-validation)
+- [Proof of Requirements & Claims](#proof-of-requirements--claims)
+    - [Proof of Signal Opacity](#proof-of-signal-opacity)
+    - [Proof of Access Exclusivity](#proof-of-access-exclusivity)
+    - [Proof of Permissions Assurance](#proof-of-permissions-assurance)
+    - [Proof of Integrity Assurance](#proof-of-integrity-assurance)
+    - [Proof of Membership Fluidity](#proof-of-membership-fluidity)
+    - [Proof of Strong Eventual Consistency](#proof-of-strong-eventual-consistency)
+    - [Proof of Practical Security Provisioning](#proof-of-practical-security-provisioning)
+    - [Proof of Independence Assurance](#proof-of-independence-assurance)
+    - [Proof of Storage Portability](#proof-of-storage-portability)
+- [Forward](#forward)
+
 
 ---
 
@@ -56,7 +105,25 @@ No assumptions are made about network connectivity or reachability in this proof
 - Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.9% chance that all _reachable_ nodes in **C** have received a given replicated transaction over **𝓛<sub>C</sub>**.
 - For example, given a swarm of reachable nodes on a WAN, **Δ<sub>C</sub>** is in the neighborhood of 1-10 minutes, depending on how **𝓛<sub>C</sub>** implements transaction replication (even swarms larger than 10<sup>7</sup>).
 
-Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s overall network properties and behavior.  [Liveness versus Safety](#liveness-versus-safety) discusses tradeoffs for various choices of **𝓛**.
+Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s overall network properties and behavior.  [Liveness versus Safety](#liveness-vs-safety) discusses tradeoffs for various choices of **𝓛**.
+
+
+## Liveness vs Safety
+
+"[Liveness](https://en.wikipedia.org/wiki/Liveness) versus [safety](https://en.wikipedia.org/wiki/Safety_property)" refers to canonical tradeoffs made in the design of a distributed system.  Here, it refers to the tradeoffs that a given **𝓛<sub>C</sub>** implementation codifies:
+
+- If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
+    1. **Δ<sub>C</sub>** will reflect network latency and topology
+    2. [Channel Entry Validation](#Channel-Entry-Validation) could potentially encounter an important but late-arriving entry, triggering a cascade of entry revalidation.
+    3.  The nodes of **C** are "offline-first" and will operate in independent cells if network connectivity is limited.
+        - As partitions rejoin after some time and synchronize, each **𝓡<sub>i</sub>** will receive new batches of old transactions (from other partitions).
+- If **𝓛<sub>C</sub>** favors _safety over liveness_ (such as a central server, [EOS](https://eos.io/), [DFINITY](https://dfinity.org/), [Hashgraph](https://www.hedera.com/)), then **𝓛<sub>C</sub>** by definition integrates a consensus mechanism that enforces a trailing timestamp boundary ("**t<sub>b</sub>**") for transactions.  This implies:
+    1. **Δ<sub>C</sub>** is helpfully fast (1-10 seconds)
+    2. [Channel Entry Validation](#Channel-Entry-Validation) has the luxury to finalize entries older than **t<sub>b</sub>** since later-arriving entries are not possible.
+    3. However, the nodes of **C** _require central network connectivity_ in order to operate.  If nodes partition from the central network:
+        - the **𝓛<sub>C</sub>** nodes will _**halt**, even though the nodes still have connectivity with each other_, and
+        - the **𝓛<sub>C</sub>** nodes will _only resume_ if/when the partition rejoins the central network.
+
 
 ---
 
@@ -470,26 +537,10 @@ Channels are intended as general-purpose containers for [channel entries](#chann
                 - For example, compare the number of ACL-related files stored on a conventional workstation to the _total_ number of files.
                 - Only ACCs tend to have dependent channels.
             - Mutations to a channel occur close to the present time, so only O(1) of all entry history typically needs to be revalidated.
-            - If **𝓛<sub>C</sub>** favors safety over liveness, then there a highly limting trailing time boundary for how "late" an entry can arrive (e.g. 10 seconds).  
+            - If **𝓛<sub>C</sub>** favors safety over liveness, then there a highly limiting trailing time boundary for how "late" an entry can arrive (e.g. 10 seconds).  
         - Revalidation can also be strategically managed, where multiple ACC mutations are scheduled such that only a single revalidation pass is needed.
 
 
-
-## Liveness versus Safety
-
-"[Liveness](https://en.wikipedia.org/wiki/Liveness) versus [safety](https://en.wikipedia.org/wiki/Safety_property)" refers to canonical tradeoffs made in the design of a distributed system.  Here in this context, it refers to the tradeoffs that a given **𝓛<sub>C</sub>** implementation codifies:
-
-- If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
-    1. **Δ<sub>C</sub>** will reflect network latency and topology
-    2. [Channel Entry Validation](#Channel-Entry-Validation) could potentially encounter an important but late-arriving entry, triggering a cascade of entry revalidation.
-    3. The nodes of **C** are "offline-first" and can operate in "cells" depending on network connectivity.  
-        - As partitions rejoin after some time and synchronize, each **𝓡<sub>i</sub>** will receive new batches of old transactions (from other partitions).
-- If **𝓛<sub>C</sub>** favors _safety over liveness_ (such as a central server, [EOS](https://eos.io/), [DFINITY](https://dfinity.org/), [Hashgraph](https://www.hedera.com/)), then **𝓛<sub>C</sub>** by definition integrates a consensus mechanism that enforces a trailing timestamp boundary ("**t<sub>b</sub>**") for transactions.  This implies:
-    1. **Δ<sub>C</sub>** will be helpfully low (1-10 seconds)
-    2. [Channel Entry Validation](#Channel-Entry-Validation) has the luxury to finialize entries older than **t<sub>b</sub>** since later-arriving entries are not possible.
-    3. However, the nodes of **C** _require central network connectivity_ in order to operate.  If a set of nodes partition from the central network:
-        - their **𝓛<sub>C</sub>** nodes will _**halt**, even though the nodes still have connectivity with each other_, and
-        - their **𝓛<sub>C</sub>** nodes will _only resume_ if/when the partition rejoins the central network.
 
 ---
 
@@ -621,7 +672,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
         - ⇒ **O** has _no_ ability to gain access to content encrypted for **m**, including content in **m**'s private channels.  
     - In the event that **O** posts a new `MemberEpoch` for **m** without permission, **m** would immediately become aware once **m**'s client sees the epoch issued.   
         - Hijacking another's identity as in this case would not allow the perpetrator to gain access to any of **m**'s private data since only **m** has possession of **[]k<sub>m</sub>**.  
-        - ⇒ **O** would only gain the abilty to impersonate **m** only as long as **m** remains offline.
+        - ⇒ **O** would only gain the ability to impersonate **m** only as long as **m** remains offline.
 4. Scenario: multiple adversaries covertly infiltrate **C**.
     - Plan A: _Surgical [Member Halt](#member-halt) Attack_
         - Since a member halt only suspends a member's access to **C**, its utility as an attack vector is limited to a one-time DoS for the targeted member.   
@@ -671,15 +722,8 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
     - with a different storage technology all together.
 
 
----
-
-### Version History
 
 
 
-| Revision | Description of Changes |
-|:--------:|------------------------|
-| Nov 2018 | Initial publication    |
-|          |                        |
-
+EOF
 
