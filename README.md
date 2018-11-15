@@ -85,7 +85,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 - For example, community **C** could be founded such that a majority vote from a persistent, member-appointed "designee" are required to add a new member to the community. This would be enforced by a smart contract wired in to **C**'s storage layer. See PLAN's [Proof of Integrity Assurance](PLAN-Proof-of-Correctness.md#Proof-of-Integrity-Assurance) for more detail.
 
 #### Q: How is PLAN's Persistent Data Interface (PDI) implemented?
-- PLAN's append-only storage layerr ("**𝓛<sub>C</sub>**") described in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented by a range of storage approaches. Since each implementation must make tradeoffs in its design, one particular implementation may be a great fit for one community's needs but would be a poor fit for another community's needs. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for more.
+- PLAN's append-only storage layerr ("**𝓛<sub>C</sub>**") described in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented by a range of storage approaches. Since each implementation must make tradeoffs in its design, one particular implementation may be a great fit for one community's needs but would be a poor fit for another community's needs. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for more information.
 
 
 
