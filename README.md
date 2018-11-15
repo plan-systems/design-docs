@@ -19,7 +19,7 @@ We wish to acknowledge the principles surrounding [multistream](https://github.c
 
 ## What's in This Repo?
 
-This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and then consider exploring our other supporting documents:
+This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and explore our other supporting documents:
 1. [PLAN Appiled](PLAN-Applied.md)
 2. [PLAN Proof of Correctness](PLAN-Proof-of-Correctness.md)
 
@@ -52,7 +52,7 @@ Each member of a (self-hosted and -organized) community running the PLAN client 
 
 In addition to the entry protocol a channel is assigned, a PLAN channel is _also_ assigned an owning access control channel (ACC) that specifies channel permissions, limits, and behaviors. A channel's controlling ACC, like all channels, also cites its own controlling ACC, and so on — up to the community's root ACC. A community's root ACC, is one of several "hard&nbsp;wired" channels that serve core community functions and can only be altered by community admins. Another such channel, for example, is the community registry channel, containing the member ID and public keys of each community member. Functions such as community member key recovery (i.e. a member "epoch" change) and other forms of private key exchange are carried out through community channels explicitly reserved for these purposes.
 
-Like IRC, channels can be public ("public" only to members in that community in this case since all of PLAN's community traffic is encrypted), or they can be private where entry content is encrypted. Only community members that have explicitly been given the channel's key have the ability to decrypt channel content. Also, although channels are fundamentally append-only, channels can be set so that new entry content can replace past content, allowing past entries to be edited (though past entries will naturally remain). The flexibility of a channel's protocol identifier plus the open/pluggable nature of PLAN's entry headers forms a powerful _superset_ of HTTP — all designed to be represented and interacted with via a local, graphical, high-performance interface.
+Like IRC, channels can be public ("public" only to members in that community in this case since all of PLAN's community traffic is encrypted), or they can be private where entry content is encrypted. Only community members that have explicitly been given the channel's key have the ability to decrypt channel content. Also, although channels are fundamentally append-only, channels can be set so that new entry content can replace past content, allowing past entries to be edited (though past entries will naturally remain). The flexibility of a channel's protocol identifier plus the rich and flexible nature of PLAN's [interoperable data structures](PLAN-Applied.md#Interoperable-Data-Structures) make PLAN's channel system dynamic and extensible — designed to be represented and interacted with via a local, graphical, high-performance interface.
 
 Moment to moment, each `pnode` in a given community:
    - Merges newly appearing community channel entries from the storage layer into the community repo layer
@@ -85,7 +85,7 @@ Using PLAN, communities arise from community organizers who value owning their o
 - For example, community **C** could be founded such that a majority vote from a persistent, member-appointed "elders" are required to add a new member to the community.  This would be enforced by a smart contract wired into **C**'s storage layer.   See PLAN's [Proof of Integrity Assurance](PLAN-Proof-of-Correctness.md#Proof-of-Integrity-Assurance) for more detail.
 
 #### Q: How is PLAN's Persistent Data Interface (PDI) implemented?
-- PLAN's append-only storage layerr ("**𝓛<sub>C</sub>**") described in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented by a range of storage approaches.  Since each implementation must make tradeoffs in its design, one particular implementation may be a great fit one community's needs but would be a poor fit for another community's needs. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for more.
+- PLAN's append-only storage layerr ("**𝓛<sub>C</sub>**") described in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented from a range of storage layer options.  Since each implementation must make tradeoffs in its design, one particular option may be a great fit one community's needs but would be a poor fit for another community's needs. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for a deeper technical discussion.
 
 
 
