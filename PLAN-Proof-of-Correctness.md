@@ -1,4 +1,4 @@
- # PLAN - Proof of Correctness
+ # PLAN Proof of Correctness
 
 ```
          P urposeful
@@ -20,48 +20,10 @@ This document, although labeled "proof", is not perfect and has areas needing de
 
 
 - [Scenario](#scenario)
-    - [On Digital Security](#on-digital-security)
-    - [On Network Connectivity](#on-network-connectivity)
-    - [Liveness vs Safety](#liveness-vs-safety)
 - [Specifications & Requirements](#specifications--requirements)
-    - [Signal Opacity](#signal-opacity)
-    - [Access Exclusivity](#access-exclusivity)
-    - [Permissions Assurance](#permissions-assurance)
-    - [Integrity Assurance](#integrity-assurance)
-    - [Membership Fluidity](#membership-fluidity)
-    - [Strong Eventual Consistency](#strong-eventual-consistency)
-    - [Practical Security Provisioning](#practical-security-provisioning)
-    - [Independence Assurance](#independence-assurance)
-    - [Storage Portability](#storage-portability)
 - [Proposed System of Operation](#proposed-system-of-operation)
-    - [System Synopsis](#system-synopsis)
-    - [System Security](#system-security)
-    - [Channel Entries](#channel-entries)
-    - [Channel Epochs](#channel-epochs)
-    - [Channels](#channels)
-    - [Reserved Channels](#reserved-channels)
-        - [Root Access Control Channel](#root-access-control-channel)
-        - [Member Epoch Channel](#member-epoch-channel)
-        - [Community Epoch Channel](#community-epoch-channel)
 - [Standard Procedures](#standard-procedures)
-    - [Issuing a New Member Epoch](#issuing-a-new-member-epoch)
-    - [Issuing a New Community Epoch](#issuing-a-new-community-epoch)
-    - [Issuing a New Channel Epoch](#issuing-a-new-channel-epoch)
-    - [Member Halt](#member-halt)
-    - [Member Halt Recovery](#member-halt-recovery)
-    - [Adding A New Member](#adding-a-new-member)
-    - [Deactivating A Member](#deactivating-a-member)
-    - [Channel Entry Validation](#channel-entry-validation)
 - [Proof of Requirements & Claims](#proof-of-requirements--claims)
-    - [Proof of Signal Opacity](#proof-of-signal-opacity)
-    - [Proof of Access Exclusivity](#proof-of-access-exclusivity)
-    - [Proof of Permissions Assurance](#proof-of-permissions-assurance)
-    - [Proof of Integrity Assurance](#proof-of-integrity-assurance)
-    - [Proof of Membership Fluidity](#proof-of-membership-fluidity)
-    - [Proof of Strong Eventual Consistency](#proof-of-strong-eventual-consistency)
-    - [Proof of Practical Security Provisioning](#proof-of-practical-security-provisioning)
-    - [Proof of Independence Assurance](#proof-of-independence-assurance)
-    - [Proof of Storage Portability](#proof-of-storage-portability)
 
 
 ---

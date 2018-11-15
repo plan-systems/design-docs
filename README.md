@@ -1,4 +1,4 @@
-# PLAN - Design & Engineering Docs
+# PLAN Design & Engineering Docs
 
 ```
          P urposeful
