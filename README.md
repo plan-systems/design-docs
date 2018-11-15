@@ -21,7 +21,7 @@ We wish to acknowledge the principles surrounding [multistream](https://github.c
 
 This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audiance ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and then consider exploring our other supporting documents:
 1. [PLAN Appiled](PLAN-Applied.md)
-2. [PLAN Proof of Correctness](Proof-of-Correctness.md)
+2. [PLAN Proof of Correctness](PLAN-Proof-of-Correctness.md)
 
 ## Goals & Objectives
 

@@ -1,4 +1,4 @@
-# PLAN - Engineering Overview
+# PLAN Applied
 
 ```
          P urposeful
@@ -7,9 +7,7 @@
 P  L  A  N etwork
 ```
 
-# Applying PLAN
-
-A technology is only as interesting as how it can be harnessed and applied in our world.  
+A technology is only as interesting as how it can be harnessed and applied to our world.  
 
 ## Community Public Access 
 
@@ -89,7 +87,7 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 | Milestone |  Timeframe  | Description                                 |
 |:---------:|:-----------:|---------------------------------------------|
 |   Newton  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model) |
-|  Babbage  |   2018 Q3   | [Proof of correctness](proof-of-correctness.md) complete |
+|  Babbage  |   2018 Q3   | [PLAN Proof of correctness](PLAN-proof-of-correctness.md) complete |
 |   Morse   |   2018 Q4   | [go-plan](https://github.com/plan-tools/go-plan) command line proof of concept demo  |
 |   Kepler  |   2019 Q1   | [plan-unity](https://github.com/plan-tools/plan-unity) client p proof of concept demo  |
 | Fessenden |   2019 Q2   | Ethereum, DFINITY, Holochain, or another established DLT used for next PDI implementation |
