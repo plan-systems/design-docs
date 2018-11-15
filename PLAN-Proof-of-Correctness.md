@@ -722,4 +722,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
     - with a different storage technology all together.
 
 
-Back to [Table of Contents](README.md)
+---
+---
+
+Back to [README](README.md)
