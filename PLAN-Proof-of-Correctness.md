@@ -11,7 +11,7 @@ P  L  A  N etwork
 
 In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-though and demonstration that a proposed method and/or design rigorously satisfies a given set of specifications or claims.  The intention is to remove _all doubt_ that there exists a set of conditions such that the proposed method would _not_ meet all the specifications.
 
-Below, we express a [scenario](#scenario), list a [set of specifications](#Specifications-&-Requirements), and propose [a system of operation](#Proposed-System-of-Operation) intended to address the scenario and specifications.  We then proceed to demonstrate [correctness for each specification](#Proof-of-Requirements-&-Claims), citing how the system and its prescribed operation satisfies that specification.  
+Below, we express a [scenario](#scenario), list a [set of specifications](#Specifications-&-Requirements), and propose [a system of operation](#Proposed-System-of-Operation) intended to address the scenario and specifications.  We then proceed to demonstrate [correctness for each specification](#Proof-of-Specifications), citing how the system and its prescribed operation satisfies that specification.  
 
 This document, although labeled "proof", is not perfect and has areas needing deeper analysis. It is intended to be a blueprint and serve as an ongoing open analysis of a pluggable, distributed, and extensible system.  The data structures listed here are intended to convey understanding and model correctness more than they are intended to be performant. 
 
@@ -23,7 +23,7 @@ This document, although labeled "proof", is not perfect and has areas needing de
 - [Specifications & Requirements](#specifications--requirements)
 - [Proposed System of Operation](#proposed-system-of-operation)
 - [Standard Procedures](#standard-procedures)
-- [Proof of Requirements & Claims](#proof-of-requirements--claims)
+- [Proof of Specifications](#proof-of-Specifications)
 
 
 ---
@@ -506,9 +506,9 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 ---
 
-## Proof of Requirements & Claims
+## Proof of Specifications
 
-_Each item below corresponds to each item in the [Specifications & Requirements](#Specifications-&-Requirements) section_.
+_Each item below corresponds to each item in the [Specifications & Requirements](#Specifications--Requirements) section_.
 
 
 #### Proof of Signal Opacity
