@@ -84,19 +84,20 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 
 ## Milestones
 
-| Milestone |  Timeframe  | Description                                 |
-|:---------:|:-----------:|---------------------------------------------|
-|   Newton  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model) |
-|  Babbage  |   2018 Q3   | [PLAN Proof of correctness](PLAN-proof-of-correctness.md) complete |
-|   Morse   |   2018 Q4   | [go-plan](https://github.com/plan-tools/go-plan) command line proof of concept demo  |
-|   Kepler  |   2019 Q1   | [plan-unity](https://github.com/plan-tools/plan-unity) client p proof of concept demo  |
+| Milestone |  Timeframe  | Description                                                                               |
+|:---------:|:-----------:|-------------------------------------------------------------------------------------------|
+|   Newton  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model)     |
+|  Babbage  |   2018 Q3   | [PLAN proof of correctness](PLAN-proof-of-correctness.md) complete                        |
+|   Morse   |   2018 Q4   | [go-plan](https://github.com/plan-tools/go-plan) command line proof of concept demo       |
+|  Mercator |   2018 Q4   | PLAN architecture visualization exhibit in Unity                                          |
+|   Kepler  |   2019 Q1   | [plan-unity](https://github.com/plan-tools/plan-unity) client proof of concept demo       |
 | Fessenden |   2019 Q2   | Ethereum, DFINITY, Holochain, or another established DLT used for next PDI implementation |
-|  Lovelace |   2019 Q2   | Installer and GUI setup experience for macOS  |
-|   Turing  |   2019 Q3   | go-plan support and QA for Linux | 
-|  Galileo  |   2019 Q3   | PLAN Foundation internally replaces Slack with PLAN  |
-| Hollerith |   2019 Q4   | Installer and GUI setup experience for Windows  | 
-|   Barton  |   2020 Q1   | PLAN helps support [Art Community Builders](http://artcommunitybuilders.org/) |
-|     -     |    2020+    | PLAN expands support for other volunteer-run events  |
+|  Lovelace |   2019 Q2   | Installer and GUI setup experience for macOS                                              |
+|   Turing  |   2019 Q3   | go-plan support and QA for Linux                                                          | 
+|  Galileo  |   2019 Q3   | PLAN Foundation internally replaces Slack with PLAN                                       |
+| Hollerith |   2019 Q4   | Installer and GUI setup experience for Windows                                            | 
+|   Barton  |   2020 Q1   | PLAN helps support [Art Community Builders](http://artcommunitybuilders.org/)             |
+|     -     |    2020+    | PLAN expands support for other volunteer-run events                                       |
 
 
 ---
