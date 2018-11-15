@@ -13,7 +13,7 @@ In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Cor
 
 Below, we express a [scenario](#scenario), list a [set of specifications](#Specifications-&-Requirements), and propose [a system of operation](#Proposed-System-of-Operation) intended to address the scenario and specifications.  We then proceed to demonstrate [correctness for each specification](#Proof-of-Requirements-&-Claims), citing how the system and its prescribed operation satisfies that specification.  
 
-This document, although labeled "proof", is not perfect and contains areas needing deeper analysis. It is intended to be a blueprint and serve as an ongoing open analysis of a pluggable, distributed, and extensible system.  The data structures listed here are intended to convey understanding and model correctness more than they are intended to be performant. 
+This document, although labeled "proof", is not perfect and has areas needing deeper analysis. It is intended to be a blueprint and serve as an ongoing open analysis of a pluggable, distributed, and extensible system.  The data structures listed here are intended to convey understanding and model correctness more than they are intended to be performant. 
 
 
 ## Table of Contents
@@ -62,7 +62,6 @@ This document, although labeled "proof", is not perfect and contains areas needi
     - [Proof of Practical Security Provisioning](#proof-of-practical-security-provisioning)
     - [Proof of Independence Assurance](#proof-of-independence-assurance)
     - [Proof of Storage Portability](#proof-of-storage-portability)
-- [Forward](#forward)
 
 
 ---
@@ -107,6 +106,7 @@ No assumptions are made about network connectivity or reachability in this proof
 
 Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s overall network properties and behavior.  [Liveness versus Safety](#liveness-vs-safety) discusses tradeoffs for various choices of **𝓛**.
 
+--- 
 
 ## Liveness vs Safety
 
@@ -722,4 +722,4 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
     - with a different storage technology all together.
 
 
-[Back to Table of Contents](README.md)
+Back to [Table of Contents](README.md)

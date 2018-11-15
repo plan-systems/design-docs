@@ -169,4 +169,4 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 
 
 
-[Back to Table of Contents](README.md)
+Back to [Table of Contents](README.md)
