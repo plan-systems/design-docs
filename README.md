@@ -25,11 +25,11 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 ## Goals & Objectives
 
-PLAN can only be useful to organizations and community organizers if non-technical users can use it easily. As software designers, we must acknowledge that distributed systems, content-based addressing, and cryptography are alien concepts to most people. How does PLAN integrate complex technologies and make the composite more broadly usable?
+PLAN can only be useful to organizations and communities if non-technical users can use it easily. As software designers, we must acknowledge that distributed systems, content-based addressing, and cryptography are alien concepts to most people. How does PLAN integrate complex technologies and make the composite more broadly usable?
 
 The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how the encryption works — _but that it is intuitive and reliable_.
 
-Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially(graphically?) — _in real-time_ — through the [Unity](https://unity3d.com) 3D engine as it visualizes channels of information in virtual space, served by "community" nodes.  PLAN nodes, written in  [Go](https://golang.org), implement PLAN's underlying channel and access control infrastructure, and are built upon a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
+Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially — _in real-time_ — through the [Unity](https://unity3d.com) 3D engine as it visualizes channels of information in virtual space, served by "community" nodes.  PLAN nodes, written in  [Go](https://golang.org), implement PLAN's underlying channel and access control infrastructure, and are built upon a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
 
 
 For the PLAN end-user, using a graphics engine affords:
@@ -47,7 +47,7 @@ Under the hood, this affords:
  
 ## Licensing
 
-PLAN is open-source, and is freely available through the GNU General Public License [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The [PLAN Foundation](http://plan.tools/org) is a non-profit charitable foundation, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.
+PLAN is open-source, and is freely available through the GNU General Public License [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The [PLAN Foundation](http://plan.tools/wp-content/uploads/2018/11/PLAN-Textbook_ed0.9.pdf) is a non-profit charitable foundation, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.
 
 ## Architecture Synopsis
 
@@ -97,7 +97,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 - For example, community **C** could be founded such that a majority vote from a persistent, member-appointed "designee" are required to add a new member to the community. This would be enforced by a smart contract wired in to **C**'s storage layer. See PLAN's [Proof of Integrity Assurance](PLAN-Proof-of-Correctness.md#Proof-of-Integrity-Assurance) for more detail.
 
 #### Q: How is PLAN's Persistent Data Interface (PDI) implemented?
-- PLAN's append-only storage layerr ("**𝓛<sub>C</sub>**") described in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented from a range of storage layer options.  Since each implementation must make tradeoffs in its design, one particular option may be a great fit one community's needs but would be a poor fit for another community's needs. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for a deeper technical discussion.
+- PLAN's append-only storage layer ("**𝓛<sub>C</sub>**") described in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented from a range of storage layer options.  Since each implementation must make tradeoffs in its design, one particular option may be a great fit one community's needs but would be a poor fit for another community's needs. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for a deeper technical discussion.
 
 #### Q: So PLAN is locked into Unity?
 
