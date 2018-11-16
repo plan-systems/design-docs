@@ -11,7 +11,7 @@ P  L  A  N etwork
 
 [PLAN](http://plan.tools) is a multi-purpose communications and logistics planning tool for organizations and communities. PLAN is built on a “pluggable” architecture that integrates distributed services, encryption, and interoperable data-transport technologies — all inside a real-time visual interface. PLAN is free, open source, and intended to be an instrument for productivity, organization, and collaboration. 
 
-The purpose PLAN’s pluggable architecture is to allow anyone to easily add, improve, or extend component functionality. The design principles of PLAN center around making information easily interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.
+The purpose PLAN’s pluggable architecture is to allow anyone to easily add, improve, or extend component functionality. The design principles of PLAN also center around making information openly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.
 
 We wish to acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which subtly but decisively improves how protocols, paths, and formats can be expressed as to invite interoperability; `http://` becomes `/http/`.
 
