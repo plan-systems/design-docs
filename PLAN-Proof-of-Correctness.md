@@ -23,6 +23,7 @@ This document, although labeled "proof", is not perfect and has areas needing de
 - [Specifications & Requirements](#specifications--requirements)
 - [Proposed System of Operation](#proposed-system-of-operation)
 - [Standard Procedures](#standard-procedures)
+- [Liveness vs Safety](#Liveness-vs-Safety)
 - [Proof of Specifications](#proof-of-Specifications)
 
 
