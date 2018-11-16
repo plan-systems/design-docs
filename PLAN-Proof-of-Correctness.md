@@ -59,7 +59,7 @@ Security frameworks often don't analyze or provision for the loss of private key
 
 ---
 
-## On Network Connectivity
+## On Network Latency
 
 In any system, replicated data transactions and messages take non-trivial periods of time to traverse and propagate across the network.  Also, any number of nodes could be offline for indefinite periods of time. 
 

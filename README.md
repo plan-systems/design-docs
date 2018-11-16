@@ -99,7 +99,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 #### Q: How is PLAN's Persistent Data Interface (PDI) implemented?
 - PLAN's append-only storage layer ("**𝓛<sub>C</sub>**") described in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented from a range of storage layer options.  Since each implementation must make tradeoffs in its design, one particular option may be a great fit one community's needs but would be a poor fit for another community's needs. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for a deeper technical discussion.
 
-#### Q: So PLAN is locked into Unity?
+#### Q: Is PLAN is locked into Unity?
 
  - Altough the [PLAN&nbsp;Foundation](http://plan.tools) is making the initial PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established framework.
 
