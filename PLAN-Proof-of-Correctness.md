@@ -70,24 +70,6 @@ Like the way an operating system is _only_ as swift as its host storage system, 
 
 --- 
 
-## Liveness vs Safety
-
-"[Liveness](https://en.wikipedia.org/wiki/Liveness) versus [safety](https://en.wikipedia.org/wiki/Safety_property)" refers to canonical tradeoffs made in the design of a distributed system.  Here, it refers to the tradeoffs that a given **𝓛<sub>C</sub>** implementation codifies:
-
-- If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
-    1. **Δ<sub>C</sub>** will reflect network latency and topology
-    2. [Channel Entry Validation](#Channel-Entry-Validation) could potentially encounter an important but late-arriving entry, triggering a cascade of entry revalidation.
-    3.  The nodes of **C** are "offline-first" and will operate in independent cells if network connectivity is limited.
-        - As partitions rejoin after some time and synchronize, each **𝓡<sub>i</sub>** will receive new batches of old transactions (from other partitions).
-- If **𝓛<sub>C</sub>** favors _safety over liveness_ (such as a central server, [EOS](https://eos.io/), [DFINITY](https://dfinity.org/), [Hashgraph](https://www.hedera.com/)), then **𝓛<sub>C</sub>** by definition integrates a consensus mechanism that enforces a trailing timestamp boundary ("**t<sub>b</sub>**") for transactions.  This implies:
-    1. **Δ<sub>C</sub>** is helpfully fast (1-10 seconds)
-    2. [Channel Entry Validation](#Channel-Entry-Validation) has the luxury to finalize entries older than **t<sub>b</sub>** since later-arriving entries are not possible.
-    3. However, the nodes of **C** _require central network connectivity_ in order to operate.  If nodes partition from the central network:
-        - the **𝓛<sub>C</sub>** nodes will _**halt**, even though the nodes still have connectivity with each other_, and
-        - the **𝓛<sub>C</sub>** nodes will _only resume_ if/when the partition rejoins the central network.
-
-
----
 
 # Specifications & Requirements
 
@@ -140,6 +122,7 @@ The members of **C** wish to assert...
 - For example, suppose **𝓛<sub>C</sub>** has the safety feature such that it automatically halts under suspicious network conditions or insufficient peer connectivity.  However, earlier in **C**'s history, a CRDT that favored "liveness" over safety was chosen because **C** needed to be agile and often be "offline-first".
 
 
+
 ---
 
 # Proposed System of Operation
@@ -172,6 +155,7 @@ The members of **C** present the following system of operation...
 
 
 ---
+
 
 ## Channel Entries
 
@@ -340,6 +324,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 ---
 
+
 ## Standard Procedures
 
 
@@ -448,7 +433,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 #### Channel Entry Validation
 - Given node **n<sub>i</sub>** in **C**, let **𝓡<sub>i</sub>** denote the local replica state of **𝓛<sub>C</sub>** on node **n<sub>i</sub>** at a given time.
 - _Channel entry validation_ is the process of merging incoming entries arriving from **𝓛<sub>C</sub>** such that entries placed into "live" status (on **𝓡<sub>i</sub>**) comply and are in integrity with all relevant author and channel permissions and intent.
-- Since entries can arrive at **n<sub>i</sub>** in arbitrary order from **𝓛<sub>C</sub>**, entries will arrive whose validation will depend on other entries that have not yet been processed — _on entries yet to even arrive_.
+- Since entries can arrive at **n<sub>i</sub>** in arbitrary order from **𝓛<sub>C</sub>**, entries will arrive whose validation will depend on other entries that have not yet been processed — _or entries yet to even arrive_.
 - As node **n<sub>i</sub>** processes an incoming entry **e** to be merged with **𝓡<sub>i</sub>**:
     - If **e** satisfies _all channel properties and parent ACC permissions_, then **e** is placed into "live" status.
     - Otherwise, if for whatever reason **e** cannot complete validation, then **e** is placed into "deferred" status.
@@ -502,6 +487,25 @@ Channels are intended as general-purpose containers for [channel entries](#chann
             - If **𝓛<sub>C</sub>** favors safety over liveness, then there a highly limiting trailing time boundary for how "late" an entry can arrive (e.g. 10 seconds).  
         - Revalidation can also be strategically managed, where multiple ACC mutations are scheduled such that only a single revalidation pass is needed.
 
+
+
+---
+
+## Liveness vs Safety
+
+"[Liveness](https://en.wikipedia.org/wiki/Liveness) versus [safety](https://en.wikipedia.org/wiki/Safety_property)" refers to canonical tradeoffs made in the design of a distributed system.  Here, it refers to the tradeoffs that a given **𝓛<sub>C</sub>** implementation codifies:
+
+- If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
+    1. **Δ<sub>C</sub>** will reflect network latency and topology
+    2. [Channel Entry Validation](#Channel-Entry-Validation) could potentially encounter an important but late-arriving entry, triggering a cascade of entry revalidation.
+    3.  The nodes of **C** are "offline-first" and will operate in independent cells if network connectivity is limited.
+        - As partitions rejoin after some time and synchronize, each **𝓡<sub>i</sub>** will receive new batches of old transactions (from other partitions).
+- If **𝓛<sub>C</sub>** favors _safety over liveness_ (such as a central server, [EOS](https://eos.io/), [DFINITY](https://dfinity.org/), [Hashgraph](https://www.hedera.com/)), then **𝓛<sub>C</sub>** by definition integrates a consensus mechanism that enforces a trailing timestamp boundary ("**t<sub>b</sub>**") for transactions.  This implies:
+    1. **Δ<sub>C</sub>** is helpfully fast (1-10 seconds)
+    2. [Channel Entry Validation](#Channel-Entry-Validation) has the luxury to finalize entries older than **t<sub>b</sub>** since later-arriving entries are not possible.
+    3. However, the nodes of **C** _require central network connectivity_ in order to operate.  If nodes partition from the central network:
+        - the **𝓛<sub>C</sub>** nodes will _**halt**, even though the nodes still have connectivity with each other_, and
+        - the **𝓛<sub>C</sub>** nodes will _only resume_ if/when the partition rejoins the central network.
 
 
 ---
