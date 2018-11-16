@@ -11,7 +11,7 @@ P  L  A  N etwork
 
 [PLAN](http://plan.tools) is a multi-purpose communications and logistics planning tool for organizations and communities. PLAN is built on a “pluggable” architecture that integrates distributed services, encryption, and interoperable data-transport technologies — all inside a real-time visual interface. PLAN is free, open source, and intended to be an instrument for productivity, organization, and collaboration. 
 
-The purpose PLAN’s pluggable architecture is to allow anyone to easily add, improve, or extend component functionality. The design principles of PLAN are focused on making information transport and delivery openly interoperable and extensible, inspired by how HTTP originated as move to improve information interoperability and compatibility.
+The purpose PLAN’s pluggable architecture is to allow anyone to easily add, improve, or extend component functionality. The design principles of PLAN center around making information easily interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.
 
 We wish to acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which subtly but decisively improves how protocols, paths, and formats can be expressed as to invite interoperability; `http://` becomes `/http/`.
 
@@ -33,7 +33,7 @@ Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user ex
 
 
 For the PLAN end-user, using a graphics engine affords:
-   - A realtime, visual, and spatially-oriented interface
+   - A real-time, visual, and spatially-oriented interface
    - A first-class input and display device experience
    - Full horsepower of the user's device/workstation
    - Transparent end-to-end encryption
@@ -51,7 +51,7 @@ PLAN is open-source, and is freely available through the GNU General Public Lice
 
 ## Architecture Synopsis
 
-PLAN is a realtime 3D/visual frontend with a p2p backend designed such that one of many available DLTs serves a secure distributed storage provider.   The PLAN Unity client connects to a `pnode`, PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes. 
+PLAN is a real-time 3D/visual frontend with a p2p backend designed such that one of many available DLTs serves a secure distributed storage provider.   The PLAN Unity client connects to a `pnode`, PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes. 
 
 What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. That is, each member in a community holds a copy of the community keyring (in addition to their private keys for that community). In effect, the entire community's network traffic and infrastructure is inaccessible to all others, providing a fundamental cryptographic "city wall" to ensure privacy and security.  
 
@@ -101,7 +101,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 
 #### Q: Is PLAN is locked into Unity?
 
- - Altough the [PLAN&nbsp;Foundation](http://plan.tools) is making the initial PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established framework.
+ - Altough the [PLAN&nbsp;Foundation](http://plan.tools) is making the initial PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established real-time 3D framework.
 
 
 ---
