@@ -98,10 +98,11 @@ The members of **C** wish to assert...
     - gain access to others' private keys or information, or 
     - alter **𝓛<sub>C</sub>** in any way that poisons or destroys community content.
 
-#### Integrity Assurance
-- The members of **C** are confident and can rest assured that members in positions of authority are:
-    - **accountable**, in that any exercise of their authority or privileges is community-public information and cannot be concealed, _and_
-    - **bound**, in that they cannot circumvent **C**'s preestablished decision-making structure.
+#### Accountability Assurance
+- The members of **C** are confident and can rest assured that every member is:
+    - **accountable**, in that any exercise of their authority is community-public information and cannot be altered or concealed, _and_
+    - **bound**, in that they cannot circumvent **C**'s established rules and governance.
+- Even members in the _highest positions of authority_ within **C** are both **accountable** and **bound**.
 
 #### Membership Fluidity
 - New members can be invited to and join **C** at any time (given that **C** policies and permissions are met).
@@ -304,7 +305,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
         ```
 - Each entry is this channel embeds a `MemberEpoch`, **𝓔**, and is only considered valid if:
     - the member who signed the entry matches the `MemberID` that appears in **𝓔** (or is an authorized member delegated to do so), _and_
-    - the predecessor ("parent") epoch of **𝓔** is eligible to be supersede.
+    - the predecessor ("parent") epoch of **𝓔** is eligible to be superseded.
 - `MemberEpoch` importantly publishes a member's public keys to the rest of the community, allowing each node in **C** to maintain a database used to:
     - authenticate signatures on each `EntryCrypt`
     - encrypt entry content exclusively for a given member (used for key distribution)
@@ -312,9 +313,14 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     - [adding new members](#Adding-A-New-Member) to **C**,
     - [deactivating members](#deactivating-A-Member) from **C**, _and_
     - restoring a member's access to **C** following a [Member Halt](#member-halt).
-- When a [Member Halt](#member-halt) has been issued on **m**, an special `MemberEpoch` entry is posted to this channel.
-    - Once this entry is live, subsequent entries with **m**'s signature are deferred during [Channel Entry Validation](#Channel-Entry-Validation).
-    - When the cause for concern is addressed, a community authority [issues a new member epoch](#Issuing-a-New-member-Epoch) for **m**.
+- When a [Member Halt](#member-halt) has been issued on **m**, an special `MemberEpoch` entry ("**𝓔<sub>halt</sub>**")  is posted to this channel.
+    - The authorizing signature of **𝓔<sub>halt</sub>** must be:
+        - one of **m**'s personal signatures, _or_
+        - a member previously designated by **m**.
+    - **𝓔<sub>halt</sub>** is permitted to be signed by **m**'s recently superseded keys, otherwise an adversary in possession of **[]k<sub>m</sub>** could "lock out" **m** by [issuing a new member epoch](#Issuing-a-New-Member-Epoch)
+    - Once **𝓔<sub>halt</sub>** goes live, [Channel Entry Validation](#Channel-Entry-Validation) will defer _all further entries_ bearing **m**'s signature.
+    - If/When the cause for concern is addressed, a community authority would [issue a new member epoch](#Issuing-a-New-member-Epoch) for **m**, superseding **𝓔<sub>halt</sub>**.
+
 
 #### Community Epoch Channel
 - This channel is where a community admin (or authorized agent) posts an entry that, in effect, replaces the current community key with a newly issued key. 
@@ -341,9 +347,9 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 - Given: member **m** wishes to replace their currently published `MemberEpoch` with a new revision:
     - **m** generates new encryption and signing key pairs and places the private keys into their personal keyring, **[]k<sub>m</sub>**.
     - **m** prepares a replacement `MemberEpoch`, **𝓔′**, placing the newly generated public keys into **𝓔′**.
-    - **m** packages **𝓔′** into a new entry ("**e<sub>𝓔′</sub>**"), signs it, and posts it to **C**'s [member epoch channel](#Member-Epoch-Channel).
+    - **m** packages **𝓔′** into a new entry ("**e<sub>𝓔′</sub>**"), signs it, and posts it to **C**'s [Member Epoch Channel](#Member-Epoch-Channel).
     - As **e<sub>𝓔′</sub>** propagates across **𝓛<sub>C</sub>** (and goes live on **𝓡<sub>i</sub>**):
-        - [Channel entry validation](#Channel-Entry-Validation) now requires that entries authored by **m** must use the newly published signing key.
+        - [Channel Entry Validation](#Channel-Entry-Validation) now requires that entries authored by **m** must use the newly published signing key.
         - Other member clients intending to securely pass keys or content to **m** would use **m**'s updated public encryption key.
 - If a [Member Halt](#member-halt) has been ordered on **m**, then admin (or community authority) intervention is required before **m** is permitted to post a new `MemberEpoch`.
 
@@ -385,9 +391,8 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     - a peer of **m** (previously designated by **m**), upon receiving a message or signal of duress from **m**, _or_
     - a community automated agent, noticing damning/malicious activity originating from a holder of **[]k<sub>m</sub>**.
 - Once a Member Halt is initiated on **m**:
-    1. A special entry is posted to the [Member Epoch Channel](#member-epoch-channel), signaling to all nodes in **C** to defer all further entries signed by **[]k<sub>m</sub>**.  
-        - In effect, this halts any actor in possession of **[]k<sub>m</sub>** from posting _any_ entries to _any_ channel on **C**.
-        - The [Member Epoch Channel](#Member-Epoch-Channel) has a grace period for older (predecessor) member keys to be used to authorize a Member Halt.  This provisions against an adversary in possession of **[]k<sub>m</sub>** from "locking out" **m** by [issuing a new member epoch](#Issuing-a-New-Member-Epoch).
+    1. A special entry is posted to the [Member Epoch Channel](#member-epoch-channel), signaling to all nodes in **C** to defer all further entries signed by **[]k<sub>m</sub>** 
+        - ⇒  this prevents any actor in possession of **[]k<sub>m</sub>** from posting any entries as **m**.
     2. A special transaction is submitted to **𝓛<sub>C</sub>**, immediately "burning" the ability of **m** (or any actor in possession of **[]k<sub>m</sub>**) to post further transactions.
         - As this propagates across **𝓛<sub>C</sub>**, subsequent transactions signed by **[]k<sub>m</sub>** will be rejected because post permission on **𝓛<sub>C</sub>** will no longer exist for **[]k<sub>m</sub>**.
         - This removes an adversary's ability to vandalize **𝓛<sub>C</sub>** (e.g filling it with junk data).
@@ -580,16 +585,17 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
             - Although **m** would be able to submit doctored entries to **𝓛<sub>C</sub>**, [Channel Entry Validation](#Channel-Entry-Validation) running on _every other_ community node would see that **m** does not have the required privileges and would indefinitely defer (reject) the entry.   
             - This is analogous to submitting a transaction on the global Bitcoin or Ethereum blockchain that transfers coinage from an ID that does not have sufficient funds — the transaction will never validate. 
 
-#### Proof of Integrity Assurance
+#### Proof of Accountability Assurance
 
-[Integrity Assurance](#Integrity-Assurance) asserts that members in positions of authority are accountable and remain bound to community policies and expectations.
+[Accountability Assurance](#Accountability-Assurance) asserts that members who exercise authority are accountable and remain bound to community policies and expectations.
 
 - Every member action (mutation) on **C** is manifested as a channel entry, whether that is a routine content entry or a specially-signed entry in the [Member Epoch Channel](#Member-Epoch-Channel).
     - ⇒ every member interaction (channel entry) is replicated across **𝓛<sub>C</sub>**, an append-only storage layer, and available for review _to all other members of **C**_.
     - ⇒ entries are immutable on **𝓛<sub>C</sub>** and any attempt to conceal or rescind an entry will not alter the original entry.
     - ⇒ all actions in community-public channels, which includes all community administrative [reserved channels](#reserved-channels), are always openly visible for peer review and scrutiny.  
 - In private channels, entry content is encrypted and _only_ members granted access by the channel's owner can read the channel's content.  
-    - By default, _not even community admins or authorities_ can gain access private channel content unless they have been granted access.  
+    - By default, _not even community admins or authorities_ can gain access private channel content unless they have been granted access. 
+    - Through privater channel content is private, some metadata is community-public information — namely, who is interacting with who and how often.
     - Although the actions of a member in private channel **𝘾𝒉<sub>p</sub>** cannot be witnessed or reviewed by members outside of that channel, _any participant_ of **𝘾𝒉<sub>p</sub>** could be pressured by community authorities to turn over the channel's keyring (or face [deactivation](#deactivating-a-member]) or social/legal repercussions).
     - Community authorities are free to make use of private channels (just like other community members), but any action affecting reserved or community-public channels would be publicly available information and would be part of the permanent record that is **𝓛<sub>C</sub>**.
 - Important channels, such as [reserved channels](#reserved-channels) or channels used to conduct community governance, could harness the dependable and predictable nature of "smart contracts" on **𝓛<sub>C</sub>**.  For example:
