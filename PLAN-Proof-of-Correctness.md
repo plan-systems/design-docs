@@ -65,7 +65,14 @@ In any system, replicated data transactions and messages take non-trivial period
 
 No assumptions are made about network connectivity or reachability in this proof, and propagation times are expressed as "**Δ<sub>C</sub>**":
 - Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.9% chance that all _reachable_ nodes in **C** have received a given replicated transaction over **𝓛<sub>C</sub>**.
-- For example, given a swarm of reachable nodes on a WAN, **Δ<sub>C</sub>** is in the neighborhood of 1-10 minutes, depending on how **𝓛<sub>C</sub>** implements transaction replication (even swarms larger than 10<sup>7</sup>).
+- **Δ<sub>C</sub>** serves as a "rule-of-thumb" for characterizing information latency within **C**.  It allows us to more fully express aggregate performance, decision making calculus, and case-study analysis.
+- Although **Δ<sub>C</sub>** depends on how aggressively **𝓛<sub>C</sub>** trades off redundancy with bandwidth conservation,  **Δ<sub>C</sub>** tends to track with `log(N)`, given `N` "well-connected" nodes.
+- For example: 
+    - Given a collection of N=1000 well-connected nodes, having:
+        1. a standard distribution of peer latency centered at .25 sec (with σ = .25 sec) 
+        2. a standard distribution of node "diameter" centered at 10 steps (with σ = 10 steps).
+    - ⇒ **Δ<sub>C</sub>** is in the neighborhood of 1*40 secs ⇒ 1 minute.
+    - If N is _doubled_, then **Δ<sub>C</sub>** only increases on the order of seconds. 
 
 Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s overall network properties and behavior.  [Liveness versus Safety](#liveness-vs-safety) discusses tradeoffs for various choices of **𝓛**.
 
