@@ -19,7 +19,7 @@ May PLAN empower organizations and individuals with little or no resources to se
 
 ## What's in This Repo?
 
-This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and _then_ explore our other supporting documents:
+This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and then explore our other supporting documents:
 1. [PLAN Appiled](PLAN-Applied.md)
 2. [PLAN Proof of Correctness](PLAN-Proof-of-Correctness.md)
 
@@ -27,9 +27,9 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 PLAN can only be useful to organizations and communities if non-technical users can use it easily. As software designers, we must acknowledge that distributed systems, content-based addressing, and cryptography are alien concepts to most people. How does PLAN integrate complex technologies and make the composite more broadly usable?
 
-The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how the encryption works — _but that it is intuitive and reliable_.
+The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it is intuitive and reliable_.
 
-Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially — _in real-time_ — through the [Unity](https://unity3d.com) 3D engine as it visualizes channels of information in virtual space, served by "community" nodes.  PLAN nodes, written in  [Go](https://golang.org), implement PLAN's underlying channel and access control infrastructure, and are built upon a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
+Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially — _in real-time_ — through the [Unity](https://unity3d.com) 3D engine as it visualizes channels of information in virtual space, served by "community" nodes.  These nodes, written in  [Go](https://golang.org), implement PLAN's underlying channel and access control infrastructure, and are built upon a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
 
 
 For the PLAN end-user, using a graphics engine affords:
@@ -51,7 +51,7 @@ PLAN is open-source, and is freely available through the GNU General Public Lice
 
 ## Architecture Synopsis
 
-PLAN is a real-time 3D/visual frontend with a p2p backend designed such that one of many available DLTs serves a secure distributed storage provider.   The PLAN Unity client connects to a `pnode`, PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes. 
+PLAN has a real-time 3D/visual frontend with a p2p backend designed such that one of many available DLTs serves as a secure distributed storage provider.   The PLAN Unity client connects to a `pnode`, PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes. 
 
 What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. That is, each member in a community holds a copy of the community keyring (in addition to their private keys for that community). In effect, the entire community's network traffic and infrastructure is inaccessible to all others, providing a fundamental cryptographic "city wall" to ensure privacy and security.  
 
@@ -74,7 +74,7 @@ PLAN has two persistent pluggable storage layers, one characterized by append-on
 
 PLAN is a p2p community-centric operating system, built on pluggable append-only and pluggable content-based addressing storage.  Community content is accessible via a _real-time_ visually intuitive interface — all within cryptographic layers of privacy. Its open-ended channel and ACC sub-systems provision for flexible, defensible, and first-class human access.
 
-Using PLAN, communities arise from organizers and members who value owning their own data, having a formidable crypto-city wall, and the ability to continue operating in the face of Internet disruptions.  
+Using PLAN, communities arise from organizers and members who value owning their own data, having a formidable cryptographic-city wall, and the ability to continue operating in the face of Internet disruptions.  
 
 
 
