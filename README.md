@@ -68,7 +68,7 @@ Moment to moment, each `pnode` in a given community:
 
 The permissions and rules of merge conflict resolution are deterministic so that strong eventual consistency (SEC) is preserved. This means that although a given pnode's data state may not be equal to other community pnodes state (due to network constraints), each pnode is guaranteed to converge to a monotonic state.
 
-PLAN has two persistent pluggable storage layers, one characterized by append-only operations, and the other characterized by content-based addressing. The former, dubbed the Persistent Data Interface (PDI) is used to host a community's channel data and is intentionally designed to be compatible with the append-only nature of blockchain storage. The latter, dubbed the Cloud File Interface (CFI), is used to serve a community's high capacity data needs and off-PDI storage requirements, while PLAN's channel protocols and GUI wrap hashnames and other implementation details that no one wants to see or interact with. For example, a channel of type `/plan/channel/file/cfi/video` is used as a wrapper whose entries are CFI pathnames to each successive revision of that file (e.g. `/plan/cfi/ipfs/QmYwAP...`). This schema affords:
+PLAN has two persistent pluggable storage layers, one characterized by append-only operations and the other characterized by content-based addressing. The former, the Persistent Data Interface (PDI) is used to host a community's channel data and is intentionally designed to be compatible with the append-only nature of blockchain storage. The latter, the Cloud File Interface (CFI), is used to support a community's bulk volatile data storage needs, while PLAN's channel protocols and GUI wrap hashnames and other implementation details that no one wants to see or interact with. For example, a channel of type `/plan/channel/file/cfi/video` is used as a wrapper whose entries are CFI pathnames to each successive revision of that file (e.g. `/plan/cfi/ipfs/QmYwAP...`). This schema affords:
    - PLAN's deterministic infrastructure to know which CFI items are in use ("pinned") and which can be unpinned/deallocated.
    - Seamless UI integration and interactivity.  In the client UI, a channel's wrapper identifier causes it to be presented as a single opaque object (like a traditional file), where its activation causes the latest revision to be fetched and consumed. This allows users to easily access community content while not having to have any understanding about what's happening under the hood (or having to interact with hashnames).
 
@@ -77,31 +77,33 @@ PLAN is a p2p community-centric operating system, built on pluggable append-only
 Using PLAN, communities arise from organizers and members who value owning their own data, having a formidable cryptographic-city wall, and the ability to continue operating in the face of Internet disruptions.  
 
 
-
-
 ---
 
- The [PLAN&nbsp;Foundation](http://plan.tools) also supports the development of a PLAN client in other environments, such as [Unreal](https://www.unrealengine.com) or [Electron](https://electronjs.org/).
 
 
 # FAQ
 
 #### Q: Why PLAN? Aren't there enough blockchain and DLTs already?
-- Indeed, there are dozens of advanced DLT projects available and new ones on the way.  _However, PLAN at its heart is not a distributed ledger technology._  The lower-level of PLAN is an information organization and permissions system that is _built on top of an existing distributed technology_. Consider: _PLAN is to blockchain as Linux is to a harddrive._  When a new more capable DLT arrives, PLAN's [Proof of Storage Portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability) demonstrates how a community can in effect upgrade their storage technology.
+- Indeed, there are many advanced DLT projects available and new ones on the way.  However, PLAN at its heart _is not a distributed ledger_.  The "lower" half of PLAN is an information organization and permissions system _built atop an existing storage system_. Consider: _PLAN is to blockchain as Linux is to a harddrive_.  If a more capable or suitable DLT appears, PLAN's [Proof of Storage Portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability) demonstrates how a community can always switch to a different storage technology.
+
+#### Q: How is PLAN's Persistent Data Interface (PDI) implemented?
+- PLAN's append-only storage layer ("**𝓛<sub>C</sub>**"), detailed in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented by a range of storage layer technologies.  This is a compelling feature since each storage implementation trades off some advantages in exchange for others.  One particular technology may be a great fit one community's needs but would be a poor fit for another. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for a deeper technical discussion.
+
+#### Q: Is _everything_ in a PLAN community stored on its shared storage layer?
+- You may be rightly unsettled if you think _all data_ in a PLAN community is permanently stored on its append-only shared storage layer.  The PDI is generally implemented as an immutable transaction log or blockchain, and so we would be remiss to assume that the PDI is sufficient to meet a community's storage needs.
+    - Consider a film production team using PLAN as a secure collaboration and file-sharing tool.  Suppose their post-production workflow is to render-out variations of scenes currently being edited for director review. It would be a waste to burn the community's _permanent_ shared storage to hold gigabytes of data that won't be needed after a week.  And it would be a _double waste_ since only a couple member nodes would be accessing it (as _all_ data under the PDI replicates to each community node).
+- The Cloud File Interface (CFI) refers to PLAN's abstraction of a [content-based]() storage system, where content is referenced by hashname.  Unlike the PDI, content written to the CFI isn't necessarily intended to persist indefinitely (though it may).
+- Generally speaking, each entry in a community "file" channel represents a revision of a high-level file and is either an inline content blob or a CFI hashname.  In the latter case, the entry is only a short string and the is user is never distracted with the sight or handling of a hashname as the PLAN UI hands off the CFI pathname for retrieval. 
 
 #### Q: But PLAN doesn't do X, fulfill need Y, or address use case Z.  How will PLAN address this?
-- PLAN is not meant to be _all_ things to _all_ people.  PLAN first intends to target the small and micro-sized organizations that currently have _no_ choices when it comes to a multi-platform, secure, real-time, free, and integrated operations platform. PLAN is all about offering a reliable and easy-to-use logistics and planning tool for organizations with little or no resources.
+- PLAN is not meant to be _all_ things to _all_ people. PLAN is intended for medium and small-sized organizations that have _few or no_ options when it comes to a multi-platform, secure, real-time, viable, and integrated operations platform. PLAN is all about offering a reliable and easy-to-use logistics and planning tool for organizations facing crisis or low-resource conditions. 
 
 #### Q: Does a PLAN community admin wield all the power and control?
 - Not unless you want it that way.  The phrase "community admin" is used in these docs to refer to an agent acting in accordance with community policies and bylaws on behalf of the community's already-established leadership. This means that a community can operate as strictly or as loosely as the founding members want, but those agreements are visible to the entire community.  
-- For example, community **C** could be founded such that a majority vote from a persistent, member-appointed "designee" are required to add a new member to the community. This would be enforced by a smart contract wired in to **C**'s storage layer. See PLAN's [Proof of Integrity Assurance](PLAN-Proof-of-Correctness.md#Proof-of-Integrity-Assurance) for more detail.
-
-#### Q: How is PLAN's Persistent Data Interface (PDI) implemented?
-- PLAN's append-only storage layer ("**𝓛<sub>C</sub>**") described in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented from a range of storage layer options.  Since each implementation must make tradeoffs in its design, one particular option may be a great fit one community's needs but would be a poor fit for another community's needs. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for a deeper technical discussion.
+- For example, community **C** could be founded such that a majority vote from a member-appointed set of "board" members are required in order to add a new member to the community. This would be enforced by a smart contract wired in to **C**'s storage layer. See PLAN's [Proof of Integrity Assurance](PLAN-Proof-of-Correctness.md#Proof-of-Integrity-Assurance) for more.
 
 #### Q: Is PLAN is locked into Unity?
-
- - Altough the [PLAN&nbsp;Foundation](http://plan.tools) is making the initial PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established real-time 3D framework.
+ - Although the [PLAN&nbsp;Foundation](http://plan.tools) is making the initial PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established real-time 3D framework.
 
 
 ---
