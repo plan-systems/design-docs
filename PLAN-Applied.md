@@ -11,11 +11,11 @@ A technology is only as interesting as how it can be harnessed and applied to ou
 
 ## Community Public Access 
 
-A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publicly accessible services to serve community content and scale (as a distributed system) alongside traditional web or internet services.  For example:
-- A musical artist uses PLAN to serve past show recordings and official track releases 
-- A documentary production uses PLAN to serve the film's trailer and the full film itself to users bearing a "paid" token.
-- A PLAN daemon periodically renders out an image of a map with spatial annotations from a community geo-space channel, served as a web page.
-- A PLAN email gateway daemon bridges access to the members of a PLAN community and the outside world.  Unlike email, however, each incoming email contains an access token that the recipient previously issued the sender, effectively eliminating unsolicited messages/spam.  Further, a sender who abuses their privileges (or loses or resells their token to a spammer), can be blocked without any concern of messages from other senders being inadvertently filtered/blocked.
+A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publicly accessible services to serve explicitly designated community content and scale (as a distributed system) alongside traditional web or internet services.  For example:
+- A musical artist uses PLAN to serve show recordings and official releases. 
+- A documentary production uses PLAN to serve the film's trailer and perhaps the full film itself to users bearing a "paid" token.
+- A PLAN daemon periodically renders out an image of a map with spatial annotations from a community geo-space channel, served as an html page.
+- A PLAN email gateway daemon bridges access to the members of a PLAN community and the outside world.  Unlike email, however, each incoming email contains an access token that the recipient previously issued the sender, effectively eliminating unsolicited messages ("spam").  Further, a sender who abuses their privileges (or loses or resells their token to a spammer), can be blocked without any concern of messages from _other_ senders being inadvertently filtered/blocked.
 
 ## Interoperable Data Structures
 
@@ -46,12 +46,12 @@ A community using PLAN will inevitably be interested in making some of its parts
         Subs       []*Block
     }
     ```
-- Importantly, each `plan.Block` instance is [self-describing](https://multiformats.io/) and can contain sub-blocks. Because each element is accompanied by a label, codec descriptor, or additional sub-blocks, `plan.Block` has the _simplicity and flexibility_ of JSON but the _efficiency and compactness_ of binary serialization.  This means any hierarchy of information or content can be structured dynamically, and each element contains enough meta information for it to be safely analyzed and processed further.
+- Importantly, each `plan.Block` instance is [self-describing](https://multiformats.io/) and can contain sub-blocks. Because each `plan.Block` can be accompanied by a label, codec descriptor, or any number of sub-blocks, it has the _simplicity and flexibility_ of JSON but the _efficiency and compactness_ of binary serialization.  This means any hierarchy of information or content can be structured dynamically, and each element contains enough meta information for it to be safely analyzed and processed further.
 - Like other foundational data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, including C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby.  Not bad!
-    - A protobuf struct ("message") can be composed of primitive data types or user-defined messages.
-    - Fields of a protobuf message are explicitly and strongly typed.
-    - Revisions to a protobuf message are backward-compatible with previous revisions.
     - Protobufs are faster, simpler, safer, more compact, and more efficient than JSON and XML.
+    - A Protobuf struct ("message") can be composed of primitive data types or user-defined messages.
+    - The fields of a Protobuf message are explicitly and strongly typed.
+    - Revisions to a Protobuf message are backward-compatible with earlier revisions.
     - Protobufs pair well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network support.
     - An entire `plan.Block` hierarchy can be serialized or deserialized using a single line of code — _in every major language and environment_.
 
@@ -68,7 +68,8 @@ A community using PLAN will inevitably be interested in making some of its parts
 
 ## Channel Protocols
 
-PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and productivity workflows in PLAN create new channels and new channel types all the time.  However, as a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or blindly assume that content is in a particular form.   Both PLAN channel "epochs" and channel entries each embed a `plan.Block`, making each a flexible self-describing container for content and information.  _This offers profound interoperability in the way that HTTP headers also self-describe content for a HTTP response._
+- PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and productivity workflows in PLAN create new channels and new channel types all the time.  
+- As a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or blindly assume that content is in a particular form.   Both PLAN channel "epochs" and channel entries each embed a `plan.Block`, making each a flexible self-describing container for content and information.  _This offers profound interoperability in the way that HTTP headers also self-describe content for a HTTP response._
 
 | Example Channel Descriptor | Expected Channel Entry Content Codecs | Example Client UI Experience  |
 |----------------------|:--------------------:|--------------------------------------|
@@ -87,7 +88,7 @@ PLAN's general purpose channels are its workhorse and _raison d'être_.  Like fi
 | Milestone |  Timeframe  | Description                                                                               |
 |:---------:|:-----------:|-------------------------------------------------------------------------------------------|
 |   [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model)     |
-|  [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)  |   2018 Q3   | [PLAN Proof of Correctness](PLAN-proof-of-correctness.md) complete                        |
+|  [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)  |   2018 Q3   | [PLAN Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
 |   [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)   |   2018 Q4   | [go-plan](https://github.com/plan-tools/go-plan) command line proof of concept demo       |
 |  [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |   2018 Q4   | PLAN architecture visualization exhibit in Unity                                          |
 |   [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)  |   2019 Q1   | [plan-unity](https://github.com/plan-tools/plan-unity) client proof of concept demo       |
