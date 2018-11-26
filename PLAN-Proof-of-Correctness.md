@@ -317,7 +317,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     - The authorizing signature of **𝓔<sub>halt</sub>** must be:
         - one of **m**'s personal signatures, _or_
         - a member previously designated by **m**.
-    - **𝓔<sub>halt</sub>** is permitted to be signed by **m**'s recently superseded keys, otherwise an adversary in possession of **[]k<sub>m</sub>** could "lock out" **m** by [issuing a new member epoch](#Issuing-a-New-Member-Epoch)
+    - **𝓔<sub>halt</sub>** is permitted to be signed by **m**'s recently superseded keys, otherwise an adversary in possession of **[]k<sub>m</sub>** could "lock out" **m** by [issuing a new member epoch](#Issuing-a-New-Member-Epoch).
     - Once **𝓔<sub>halt</sub>** goes live, [Channel Entry Validation](#Channel-Entry-Validation) will defer _all further entries_ bearing **m**'s signature.
     - If/When the cause for concern is addressed, a community authority would [issue a new member epoch](#Issuing-a-New-member-Epoch) for **m**, superseding **𝓔<sub>halt</sub>**.
 
@@ -681,7 +681,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
     - ⇒  **𝓛<sub>C</sub>** is characterized as a set of sealed data transactions and can be partitioned at any given time index.  
 - The founders of **C′** do the following:
     1. Instantiate a new CRDT ("**𝓛<sub>C′</sub>**") and allocate bulk postage identically to **𝓛<sub>C</sub>**'s genesis _in addition to_ allocating bulk postage to **[]a′**.
-    2. Instantiate Copy the parameters from **C**'s genesis _in addition to_ granting admin status to **[]a′**.
+    2. Copy the parameters from **C**'s genesis _in addition to_ grant admin status to **[]a′**.
     3. Transfer entries from **𝓛<sub>C</sub>** to **𝓛<sub>C′</sub>** up to time **t<sub>C′</sub>** (omitting entries as desired).
         - Allocations from step (1) ensure that transactions copied from **𝓛<sub>C</sub>** and posted to **𝓛<sub>C′</sub>** will clear.
     4. Once is **𝓛<sub>C′</sub>** updated up to desired time, **[]a′** can effectively assert control:
