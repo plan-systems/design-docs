@@ -88,14 +88,14 @@ A community using PLAN will inevitably be interested in making some of its parts
 | Milestone |  Timeframe  | Description                                                                               |
 |:---------:|:-----------:|-------------------------------------------------------------------------------------------|
 |   [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model)     |
-|  [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)  |   2018 Q3   | [PLAN Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
+|  [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)  |   2018 Q3   | PLAN [Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
 |   [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)   |   2018 Q4   | [go-plan](https://github.com/plan-tools/go-plan) command line proof of concept demo       |
-|  [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |   2018 Q4   | PLAN architecture visualization exhibit in Unity                                          |
-|   [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)  |   2019 Q1   | [plan-unity](https://github.com/plan-tools/plan-unity) client proof of concept demo       |
-| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) |   2019 Q2   | Ethereum, DFINITY, Holochain, or another established DLT used for next PDI implementation |
-|  [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace) |   2019 Q2   | Installer and GUI setup experience for macOS                                              |
+|  [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |   2019 Q1   | [plan-unity](https://github.com/plan-tools/plan-unity) preliminary proof of concept |                                       |
+|   [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)  |   2019 Q2   |  CFI ([IPFS](https://ipfs.io/)) integratation   |
+| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) |   2019 Q2   | Ethereum, DFINITY, Holochain, or other established DLT used for first PDI implementation |
+|  [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace) |   2019 Q3   | Installer and GUI setup experience for macOS                                              |
 |   [Turing](https://en.wikipedia.org/wiki/Alan_Turing)  |   2019 Q3   | go-plan support and QA for Linux                                                          | 
-|  [Galileo](https://en.wikipedia.org/wiki/Galileo_Galilei)  |   2019 Q3   | PLAN Foundation internally replaces Slack with PLAN                                       |
+|  [Galileo](https://en.wikipedia.org/wiki/Galileo_Galilei)  |   2019 Q4   | PLAN Foundation internally replaces Slack with PLAN                                       |
 | [Hollerith](https://en.wikipedia.org/wiki/Herman_Hollerith) |   2019 Q4   | Installer and GUI setup experience for Windows                                            | 
 |   [Barton](https://en.wikipedia.org/wiki/Clara_Barton)  |   2020 Q1   | PLAN helps support [Art Community Builders](http://artcommunitybuilders.org/)             |
 |     -     |    2020+    | PLAN expands support for other volunteer-run events                                       |
