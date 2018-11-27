@@ -53,11 +53,21 @@ PLAN is open-source, and is freely available through the GNU General Public Lice
 
 PLAN has a real-time 3D/visual frontend with a p2p backend designed such that one of many available DLTs serves as a secure distributed storage provider.   The PLAN Unity client connects to a `pnode`, PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes. 
 
-What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. That is, each member in a community holds a copy of the community keyring (in addition to their private keys for that community). In effect, the entire community's network traffic and infrastructure is inaccessible to all others, providing a fundamental cryptographic "city wall" to ensure privacy and security.  
+What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. The entire community's network traffic and infrastructure is inaccessible to all others, forming a cryptographic "city wall" of privacy and security.  
 
-Each member of a (self-hosted and -organized) community running the PLAN client software has a copy of the community keyring, giving them the ability to decrypt community data. Anyone _without_ this keyring — anyone _not_ in the community — is _outside_ the community's cryptographic city wall. Inside a community's city wall, residing on each community `pnode`, lives an IRC-inspired channel infrastructure. Each PLAN channel entry is composed of content data and an accompanying header that woeks like HTTP headers. When a PLAN channel is created, it is assigned a protocol identifier. A [channel's protocol](PLAN-Applied.md#channel-protocols) implies the _kind_ of entries that are expected to appear in that channel and _how_ they are interpreted. For example, an entry consisting of a geographical position could appear in a channel of type `/plan/channel/chat`, or in a channel of type `/plan/channel/geospace`; the UI is able to flexibly handle the entry differently. In the PLAN graphical client, each channel protocol identifier maps to a particular "channel UI driver", allowing the client to select from any of the available drivers. So instead of people requiring a web browser, PLAN is an open platform that offers users the ability to select or add channel UI drivers that suit their interests, taste, or needs.
+A PLAN community is peer-hosted and is formed when one or more founders/organizers gather and together use the community genesis tool.  After that, the founders and subsequent members of the community maintain a copy of the "community keyring", giving members the ability to access the community's shared data repository. Anyone _without_ this keyring — anyone _not_ in the community — is _outside_ the community's crypto-city wall. 
 
-In addition to the entry protocol a channel is assigned, a PLAN channel is _also_ assigned an owning access control channel (ACC) that specifies channel permissions, limits, and behaviors. A channel's controlling ACC, like all channels, also cites its own controlling ACC, and so on — up to the community's root ACC. A community's root ACC, is one of several "hard&nbsp;wired" channels that serve core community functions and can only be altered by community admins. Another such channel, for example, is the community registry channel, containing the member ID and public keys of each community member. Functions such as community member key recovery (i.e. a member "epoch" change) and other forms of private key exchange are carried out through community channels explicitly reserved for these purposes.
+Inside this outer layer of security, residing on each community node, lives an IRC-inspired channel infrastructure. Each PLAN channel entry contains content and metadata that works like HTTP headers, allowing content to be richly interpreted.  But a channel's "protocol identifier" also contributes to describing how entry content should be interpreted.  
+
+When a PLAN channel is created, it is assigned a protocol identifier string (e.g. `/plan/ch/chat`). This [channel protocol](PLAN-Applied.md#channel-protocols) implies the _kind_ of entries that are expected to appear in a channel and _how_ they should be interpreted and presented within the PLAN client. In the client, each channel type string maps to a channel UI "driver" that is invoked when the user opens/views a channel, like when an OS opens a specific application to handle a given file type.  A power user can set their client to invoke alternative channel drivers that may be more appropriate for their situation, device, or personal taste.  This leaves open and exciting possibilities for specialized and custom channel type development.  "Out of the box", PLAN includes support for channels that:
+- facilitate 1-on-1 and group communication
+- link maps, charts, floor plans, and other real-world spaces
+- coordinate and visualize personnel scheduling
+- track tasks and task status
+- accept and filter standardized forms
+- track inventory or supply levels
+
+In addition to the entry protocol a channel is assigned, a PLAN channel is _also_ assigned an owning access control channel (ACC) that specifies channel permissions, limits, and behaviors. A channel's controlling ACC, like all channels, also cites its own controlling ACC, and so on — up to the community's root ACC. A community's root ACC, is one of several "hard&nbsp;wired" channels that serve core community functions and can only be altered by community admins. Another such channel, for example, is the community registry channel, containing the member ID and public keys of each community member. Functions such as member key regeneration and key exchange are carried out through community channels explicitly reserved for these purposes.
 
 Akin IRC, PLAN channels are either "community-public" (readable only to members in the community), or they are private where entry content is encrypted such that only channel members have access. Only community members that have explicitly been given a private channel's key have the ability to decrypt its content. And although channels are fundamentally append-only, channels can be set so that new entry content can replace past content, allowing past entries to be edited (though past entries will naturally remain). The flexibility of a channel's protocol identifier plus the rich and flexible nature of PLAN's [interoperable data structures](PLAN-Applied.md#Interoperable-Data-Structures) make PLAN's channel system dynamic and extensible — designed to be represented and interacted with via a local, graphical, high-performance interface.
 
@@ -72,16 +82,18 @@ PLAN has two persistent pluggable storage layers, one characterized by append-on
    - PLAN's deterministic infrastructure to know which CFI items are in use ("pinned") and which can be unpinned/deallocated.
    - Seamless UI integration and interactivity.  In the client UI, a channel's wrapper identifier causes it to be presented as a single opaque object (like a traditional file), where its activation causes the latest revision to be fetched and consumed. This allows users to easily access community content while not having to have any understanding about what's happening under the hood (or having to interact with hashnames).
 
-PLAN is a p2p community-centric operating system, built on pluggable append-only and pluggable content-based addressing storage.  Community content is accessible via a _real-time_ visually intuitive interface — all within cryptographic layers of privacy. Its open-ended channel and ACC sub-systems provision for flexible, defensible, and first-class human access.
+## Summary
+
+PLAN is a p2p community-first tool, built on pluggable append-only and pluggable content-based addressing storage.  Community content is accessible via a _real-time_ visually intuitive interface protected inside cryptographic layers of privacy. Its open-ended channel sub-systems form a level foundation that supports flexible, defensible, and first-class human access.
 
 Using PLAN, communities arise from organizers and members who value owning their own data, having a formidable cryptographic-city wall, and the ability to continue operating in the face of Internet disruptions.  
-
 
 ---
 
 
 
 # FAQ
+
 
 #### Q: Why PLAN? Aren't there enough blockchain and distributed ledger technologies already?
 - Indeed, there are many advanced DLT projects available and new ones on the way.  However, _PLAN is not characterized as a distributed ledger_.  The "lower" half of PLAN is an information organization and permissions system _built atop an interchangeable storage system_. Consider: _PLAN is to DLT as operating system is to a harddrive_.  If a more capable or suitable DLT appears, PLAN's [Proof of Storage Portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability) demonstrates how a community can always switch to a different storage technology.
@@ -102,6 +114,10 @@ Using PLAN, communities arise from organizers and members who value owning their
 
 #### Q: Is PLAN is locked into Unity?
 - Although the [PLAN&nbsp;Foundation](http://plan.tools) is making the initial PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established real-time 3D framework.
+
+
+#### Q: How can I try PLAN or support its development?
+- Check out the [PLAN website](http://plan.tools) and fill out our contact form.  This will allow you hear about announcements and upcoming releases.
 
 ---
 ---
