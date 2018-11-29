@@ -59,13 +59,14 @@ A PLAN community is peer-hosted and is formed when one or more founders/organize
 
 Inside this outer layer of security, residing on each community node, lives an IRC-inspired channel infrastructure. Each PLAN channel entry contains content and metadata that works like HTTP headers, allowing content to be richly interpreted.  But a channel's "protocol identifier" also contributes to describing how entry content should be interpreted.  
 
-When a PLAN channel is created, it is assigned a protocol identifier string (e.g. `/plan/ch/chat`). This [channel protocol](PLAN-Applied.md#channel-protocols) implies the _kind_ of entries that are expected to appear in a channel and _how_ they should be interpreted and presented within the PLAN client. In the client, each channel type string maps to a channel UI "driver" that is invoked when the user opens/views a channel, like when an OS opens a specific application to handle a given file type.  A power user can set their client to invoke alternative channel drivers that may be more appropriate for their situation, device, or personal taste.  This leaves open and exciting possibilities for specialized and custom channel type development.  "Out of the box", PLAN includes support for channels that:
-- facilitate 1-on-1 and group communication
-- link maps, charts, floor plans, and other real-world spaces
-- coordinate and visualize personnel scheduling
+When a PLAN channel is created, it is assigned a protocol identifier string (e.g. `/plan/ch/chat`). This [channel protocol](PLAN-Applied.md#channel-protocols) implies the _kind_ of entries that are expected to appear in a channel and _how_ they should be interpreted and presented within the PLAN client. In the client, each channel type string maps to a channel UI "driver" that is invoked when the user opens/views a channel, like when an OS opens a specific application to handle a given file type.  A power user can set their client to invoke alternative channel drivers that may be more appropriate for their situation, device, or personal taste.  This leaves exciting possibilities for custom channel design and development.  As PLAN grows into its core mission and vision, primary development is going towards channels that:
+- facilitate group communication and workflows
 - track tasks and task status
-- accept and filter standardized forms
-- track inventory or supply levels
+- build interactive maps, charts, floor plans, and virtual spaces
+- track inventory and supplies
+- integrate files and media sharing
+- coordinate and visualize calendars and scheduling
+- accept and filter custom-designed forms
 
 In addition to the entry protocol a channel is assigned, a PLAN channel is _also_ assigned an owning access control channel (ACC) that specifies channel permissions, limits, and behaviors. A channel's controlling ACC, like all channels, also cites its own controlling ACC, and so on — up to the community's root ACC. A community's root ACC, is one of several "hard&nbsp;wired" channels that serve core community functions and can only be altered by community admins. Another such channel, for example, is the community registry channel, containing the member ID and public keys of each community member. Functions such as member key regeneration and key exchange are carried out through community channels explicitly reserved for these purposes.
 
@@ -102,7 +103,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 - PLAN's append-only storage layer ("**𝓛<sub>C</sub>**"), detailed in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented by a range of storage layer technologies.  This is a compelling feature since each storage implementation trades off some advantages in exchange for others.  One particular technology may be a great fit one community's needs but would be a poor fit for another. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for a deeper technical discussion.
 
 #### Q: Is _everything_ in a PLAN community stored on its shared storage layer?
-- The Persistent Data Interface (PDI) is intended for _permanent_ community storage and is synonymous with a community's channel "repo".  The PDI is _not_ suited to store bulk data, especially if the data will only be accessed by a couple community members or the data is only needed temporarily. 
+- The Persistent Data Interface (PDI) is intended for _permanent_ community storage and is synonymous with being a community's channel repository (or "repo").  The PDI is not suited to store bulk data, especially if the data will only be accessed by a couple community members or the data is only needed temporarily. 
  - The [Cloud File Interface](PLAN-Applied.md#cloud-file-interface) is an abstraction that exposes a distributed storage system, used for both short-term and long-term bulk data storage. It pairs well with the PDI since a channel entry can reference any CFI item using only a short string.  
 
 #### Q: But PLAN doesn't do X, fulfill need Y, or address use case Z.  How will PLAN address this?
