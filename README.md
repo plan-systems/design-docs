@@ -49,7 +49,7 @@ PLAN can only be useful to organizations and communities if non-technical users 
 
 The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it is intuitive and reliable_.
 
-Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially — _in real-time_ — through the [Unity](https://unity3d.com) 3D engine as it visualizes channels of information in virtual space, served by "community" nodes.  These nodes, written in  [Go](https://golang.org), implement PLAN's underlying channel and access control infrastructure, and are built upon a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
+Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially — _in real-time_ — through the [Unity](https://unity3d.com) 3D engine as it renders channels of information in virtual space, served by "community" nodes.  These nodes, written in  [Go](https://golang.org), implement PLAN's underlying channel and access control infrastructure, and are built upon a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
 
 
 For the PLAN end-user, using a graphics engine affords:
@@ -59,7 +59,7 @@ For the PLAN end-user, using a graphics engine affords:
    - Transparent end-to-end encryption
    - Multi-platform support (Android, iOS, macOS, Windows, Linux)
 
-Under the hood, this affords:
+Under the hood, this provides:
    - The benefits and capabilities of Go
    - A lean, performant, and robust multi-platform peer-to-peer node
    - Embedding of key stacks, namely: [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), and [Protobufs](https://developers.google.com/protocol-buffers)+[gRPC](https://grpc.io).
@@ -67,7 +67,7 @@ Under the hood, this affords:
  
 ## Licensing
 
-PLAN is open-source, and is freely available through the GNU General Public License [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). [PLAN Systems](http://plan.tools/wp-content/uploads/2018/11/PLAN-Textbook_ed1.0.pdf) is a non-profit charitable foundation, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.
+PLAN is open-source, and is freely available through the GNU General Public License [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). [PLAN Systems](http://plan.tools/wp-content/uploads/2018/11/PLAN-Textbook_ed0.9.pdf) is a non-profit public charity, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.
 
 ## Architecture Synopsis
 
