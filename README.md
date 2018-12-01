@@ -9,13 +9,33 @@ P  L  A  N etwork
 
 ## Welcome to PLAN!
 
-[PLAN](http://plan.tools) is a multi-purpose communications and logistics planning tool for organizations and communities. PLAN is built on a “pluggable” architecture that integrates distributed services, encryption, and interoperable data-transport technologies — all inside a real-time visual interface. PLAN is free, open source, and intended to be an instrument for productivity, organization, and collaboration. 
+The goal of PLAN is provide a space for groups to communicate, collaborate, and coordinate logistics. PLAN features:
+- Channels for chat, file sharing, interactive maps, forms, tasking, scheduling, inventory management
+- A user interface where channels and objects are pinned in virtual spaces
+- Peer to peer storage and communication that doesn’t require a central server
+- Integrated collaboration tools that are secure, private, and reliable
+- A highly “pluggable” architecture intended for modification and customization
+	
+PLAN’s pluggable architecture brings together distributed services, encryption, and interoperable data-transport technologies — all inside a spatial interface. The design principles of PLAN also center around making information openly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility. PLAN is free, open source, open protocol, and intended to be an instrument for productivity, organization, and collaboration.
 
-The purpose of PLAN’s pluggable architecture is to allow anyone to easily add, improve, or extend component functionality. The design principles of PLAN also center around making information openly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.
+Groups that might use PLAN:
+- Community organizations
+- Crisis management teams
+- Scientific researchers
+- Educators
+- Businesses and sales teams
+- Clubs & gaming groups
+- Support groups
 
-We wish to acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which subtly but decisively improves how protocols, paths, and formats can be expressed to invite interoperability; `http://` becomes `/http/`.
+We wish to acknowledge the principles surrounding multistream by Protocol Labs, which subtly but decisively improves how protocols, paths, and formats can be expressed to invite interoperability; http:// becomes /http/.
 
 May PLAN empower organizations and individuals with little or no resources to self-organize.
+
+## Why PLAN?
+
+Distributed technologies and protocols offer astonishing potential, but they lack a consistent and unifying graphical user experience. Distributed blockchain and “serverless” cloud technologies are ripe to be integrated into an accessible, unified visual interface that supports human communications —  a system that isn’t easily compromised by mass-messaging/spam, third-party interests, or malicious actors.
+
+As an information visualizer, PLAN allows teams to communicate and conduct critical logistics planning with high reliability, persistence, and privacy. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also in natural disasters, geopolitical crisis, or economic drought. 
 
 ## What's in This Repo?
 
@@ -41,17 +61,17 @@ For the PLAN end-user, using a graphics engine affords:
 
 Under the hood, this affords:
    - The benefits and capabilities of Go
-   - A lean, performant, and robust multi-platform p2p node
+   - A lean, performant, and robust multi-platform peer-to-peer node
    - Embedding of key stacks, namely: [IPFS](https://github.com/ipfs), [libp2p](https://github.com/libp2p), and [Protobufs](https://developers.google.com/protocol-buffers)+[gRPC](https://grpc.io).
 
  
 ## Licensing
 
-PLAN is open-source, and is freely available through the GNU General Public License [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). The [PLAN Foundation](http://plan.tools/wp-content/uploads/2018/11/PLAN-Textbook_ed0.9.pdf) is a non-profit charitable foundation, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.
+PLAN is open-source, and is freely available through the GNU General Public License [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html). [PLAN Systems](http://plan.tools/wp-content/uploads/2018/11/PLAN-Textbook_ed1.0.pdf) is a non-profit charitable foundation, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.
 
 ## Architecture Synopsis
 
-PLAN has a real-time 3D/visual frontend with a p2p backend designed such that one of many available DLTs serves as a secure distributed storage provider.   The PLAN Unity client connects to a `pnode`, PLAN's p2p client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes. 
+PLAN has a real-time 3D/visual frontend with a peer-to-peer backend designed such that one of many available DLTs serves as a secure distributed storage provider.   The PLAN Unity client connects to a `pnode`, PLAN's peer-to-peer client-serving node.  `pnode` is a Go daemon that serves PLAN clients while replicating community data across the community's swarm of pnodes. 
 
 What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. The entire community's network traffic and infrastructure is inaccessible to all others, forming a cryptographic "city wall" of privacy and security.  
 
@@ -75,7 +95,7 @@ Akin IRC, PLAN channels are either "community-public" (readable only to members 
 At any given time, each `pnode` in a community:
    - Merges newly appearing community channel entries from the storage layer into the community repo layer
    - Hosts connected Unity clients, serving client channel queries and decrypting content on the fly
-   - Serves as a public HTTP gateway for community content designated to be publicly served (e.g. a public-facing web page containing a p2p-served promo video)
+   - Serves as a public HTTP gateway for community content designated to be publicly served (e.g. a public-facing web page containing a peer-served promo video)
 
 The permissions and rules of merge conflict resolution are deterministic so that strong eventual consistency (SEC) is preserved. This means that although a given pnode's data state may not be equal to other community pnodes state (due to network constraints), each pnode is guaranteed to converge to a monotonic state.
 
@@ -85,7 +105,7 @@ PLAN has two persistent pluggable storage layers, one characterized by append-on
 
 ## Summary
 
-PLAN is a p2p community-first tool, built on pluggable append-only and pluggable content-based addressing storage.  Community content is accessible via a _real-time_ visually intuitive interface protected inside cryptographic layers of privacy. Its open-ended channel sub-systems form a level foundation that supports flexible, defensible, and first-class human access.
+PLAN is a peer-to-peer community-first tool, built on pluggable append-only and pluggable content-based addressing storage.  Community content is accessible via a _real-time_ visually intuitive interface protected inside cryptographic layers of privacy. Its open-ended channel sub-systems form a level foundation that supports flexible, defensible, and first-class human access.
 
 Using PLAN, communities arise from organizers and members who value owning their own data, having a formidable cryptographic-city wall, and the ability to continue operating in the face of Internet disruptions.  
 
@@ -96,8 +116,8 @@ Using PLAN, communities arise from organizers and members who value owning their
 # FAQ
 
 
-#### Q: Why PLAN? Aren't there enough blockchain and distributed ledger technologies already?
-- Indeed, there are many advanced DLT projects available and new ones on the way.  However, _PLAN is not characterized as a distributed ledger_.  The "lower" half of PLAN is an information organization and permissions system _built atop an interchangeable storage system_. Consider: _PLAN is to DLT as operating system is to a harddrive_.  If a more capable or suitable DLT appears, PLAN's [Proof of Storage Portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability) demonstrates how a community can always switch to a different storage technology.
+#### Q: Why PLAN? Aren't there enough blockchain and distributed ledgers already?
+- Indeed, there are many advanced distributed ledger projects available and new ones on the way.  However, _PLAN is not characterized as a distributed ledger_.  PLAN is an information organization and permissions system _resides atop a ledger or storage system_. Consider: _PLAN is to distributed ledger as operating system is to harddrive_.  If a more capable or suitable storage technology appears, PLAN's [Proof of Storage Portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability) demonstrates how a community can switch storage technologies.
 
 #### Q: How is PLAN's Persistent Data Interface (PDI) implemented?
 - PLAN's append-only storage layer ("**𝓛<sub>C</sub>**"), detailed in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented by a range of storage layer technologies.  This is a compelling feature since each storage implementation trades off some advantages in exchange for others.  One particular technology may be a great fit one community's needs but would be a poor fit for another. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for a deeper technical discussion.
@@ -114,7 +134,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 - For example, community **C** could be founded such that a majority vote from a member-appointed set of "board" members are required in order to add a new member to the community. This would be enforced by a smart contract wired into **C**'s storage layer. See PLAN's [Proof of Integrity Assurance](PLAN-Proof-of-Correctness.md#Proof-of-Integrity-Assurance) for more.
 
 #### Q: Is PLAN is locked into Unity?
-- Although the [PLAN&nbsp;Foundation](http://plan.tools) is making the initial PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established real-time 3D framework.
+- Although [PLAN&nbsp;Systems](http://plan.tools) is making the initial PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established real-time 3D framework.
 
 
 #### Q: How can I try PLAN or support its development?
