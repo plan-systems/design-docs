@@ -9,7 +9,7 @@ P  L  A  N etwork
 
 ## Welcome to PLAN!
 
-PLAN is a free and open platform for groups to securely communicate, collaborate, and coordinate. PLAN features:
+PLAN is a free and open platform for groups to securely communicate, collaborate, and coordinate efforts and activities. PLAN features:
 - Channels specialized for chat, file sharing, interactive maps, forms, tasking, scheduling, and inventory management
 - A user interface where channels and objects are placed into virtual spaces
 - Peer-to-peer storage and infrastructure that doesn’t require a central server
@@ -51,11 +51,9 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 ## Goals & Objectives
 
-PLAN can only be useful to organizations and communities if non-technical users can use it easily. As software designers, we must acknowledge that distributed systems, content-based addressing, and cryptography are alien concepts to most people. How does PLAN integrate complex technologies and make the result more broadly usable?
-
 The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it is intuitive and reliable_.
 
-Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially — _in real-time_ — through the [Unity](https://unity3d.com) 3D engine as it renders channels of information in virtual space, served by "community" nodes.  These nodes implement PLAN's underlying channel and access control infrastructure and are built upon a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
+Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially — _in real-time_ — through the [Unity](https://unity3d.com) 3D engine as it renders channels of information in virtual space, served by allied "community" nodes.  These nodes implement PLAN's underlying channel and access control infrastructure and are built upon a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
 
 Design goals:
 - Multiplatform support — Android, iOS, macOS, Windows, Linux)
@@ -72,6 +70,15 @@ People using PLAN receive:
 - A responsive, engaging, visual, and spatially-oriented interface
 - A first-class input and display device experience
 - Full horsepower of the user's device/workstation
+
+How is PLAN implemented?
+- [Unity](https://unity3d.com) 3D engine with (C# & .NET Core)
+- Local file system caching and partial network resilience to enable offline work
+- Front end written in [Unity](https://unity3d.com) (C# & .NET Core)
+- Back end node/daemon ("pnode") written in [Go](https://golang.org)
+- Channels are identified and handled by self-describing meta data.
+- Access control implemented using channels; each channel is a child of some other channel, ultimately up to a root.
+
 
 ## Architecture Synopsis
 
