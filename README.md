@@ -10,8 +10,8 @@ P  L  A  N etwork
 ## Welcome to PLAN!
 
 PLAN is a free and open platform for groups to securely communicate, collaborate, and coordinate efforts and activities. PLAN features:
-- Channels specialized for chat, file sharing, interactive maps, forms, tasking, scheduling, and inventory management
-- A user interface where channels and objects are placed into virtual spaces
+- Channels specialized for chat, file sharing, interactive maps, tasking, scheduling, and inventory management
+- A user interface where channels and objects are placed into any number of virtual spaces
 - Peer-to-peer storage and infrastructure that doesn’t require a central server
 - Built-in collaboration tools that are secure, private, and reliable
 - Relationship and organization management and visualization
@@ -31,7 +31,7 @@ PLAN is designed and intended for:
 
 ## PLAN Systems
 
-[PLAN Systems](http://plan.tools/wp-content/uploads/2018/11/PLAN-Textbook_ed0.9.pdf) is a non-profit public charity, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.  
+[PLAN Systems](http://plan.tools) is a non-profit public charity, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.  
 
 May PLAN empower organizations and individuals, and may it be an instrument of productivity and self-organization.
 
@@ -53,23 +53,23 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it is intuitive and reliable_.
 
-Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially — _in real-time_ — through the [Unity](https://unity3d.com) 3D engine as it renders channels of information in virtual space, served by allied "community" nodes.  These nodes implement PLAN's underlying channel and access control infrastructure and are built upon a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
+Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially — _in real-time_ — through the [Unity](https://unity3d.com) graphics engine as it renders channels of information in virtual space, served by allied "community" nodes.  These nodes implement PLAN's underlying channel and access control infrastructure and are built on a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
 
 Design goals:
-- Multiplatform support — Android, iOS, macOS, Windows, Linux)
+- Multiplatform — Android, iOS, macOS, Windows, Linux
+- First person, isometric, AR/VR, or 2D user experience
 - Peer-to-peer persistent storage abstraction compatible with distributed ledgers
 - Peer-to-peer "cloud" storage abstraction compatible with distributed storage systems.
 - Pluggable content handling and GUI extension
-- First person, isometric, and 2D visual interaction
 - “Offline first” to allow work with only part of the network reachable
 - Access controls for the group as a whole or for individual channels or group members
 - Allow a community to publish and peer-host content from for external public consumption
 
-People using PLAN receive:
-- Seamless multiplatform support — Android, iOS, macOS, Windows, Linux
-- A responsive, engaging, visual, and spatially-oriented interface
+PLAN users receive:
+- A responsive, engaging, animated, and spatially-aware GUI
 - A first-class input and display device experience
 - Full horsepower of the user's device/workstation
+- Full data ownership and control
 
 How is PLAN implemented?
 - [Unity](https://unity3d.com) 3D engine with (C# & .NET Core)
