@@ -11,48 +11,23 @@ A technology is only as interesting as how it can be harnessed and applied in ou
 
 ## Primary APIs
 
-PLAN features 5 primary "pluggable" areas of interoperability.  Together, they reflect PLAN's engineering mission to be modular, future-proof, and adaptable.  Importantly, they work together to allow non-technical users to use and harness inherently complicated technologies in the way graphical operating systems in the 90s allowed non-technical users to use personal computers without having to use a command line interface.
+PLAN features large "pluggable" surfaces for extension and interoperability.  Together, they reflect PLAN's engineering mission to be modular, future-proof, and adaptable.  Importantly, they work together to allow non-technical users to use and harness inherently complicated technologies in the way graphical operating systems in the 90s allowed non-technical users to use personal computers without having to use a command line interface.
 
-1. Persistent Data Interface (PDI)
-    - This abstracts persistent, append-only storage and is used to store a PLAN community's channels.  
-    - The PDI can be implemented using a wide selection of distributed ledgers _or_ using a conventional centralized server.  
-    - The PDI offers [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a centralized server for convenience/availability, and transparently migrate to a distributed ledger that scales down the road.
-2. [Cloud File Interface](#Cloud-File-Interface) (CFI)
-    - This abstracts content-addressable storage and is used for a PLAN community's temporary or bulk storage needs.  
-    - The CFI and PDI are disjoint, but a single storage layer could be used to implement both, provided it has the requisite capabilities.
-    - For example, [IPFS](https://ipfs.io/) is capable peer-to-peer distributed storage system that, under PLAN, becomes usable to non-technical users since the PLAN client seamlessly hides and manages hashnames, pinning, and unpinning.  
-3. Secure Key Interface (SKI)
-    - The SKI abstracts private key storage, private key handling, and offers support for third-party encryption and authentication systems.
-    - The SKI guarantees compartmentalization in PLAN, ensuring that private keys remain secure and reside "outside" of PLAN.
-4. Channel GUI "Drivers"
-    - A channel's protocol identifier string corresponds to a matching channel GUI "driver" in the PLAN client.  Like a traditional hardware driver, a PLAN channel driver is designed specifically to interface with a data consumer and producer having an established format and flow.
-    - When a user accesses/opens a channel in PLAN, the client starts a new instance of the channel module designed _for that specific type of channel_.  If multiple matching channel drivers are available, the client can choose based on user settings or can prompt the user to select one.
-    - Specially, a PLAN channel driver is a C# class that lives in the Unity client.  
-        - New instances are passed a gRPC connection set up for a specific channel `UUID`.
-    - For example, a channel with type `/plan/ch/calendar`, could invoke the client's default `calendar` channel driver or instead use another that:
-        - displays scheduled events on a horizontal timeline that extends from the past to the future.
-        - overlays appointments from an external Google Calendar account
-    - Users can easily "try on" alternate channel drivers in the way you can try on different color themes in a text editor.
-    - Meanwhile, channel driver developers only have to focus on a narrow and specific API, leaving them to open to use Unity in exciting ways.
-5. [Channel Protocols](#channel-protocols)
-    - A community or organization may have a specific need and always has the option to design a channel content protocol that meets unique needs.
-    - A custom-designed channel protocol generally will need an accompanying custom channel GUI driver so PLAN clients can interact with that channel type.
-    - Examples:
-        - A brewery uses sensor arrays to monitor temperatures all over a warehouse.  These sensors periodically write JSON data to a channel with a given custom channel type.  The brewery has its own channel GUI driver "bound" to the custom channel channel type that displays the floor plan of the brewery and overlaid with color swaths visualizing the most recent temperature readings.  
+|     Area of Interoperability    | Purpose                                                                                                                                     |
+|:-------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------|
+|  [Interoperable Data Structures](#Interoperable-Data-Structures)  | Easy, flexible, portable, self-describing, performant data structures.                                                                     |
+| [Persistent Data Interface](#Persistent-Data-Interface) | Abstracts a community's permanent data store; designed to be compatible with many distributed ledgers.                                |
+|        [Channel Protocols](#channel-protocols)        | Silos content streams by purpose and interpretation, not by content type or format.                                                            |
+|       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel protocol type.                                                             |
+|       [Cloud File Interface](#Cloud-File-Interface)      | Abstracts purgeable shared storage; designed to be compatible with most distributed content-addressable storage systems.               |
+|       [Secure Key Interface](#Secure-Key-Interface)     | Abstracts private key handling and crypto services; designed to be compatible with third-party encryption and authentication systems. |
 
-
-## Community Public Access 
-
-A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publicly accessible services to serve explicitly designated community content and scale (as a distributed system) alongside traditional web or internet services.  For example:
-- A musical artist uses PLAN to serve show recordings and official releases. 
-- A documentary production uses PLAN to serve the film's trailer and perhaps the full film itself to users bearing a "paid" token.
-- A PLAN daemon periodically renders out an image of a map with spatial annotations from a community geo-space channel, served as an html page.
-- A PLAN email gateway daemon bridges access to the members of a PLAN community and the outside world.  Unlike email, however, each incoming email contains an access token that the recipient previously issued the sender, effectively eliminating unsolicited messages ("spam").  Further, a sender who abuses their privileges (or loses or resells their token to a spammer), can be blocked without any concern of messages from _other_ senders being inadvertently filtered/blocked.
 
 ## Interoperable Data Structures
 
+- PLAN features a powerful but tiny set of flexible, portable, self-describing, and performant data structures. 
+- Thanks to [Protobufs](https://developers.google.com/protocol-buffers) and [gRPC](https://grpc.io), developers can access content in PLAN using every major language and over a network connection with only a few lines of code. 
 - PLAN's standard unit of information storage, structure, and transport is `plan.Block`:
-
     ```
     // A portable, compact, self-describing, nestable information container inspired from HTTP.
     type Block struct {
@@ -79,7 +54,7 @@ A community using PLAN will inevitably be interested in making some of its parts
     }
     ```
 - Importantly, each `plan.Block` instance is [self-describing](https://multiformats.io/) and can contain sub-blocks. Because each `plan.Block` can be accompanied by a label, codec descriptor, or any number of sub-blocks, it has the _simplicity and flexibility_ of JSON but the _efficiency and compactness_ of binary serialization.  This means any hierarchy of information or content can be structured dynamically, and each element contains enough meta information for it to be safely analyzed and processed further.
-- Like other foundational data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, including C, C++, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby.  Not bad!
+- Like other foundational data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, including C, C++, Haskell, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby.  Not bad!
     - Protobufs are faster, simpler, safer, more compact, and more efficient than JSON and XML.
     - A Protobuf struct ("message") can be composed of primitive data types or user-defined messages.
     - The fields of a Protobuf message are explicitly and strongly typed.
@@ -96,10 +71,23 @@ A community using PLAN will inevitably be interested in making some of its parts
     | [go-plan/ski/ski.proto](http://github.com/plan-tools/go-plan/blob/master/ski/ski.proto)                      | Secure Key Interface (SKI) data structures      |
     | [go-plan/pservice/pservice.proto](http://github.com/plan-tools/go-plan/blob/master/pservice/pservice.proto)  | GRPC network services and data structures       |
 
+
+---
+
+
+## Persistent Data Interface
+- PLAN's **Persistent Data Interface** ("PDI") abstracts persistent, append-only, and community-shared container, used to store the channels of a PLAN community.  
+- The PDI embraces an append-only model so that a wide range of replicating data types and distributed ledgers are eligible to be used for its implementation.  
+- PDI transactions ("channel entries") are considered immutable and permanent (though content mutability is effectively recreated in PLAN's intermediate channel database layer).
+- A conventional centralized shared database can also be used to implement the PDI, offering performance and convenience for small communities that are getting started.
+- The PDI offers [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a centralized server for convenience/availability, and transparently migrate to a distributed ledger that scales down the road.
+- In [go-plan](http://github.com/plan-tools/go-plan), the interface `StorageSession` in [StorageProvider.go](http://github.com/plan-tools/go-plan/blob/master/pdi/StorageProvider.go) is the heart of the PDI.
+
+
+
 ---
 
 ## Channel Protocols
-
 - PLAN's general purpose channels are its workhorse and _raison d'être_.  Like files in a conventional operating system, users and productivity workflows in PLAN create new channels and new channel types all the time.  
 - As a PLAN client UI interacts with a given channel, it does not use filename extensions, content-embedded markers, or blindly assume that content is in a particular form.   Both PLAN channel "epochs" and channel entries each embed a `plan.Block`, making each a flexible self-describing container for content and information.  _This offers profound interoperability in the way that HTTP headers also self-describe content for a HTTP response._
 
@@ -114,14 +102,53 @@ A community using PLAN will inevitably be interested in making some of its parts
 | `/plan/ch/calendar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom containing events (entries) that are graphically rendered on the appropriate days and times. The user interacts with channel UI in real-time, scrolling from week to week, to day to day as the user zooms in "closer". |
 
 
+### Creating Custom Channel Protocols
+- A community or organization may have a specific need and always has the option to design a custom channel content protocol that meets specialized needs.
+    - A custom-designed channel protocol generally will need an accompanying custom channel GUI adapter so PLAN clients can interact with that channel type.
+    - For example, a brewery uses sensor arrays to monitor temperatures all over a warehouse.  These sensors periodically write JSON data to a channel with a given custom channel type.  The brewery has its own channel GUI adapter "bound" to the custom channel channel type that displays the floor plan of the brewery and overlaid with color swaths visualizing the most recent temperature readings.  
+
+
+## Channel GUI Adapters
+- A channel's protocol identifier string corresponds to a matching channel GUI adapter or "driver" in the PLAN client.  Like a traditional hardware driver, a PLAN channel adapter is designed specifically to interface with a data consumer and producer having an established format and flow.
+- When a user accesses/opens a channel in PLAN, the client starts a new instance of the channel module designed _for that specific type of channel_.  If multiple matching channel adapters are available, the client can choose based on user settings or can prompt the user to select one.
+- Specially, a PLAN channel adapter is a C# class that lives in the Unity client.  
+    - New adapter instances are passed a gRPC connection set up for a specific channel `UUID`.
+- For example, a channel with type `/plan/ch/calendar`, could invoke the client's default `calendar` channel adapter or instead use another that:
+    - displays scheduled events on a horizontal timeline that extends from the past to the future.
+    - overlays appointments from an external Google Calendar account
+- Users can easily "try on" alternate channel adapters in the way you can try on different color themes in a text editor.
+- Meanwhile, channel adapter developers only have to focus on a narrow and specific API, leaving them to open to use Unity in exciting ways.
+
+---
+
 ## Cloud File Interface
-- You may be rightly unsettled if you think all the data in a PLAN community is stored on an append-only shared storage layer.  Recall that the Persistent Data Interface (PDI) abstracts the community-shared container that stores all the channels in a community.  The PDI is typically implemented using a replicated transaction log or blockchain, so entries are regarded as immutable and permanent.  However, this means it is not flexible enough to meet general-purpose client storage needs.
+- PLAN's **Cloud File Interface** ("CFI") content-addressable storage and is used for a PLAN community's temporary or bulk storage needs.  .  
+- You may be rightly unsettled if you think all the data in a PLAN community using the PDI (an append-only shared storage abstraction).  PDI entries are immutable and permanent, so the PDI is not suited to meet general-purpose client storage needs.
     - Consider a film production team using PLAN as a secure collaboration and file-sharing tool.  Suppose their post-production workflow is to render-out variations of scenes currently being edited for director review. It would be a waste to burn the community's _permanent_ shared storage to hold gigabytes of data that won't be used after a week.  Worse, a couple member nodes would be accessing this data (as _all_ data under the PDI replicates to each community node).
 - So how is bulk data stored in PLAN if relying on the PDI is clearly the wrong choice?  Introducing the Cloud File Interface (CFI), whose purpose is to provide access to scalable but purgeable storage on-demand.  The CFI is an abstraction of [content-addressable storage](https://en.wikipedia.org/wiki/Content-addressable_storage), where content is referenced by hashname.  Unlike the PDI, content written to the CFI isn't necessarily intended to persist indefinitely (though it may).
 - Each entry in a "file" channel represents a revision of a high-level file and is either an inline content blob or a CFI hashname.  In the latter case, each entry is _only_ a short string and doesn't consume material space on a community's permanent shared storage.  In the PLAN client, the channel appears as a single monolithic icon or animation.  When the user opens/views this object, the PLAN client hands off the most recent channel entry (a CFI pathname) to the CFI layer for retrieval.
     - Conveniently, this approach yields CFI garbage collection for "free".  For a given file channel, once an entry containing a CFI item is superseded longer than some grace period (or any other valuation calculus), the referenced item can be safely "unpinned" through the CFI.  
     - At the PLAN client level, the user is not burdened or distracted with the details and steps associated with accessing and managing the CFI.  This means the user never has to see hashnames or even understand how the PDI and CFI work together.  
-- Like the PDI, the Cloud File Interface is designed to be pluggable, offer flexibility, and preserve portability.  Most organizations using PLAN will be happy with PLAN's reference CFI implementation using [IPFS](https://ipfs.io/), but others may want to choose from other possibilities, such as [Dat](https://datproject.org/).
+- Like the PDI, the Cloud File Interface is designed to be pluggable, offer flexibility, and preserve portability.  Most organizations using PLAN will be happy with PLAN's reference CFI implementation using [IPFS](https://ipfs.io/), a capable peer-to-peer distributed storage system.  However, others may want to choose from other possibilities, such as [Dat](https://datproject.org/).  
+    - Regardless, these rich but complex storage systems are made usable to non-technical users since the PLAN client seamlessly hides and manages hashnames, pinning, and unpinning
+- The CFI and PDI are architecturally disjoint, but a single storage layer could be used to implement both, provided it has the requisite capabilities.
+
+---
+
+## Secure Key Interface
+- The SKI abstracts private key storage, private key handling, and offers support for third-party encryption and authentication systems.
+- The SKI guarantees compartmentalization in PLAN, ensuring that private keys remain secure and reside "outside" of PLAN.
+
+
+---
+
+## Community Public Access 
+
+A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publicly accessible services to serve explicitly designated community content and scale (as a distributed system) alongside traditional web or internet services.  For example:
+- A musical artist uses PLAN to serve show recordings and official releases. 
+- A documentary production uses PLAN to serve the film's trailer and perhaps the full film itself to users bearing a "paid" token.
+- A PLAN daemon periodically renders out an image of a map with spatial annotations from a community geo-space channel, served as an html page.
+- A PLAN email gateway daemon bridges access to the members of a PLAN community and the outside world.  Unlike email, however, each incoming email contains an access token that the recipient previously issued the sender, effectively eliminating unsolicited messages ("spam").  Further, a sender who abuses their privileges (or loses or resells their token to a spammer), can be blocked without any concern of messages from _other_ senders being inadvertently filtered/blocked.
 
 
 ---
