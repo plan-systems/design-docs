@@ -11,7 +11,7 @@ A technology is only as interesting as how it can be harnessed and applied in ou
 
 ## Primary APIs
 
-PLAN features 6 primary surfaces of extension and interoperability.  Together, they reflect PLAN's engineering mission to be modular, future-proof, and adaptable.  Importantly, they work together to allow non-technical users to use and harness inherently complicated technologies in the way graphical operating systems in the 90s allowed non-technical users to use personal computers without having to use a command line interface.
+PLAN features six primary areas of extension and interoperability.  Together, they reflect PLAN's engineering mission to be modular, future-proof, and adaptable. 
 
 |     Area of Interoperability    | Purpose                                                                                                                                     |
 |:-------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------|
