@@ -9,7 +9,7 @@ P  L  A  N etwork
 
 ## Welcome to PLAN!
 
-The goal of PLAN is provide a space for groups to communicate, collaborate, and coordinate logistics. PLAN features:
+The purpose of PLAN is provide an open platform for groups to communicate, collaborate, and coordinate logistics. PLAN features:
 - Channels specialized for chat, file sharing, interactive maps, forms, tasking, scheduling, and inventory management
 - A user interface where channels and objects are pinned in virtual spaces
 - Peer-to-peer storage and infrastructure that doesn’t require a central server
@@ -27,7 +27,7 @@ Groups that might use PLAN:
 - Clubs and gaming groups
 - Support groups
 
-We wish to acknowledge the principles surrounding multistream by Protocol Labs, which subtly but decisively improves how protocols, paths, and formats can be expressed to invite interoperability; http:// becomes /http/.
+We wish to acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which subtly but decisively improves how protocols, paths, and formats can be expressed to invite interoperability; http:// becomes /http/.
 
 May PLAN empower organizations and individuals with little or no resources to self-organize.
 
