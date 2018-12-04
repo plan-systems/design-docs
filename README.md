@@ -19,11 +19,11 @@ PLAN is a free and open platform for groups to securely communicate, collaborate
 	
 PLAN’s architecture brings all these parts together under a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.  PLAN is free and open-source through the GNU General Public License ([GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
 
-Groups that might use PLAN:
+PLAN is designed and intended for:
 - Community organizations
 - Crisis management teams
-- Researchers
-- Educators
+- Educators and researchers
+- Civic institutions
 - Businesses and sales teams
 - Clubs and gaming groups
 - Support groups
