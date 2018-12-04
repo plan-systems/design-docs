@@ -1,4 +1,4 @@
-# PLAN Applied
+# PLAN API Documentation
 
 ```
          P urposeful
@@ -7,7 +7,39 @@
 P  L  A  N etwork
 ```
 
-A technology is only as interesting as how it can be harnessed and applied to our world.  
+A technology is only as interesting as how it can be harnessed and applied in our world.  
+
+## Primary APIs
+
+PLAN features 5 primary "pluggable" areas of interoperability.  Together, they reflect PLAN's engineering mission to be modular, future-proof, and adaptable.  Importantly, they work together to allow non-technical users to use and harness inherently complicated technologies in the way graphical operating systems in the 90s allowed non-technical users to use personal computers without having to use a command line interface.
+
+1. Persistent Data Interface (PDI)
+    - This abstracts persistent, append-only storage and is used to store a PLAN community's channels.  
+    - The PDI can be implemented using a wide selection of distributed ledgers _or_ using a conventional centralized server.  
+    - The PDI offers [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a centralized server for convenience/availability, and transparently migrate to a distributed ledger that scales down the road.
+2. [Cloud File Interface](#Cloud-File-Interface) (CFI)
+    - This abstracts content-addressable storage and is used for a PLAN community's temporary or bulk storage needs.  
+    - The CFI and PDI are disjoint, but a single storage layer could be used to implement both, provided it has the requisite capabilities.
+    - For example, [IPFS](https://ipfs.io/) is capable peer-to-peer distributed storage system that, under PLAN, becomes usable to non-technical users since the PLAN client seamlessly hides and manages hashnames, pinning, and unpinning.  
+3. Secure Key Interface (SKI)
+    - The SKI abstracts private key storage, private key handling, and offers support for third-party encryption and authentication systems.
+    - The SKI guarantees compartmentalization in PLAN, ensuring that private keys remain secure and reside "outside" of PLAN.
+4. Channel GUI "Drivers"
+    - A channel's protocol identifier string corresponds to a matching channel GUI "driver" in the PLAN client.  Like a traditional hardware driver, a PLAN channel driver is designed specifically to interface with a data consumer and producer having an established format and flow.
+    - When a user accesses/opens a channel in PLAN, the client starts a new instance of the channel module designed _for that specific type of channel_.  If multiple matching channel drivers are available, the client can choose based on user settings or can prompt the user to select one.
+    - Specially, a PLAN channel driver is a C# class that lives in the Unity client.  
+        - New instances are passed a gRPC connection set up for a specific channel `UUID`.
+    - For example, a channel with type `/plan/ch/calendar`, could invoke the client's default `calendar` channel driver or instead use another that:
+        - displays scheduled events on a horizontal timeline that extends from the past to the future.
+        - overlays appointments from an external Google Calendar account
+    - Users can easily "try on" alternate channel drivers in the way you can try on different color themes in a text editor.
+    - Meanwhile, channel driver developers only have to focus on a narrow and specific API, leaving them to open to use Unity in exciting ways.
+5. [Channel Protocols](#channel-protocols)
+    - A community or organization may have a specific need and always has the option to design a channel content protocol that meets unique needs.
+    - A custom-designed channel protocol generally will need an accompanying custom channel GUI driver so PLAN clients can interact with that channel type.
+    - Examples:
+        - A brewery uses sensor arrays to monitor temperatures all over a warehouse.  These sensors periodically write JSON data to a channel with a given custom channel type.  The brewery has its own channel GUI driver "bound" to the custom channel channel type that displays the floor plan of the brewery and overlaid with color swaths visualizing the most recent temperature readings.  
+
 
 ## Community Public Access 
 
@@ -102,7 +134,7 @@ A community using PLAN will inevitably be interested in making some of its parts
 |  [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)  |   2018 Q3   | PLAN [Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
 |   [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)   |   2018 Q4   | [go-plan](https://github.com/plan-tools/go-plan) command line proof of concept demo       |
 |  [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |   2019 Q1   | [plan-unity](https://github.com/plan-tools/plan-unity) preliminary proof of concept |                                       |
-|   [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)  |   2019 Q2   |  CFI ([IPFS](https://ipfs.io/)) integratation   |
+|   [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)  |   2019 Q2   |  CFI ([IPFS](https://ipfs.io/)) integration   |
 | [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) |   2019 Q2   | Ethereum, DFINITY, Holochain, or other established DLT used for first PDI implementation |
 |  [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace) |   2019 Q3   | Installer and GUI setup experience for macOS                                              |
 |   [Turing](https://en.wikipedia.org/wiki/Alan_Turing)  |   2019 Q3   | go-plan support and QA for Linux                                                          | 

@@ -1,4 +1,4 @@
- # PLAN Proof of Correctness
+ # PLAN Data Model Proof of Correctness
 
 ```
          P urposeful
@@ -8,6 +8,8 @@ P  L  A  N etwork
 ```
 
 ## What is this?
+
+This document is a proof of correctness that spells out PLAN's data model, security mechanisms, encryption layers, and access controls.
 
 In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-through and demonstration that a proposed method and/or design rigorously satisfies a given set of specifications or claims.  The intention is to remove _all doubt_ that there exists a set of conditions such that the proposed method would _not_ meet all the specifications.
 
@@ -578,7 +580,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
         - Since any withholding of entries can't result in the _additional_  generation/grant of permissions, the remaining possibility is that withholding entries somehow result in  **𝓡<sub>i</sub>** not mutating such that privileged data somehow remains accessible. This is a legitimate concern, however, [Channel Entry Validation](#Channel-Entry-Validation) requires that any mutation that is access-restrictive in nature must also [issue a new channel security epoch](#issuing-a-new-Channel-Epoch).  In this process flow, _only_ members with access privileges are (securely) issued the newly generated private channel key.   Similarly, this is why a [new community epoch is issued](#Issuing-a-New-Community-Epoch) when a member is [deactivated](#deactivating-A-Member) or a [Member Halt](#Member-halt) is issued (but not when a [new member is added](#adding-a-new-member)).
         - ⇒ In the case where entries are _withheld_ from **n<sub>i</sub>**, there is no possibility that subsequent entries could reveal restricted material since new peer entries would be encrypted with a newly issued member, channel or community key (after **Δ<sub>C</sub>**) .
     2. **Circumventing access controls**
-        - These scenarios are characterized by posting maliciously architected channel entries on **C** intended to circumvent access controls.
+        - These scenarios are characterized by posting maliciously crafted channel entries on **C** intended to circumvent access controls.
         - Given [Proof of Access Exclusivity](#Proof-of-Access-Exclusivity), we know that in order for **𝓡<sub>i</sub>** to be mutated (or maliciously manipulated), the perpetrating actor must possess _both_ an active member and community keyring.    
             - ⇒ this would start with **m** (or an adversary covertly in possession of **m**'s keys) authoring and submitting said entries in an attempt to somehow sidestep an aspect of the system's channel permissions enforcement.   How could an entry go live across **C** whose parent ACC denies access?  [Channel Entry Validation](#Channel-Entry-Validation)'s primary purpose is to _ensure that **only** entries that validate under the parent channel's ACC are placed into "live" status_.
         - What if **m** (or an adversary in possession of **m**'s keys) "hot-wires" their node or manually crafts an entry to perform an operation not allowed by **m**?  
