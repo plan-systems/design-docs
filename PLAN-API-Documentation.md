@@ -75,11 +75,11 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 
 
 ## Persistent Data Interface
-- PLAN's **Persistent Data Interface** ("PDI") abstracts persistent, append-only, and community-shared container, used to store the channels of a PLAN community.  
-- The PDI embraces an append-only model so that a wide range of replicating data types and distributed ledgers are eligible to be used for its implementation.  
-- PDI transactions ("channel entries") are considered immutable and permanent (though content mutability is effectively recreated in PLAN's intermediate channel database layer).
+- The **Persistent Data Interface** ("PDI") is an abstraction for append-only storage shared by a PLAN community.  It stores all of a community's channel entries and is _cryptographically exclusive_ to its members.
+- The PDI embraces an append-only model so that a wide range of replicating data types and distributed ledgers can be used as an implementation.  
+- PDI transactions ("channel entries") are modeled as immutable and permanent (though content mutability is recreated virtually in PLAN's intermediate channel database layer).
 - A conventional centralized shared database can also be used to implement the PDI, offering performance and convenience for small communities that are getting started.
-- The PDI offers [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a centralized server for convenience/availability, and transparently migrate to a distributed ledger that scales down the road.
+- The PDI offers [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a centralized server for convenience/availability, and later migrate to a distributed ledger that scales down the road.
 - In [go-plan](http://github.com/plan-tools/go-plan), the interface `StorageSession` in [StorageProvider.go](http://github.com/plan-tools/go-plan/blob/master/pdi/StorageProvider.go) is the heart of the PDI.
 
 
@@ -115,21 +115,21 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 - A channel with type `/plan/ch/calendar`, could invoke the client's default `calendar` channel adapter _or_ instead use another that:
     - displays scheduled events on a horizontal timeline that extends from the past to the future,
     - displays scheduled events on geographically relevant map, _or_
-    - overlays appointments from an external calendar service.
+    - overlays appointments from an outside calendar service.
 - Users can choose alternate channel adapters in the way a media player offers alternate skins/UIs
 - Developers that create and extend channel adapters can focus on the API or GUI, rather than infrastructure related tasks.
 
 ---
 
 ## Cloud File Interface
-- The **Cloud File Interface** ("CFI") abstracts [content-addressable storage](https://en.wikipedia.org/wiki/Content-addressable_storage), where content is referenced by hashname and is available across the community's network.  Unlike the PDI, content written to the CFI isn't necessarily intended to persist indefinitely (though it can).   
-- The CFI provides scalable and expendable storage on-demand and serves a PLAN community's temporary or bulk storage needs.
-    - Consider an film production team using PLAN as a collaboration and file-sharing tool.  Suppose their workflow is to export rough cuts of scenes currently under construction and post them within PLAN for team feedback and review. It would be a waste to burn the community's _permanent_ shared storage (via the PDI) to hold gigabytes of data that won't be used after a week.  Worse, if only 5 members were reading this data out of a team of 25, then the other 20 member nodes would be unnecessarily burdened with this load (as _all_ data posted to the PDI replicates to each community node).
-- Each entry in a "file" channel represents a revision of a high-level file and is either an inline content blob or a CFI hashname.  In the latter case, each entry is _only_ a short string and doesn't consume material space on a community's permanent shared storage.  In the PLAN client, the channel appears as a single monolithic icon or animation.  When the user opens/views this object, the PLAN client hands off the most recent channel entry (a CFI pathname) to the CFI layer for retrieval.
-    - Conveniently, this approach helps manage CFI allocation for "free".  For a given file channel, once an entry containing a CFI item is superseded longer than some grace period (or any other valuation calculus), the referenced item can be safely "unpinned" through the CFI.  
-    - At the PLAN client level, the user is not burdened or distracted with the details and steps associated with accessing and managing the CFI.  The user never sees hashnames or has to be aware how the PDI and CFI work together.  
+- The **Cloud File Interface** ("CFI") is an abstraction for [content-addressable storage](https://en.wikipedia.org/wiki/Content-addressable_storage), where files/content are referenced by hashname and are available across the community's network.  Unlike the PDI, content written to the CFI isn't necessarily intended to persist indefinitely (though it can).   
+- The CFI provides scalable and expendable storage, serving a community's temporary and bulk storage needs.
+- Distributed storage systems typically only replicate on-demand (e.g. BitTorrent), so CFI content tends to only consume local storage for users accessing that content.  This is in contrast to how entries posted to the PDI replicate to _every_ community node.
+- "File" channels allow PLAN users to interact with files and trees in familiar ways, but under the hood each entry in the channel is a CFI pathname that points to a revision of the file or tree.  Since each revision pathname is _only_ a short string, these channels don't materially consume the community's permanent shared storage.  When a user opens/views this object, the PLAN client hands off the most recent channel entry (a CFI pathname) to the CFI layer for retrieval while the PLAN client graphically reports progress.
+    - Conveniently, this helps the PLAN client manage the CFI for "free".  For a given file channel, once an entry containing a CFI item is superseded longer than some grace period (or any other expiration function), the referenced item can be safely and automatically "unpinned" (or more aggressively reclaimed).
+    - At the PLAN client level, the user is not burdened or distracted with the details associated with managing the CFI.  The user never sees hashnames and requires zero knowledge about how the PDI and CFI are working together.  
+- Consider a film production team using PLAN as a collaboration and file-sharing tool. Their workflow is to present scene cuts to the team for feedback and review. Instead of using the community's _permanent_ shared storage for short-term video files, the team uses a channel where posted files _appear_ in the channel and can be conveniently played.  However, under the hood, the PLAN client is posting the file to the CFI and placing a CFI pathname in the channel.  The channel is set so that files older than X days expire and are unpinned/deallocated.
 - Like the PDI, the Cloud File Interface is designed to be pluggable, offer flexibility, and preserve portability.  Most organizations using PLAN will be happy with PLAN's reference CFI implementation using [IPFS](https://ipfs.io/), a capable peer-to-peer distributed storage system.  However, others may want to choose from other possibilities, such as [Dat](https://datproject.org/).  
-    - Regardless, these rich but complex storage systems are made usable to non-technical users since the PLAN client seamlessly hides and manages hashnames, pinning, and unpinning.
 - The CFI and PDI are architecturally disjoint, but a single storage layer could be used to implement both, provided it has the requisite capabilities.
 
 ---
