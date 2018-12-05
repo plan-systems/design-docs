@@ -76,7 +76,7 @@ No assumptions are made about network connectivity or reachability in this proof
     - ⇒ **Δ<sub>C</sub>** is in the neighborhood of 1*40 secs ⇒ 1 minute.
     - If N is _doubled_, then **Δ<sub>C</sub>** only increases on the order of seconds. 
 
-Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness (aka availability) of the system presented below is solely dependent on **𝓛**.  This means that the design tradeoffs that **𝓛<sub>C</sub>** makes will determine **C**'s overall network properties and behavior.  [Liveness vs Safety](#liveness-vs-safety) discusses tradeoffs for various choices of **𝓛**.
+Like the way an operating system is _only_ as swift as its host storage system, the latency and "liveness" (availability) of the system presented below is solely dependent on **𝓛**.  This means that the design tradeoffs that **𝓛<sub>C</sub>** makes will determine **C**'s overall network properties and behavior.  [Liveness vs Safety](#liveness-vs-safety) discusses tradeoffs for various choices of **𝓛**.
 
 --- 
 
@@ -628,7 +628,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
 
 #### Proof of Practical Security Provisioning
 
-[Practical Security Provisioning](#Practical-Security-Provisioning) refers a system's inherent ability to address real-world security incidents.  Given member **m** in **C**, this system provisions for even the worst security scenarios: 
+[Practical Security Provisioning](#Practical-Security-Provisioning) refers a system's inherent ability to address real-world security incidents.  Although this section is indented to convincingly analyze how this system provisions for severe security scenarios, we acknowledge that the more severe and multifaceted the scenario, the more complex and divergent a complete analysis becomes.  Given member **m** in **C**, this system provisions for: 
 
 1. Scenario: **m** loses/erases all copies of their private keyring ("**[]k<sub>lost</sub>**").
     - A community admin (or delegated member) would use a procedure similar to [adding a new member](#Adding-A-New-Member), resulting in a successor `MemberEpoch` to be issued for **m**.
@@ -669,7 +669,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
                 - Each dependent entry would automatically be placed into rejected status on each community node during propagation.
             3. hard fork **𝓛<sub>C</sub>** to an earlier state if the vandalism was pervasive (e.g. though postage guards against this, gigabytes of junk appended to **𝓛<sub>C</sub>**).
                 - [Proof of Independence Assurance](#Proof-of-Independence-Assurance) describes variations of this recovery flow.
-    
+
 
 #### Proof of Independence Assurance
 
