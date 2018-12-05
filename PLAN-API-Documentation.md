@@ -11,17 +11,17 @@ A technology is only as interesting as how it can be harnessed and applied in ou
 
 ## Primary APIs
 
-PLAN features six primary areas of extension and interoperability.  Together, they reflect PLAN's engineering mission to be modular, future-proof, and adaptable. 
+PLAN features 7 primary areas of extension and interoperability.  Together, they reflect PLAN's engineering mission to be modular, future-proof, and adaptable. 
 
 |     Area of Interoperability    | Purpose                                                                                                                                     |
 |:-------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------|
-|  [Interoperable Data Structures](#Interoperable-Data-Structures)  | Flexible, portable, self-describing, performant data structures                                                                     |
-| [Persistent Data Interface](#Persistent-Data-Interface) | Abstracts a community's permanent data store; designed to be compatible with distributed ledgers (e.g. blockchains)                            |
-|        [Channel Protocols](#channel-protocols)        | Separates content streams by purpose and interpretation, not just by content type or format                                                            |
-|       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel type                                                             |
-|       [Cloud File Interface](#Cloud-File-Interface)      | Abstracts purgeable shared storage; designed to be compatible with distributed content-addressable storage systems               |
-|       [Secure Key Interface](#Secure-Key-Interface)     | Abstracts private key handling and crypto services; designed to integrate third-party encryption and authentication systems |
-
+|  [Interoperable Data Structures](#Interoperable-Data-Structures)  | Flexible, portable, self-describing, performant data structures                                                               |
+| [Persistent Data Interface](#Persistent-Data-Interface)  | Abstracts a community's permanent data store; designed to be compatible with distributed ledgers (e.g. blockchains)                    |
+|        [Channel Protocols](#channel-protocols)           | Separates content streams by purpose and interpretation, not just by content type or format                                            |
+|       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel type                                                          |
+|       [Cloud File Interface](#Cloud-File-Interface)      | Abstracts expendable shared bulk storage; designed to be compatible with distributed content-addressable storage systems               |
+|       [Secure Key Interface](#Secure-Key-Interface)      | Abstracts private key handling and crypto services; designed to integrate third-party encryption and authentication systems            |
+|        [Public Services](Public-Services)                | Serves public requests for explicitly shared community content via conventional internet protocols                                     |
 
 ## Interoperable Data Structures
 
@@ -141,11 +141,11 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 
 ---
 
-## Community Public Access 
+## Public Services 
 
 A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publicly accessible services to serve explicitly designated community content and scale (as a distributed system) alongside traditional web or internet services.  For example:
 - A musical artist uses PLAN to serve show recordings and official releases. 
-- A documentary production uses PLAN to serve the film's trailer and perhaps the full film itself to users bearing a "paid" token.
+- A documentary production uses PLAN to serve the film's trailer and the full film to users bearing a the right token.
 - A PLAN daemon periodically renders out an image of a map with spatial annotations from a community geo-space channel, served as an html page.
 - A PLAN email gateway daemon bridges access to the members of a PLAN community and the outside world.  Unlike email, however, each incoming email contains an access token that the recipient previously issued the sender, effectively eliminating unsolicited messages ("spam").  Further, a sender who abuses their privileges (or loses or resells their token to a spammer), can be blocked without any concern of messages from _other_ senders being inadvertently filtered/blocked.
 
