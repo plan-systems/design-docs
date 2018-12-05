@@ -9,7 +9,7 @@ P  L  A  N etwork
 
 A technology is only as interesting as how it can be harnessed and applied in our world.  
 
-## Primary APIs
+## Primary Interfaces
 
 PLAN features 7 primary areas of extension and interoperability.  Together, they reflect PLAN's engineering mission to be modular, future-proof, and adaptable. 
 

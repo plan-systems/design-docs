@@ -15,7 +15,7 @@ PLAN is a free and open platform for groups to securely communicate, collaborate
 - Peer-to-peer storage and infrastructure that doesn’t require a central server
 - Built-in collaboration tools that are secure, private, and reliable
 - Relationship and organization management and visualization
-- A flexible and “[pluggable](PLAN-API-Documentation.md#Primary-APIs)” architecture made for modification and extension
+- A flexible and “[pluggable](PLAN-API-Documentation.md#Primary-Interfaces)” architecture made for modification and extension
 	
 PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.  PLAN is available through the GNU General Public License ([GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
 
@@ -129,7 +129,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 - Consider: _PLAN is to distributed ledger as operating system is to harddrive_.  If a more capable or suitable storage technology appears, PLAN's [Proof of Storage Portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability) demonstrates how a community can switch storage technologies.
 
 #### Q: What are the ways PLAN is pluggable or can be otherwise be extended?
-- PLAN features an architecture intended for modularity, flexibility, and specialization. PLAN's [Primary APIs](PLAN-API-Documentation.md#Primary-APIs) span from storage layers, to PLAN GUI plugins called Channel Adapters that allow a channel to be experienced in alternate ways.
+- PLAN features an architecture intended for modularity, flexibility, and specialization. PLAN's [Primary APIs](PLAN-API-Documentation.md#Primary-Interfaces) span from storage layers, to PLAN GUI plugins called Channel Adapters that allow a channel to be experienced in alternate ways.
 
 #### Q: How is PLAN's Persistent Data Interface (PDI) implemented?
 - PLAN's append-only storage layer ("**𝓛<sub>C</sub>**"), detailed in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented by a range of storage layer technologies.  This is a compelling feature since each storage implementation trades off some advantages in exchange for others.  One particular technology may be a great fit one community's needs but would be a poor fit for another. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for a deeper technical discussion.
