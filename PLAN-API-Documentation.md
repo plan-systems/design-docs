@@ -15,12 +15,12 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 
 |     Area of Interoperability    | Purpose                                                                                                                                     |
 |:-------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------|
-|  [Interoperable Data Structures](#Interoperable-Data-Structures)  | Easy, flexible, portable, self-describing, performant data structures.                                                                     |
-| [Persistent Data Interface](#Persistent-Data-Interface) | Abstracts a community's permanent data store; designed to be compatible with many distributed ledgers.                                |
-|        [Channel Protocols](#channel-protocols)        | Silos content streams by purpose and interpretation, not by content type or format.                                                            |
-|       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel type.                                                             |
-|       [Cloud File Interface](#Cloud-File-Interface)      | Abstracts purgeable shared storage; designed to be compatible with most distributed content-addressable storage systems.               |
-|       [Secure Key Interface](#Secure-Key-Interface)     | Abstracts private key handling and crypto services; designed to be compatible with third-party encryption and authentication systems. |
+|  [Interoperable Data Structures](#Interoperable-Data-Structures)  | Easy, flexible, portable, self-describing, performant data structures                                                                     |
+| [Persistent Data Interface](#Persistent-Data-Interface) | Abstracts a community's permanent data store; designed to be compatible with distributed ledgers                                |
+|        [Channel Protocols](#channel-protocols)        | Separates content streams by purpose and interpretation, not by content type or format                                                            |
+|       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel type                                                             |
+|       [Cloud File Interface](#Cloud-File-Interface)      | Abstracts purgeable shared storage; designed to be compatible with distributed content-addressable storage systems               |
+|       [Secure Key Interface](#Secure-Key-Interface)     | Abstracts private key handling and crypto services; designed to integrate third-party encryption and authentication systems |
 
 
 ## Interoperable Data Structures
@@ -61,9 +61,7 @@ PLAN features six primary areas of extension and interoperability.  Together, th
     - Revisions to a Protobuf message are backward-compatible with earlier revisions.
     - Protobufs pair well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network support.
     - An entire `plan.Block` hierarchy can be serialized or deserialized using a single line of code — _in every major language and environment_.
-
 - PLAN's Protobuf-based data structures:
-
     | Protobuf File      | Purpose                                         |
     |--------------------|-------------------------------------------------|
     | [go-plan/plan/plan.proto](http://github.com/plan-tools/go-plan/blob/master/plan/plan.proto)                  | PLAN-wide general purpose data structures       |
@@ -94,7 +92,7 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 | Example Channel Descriptor | Expected Channel Entry Content Codecs | Example Client UI Experience  |
 |----------------------|:--------------------:|--------------------------------------|
 | `/plan/ch/chat`      |          `txt`\|`rtf`\|`image`      | A familiar "vertical scroller" where new entries appear in colored ovals at the bottom and previous entries vertically scroll upward to make room. |
-| `/plan/ch/geoplot`   |         `cords + (txt`\|`image)`    | A map displays text and image annotations at each given geo-coordinate entry.  Clicking/Tapping on an annotation causes a box to appear displaying who made the entry and when. |
+| `/plan/ch/geoplot`   |         `cords+(txt`\|`image)`    | A map displays text and image annotations at each given geo-coordinate entry.  Clicking/Tapping on an annotation causes a box to appear displaying who made the entry and when. |
 | `/plan/ch/file/pdf`  |            `ipfs`\|`binary`         | The client UI represents this file-revision channel as a single monolithic object. Tapping on it causes the most recent channel entry (interpreted as the latest revision) to be fetched and opened locally on the client using a PDF viewing application.  Power users can learn to open previous revisions of this "file". |
 | `/plan/ch/file/audio`| `ipfs`\|`mpg`\|`aac`\|`ogg`\|`flac` | Like other PLAN "file" channels, this client UI displays this channel as a single object, where opening/activating it causes the most recent entry to be fetched and played using the default media player app or using PLAN's integrated AV player.  |  
 | `/plan/ch/feed/rss`  |                 `xml`               | This channel is used to publish a sequence of text, audio, or video items with accompanying meta elements (e.g. title, link, thumbnail, and description).  This channel's epoch content `Block` houses [RSS](https://en.wikipedia.org/wiki/RSS) channel information while PLAN channel entries correspond to familiar RSS `item` elements in xml.  |
@@ -102,7 +100,7 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 | `/plan/ch/calendar`  |          `text/ifb`\|`text/ics`     | The client UI presents a familiar visual calendar idiom containing events (entries) that are graphically rendered on the appropriate days and times. The user interacts with channel UI in real-time, scrolling from week to week, to day to day as the user zooms in "closer". |
 
 
-### Creating Custom Channel Protocols
+### Custom Channel Protocols
 - A community or organization may have a specific need and always has the option to design a custom channel content protocol that meets specialized needs.
     - A custom-designed channel protocol generally will need an accompanying custom channel GUI adapter so PLAN clients can interact with that channel type.
     - For example, a brewery uses sensor arrays to monitor temperatures all over a warehouse.  These sensors periodically write JSON data to a channel with a given custom channel type.  The brewery has its own channel GUI adapter "bound" to the custom channel channel type that displays the floor plan of the brewery and overlaid with color swaths visualizing the most recent temperature readings.  
@@ -117,21 +115,20 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 - For example, a channel with type `/plan/ch/calendar`, could invoke the client's default `calendar` channel adapter or instead use another that:
     - displays scheduled events on a horizontal timeline that extends from the past to the future.
     - overlays appointments from an external Google Calendar account
-- Users can easily "try on" alternate channel adapters in the way you can try on different color themes in a text editor.
-- Meanwhile, channel adapter developers only have to focus on a narrow and specific API, leaving them to open to use Unity in exciting ways.
+- Users can "try on" alternate channel adapters in the way you can try on different color themes in a text editor.
+- Meanwhile, channel adapter developers only have to focus on a narrow and specific API, leaving them to focus on using Unity in the best ways.
 
 ---
 
 ## Cloud File Interface
-- PLAN's **Cloud File Interface** ("CFI") content-addressable storage and is used for a PLAN community's temporary or bulk storage needs.  .  
-- You may be rightly unsettled if you think all the data in a PLAN community using the PDI (an append-only shared storage abstraction).  PDI entries are immutable and permanent, so the PDI is not suited to meet general-purpose client storage needs.
-    - Consider a film production team using PLAN as a secure collaboration and file-sharing tool.  Suppose their post-production workflow is to render-out variations of scenes currently being edited for director review. It would be a waste to burn the community's _permanent_ shared storage to hold gigabytes of data that won't be used after a week.  Worse, a couple member nodes would be accessing this data (as _all_ data under the PDI replicates to each community node).
-- So how is bulk data stored in PLAN if relying on the PDI is clearly the wrong choice?  Introducing the Cloud File Interface (CFI), whose purpose is to provide access to scalable but purgeable storage on-demand.  The CFI is an abstraction of [content-addressable storage](https://en.wikipedia.org/wiki/Content-addressable_storage), where content is referenced by hashname.  Unlike the PDI, content written to the CFI isn't necessarily intended to persist indefinitely (though it may).
+- PLAN's **Cloud File Interface** ("CFI") content-addressable storage and is used for a PLAN community's temporary or bulk storage needs.  It provides scalable and expendable storage on-demand. 
+    - Consider an animated film production team using PLAN as a collaboration and file-sharing tool.  Suppose their workflow is to render-out rough cuts of scenes currently under construction and post them within PLAN for team feedback and review. It would be a waste to burn the community's _permanent_ shared storage (via the PDI) to hold gigabytes of data that won't be used after a week.  Worse, if only 5 members were reading this data out of a team of 25, then the other 20 member nodes would be unnecessarily burdened with this load (as _all_ data posted to the PDI replicates to each community node).
+- The CFI is an abstraction of [content-addressable storage](https://en.wikipedia.org/wiki/Content-addressable_storage), where content is referenced by hashname.  Unlike the PDI, content written to the CFI isn't necessarily intended to persist indefinitely (though it can).
 - Each entry in a "file" channel represents a revision of a high-level file and is either an inline content blob or a CFI hashname.  In the latter case, each entry is _only_ a short string and doesn't consume material space on a community's permanent shared storage.  In the PLAN client, the channel appears as a single monolithic icon or animation.  When the user opens/views this object, the PLAN client hands off the most recent channel entry (a CFI pathname) to the CFI layer for retrieval.
-    - Conveniently, this approach yields CFI garbage collection for "free".  For a given file channel, once an entry containing a CFI item is superseded longer than some grace period (or any other valuation calculus), the referenced item can be safely "unpinned" through the CFI.  
-    - At the PLAN client level, the user is not burdened or distracted with the details and steps associated with accessing and managing the CFI.  This means the user never has to see hashnames or even understand how the PDI and CFI work together.  
+    - Conveniently, this approach helps manage CFI allocation for "free".  For a given file channel, once an entry containing a CFI item is superseded longer than some grace period (or any other valuation calculus), the referenced item can be safely "unpinned" through the CFI.  
+    - At the PLAN client level, the user is not burdened or distracted with the details and steps associated with accessing and managing the CFI.  The user never sees hashnames or has to be aware how the PDI and CFI work together.  
 - Like the PDI, the Cloud File Interface is designed to be pluggable, offer flexibility, and preserve portability.  Most organizations using PLAN will be happy with PLAN's reference CFI implementation using [IPFS](https://ipfs.io/), a capable peer-to-peer distributed storage system.  However, others may want to choose from other possibilities, such as [Dat](https://datproject.org/).  
-    - Regardless, these rich but complex storage systems are made usable to non-technical users since the PLAN client seamlessly hides and manages hashnames, pinning, and unpinning
+    - Regardless, these rich but complex storage systems are made usable to non-technical users since the PLAN client seamlessly hides and manages hashnames, pinning, and unpinning.
 - The CFI and PDI are architecturally disjoint, but a single storage layer could be used to implement both, provided it has the requisite capabilities.
 
 ---

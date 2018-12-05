@@ -31,8 +31,8 @@ PLAN is designed and intended for:
 ## What's in This Repo?
 
 This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and then explore our other supporting documents:
-1. [PLAN API Documentation](PLAN-API-Documentation.md)
-2. [PLAN Data Model Proof of Correctness](PLAN-Proof-of-Correctness.md)
+1. [API Documentation](PLAN-API-Documentation.md)
+2. [Data Model Proof of Correctness](PLAN-Proof-of-Correctness.md)
 3. [FAQ](#FAQ)
 
 ## Why PLAN?
