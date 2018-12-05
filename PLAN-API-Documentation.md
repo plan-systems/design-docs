@@ -18,7 +18,7 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 |  [Interoperable Data Structures](#Interoperable-Data-Structures)  | Easy, flexible, portable, self-describing, performant data structures.                                                                     |
 | [Persistent Data Interface](#Persistent-Data-Interface) | Abstracts a community's permanent data store; designed to be compatible with many distributed ledgers.                                |
 |        [Channel Protocols](#channel-protocols)        | Silos content streams by purpose and interpretation, not by content type or format.                                                            |
-|       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel protocol type.                                                             |
+|       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel type.                                                             |
 |       [Cloud File Interface](#Cloud-File-Interface)      | Abstracts purgeable shared storage; designed to be compatible with most distributed content-addressable storage systems.               |
 |       [Secure Key Interface](#Secure-Key-Interface)     | Abstracts private key handling and crypto services; designed to be compatible with third-party encryption and authentication systems. |
 
@@ -107,6 +107,7 @@ PLAN features six primary areas of extension and interoperability.  Together, th
     - A custom-designed channel protocol generally will need an accompanying custom channel GUI adapter so PLAN clients can interact with that channel type.
     - For example, a brewery uses sensor arrays to monitor temperatures all over a warehouse.  These sensors periodically write JSON data to a channel with a given custom channel type.  The brewery has its own channel GUI adapter "bound" to the custom channel channel type that displays the floor plan of the brewery and overlaid with color swaths visualizing the most recent temperature readings.  
 
+---
 
 ## Channel GUI Adapters
 - A channel's protocol identifier string corresponds to a matching channel GUI adapter or "driver" in the PLAN client.  Like a traditional hardware driver, a PLAN channel adapter is designed specifically to interface with a data consumer and producer having an established format and flow.
