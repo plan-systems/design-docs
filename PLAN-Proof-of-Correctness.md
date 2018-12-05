@@ -76,7 +76,7 @@ No assumptions are made about network connectivity or reachability in this proof
     - ⇒ **Δ<sub>C</sub>** is in the neighborhood of 1*40 secs ⇒ 1 minute.
     - If N is _doubled_, then **Δ<sub>C</sub>** only increases on the order of seconds. 
 
-Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness of the system presented below is solely dependent on **𝓛**.  This means that the tradeoffs  **𝓛<sub>C</sub>** makes, in terms of connectivity, safety, and liveness, determine **C**'s overall network properties and behavior.  [Liveness versus Safety](#liveness-vs-safety) discusses tradeoffs for various choices of **𝓛**.
+Like the way an operating system is _only_ as swift as its host storage system, the latency and liveness (aka availability) of the system presented below is solely dependent on **𝓛**.  This means that the design tradeoffs that **𝓛<sub>C</sub>** makes will determine **C**'s overall network properties and behavior.  [Liveness vs Safety](#liveness-vs-safety) discusses tradeoffs for various choices of **𝓛**.
 
 --- 
 
@@ -130,7 +130,7 @@ The members of **C** wish to assert...
 
 #### Storage Portability
 - **C**, led by a coordinated admin effort, always has the ability to switch CRDT technologies. 
-- For example, suppose **𝓛<sub>C</sub>** has the safety feature such that it automatically halts under suspicious network conditions or insufficient peer connectivity.  However, earlier in **C**'s history, a CRDT that favored "liveness" over safety was chosen because **C** needed to be agile and often be "offline-first".
+- For example, suppose **𝓛<sub>C</sub>** has the safety feature such that it automatically halts under suspicious network conditions or insufficient peer connectivity.  However, earlier in **C**'s history, a CRDT that favored [liveness over safety](#liveness-vs-safety) was chosen because **C** needed to be agile and often be "offline-first".
 
 
 
@@ -508,7 +508,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 ## Liveness vs Safety
 
-"[Liveness](https://en.wikipedia.org/wiki/Liveness) versus [safety](https://en.wikipedia.org/wiki/Safety_property)" refers to canonical tradeoffs made in the design of a distributed system.  Here, it refers to the tradeoffs that a given **𝓛<sub>C</sub>** implementation codifies:
+"Liveness versus safety" refers to canonical tradeoffs made during the design of a blockchain or distributed ledger.  This discussion is variant of the [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) applied to distributed ledgers, where "[liveness](https://en.wikipedia.org/wiki/Liveness)" corresponds to _availability_ and "[safety](https://en.wikipedia.org/wiki/Safety_property)" corresponds to _consistency_.  Here, we weigh the tradeoffs made by a given **𝓛<sub>C</sub>** implementation:
 
 - If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
     1. **Δ<sub>C</sub>** will reflect network latency and topology
