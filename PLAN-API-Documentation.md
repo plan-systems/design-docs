@@ -17,7 +17,7 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 |:-------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------|
 |  [Interoperable Data Structures](#Interoperable-Data-Structures)  | Flexible, portable, self-describing, performant data structures                                                                     |
 | [Persistent Data Interface](#Persistent-Data-Interface) | Abstracts a community's permanent data store; designed to be compatible with distributed ledgers (e.g. blockchains)                            |
-|        [Channel Protocols](#channel-protocols)        | Separates content streams by purpose and interpretation, not by content type or format                                                            |
+|        [Channel Protocols](#channel-protocols)        | Separates content streams by purpose and interpretation, not just by content type or format                                                            |
 |       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel type                                                             |
 |       [Cloud File Interface](#Cloud-File-Interface)      | Abstracts purgeable shared storage; designed to be compatible with distributed content-addressable storage systems               |
 |       [Secure Key Interface](#Secure-Key-Interface)     | Abstracts private key handling and crypto services; designed to integrate third-party encryption and authentication systems |
@@ -111,12 +111,11 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 ## Channel GUI Adapters
 - A channel's protocol identifier string corresponds to a matching channel GUI adapter or "driver" in the PLAN client.  Like a traditional hardware driver, a PLAN channel adapter is designed specifically to interface with a data consumer and producer having an established format and flow.
 - When a user accesses/opens a channel in PLAN, the client starts a new instance of the channel module designed _for that specific type of channel_.  If multiple matching channel adapters are available, the client can choose based on user settings or can prompt the user to select one.
-- Specially, a PLAN channel adapter is a C# class that lives in the Unity client.  
-    - New adapter instances are passed a gRPC connection set up for a specific channel `UUID`.
-- For example, a channel with type `/plan/ch/calendar`, could invoke the client's default `calendar` channel adapter or instead use another that:
+- A PLAN channel adapter is a C# class that lives in the Unity client. New adapter instances are passed a gRPC connection set up for a given channel `UUID`.
+- A channel with type `/plan/ch/calendar`, could invoke the client's default `calendar` channel adapter or instead use another that:
     - displays scheduled events on a horizontal timeline that extends from the past to the future.
-    - overlays appointments from an external Google Calendar account
-- Users can "try on" alternate channel adapters in the way you can try on different color themes in a text editor.
+    - overlays appointments from an external calendar service
+- Users can choose alternate channel adapters in the way a media player offers alternate skins/UIs
 - Meanwhile, channel adapter developers only have to focus on a narrow and specific API, leaving them to focus on using Unity in the best ways.
 
 ---
