@@ -15,8 +15,8 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 
 |     Area of Interoperability    | Purpose                                                                                                                                     |
 |:-------------------------------:|---------------------------------------------------------------------------------------------------------------------------------------------|
-|  [Interoperable Data Structures](#Interoperable-Data-Structures)  | Easy, flexible, portable, self-describing, performant data structures                                                                     |
-| [Persistent Data Interface](#Persistent-Data-Interface) | Abstracts a community's permanent data store; designed to be compatible with distributed ledgers                                |
+|  [Interoperable Data Structures](#Interoperable-Data-Structures)  | Flexible, portable, self-describing, performant data structures                                                                     |
+| [Persistent Data Interface](#Persistent-Data-Interface) | Abstracts a community's permanent data store; designed to be compatible with distributed ledgers (e.g. blockchains)                            |
 |        [Channel Protocols](#channel-protocols)        | Separates content streams by purpose and interpretation, not by content type or format                                                            |
 |       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel type                                                             |
 |       [Cloud File Interface](#Cloud-File-Interface)      | Abstracts purgeable shared storage; designed to be compatible with distributed content-addressable storage systems               |
@@ -62,6 +62,7 @@ PLAN features six primary areas of extension and interoperability.  Together, th
     - Protobufs pair well with [gRPC](https://grpc.io), opening up broad multi-language and multi-platform network support.
     - An entire `plan.Block` hierarchy can be serialized or deserialized using a single line of code — _in every major language and environment_.
 - PLAN's Protobuf-based data structures:
+
     | Protobuf File      | Purpose                                         |
     |--------------------|-------------------------------------------------|
     | [go-plan/plan/plan.proto](http://github.com/plan-tools/go-plan/blob/master/plan/plan.proto)                  | PLAN-wide general purpose data structures       |
