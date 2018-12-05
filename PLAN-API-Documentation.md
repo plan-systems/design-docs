@@ -112,18 +112,19 @@ PLAN features six primary areas of extension and interoperability.  Together, th
 - A channel's protocol identifier string corresponds to a matching channel GUI adapter or "driver" in the PLAN client.  Like a traditional hardware driver, a PLAN channel adapter is designed specifically to interface with a data consumer and producer having an established format and flow.
 - When a user accesses/opens a channel in PLAN, the client starts a new instance of the channel module designed _for that specific type of channel_.  If multiple matching channel adapters are available, the client can choose based on user settings or can prompt the user to select one.
 - A PLAN channel adapter is a C# class that lives in the Unity client. New adapter instances are passed a gRPC connection set up for a given channel `UUID`.
-- A channel with type `/plan/ch/calendar`, could invoke the client's default `calendar` channel adapter or instead use another that:
-    - displays scheduled events on a horizontal timeline that extends from the past to the future.
-    - overlays appointments from an external calendar service
+- A channel with type `/plan/ch/calendar`, could invoke the client's default `calendar` channel adapter _or_ instead use another that:
+    - displays scheduled events on a horizontal timeline that extends from the past to the future,
+    - displays scheduled events on geographically relevant map, _or_
+    - overlays appointments from an external calendar service.
 - Users can choose alternate channel adapters in the way a media player offers alternate skins/UIs
-- Meanwhile, channel adapter developers only have to focus on a narrow and specific API, leaving them to focus on using Unity in the best ways.
+- Developers that create and extend channel adapters can focus on the API or GUI, rather than infrastructure related tasks.
 
 ---
 
 ## Cloud File Interface
 - PLAN's **Cloud File Interface** ("CFI") content-addressable storage and is used for a PLAN community's temporary or bulk storage needs.  It provides scalable and expendable storage on-demand. 
-    - Consider an animated film production team using PLAN as a collaboration and file-sharing tool.  Suppose their workflow is to render-out rough cuts of scenes currently under construction and post them within PLAN for team feedback and review. It would be a waste to burn the community's _permanent_ shared storage (via the PDI) to hold gigabytes of data that won't be used after a week.  Worse, if only 5 members were reading this data out of a team of 25, then the other 20 member nodes would be unnecessarily burdened with this load (as _all_ data posted to the PDI replicates to each community node).
 - The CFI is an abstraction of [content-addressable storage](https://en.wikipedia.org/wiki/Content-addressable_storage), where content is referenced by hashname.  Unlike the PDI, content written to the CFI isn't necessarily intended to persist indefinitely (though it can).
+    - Consider an film production team using PLAN as a collaboration and file-sharing tool.  Suppose their workflow is to export rough cuts of scenes currently under construction and post them within PLAN for team feedback and review. It would be a waste to burn the community's _permanent_ shared storage (via the PDI) to hold gigabytes of data that won't be used after a week.  Worse, if only 5 members were reading this data out of a team of 25, then the other 20 member nodes would be unnecessarily burdened with this load (as _all_ data posted to the PDI replicates to each community node).
 - Each entry in a "file" channel represents a revision of a high-level file and is either an inline content blob or a CFI hashname.  In the latter case, each entry is _only_ a short string and doesn't consume material space on a community's permanent shared storage.  In the PLAN client, the channel appears as a single monolithic icon or animation.  When the user opens/views this object, the PLAN client hands off the most recent channel entry (a CFI pathname) to the CFI layer for retrieval.
     - Conveniently, this approach helps manage CFI allocation for "free".  For a given file channel, once an entry containing a CFI item is superseded longer than some grace period (or any other valuation calculus), the referenced item can be safely "unpinned" through the CFI.  
     - At the PLAN client level, the user is not burdened or distracted with the details and steps associated with accessing and managing the CFI.  The user never sees hashnames or has to be aware how the PDI and CFI work together.  
