@@ -33,6 +33,7 @@ PLAN is designed and intended for:
 This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and then explore our other supporting documents:
 1. [PLAN API Documentation](PLAN-API-Documentation.md)
 2. [PLAN Data Model Proof of Correctness](PLAN-Proof-of-Correctness.md)
+3. [FAQ](#FAQ)
 
 ## Why PLAN?
 
@@ -46,7 +47,7 @@ We wish to acknowledge the principles surrounding [multistream](https://github.c
 
 May PLAN empower organizations and individuals, and may it be an instrument of productivity and self-organization.
 
-## Goals & Objectives
+## Architecture Objectives
 
 The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it is intuitive and reliable_.
 
