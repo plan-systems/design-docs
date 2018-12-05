@@ -131,13 +131,10 @@ Using PLAN, communities arise from organizers and members who value owning their
 #### Q: What are the ways PLAN is pluggable or can be otherwise be extended?
 - PLAN features an architecture intended for modularity, flexibility, and specialization. PLAN's [Primary APIs](PLAN-API-Documentation.md#Primary-Interfaces) span from storage layers, to PLAN GUI plugins called Channel Adapters that allow a channel to be experienced in alternate ways.
 
-#### Q: How is PLAN's Persistent Data Interface (PDI) implemented?
-- PLAN's append-only storage layer ("**𝓛<sub>C</sub>**"), detailed in PLAN's [Proof of Correctness](PLAN-Proof-of-Correctness.md), can be implemented by a range of storage layer technologies.  This is a compelling feature since each storage implementation trades off some advantages in exchange for others.  One particular technology may be a great fit one community's needs but would be a poor fit for another. See [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) for a deeper technical discussion.
-
 #### Q: Where is a community data stored and who ultimately controls it?
-- The [Persistent Data Interface](PLAN-API-Documentation.md#Persistent-Data-Interface) is intended for _permanent_ community storage and should be regarded at the community's channel repository.  It is not suited to store bulk data, especially if the data will only be accessed by a couple community members or the data is only needed temporarily. 
-- The [Cloud File Interface](PLAN-API-Documentation.md#cloud-file-interface) is an abstraction that exposes a distributed storage system, used for both short-term and long-term bulk data storage. It pairs well with the PDI since a channel entry can reference any CFI item using only a short string.  
-- In both cases, _the community's data is stored and owned by the community_.  By design, a PLAN community is not dependent on storage or infrastructure outside the community (other than whatever third-party telecommunications infrastructure is needed) 
+- The [Persistent Data Interface](PLAN-API-Documentation.md#Persistent-Data-Interface) is intended for _permanent_ community storage and should be regarded at the community's channel repository. 
+- The [Cloud File Interface](PLAN-API-Documentation.md#cloud-file-interface) is an abstraction that exposes a distributed storage system, used for bulk data storage. It pairs well with the PDI since a channel entry can reference a CFI item using only a short string.  
+- In both cases, _the community stores and controls its own data_.  By design, a PLAN community is not dependent on storage or infrastructure outside the community (other than whatever third-party telecommunications infrastructure is needed) 
 
 #### Q: But PLAN doesn't do X, fulfill need Y, or address use case Z.  How will PLAN address this?
 - PLAN is not meant to be _all_ things to _all_ people. PLAN is intended for medium and small-sized organizations that have few or no options when it comes to a multi-platform, secure, real-time, viable, and integrated operations platform. PLAN is all about offering a reliable and easy-to-use logistics and planning tool for organizations facing crisis or low-resource conditions. 
@@ -147,7 +144,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 - For example, community **C** could be founded such that a majority vote from a member-appointed set of "board" members are required in order to add a new member to the community. This would be enforced by a smart contract wired into **C**'s storage layer. See PLAN's [Proof of Integrity Assurance](PLAN-Proof-of-Correctness.md#Proof-of-Integrity-Assurance) for more.
 
 #### Q: Is PLAN is locked into Unity?
-- Although [PLAN&nbsp;Systems](http://plan.tools) is making the initial PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established real-time 3D framework.
+- Although [PLAN&nbsp;Systems](http://plan.tools) is making the primary PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established 3D framework.
 
 #### Q: How can I try PLAN or support its development?
 - Check out the [PLAN website](http://plan.tools) and fill out our contact form.  This will allow you hear about announcements and upcoming releases.
