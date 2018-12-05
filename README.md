@@ -9,15 +9,15 @@ P  L  A  N etwork
 
 ## Welcome to PLAN!
 
-PLAN is a free and open platform for groups to securely communicate, collaborate, and coordinate efforts and activities. PLAN features:
-- Channels specialized for chat, file sharing, interactive maps, tasking, scheduling, and inventory control
+PLAN is a free and open platform for groups to securely communicate, collaborate, and coordinate projects and activities. PLAN features:
+- Channels specialized for chat, file sharing, interactive maps, tasking, scheduling, and inventory management
 - A user interface where channels and objects are placed into any number of virtual spaces
 - Peer-to-peer storage and infrastructure that doesn’t require a central server
 - Built-in collaboration tools that are secure, private, and reliable
 - Relationship and organization management and visualization
 - A flexible and “[pluggable](PLAN-API-Documentation.md#Primary-APIs)” architecture made for modification and extension
 	
-PLAN’s architecture brings all these parts together under a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired from how HTTP originated at CERN.  PLAN is free and open-source through the GNU General Public License ([GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
+PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.  PLAN is available through the GNU General Public License ([GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
 
 PLAN is designed and intended for:
 - Community organizations
@@ -43,9 +43,9 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 ## Why PLAN?
 
-Distributed technologies and protocols offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human usability and convenience.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.
+Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human usability and convenience.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.
 
-As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN is not dependent on any outside business models, and it offers assurance that the information we store and depend on will be available not only during times of prosperity, but also in natural disasters, geopolitical crisis, or economic drought. 
+As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also in natural disasters, geopolitical crisis, or economic drought. 
 
 We wish to acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which subtly but decisively improves how protocols, paths, and formats can be expressed to invite interoperability; http:// becomes /http/.
 
