@@ -76,13 +76,10 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 
 ## Persistent Data Interface
 - The **Persistent Data Interface** ("PDI") is an abstraction for append-only storage shared by a PLAN community.  It stores all of a community's channel entries and is _cryptographically exclusive_ to its members.
-- The PDI embraces an append-only model so that a wide range of replicating data types and distributed ledgers can be used as an implementation.  
+- The PDI embraces an append-only model so that a wide range of replicating data types and distributed ledgers can be used as an implementation.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how a particular distributed ledger can be a great fit for one community but a poor fit for another. 
 - PDI transactions ("channel entries") are modeled as immutable and permanent (though content mutability is recreated virtually in PLAN's intermediate channel database layer).
-- A conventional centralized shared database can also be used to implement the PDI, offering performance and convenience for small communities that are getting started.
-- The PDI offers [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a centralized server for convenience/availability, and later migrate to a distributed ledger that scales down the road.
+- A central database server can also be used to implement the PDI, offering performance and convenience for small communities that are getting started.  The PDI offers [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a central database for convenience/availability, and later migrate to a distributed ledger designed for scale. 
 - In [go-plan](http://github.com/plan-tools/go-plan), the interface `StorageSession` in [StorageProvider.go](http://github.com/plan-tools/go-plan/blob/master/pdi/StorageProvider.go) is the heart of the PDI.
-
-
 
 ---
 
