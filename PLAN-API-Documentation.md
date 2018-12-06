@@ -54,7 +54,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
     }
     ```
 - Importantly, each `plan.Block` instance is [self-describing](https://multiformats.io/) and can contain sub-blocks. Because each `plan.Block` can be accompanied by a label, codec descriptor, or any number of sub-blocks, it has the _simplicity and flexibility_ of JSON but the _efficiency and compactness_ of binary serialization.  This means any hierarchy of information or content can be structured dynamically, and each element contains enough meta information for it to be safely analyzed and processed further.
-- Like other foundational data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-tools/plan-protobufs) for most major languages and environments, including C, C++, Haskell, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby.  Not bad!
+- Like other foundational data structures in PLAN, `plan.Block` is specified using [Protobufs](https://developers.google.com/protocol-buffers).  This means boilerplate serialization and network handling code can be [trivially generated](https://github.com/plan-systems/plan-protobufs) for most major languages and environments, including C, C++, Haskell, Objective-C, Swift, C#, Go, Java, JavaScript, Python, and Ruby.  Not bad!
     - Protobufs are faster, simpler, safer, more compact, and more efficient than JSON and XML.
     - A Protobuf struct ("message") can be composed of primitive data types or user-defined messages.
     - The fields of a Protobuf message are explicitly and strongly typed.
@@ -65,10 +65,10 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 
     | Protobuf File      | Purpose                                         |
     |--------------------|-------------------------------------------------|
-    | [go-plan/plan/plan.proto](http://github.com/plan-tools/go-plan/blob/master/plan/plan.proto)                  | PLAN-wide general purpose data structures       |
-    | [go-plan/pdi/pdi.proto](http://github.com/plan-tools/go-plan/blob/master/pdi/pdi.proto)                      | Persistent Data Interface (PDI) data structures |
-    | [go-plan/ski/ski.proto](http://github.com/plan-tools/go-plan/blob/master/ski/ski.proto)                      | Secure Key Interface (SKI) data structures      |
-    | [go-plan/pservice/pservice.proto](http://github.com/plan-tools/go-plan/blob/master/pservice/pservice.proto)  | GRPC network services and data structures       |
+    | [go-plan/plan/plan.proto](http://github.com/plan-systems/go-plan/blob/master/plan/plan.proto)                  | PLAN-wide general purpose data structures       |
+    | [go-plan/pdi/pdi.proto](http://github.com/plan-systems/go-plan/blob/master/pdi/pdi.proto)                      | Persistent Data Interface (PDI) data structures |
+    | [go-plan/ski/ski.proto](http://github.com/plan-systems/go-plan/blob/master/ski/ski.proto)                      | Secure Key Interface (SKI) data structures      |
+    | [go-plan/pservice/pservice.proto](http://github.com/plan-systems/go-plan/blob/master/pservice/pservice.proto)  | GRPC network services and data structures       |
 
 
 ---
@@ -79,7 +79,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 - The PDI embraces an append-only model so that a wide range of replicating data types and distributed ledgers can be used as an implementation.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how a particular distributed ledger can be a great fit for one community but a poor fit for another. 
 - PDI transactions ("channel entries") are modeled as immutable and permanent (though content mutability is recreated virtually in PLAN's intermediate channel database layer).
 - A central database server can also be used to implement the PDI, offering performance and convenience for small communities that are getting started.  The PDI offers [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a central database for convenience/availability, and later migrate to a distributed ledger designed for scale. 
-- In [go-plan](http://github.com/plan-tools/go-plan), the interface `StorageSession` in [StorageProvider.go](http://github.com/plan-tools/go-plan/blob/master/pdi/StorageProvider.go) is the heart of the PDI.
+- In [go-plan](http://github.com/plan-systems/go-plan), the interface `StorageSession` in [StorageProvider.go](http://github.com/plan-systems/go-plan/blob/master/pdi/StorageProvider.go) is the heart of the PDI.
 
 ---
 
@@ -153,11 +153,11 @@ A community using PLAN will inevitably be interested in making some of its parts
 
 | Milestone |  Timeframe  | Description                                                                               |
 |:---------:|:-----------:|-------------------------------------------------------------------------------------------|
-|   [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model)     |
+|   [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-systems/permissions-model)     |
 |  [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)  |   2018 Q3   | PLAN [Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
-|   [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)   |   2019 Q1   | [go-plan](https://github.com/plan-tools/go-plan) command line proof of concept demo       |
+|   [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)   |   2019 Q1   | [go-plan](https://github.com/plan-systems/go-plan) command line proof of concept demo       |
 |   [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)  |   2019 Q2   |  CFI ([IPFS](https://ipfs.io/)) integration   |
-|  [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |   2019 Q2   | [plan-unity](https://github.com/plan-tools/plan-unity) preliminary proof of concept |                                       |
+|  [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |   2019 Q2   | [plan-unity](https://github.com/plan-systems/plan-unity) preliminary proof of concept |                                       |
 | [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) |   2019 Q3   | Ethereum, DFINITY, Holochain, or other established DLT used for first PDI implementation |
 |   [Turing](https://en.wikipedia.org/wiki/Alan_Turing)  |   2019 Q3   | go-plan support and QA for Linux                                                          | 
 |  [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace) |   2019 Q3   | Installer and GUI setup experience for macOS                                              |

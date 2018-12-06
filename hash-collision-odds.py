@@ -28,7 +28,7 @@
 # The talented and well-spoken Michael at Vsauce delightfully shows how BIG these numbers really are:
 #     https://www.youtube.com/watch?v=ObiqJzfyACM&t=888s
 #
-# ~ Drew O'Meara, Fall 2018
+# ~ Drew O'Meara, Fall 2018, PLAN Systems
 #
 #
 # Output:
