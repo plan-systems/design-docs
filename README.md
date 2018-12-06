@@ -51,14 +51,14 @@ May PLAN empower organizations and individuals, and may it be an instrument of p
 
 The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it is intuitive and reliable_.
 
-Instead of a 2D-constrained and sandboxed web/browser experience, a PLAN user experiences their organization's structure and content spatially — _in real-time_ — through the [Unity](https://unity3d.com) graphics engine as it renders channels of information in virtual space, served by allied "community" nodes.  These nodes implement PLAN's underlying channel and access control infrastructure and are built on a storage layer abstraction compatible with most [distributed ledger](https://en.wikipedia.org/wiki/Distributed_ledger) implementations.
+Instead of a 2D-constrained and sandboxed web browser experience, a PLAN user experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders channels of information into virtual space.  The client is served by one of the organization's peer-to-peer nodes, built on top of a storage layer compatible with existing [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
 
 Design goals:
 - Multiplatform: _Android, iOS, Linux, macOS, Windows_
-- User experience is 2D/orthographic, first person, isometric, or AR/VR
-- Peer-to-peer persistent storage abstraction compatible with distributed ledgers
-- Peer-to-peer "cloud" storage abstraction compatible with distributed storage systems
-- Pluggable content handling and rendering via GUI "adapters"
+- User experience is 2D/orthographic, first person, isometric, AR, VR
+- Peer-to-peer [persistent storage abstraction](PLAN-API-Documentation.md#persistent-data-interface) compatible with distributed ledgers
+- Peer-to-peer [cloud storage abstraction](PLAN-API-Documentation.md#cloud-file-interface) compatible with distributed storage systems
+- Pluggable content handling and rendering via [channel GUI adapters](PLAN-API-Documentation.md#channel-gui-adapters)
 - “Offline first” to allow work when only part of the network reachable
 - Access controls for the group as a whole or for individual channels or group members
 - Allow a community peer-host selected content for outside public consumption
@@ -93,6 +93,7 @@ When a PLAN channel is created, it is assigned a protocol identifier string (e.g
 - build interactive maps, charts, floor plans, and virtual spaces
 - track inventory and supplies
 - integrate files and media sharing
+- tally and track community polls and voting
 - coordinate and visualize calendars and scheduling
 - accept and filter custom-designed forms
 
@@ -145,6 +146,11 @@ Using PLAN, communities arise from organizers and members who value owning their
 
 #### Q: Is PLAN is locked into Unity?
 - Although [PLAN&nbsp;Systems](http://plan.tools) is making the primary PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established 3D framework.
+
+#### Q: Can multiple PLAN communities interact or federate?
+- There are many interesting areas of research and future development related to how independent PLAN communities can interact and be allies.  Open research areas include:
+    - Partner Federations: a community's leadership makes agreements to grant privileges to other communities en masse. 
+    - Hierarchic Federations: a community originates as subordinate in some way to parent community.
 
 #### Q: How can I try PLAN or support its development?
 - Check out the [PLAN website](http://plan.tools) and fill out our contact form.  This will allow you hear about announcements and upcoming releases.
