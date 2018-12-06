@@ -17,7 +17,7 @@ PLAN is a free and open platform for groups to securely communicate, collaborate
 - Relationship and organization management and visualization
 - A flexible and “[pluggable](PLAN-API-Documentation.md#Primary-Interfaces)” architecture made for modification and extension
 	
-PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.  PLAN is available through the GNU General Public License ([GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
+PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.  PLAN is freely available through the GNU General Public License ([GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
 
 PLAN is designed and intended for:
 - Community organizations
@@ -51,7 +51,7 @@ May PLAN empower organizations and individuals, and may it be an instrument of p
 
 The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it is intuitive and reliable_.
 
-Instead of a 2D-constrained and sandboxed web browser experience, a PLAN user experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders channels of information into virtual space.  The client is served by one of the organization's peer-to-peer nodes, built on top of a storage layer compatible with existing [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
+Instead of a 2D-constrained and sandboxed web browser experience, a PLAN user experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders channels of information into virtual space.  The client is served by a "community" node that uses a storage abstraction designed for [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
 
 Design goals:
 - Multiplatform: _Android, iOS, Linux, macOS, Windows_
