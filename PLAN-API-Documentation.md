@@ -21,7 +21,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 |       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel type                                                          |
 |       [Cloud File Interface](#Cloud-File-Interface)      | Abstracts expendable shared bulk storage; designed to be compatible with distributed content-addressable storage systems               |
 |       [Secure Key Interface](#Secure-Key-Interface)      | Abstracts private key handling and crypto services; designed to integrate third-party encryption and authentication systems            |
-|        [Public Services](Public-Services)                | Serves public requests for explicitly shared community content via conventional internet protocols                                     |
+|              [Web Services](Web-Services)                | Serves public requests for explicitly shared community content via conventional internet protocols                                     |
 
 ## Interoperable Data Structures
 
@@ -119,7 +119,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 ---
 
 ## Cloud File Interface
-- The **Cloud File Interface** ("CFI") is an abstraction for [content-addressable storage](https://en.wikipedia.org/wiki/Content-addressable_storage), where files/content are referenced by hashname and are available across the community's network.  Unlike the PDI, content written to the CFI isn't necessarily intended to persist indefinitely (though it can).   
+- The **Cloud File Interface** ("CFI") is an abstraction for [content-addressable storage](https://en.wikipedia.org/wiki/Content-addressable_storage), where files/content are referenced by hashname and are available across a community's network.  Unlike the PDI, content written to the CFI isn't necessarily intended to persist indefinitely (though it can).   
 - The CFI provides scalable and expendable storage, serving a community's temporary and bulk storage needs.
 - Distributed storage systems typically only replicate on-demand (e.g. BitTorrent), so CFI content tends to only consume local storage for users accessing that content.  This is in contrast to how entries posted to the PDI replicate to _every_ community node.
 - "File" channels allow PLAN users to interact with files and trees in familiar ways, but under the hood each entry in the channel is a CFI pathname that points to a revision of the file or tree.  Since each revision pathname is _only_ a short string, these channels don't materially consume the community's permanent shared storage.  When a user opens/views this object, the PLAN client hands off the most recent channel entry (a CFI pathname) to the CFI layer for retrieval while the PLAN client graphically reports progress.
@@ -138,7 +138,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 
 ---
 
-## Public Services 
+## Web Services 
 
 A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publicly accessible services to serve explicitly designated community content and scale (as a distributed system) alongside traditional web or internet services.  For example:
 - A musical artist uses PLAN to serve show recordings and official releases. 
@@ -155,12 +155,12 @@ A community using PLAN will inevitably be interested in making some of its parts
 |:---------:|:-----------:|-------------------------------------------------------------------------------------------|
 |   [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-tools/permissions-model)     |
 |  [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)  |   2018 Q3   | PLAN [Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
-|   [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)   |   2018 Q4   | [go-plan](https://github.com/plan-tools/go-plan) command line proof of concept demo       |
-|  [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |   2019 Q1   | [plan-unity](https://github.com/plan-tools/plan-unity) preliminary proof of concept |                                       |
+|   [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)   |   2019 Q1   | [go-plan](https://github.com/plan-tools/go-plan) command line proof of concept demo       |
 |   [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)  |   2019 Q2   |  CFI ([IPFS](https://ipfs.io/)) integration   |
-| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) |   2019 Q2   | Ethereum, DFINITY, Holochain, or other established DLT used for first PDI implementation |
-|  [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace) |   2019 Q3   | Installer and GUI setup experience for macOS                                              |
+|  [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |   2019 Q2   | [plan-unity](https://github.com/plan-tools/plan-unity) preliminary proof of concept |                                       |
+| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) |   2019 Q3   | Ethereum, DFINITY, Holochain, or other established DLT used for first PDI implementation |
 |   [Turing](https://en.wikipedia.org/wiki/Alan_Turing)  |   2019 Q3   | go-plan support and QA for Linux                                                          | 
+|  [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace) |   2019 Q3   | Installer and GUI setup experience for macOS                                              |
 |  [Galileo](https://en.wikipedia.org/wiki/Galileo_Galilei)  |   2019 Q4   | PLAN Systems internally replaces Slack with PLAN                                       |
 | [Hollerith](https://en.wikipedia.org/wiki/Herman_Hollerith) |   2019 Q4   | Installer and GUI setup experience for Windows                                            | 
 |   [Barton](https://en.wikipedia.org/wiki/Clara_Barton)  |   2020 Q1   | PLAN helps support [Art Community Builders](http://artcommunitybuilders.org/)             |
