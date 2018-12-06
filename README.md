@@ -31,13 +31,13 @@ PLAN is designed and intended for:
 ## What's in This Repo?
 
 This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and then explore our other supporting documents:
-1. [API Documentation](PLAN-API-Documentation.md)
-2. [Data Model Proof of Correctness](PLAN-Proof-of-Correctness.md)
-3. [FAQ](#FAQ)
+1. [FAQ](#FAQ)
+2. [API Documentation](PLAN-API-Documentation.md)
+3. [Data Model Proof of Correctness](PLAN-Proof-of-Correctness.md)
 
 ## Why PLAN?
 
-Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human usability and convenience.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also in natural disasters, geopolitical crisis, or economic drought. 
+Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human usability and convenience.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought. 
 
 We wish to acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which subtly but decisively improves how protocols, paths, and formats can be expressed to invite interoperability; http:// becomes /http/.
 
@@ -49,15 +49,17 @@ May PLAN empower organizations and individuals, and may it be an instrument of p
 
 ## Architecture Objectives
 
-The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it is intuitive and reliable_.
+The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it's intuitive and reliable_.
 
-Instead of a 2D-constrained and sandboxed web browser experience, a PLAN user experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders channels of information into virtual space.  The client is served by a "community" node that uses a storage abstraction designed for [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
+Instead of a 2D-constrained and sandboxed web browser experience, a PLAN user experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders channels of information into virtual space.  The client is served by a "community" node that uses a storage abstraction compatible with many existing [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
 
 Design goals:
 - Multiplatform: _Android, iOS, Linux, macOS, Windows_
 - User experience is 2D/orthographic, first person, isometric, AR, VR
 - Peer-to-peer [persistent storage abstraction](PLAN-API-Documentation.md#persistent-data-interface) compatible with distributed ledgers
 - Peer-to-peer [cloud storage abstraction](PLAN-API-Documentation.md#cloud-file-interface) compatible with distributed storage systems
+
+
 - Pluggable content handling and rendering via [channel GUI adapters](PLAN-API-Documentation.md#channel-gui-adapters)
 - “Offline first” to allow work when only part of the network reachable
 - Access controls for the group as a whole or for individual channels or group members
@@ -130,7 +132,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 - Consider: _PLAN is to distributed ledger as operating system is to harddrive_.  If a more capable or suitable storage technology appears, PLAN's [Proof of Storage Portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability) demonstrates how a community can switch storage technologies.
 
 #### Q: What are the ways PLAN is pluggable or can be otherwise be extended?
-- PLAN features an architecture intended for modularity, flexibility, and specialization. PLAN's [Primary APIs](PLAN-API-Documentation.md#Primary-Interfaces) span from storage layers, to PLAN GUI plugins called Channel Adapters that allow a channel to be experienced in alternate ways.
+- PLAN features an architecture intended for modularity, flexibility, and specialization. PLAN's [Primary Interfaces](PLAN-API-Documentation.md#Primary-Interfaces) span from storage layers, to PLAN GUI plugins called Channel Adapters that allow a channel to be experienced differently.
 
 #### Q: Where is a community data stored and who ultimately controls it?
 - The [Persistent Data Interface](PLAN-API-Documentation.md#Persistent-Data-Interface) is intended for _permanent_ community storage and should be regarded at the community's channel repository. 
@@ -138,7 +140,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 - In both cases, _the community stores and controls its own data_.  By design, a PLAN community is not dependent on storage or infrastructure outside the community (other than whatever third-party telecommunications infrastructure is needed) 
 
 #### Q: But PLAN doesn't do X, fulfill need Y, or address use case Z.  How will PLAN address this?
-- PLAN is not meant to be _all_ things to _all_ people. PLAN is intended for medium and small-sized organizations that have few or no options when it comes to a multi-platform, secure, real-time, viable, and integrated operations platform. PLAN is all about offering a reliable and easy-to-use logistics and planning tool for organizations facing crisis or low-resource conditions. 
+- PLAN is not meant to be _all_ things to _all_ people. PLAN is intended for micro-sized to medium-sized organizations and groups that have few or no options when it comes to a multi-platform, secure, and integrated operations platform. PLAN is all about offering a reliable and easy-to-use logistics and planning tool for ad-hoc groups or under-resourced organizations. 
 
 #### Q: Does a PLAN community admin wield all the power and control?
 - Not unless you want it that way.  The phrase "community admin" is used in these docs to refer to an agent acting in accordance with community policies and bylaws on behalf of the community's already-established leadership. This means that a community can operate as strictly or as loosely as the founding members want, but those agreements are visible to the entire community.  
