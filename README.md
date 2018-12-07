@@ -173,8 +173,9 @@ Using PLAN, communities arise from organizers and members who value owning their
 
 #### Q: Can multiple PLAN communities interact or federate?
 - There are many interesting areas of research and future development related to how independent PLAN communities can interact and be allies.  Open research areas include:
-    - Partner Federations: a community's leadership makes agreements to grant privileges to other communities en masse. 
-    - Hierarchic Federations: a community originates as subordinate in some way to parent community.
+    - Peer Federations — a community's leadership grants privileges to another community's members en masse. 
+    - Hierarchical Federations — a community originates as subordinate in some way to parent community.
+    - Commerce Federations — multiple communities maintain shared identity or marketplace federation infrastructure, facilitating trade and commerce. 
 
 #### Q: How can I try PLAN or support its development?
 - Check out the [PLAN website](http://plan.tools) and fill out our contact form.  This will allow you hear about announcements and upcoming releases.
