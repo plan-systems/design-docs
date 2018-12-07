@@ -43,7 +43,7 @@ We wish to acknowledge the principles surrounding [multistream](https://github.c
 
 ## PLAN Systems
 
-[PLAN Systems](http://plan.tools) is a non-profit public charity, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.  
+[PLAN Systems](http://plan-systems.org) is a non-profit public charity, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.  
 
 May PLAN empower organizations and individuals, and may it be an instrument of productivity and self-organization.
 
@@ -169,7 +169,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 - For example, community **C** could be founded such that a majority vote from a member-appointed set of "board" members are required in order to add a new member to the community. This would be enforced by a smart contract wired into **C**'s storage layer. See PLAN's [Proof of Integrity Assurance](PLAN-Proof-of-Correctness.md#Proof-of-Integrity-Assurance) for more.
 
 #### Q: Is PLAN is locked into Unity?
-- Although [PLAN&nbsp;Systems](http://plan.tools) is making the primary PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established 3D framework.
+- Although [PLAN&nbsp;Systems](http://plan-systems.org) is making the primary PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established 3D framework.
 
 #### Q: Can multiple PLAN communities interact or federate?
 - There are many interesting areas of research and future development related to how independent PLAN communities can interact and be allies.  Open research areas include:
@@ -178,7 +178,7 @@ Using PLAN, communities arise from organizers and members who value owning their
     - Commerce Federations — multiple communities maintain shared identity or marketplace federation infrastructure, facilitating trade and commerce. 
 
 #### Q: How can I try PLAN or support its development?
-- Check out the [PLAN website](http://plan.tools) and fill out our contact form.  This will allow you hear about announcements and upcoming releases.
+- Check out the [PLAN website](http://plan-systems.org) and fill out our contact form.  This will allow you hear about announcements and upcoming releases.
 
 ---
 ---
