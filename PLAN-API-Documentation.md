@@ -142,29 +142,10 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 
 A community using PLAN will inevitably be interested in making some of its parts accessible to the global public.  A PLAN node allows publicly accessible services to serve explicitly designated community content and scale (as a distributed system) alongside traditional web or internet services.  For example:
 - A musical artist uses PLAN to serve show recordings and official releases. 
-- A documentary production uses PLAN to serve the film's trailer and the full film to users bearing a the right token.
+- A documentary production uses PLAN to serve the film's trailer and the full film to users bearing a token.
 - A PLAN daemon periodically renders out an image of a map with spatial annotations from a community geo-space channel, served as an html page.
 - A PLAN email gateway daemon bridges access to the members of a PLAN community and the outside world.  Unlike email, however, each incoming email contains an access token that the recipient previously issued the sender, effectively eliminating unsolicited messages ("spam").  Further, a sender who abuses their privileges (or loses or resells their token to a spammer), can be blocked without any concern of messages from _other_ senders being inadvertently filtered/blocked.
 
-
----
-
-## Milestones
-
-| Milestone |  Timeframe  | Description                                                                               |
-|:---------:|:-----------:|-------------------------------------------------------------------------------------------|
-|   [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-systems/permissions-model)     |
-|  [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)  |   2018 Q3   | PLAN [Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
-|   [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)   |   2019 Q1   | [go-plan](https://github.com/plan-systems/go-plan) command line proof of concept demo       |
-|   [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)  |   2019 Q2   |  CFI ([IPFS](https://ipfs.io/)) integration   |
-|  [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |   2019 Q2   | [plan-unity](https://github.com/plan-systems/plan-unity) preliminary proof of concept |                                       |
-| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) |   2019 Q3   | Ethereum, DFINITY, Holochain, or other established DLT used for first PDI implementation |
-|   [Turing](https://en.wikipedia.org/wiki/Alan_Turing)  |   2019 Q3   | go-plan support and QA for Linux                                                          | 
-|  [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace) |   2019 Q3   | Installer and GUI setup experience for macOS                                              |
-|  [Galileo](https://en.wikipedia.org/wiki/Galileo_Galilei)  |   2019 Q4   | PLAN Systems internally replaces Slack with PLAN                                       |
-| [Hollerith](https://en.wikipedia.org/wiki/Herman_Hollerith) |   2019 Q4   | Installer and GUI setup experience for Windows                                            | 
-|   [Barton](https://en.wikipedia.org/wiki/Clara_Barton)  |   2020 Q1   | PLAN helps support [Art Community Builders](http://artcommunitybuilders.org/)             |
-|     -     |    2020+    | PLAN expands support for other volunteer-run events                                       |
 
 
 ---
