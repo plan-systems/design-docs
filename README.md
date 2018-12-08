@@ -58,12 +58,10 @@ Design goals:
 - User experience is 2D/orthographic, first person, isometric, AR, VR
 - Peer-to-peer [persistent storage abstraction](PLAN-API-Documentation.md#persistent-data-interface) compatible with distributed ledgers
 - Peer-to-peer [cloud storage abstraction](PLAN-API-Documentation.md#cloud-file-interface) compatible with distributed storage systems
-
-
 - Pluggable content handling and rendering via [channel GUI adapters](PLAN-API-Documentation.md#channel-gui-adapters)
 - “Offline first” to allow work when only part of the network reachable
 - Access controls for the group as a whole or for individual channels or group members
-- Allow a community peer-host selected content for outside public consumption
+- Allow a community peer-host selected content for external/public consumption
 
 PLAN users receive:
 - A responsive, engaging, animated, and spatially-aware GUI
