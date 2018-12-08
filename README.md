@@ -17,7 +17,7 @@ PLAN is a free and open platform for groups to securely communicate, collaborate
 - Relationship and organization management and visualization
 - A flexible and “[pluggable](PLAN-API-Documentation.md#Primary-Interfaces)” architecture made for modification and extension
 	
-PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.  PLAN is freely available through the GNU General Public License ([GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
+PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.  PLAN is freely available through the GNU General Public License ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
 
 PLAN is designed and intended for:
 - Community organizations
@@ -81,7 +81,7 @@ How is PLAN implemented?
 
 ## Architecture Synopsis
 
-PLAN has a 3D/visual frontend with a peer-to-peer backend that uses one or more secure distributed storage providers.  The PLAN client, written in [Unity](https://unity3d.com), connects to a "community" peer-to-peer PLAN node, a daemon written written in [Go](https://golang.org).  These nodes serve PLAN clients while replicating shared community data across the community's secure federation of nodes. 
+PLAN has a 3D/visual frontend with a peer-to-peer backend that uses one or more secure distributed storage providers.  The PLAN client, written in [Unity](https://unity3d.com), connects to a "community" peer-to-peer PLAN node, a daemon written in [Go](https://golang.org).  These nodes serve PLAN clients while replicating shared community data across the community's secure federation of nodes. 
 
 What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. The entire community's network traffic and infrastructure is inaccessible to all others, forming a cryptographic "city wall" of privacy and security.  
 
