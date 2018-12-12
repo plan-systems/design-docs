@@ -28,7 +28,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 - PLAN features a powerful but tiny set of flexible, portable, self-describing, and performant data structures. 
 - Thanks to [Protobufs](https://developers.google.com/protocol-buffers) and [gRPC](https://grpc.io), developers can access content in PLAN using every major language and over a network connection with only a few lines of code. 
 - PLAN's standard unit of information storage, structure, and transport is `plan.Block`:
-    ```
+    ```golang
     // A portable, compact, self-describing, nestable information container inspired from HTTP.
     type Block struct {
 
