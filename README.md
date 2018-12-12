@@ -9,9 +9,9 @@ P  L  A  N etwork
 
 ## Welcome to PLAN!
 
-PLAN is a free and open platform for groups to securely communicate, collaborate, and coordinate projects and activities. PLAN features:
+PLAN is free platform for groups to securely communicate, collaborate, and coordinate projects and activities. PLAN features:
 - Channels specialized for chat, file sharing, interactive maps, tasking, scheduling, and inventory management
-- A user interface where channels and objects are placed into any number of virtual spaces
+- A user interface where channels and objects are placed within virtual spaces
 - Peer-to-peer storage and infrastructure that doesn’t require a central server
 - Built-in collaboration tools that are secure, private, and reliable
 - Relationship and organization management and visualization
@@ -63,7 +63,7 @@ Design goals:
 - Access controls for the group as a whole or for individual channels or group members
 - Allow a community peer-host selected content for external/public consumption
 
-PLAN users receive:
+PLAN users get:
 - A responsive, engaging, animated, and spatially-aware GUI
 - A first-class input and display device experience
 - Full horsepower of the user's device/workstation
