@@ -568,7 +568,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
 
 [Permissions Assurance](#Permissions-Assurance) asserts the access controls on **C** remain in effect and cannot be circumvented.
 
-- In order for an entry to be "live" in a node's repo ("**𝓡<sub>i</sub>**"), it must repeatedly survive [Channel Entry Validation](#Channel-Entry-Validation).  
+- In order for a channel entry to be "live" in a node's repo ("**𝓡<sub>i</sub>**"), it must repeatedly survive [Channel Entry Validation](#Channel-Entry-Validation).  
     - ⇒ each successive state of **𝓡<sub>i</sub>** is, exclusively, an authorized mutation from its previous state.  
 - However, if an important entry is withheld from node **n<sub>i</sub>**, it is easy to imagine dependent entries piling up and **𝓡<sub>i</sub>** being at a standstill.  
 - In addition to transactions arriving out of order from **𝓛<sub>C</sub>** naturally, we must consider if entries are altered, reordered, or withheld by adversaries manipulating communications signals or infrastructure.

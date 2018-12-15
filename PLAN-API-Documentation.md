@@ -110,9 +110,9 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 - When a user accesses/opens a channel in PLAN, the client starts a new instance of the channel module designed _for that specific type of channel_.  If multiple matching channel adapters are available, the client can choose based on user settings or can prompt the user to select one.
 - A PLAN channel adapter is a C# class that lives in the Unity client. New adapter instances are passed a gRPC connection set up for a given channel `UUID`.
 - A channel with type `/plan/ch/calendar`, could invoke the client's default `calendar` channel adapter _or_ instead use another that:
-    - displays scheduled events on a horizontal timeline that extends from the past to the future,
-    - displays scheduled events on geographically relevant map, _or_
-    - overlays appointments from an outside calendar service.
+    - displays scheduled events on a horizontal timeline that extends from the past to the future
+    - displays scheduled events on a geographically relevant map
+    - overlays appointments from an outside calendar service
 - Users can choose alternate channel adapters in the way a media player offers alternate skins/UIs
 - Developers that create and extend channel adapters can focus on the API or GUI, rather than infrastructure related tasks.
 
@@ -125,7 +125,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 - "File" channels allow PLAN users to interact with files and trees in familiar ways, but under the hood each entry in the channel is a CFI pathname that points to a revision of the file or tree.  Since each revision pathname is _only_ a short string, these channels don't materially consume the community's permanent shared storage.  When a user opens/views this object, the PLAN client hands off the most recent channel entry (a CFI pathname) to the CFI layer for retrieval while the PLAN client graphically reports progress.
     - Conveniently, this helps the PLAN client manage the CFI for "free".  For a given file channel, once an entry containing a CFI item is superseded longer than some grace period (or any other expiration function), the referenced item can be safely and automatically "unpinned" (or more aggressively reclaimed).
     - At the PLAN client level, the user is not burdened or distracted with the details associated with managing the CFI.  The user never sees hashnames and requires zero knowledge about how the PDI and CFI are working together.  
-- Consider a film production team using PLAN as a collaboration and file-sharing tool. Their workflow is to present scene cuts to the team for feedback and review. Instead of using the community's _permanent_ shared storage for short-term video files, the team uses a channel where posted files _appear_ in the channel and can be conveniently played.  However, under the hood, the PLAN client is posting the file to the CFI and placing a CFI pathname in the channel.  The channel is set so that files older than X days expire and are unpinned/deallocated.
+- Consider a film production team using PLAN as a collaboration and file-sharing tool. Their workflow is to present scene cuts to the team for feedback and review. Instead of using the community's _permanent_ shared storage for short-term video files, the team uses a file channel where posted videos _appear_ in the channel and can be conveniently played.  However, under the hood, the PLAN client is posting the file to the CFI and then placing a CFI pathname into an entry in the channel.  The channel is set so that files older than X days expire and are unpinned/deallocated.
 - Like the PDI, the Cloud File Interface is designed to be pluggable, offer flexibility, and preserve portability.  Most organizations using PLAN will be happy with PLAN's reference CFI implementation using [IPFS](https://ipfs.io/), a capable peer-to-peer distributed storage system.  However, others may want to choose from other possibilities, such as [Dat](https://datproject.org/).  
 - The CFI and PDI are architecturally disjoint, but a single storage layer could be used to implement both, provided it has the requisite capabilities.
 
