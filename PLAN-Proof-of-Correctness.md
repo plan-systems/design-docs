@@ -596,8 +596,8 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
     - ⇒ entries are immutable on **𝓛<sub>C</sub>** and any attempt to conceal or rescind an entry will not alter the original entry.
     - ⇒ all actions in community-public channels, which includes all community administrative [reserved channels](#reserved-channels), are always openly visible for peer review and scrutiny.  
 - In private channels, entry content is encrypted and _only_ members granted access by the channel's owner can read the channel's content.  
-    - By default, _not even community admins or authorities_ can gain access private channel content unless they have been granted access. 
-    - Through privater channel content is private, some metadata is community-public information — namely, who is interacting with who and how often.
+    - By default, _not even community admins or authorities_ can gain access to private channel content unless they have been granted access. 
+    - Through private channel content is cryptographically secure, some metadata is community-public information — namely, who is generating activity, with whom, and how often.
     - Although the actions of a member in private channel **𝘾𝒉<sub>p</sub>** cannot be witnessed or reviewed by members outside of that channel, _any participant_ of **𝘾𝒉<sub>p</sub>** could be pressured by community authorities to turn over the channel's keyring (or face [deactivation](#deactivating-a-member]) or social/legal repercussions).
     - Community authorities are free to make use of private channels (just like other community members), but any action affecting reserved or community-public channels would be publicly available information and would be part of the permanent record that is **𝓛<sub>C</sub>**.
 - Important channels, such as [reserved channels](#reserved-channels) or channels used to conduct community governance, could harness the dependable and predictable nature of "smart contracts" on **𝓛<sub>C</sub>**.  For example:
