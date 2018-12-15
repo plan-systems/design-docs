@@ -602,7 +602,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
     - Community authorities are free to make use of private channels (just like other community members), but any action affecting reserved or community-public channels would be publicly available information and would be part of the permanent record that is **𝓛<sub>C</sub>**.
 - Important channels, such as [reserved channels](#reserved-channels) or channels used to conduct community governance, could harness the dependable and predictable nature of "smart contracts" on **𝓛<sub>C</sub>**.  For example:
     - **C** has a _special_ community admin account capable of executing community propositions.  This virtual agent (and its private keys) are wired into a smart contract on **𝓛<sub>C</sub>** such that ⅔ of **C**'s "council" members are needed to sign a proposition before the contract's "threshold" signature triggers the proposition to be executed with admin permissions.
-    - **C** makes use of a channel UI extension that in effect recreates a voting booth, allowing the members of **C** to vote on community propositions.  Corresponding smart contracts on **𝓛<sub>C</sub>** would be wired into these channels such that community members would have full assurance than voted propositions are executed reliably and predictably.
+    - **C** makes use of a channel UI extension that in effect recreates a voting booth, allowing the members of **C** to vote on community propositions.  Corresponding smart contracts on **𝓛<sub>C</sub>** would be wired into these channels such that community members would have full assurance that voted propositions are executed reliably and predictably.
 
 
 #### Proof of Membership Fluidity
