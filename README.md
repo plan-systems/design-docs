@@ -164,7 +164,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 
 #### Q: Does a PLAN community admin wield all the power and control?
 - Not unless you want it that way.  The phrase "community admin" is used in these docs to refer to an agent acting in accordance with community policies and bylaws on behalf of the community's already-established leadership. This means that a community can operate as strictly or as loosely as the founding members want, but those agreements are visible to the entire community.  
-- For example, community **C** could be founded such that a majority vote from a member-appointed set of "board" members are required in order to add a new member to the community. This would be enforced by a smart contract wired into **C**'s storage layer. See PLAN's [Proof of Integrity Assurance](PLAN-Proof-of-Correctness.md#Proof-of-Integrity-Assurance) for more.
+- For example, community **C** could be founded such that a majority vote from a member-appointed set of "board" members are required in order to add a new member to the community. This would be enforced by a smart contract wired into **C**'s storage layer. See PLAN's [Proof of Accountability Assurance](PLAN-Proof-of-Correctness.md#Proof-of-Accountability-Assurance) for more.
 
 #### Q: Is PLAN is locked into Unity?
 - Although [PLAN&nbsp;Systems](http://plan-systems.org) is making the primary PLAN client with [Unity](https://unity3d.com/), we would fully support development of a client made with [Unreal](https://www.unrealengine.com), [CRYENGINE](https://www.cryengine.com/), [Godot](https://godotengine.org/) or any other established 3D framework.
