@@ -171,7 +171,7 @@ The members of **C** present the following system of operation...
 ## Channel Entries
 
 - Transactions residing in **𝓛<sub>C</sub>** are storage containers for `EntryCrypt`:
-    ```
+    ```golang
     type EntryCrypt struct {
         CommunityKeyID    UUID     // The community key used to encrypt .HeaderCrypt
         HeaderCrypt       []byte   // EntryHeader encrypted with .CommunityKeyID
@@ -180,7 +180,7 @@ The members of **C** present the following system of operation...
     }
     ```
 - Given entry **e** arriving from **𝓛<sub>C</sub>** and access to  **[]k<sub>C</sub>**, node **n<sub>i</sub>** decrypts **e**`.HeaderCrypt` into an `EntryHeader` ("**e<sub>hdr</sub>**"):
-    ```
+    ```golang
     type EntryHeader struct {
         EntryOp           int32    // Entry opcode. Typically, POST_CONTENT
         TimeAuthored      int64    // When this header was sealed/signed
@@ -198,7 +198,7 @@ The members of **C** present the following system of operation...
     - bookkeeping needed to resume sessions with **𝓛<sub>C</sub>**
     - a queue of entries to be merged in accordance with [channel entry validation](#Channel-Entry-Validation).
     - a mechanism for "deferred" entries to be retried periodically
-    ```
+    ```golang
     // CommunityRepo is a node's replica/repo/𝓡i
     type CommunityRepo struct {
         ChannelsByID      map[UUID]ChannelStore
@@ -231,7 +231,7 @@ Under an append-only storage model, the mechanism that gives rise to mutable per
     - edit properties specific to **𝘾𝒉**, _or_
     - designate a different parent ACC for **𝘾𝒉**.
 - Naturally, part of [channel entry validation](#channel-entry-validation) is to reject entries from members that lack the appropriate permissions to issue a new `ChannelEpoch` for a given channel. 
-    ```
+    ```golang
     // Specifies general epoch parameters and info
     type EpochInfo struct {
         TimeStarted       timestamp
@@ -294,7 +294,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 #### Member Epoch Channel
 - This is a special channel where members post revisions to their currently published `MemberEpoch`.
     - `MemberEpoch` contains essential information about a specific member, such as their most recently published public keys and their "home" channel `UUID`
-        ```
+        ```golang
         // MemberEpoch contains a member's community-public info
         type MemberEpoch struct {
             MemberID          UUID
@@ -329,7 +329,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 - This channel contains a succession of entries that embed:
     - an `EpochInfo` containing parameters associated with the new community epoch, _and_
     - a newly generated symmetric key _for each_ member **m** in **C**, encrypted using **m**'s latest public key published in **C**'s [Member Epoch Channel](#Member-Epoch-Channel):
-        ```
+        ```golang
         // KeyIssue is the vessel used to securely pass a ski.KeyEntry to another member
         type KeyIssue struct {
             MemberID          UUID      // Specifies the recipient 
