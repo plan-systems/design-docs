@@ -79,7 +79,9 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 - The PDI embraces an append-only model so that a wide range of replicating data types and distributed ledgers can be used as an implementation.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how a particular distributed ledger can be a great fit for one community but a poor fit for another. 
 - PDI transactions ("channel entries") are modeled as immutable and permanent (though content mutability is recreated virtually in PLAN's intermediate channel database layer).
 - A central database server can also be used to implement the PDI, offering performance and convenience for small communities that are getting started.  The PDI offers [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a central database for convenience/availability, and later migrate to a distributed ledger designed for scale. 
-- In [go-plan](http://github.com/plan-systems/go-plan), the interface `StorageSession` in [StorageProvider.go](http://github.com/plan-systems/go-plan/blob/master/pdi/StorageProvider.go) is the heart of the PDI.
+- In [go-plan](http://github.com/plan-systems/go-plan), `StorageProvider` is a [gRPC](https://grpc.io/) service defined in [pdi.proto](http://github.com/plan-systems/go-plan/blob/master/pdi/pdi.proto).  It's the service interface that a PDI storage daemon makes available.  
+    - In `pdi-datastore`, it is implemented using the interface [go-datastore](https://github.com/ipfs/go-datastore).  This allows one of many database implementations to be selected and plugged in as a central database, such as [Badger](https://github.com/dgraph-io/badger), [Bolt](https://github.com/boltdb/bolt), [Redis](https://redis.io/), and [LevelDB](http://leveldb.org/).  
+    - In `pdi-eth` and `pdi-holo`, it is implemented using Ethereum and Holochain respectively, etc.
 
 ---
 
