@@ -75,14 +75,24 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 
 
 ## Persistent Data Interface
-- The **Persistent Data Interface** ("PDI") is an abstraction for append-only storage shared by a PLAN community.  It stores all of a community's channel entries and is _cryptographically exclusive_ to its members.
-- The PDI embraces an append-only model so that a wide range of replicating data types and distributed ledgers can be used as an implementation.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how a particular distributed ledger can be a great fit for one community but a poor fit for another. 
-- PDI transactions ("channel entries") are modeled as immutable and permanent (though content mutability is recreated virtually in PLAN's intermediate channel database layer).
-- A central database server can also be used to implement the PDI, offering performance and convenience for small communities that are getting started.  The PDI offers [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a central database for convenience/availability, and later migrate to a distributed ledger designed for scale. 
-- In [go-plan](http://github.com/plan-systems/go-plan), `StorageProvider` is a [gRPC](https://grpc.io/) service defined in [pdi.proto](http://github.com/plan-systems/go-plan/blob/master/pdi/pdi.proto).  It's the service interface that a PDI storage daemon makes available to the members in its parent community.   
-    - In `pdi-datastore`, it is implemented using the interface [go-datastore](https://github.com/ipfs/go-datastore).  This allows one of many database implementations to be selected and plugged in as a central database, such as [Badger](https://github.com/dgraph-io/badger), [Bolt](https://github.com/boltdb/bolt), [Redis](https://redis.io/), and [LevelDB](http://leveldb.org/).  
-    - In `pdi-eth` and `pdi-holo`, it is implemented using Ethereum and Holochain respectively, etc.
-
+- The **Persistent Data Interface** ("PDI") is PLAN's append-only storage abstraction.  It stores all of a PLAN community's channel entries and is only _cryptographically accessible_ to its members.
+- The PDI embraces an append-only model so that a wide range of centralized databases, replicating data types, and distributed ledgers can be used off the shelf.
+- PDI transactions ("channel entries") are modeled as immutable and permanent (though content mutability is recreated virtually via PLAN's higher-level channel database layer).
+- A PDI storage provider features [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a central database for convenience, and migrate to a distributed ledger better for scale later on down the road. 
+- In [go-plan](http://github.com/plan-systems/go-plan), `StorageProvider` is a [gRPC](https://grpc.io/) service defined in [pdi.proto](http://github.com/plan-systems/go-plan/blob/master/pdi/pdi.proto). A PDI storage node makes this service available to the clients/members of a community.  There are two categories of PDI implementations:
+    1. **Centralized** - a `StorageProvider` implementation that uses a conventional central server or cluster.
+        - Pros: low latency, convenient, traditional server availability
+        - Cons: Single point of dependence/failure, client can't work "off" network
+        - `pdi-datastore` is a centralized `StorageProvider` implementation that favors ease of connection and setup.  It is implemented using IPFS' [go-datastore](https://github.com/ipfs/go-datastore), offering a selection of proven
+        databases to be considered and plugged in: 
+            - [LevelDB](http://leveldb.org/), [Badger](https://github.com/dgraph-io/badger), and [Bolt](https://github.com/boltdb/bolt) — _FOSS, fast, lightweight_
+            - [Amazon S3](https://aws.amazon.com/s3/) — _enterprise-grade reliability, scalability, and support_ 
+            - [Redis](https://redis.io/) - _FOSS, replication, major features_
+    2. **Decentralized** - a `StorageProvider` implementation that internally maintains peer connections with other daemons of its kind.  Peers collectively maintain distributed state and, in effect, provide replicated, redundant storage.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how a particular distributed ledger can be a good fit for one community but a poor fit for another. 
+        - Pros: equally secure, scalable, high redundancy, censorship resistent, no centralization, "offline-first"
+        - Cons: slower latency, larger footprint size
+        - In `pdi-eth` and `pdi-holo`, a private Ethereum and Holochain chain are used as the persistent datastore, respectively.  Transaction payload blobs committed to `StorageProvider` are encoded into native blockchain transactions and committed to a private blockchain.  For more, see the "[Scenario](PLAN-Proof-of-Correctness.md#Scenario)" section in the _PLAN Data Model Proof of Correctness_.
+    
 ---
 
 ## Channel Protocols
