@@ -9,16 +9,14 @@ P  L  A  N etwork
 
 ## Welcome to PLAN!
 
-PLAN is open-source collaboration software for groups to securely communicate and coordinate activities. 
-
-PLAN features:
+PLAN is open-source collaboration software for groups to securely communicate and coordinate activities, featuring:
 - Channels specialized for chat, file sharing, interactive maps, tasking, scheduling, and inventory management
 - End-to-end security, complete data ownership, and mission-critical reliability
 - A highly visual interface where channels, files, and objects are located in virtual spaces
 - Optional storage decentralization for risk mitigation and offline operation
 - Built-in collaboration tools for teams to organize and manage operations
 - Relationship and organization management and visualization
-- A“[pluggable](PLAN-API-Documentation.md#Primary-Interfaces)” architecture designed to support modification and flexibility.
+- A “[pluggable](PLAN-API-Documentation.md#Primary-Interfaces)” architecture designed to support modification and flexibility.
 	
 PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.  PLAN is freely available through the GNU General Public License ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
 
