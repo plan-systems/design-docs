@@ -9,7 +9,9 @@ P  L  A  N etwork
 
 ## Welcome to PLAN!
 
-PLAN is open-source collaboration software for groups to securely communicate and coordinate activities. PLAN features:
+PLAN is open-source collaboration software for groups to securely communicate and coordinate activities. 
+
+PLAN features:
 - Channels specialized for chat, file sharing, interactive maps, tasking, scheduling, and inventory management
 - End-to-end security, complete data ownership, and mission-critical reliability
 - A highly visual interface where channels, files, and objects are located in virtual spaces
