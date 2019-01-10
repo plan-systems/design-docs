@@ -12,7 +12,7 @@ P  L  A  N etwork
 PLAN is open-source collaboration software for groups to securely communicate and coordinate activities, featuring:
 - Channels specialized for chat, file sharing, interactive maps, tasking, scheduling, and inventory management
 - End-to-end security, complete data ownership, and mission-critical reliability
-- A highly visual interface where channels, files, and objects are located in virtual spaces
+- A highly visual interface where channels, file, and links are found in virtual spaces
 - Optional storage decentralization for risk mitigation and offline operation
 - Built-in collaboration tools for teams to organize and manage operations
 - Relationship and organization management and visualization
@@ -40,11 +40,11 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human usability and convenience.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought. 
 
-We wish to acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which subtly but decisively improves how protocols, paths, and formats can be expressed to invite interoperability; http:// becomes /http/.
+We wish to acknowledge the principles surrounding [multistream](https://github.com/multiformats/multistream) by [Protocol Labs](https://protocol.ai), which subtly but decisively improve how protocols, paths, and formats can be expressed to invite interoperability; http:// becomes /http/.
 
 ## PLAN Systems
 
-[PLAN Systems](http://plan-systems.org) is a non-profit public charity, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies to maintain, produce, or provide these utilities.  
+[PLAN Systems](http://plan-systems.org) is a non-profit public charity, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies.  
 
 May PLAN empower organizations and individuals, and may it be an instrument of productivity and self-organization.
 
@@ -61,30 +61,30 @@ Design goals:
 - Peer-to-peer [cloud storage abstraction](PLAN-API-Documentation.md#cloud-file-interface) compatible with distributed storage systems
 - Pluggable content handling and rendering via [channel GUI adapters](PLAN-API-Documentation.md#channel-gui-adapters)
 - “Offline first” to allow work when only part of the network reachable
-- Access controls for the group as a whole or for individual channels or group members
-- Allow a community peer-host selected content for external/public consumption
+- Access controls for groups as a whole or for individual channels or members
+- Allow a community to peer-host select content for external consumption
 
 PLAN users get:
-- A responsive, engaging, animated, and spatially-aware GUI
+- A responsive, engaging, animated, and intuitive experience
 - A first-class input and display device experience
-- Full horsepower of the user's device/workstation
+- Full horsepower of the device/workstation
 - Complete data ownership and control
 
 How is PLAN implemented?
 - User client written in [Unity](https://unity3d.com) 3D engine (C# and .NET Core)
-- Peer-to-peer backend node/daemon written in [Go](https://golang.org)
-- Channels are identified and interpreted via self-describing meta data
+- Peer-to-peer backend daemon ("node") written in [Go](https://golang.org)
+- Channels are identified and interpreted via self-describing metadata
 - Access control implemented using channels; each channel is a child of some other channel, up to a root.
 - Local file system caching and partial network resilience to enable offline work
 
 
 ## Architecture Synopsis
 
-PLAN has a 3D/visual frontend with a peer-to-peer backend that uses one or more secure distributed storage providers.  The PLAN client, written in [Unity](https://unity3d.com), connects to a "community" peer-to-peer PLAN node, a daemon written in [Go](https://golang.org).  These nodes serve PLAN clients while replicating shared community data across the community's secure federation of nodes. 
+PLAN has a 3D/visual frontend with a peer-to-peer backend that uses one or more secure distributed storage providers.  The PLAN client, written in [Unity](https://unity3d.com), connects to a "community" peer-to-peer PLAN node, a daemon written in [Go](https://golang.org).  These nodes serve PLAN clients while replicating shared community data across the community's federation of nodes. 
 
-What defines a community? In PLAN, a community is designed to reflect the human relationships that make up a community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. The entire community's network traffic and infrastructure is inaccessible to all others, forming a cryptographic "city wall" of privacy and security.  
+What defines a community? In PLAN, a community is designed to reflect the human relationships that make up the community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. The entire community's network traffic and infrastructure is inaccessible to all others, forming a cryptographic _city wall_ of privacy and security.  
 
-A PLAN community is peer-hosted and is formed when one or more founders/organizers gather and together use the community genesis tool that codifies initial governance and administration.  After that, the founders and subsequent members of the community maintain a copy of the "community keyring", giving members the ability to access the community's shared data repository. Anyone _without_ this keyring — anyone _not_ in the community — is _outside_ the community's crypto city wall. 
+A PLAN community is formed when one or more founders/organizers gather and together use the community genesis tool that codifies initial governance and administration.  In that process, they also decide which of the available [StorageProviders](PLAN-API-Documentation.md#persistent-data-interface) implementaitons are best for their needs.  After that, the founders and subsequent members of the community maintain a copy of the "community keyring", giving members the ability to access the community's shared data repository. Anyone _without_ this keyring — anyone _not_ in the community — is _outside_ the community's crypto city wall.  
 
 Inside this outer layer of security, residing on each community node, lives an IRC-inspired channel infrastructure. Each PLAN channel entry contains content and metadata that works like HTTP headers, allowing content to be richly interpreted.  But a channel's "protocol identifier" also contributes to describing how entry content should be interpreted.  
 
@@ -100,7 +100,7 @@ When a PLAN channel is created, it is assigned a protocol identifier string (e.g
 
 In addition to the entry protocol a channel is assigned, a PLAN channel is _also_ assigned an owning access control channel (ACC) that specifies channel permissions, limits, and behaviors. A channel's controlling ACC, like all channels, also cites its own controlling ACC, and so on — up to the community's root ACC. A community's root ACC, is one of several "hard&nbsp;wired" channels that serve core community functions and can only be altered by community admins. Another such channel, for example, is the community registry channel, containing the member ID and public keys of each community member. Functions such as member key regeneration and key exchange are carried out through community channels explicitly reserved for these purposes.
 
-Akin IRC, PLAN channels are either "community-public" (readable only to members in the community), or they are private where entry content is encrypted such that only channel members have access. Only community members that have explicitly been given a private channel's key have the ability to decrypt its content. And although channels are fundamentally append-only, channels can be set so that new entry content can replace past content, allowing past entries to be edited (though past entries will naturally remain). The flexibility of a channel's protocol identifier plus the rich and flexible nature of PLAN's [interoperable data structures](PLAN-API-Documentation.md#Interoperable-Data-Structures) make PLAN's channel system dynamic and extensible — designed to be represented and interacted with via a local, graphical, high-performance interface.
+Akin to IRC, PLAN channels are either "community-public" (readable only to members in the community), or they are private where entry content is encrypted such that only channel members have access. Only community members that have explicitly been given a private channel's key have the ability to decrypt its content. And although channels are fundamentally append-only, channels can be set so that new entry content can replace past content, allowing past entries to be edited (though past entries will naturally remain). The flexibility of a channel's protocol identifier plus the rich and flexible nature of PLAN's [interoperable data structures](PLAN-API-Documentation.md#Interoperable-Data-Structures) make PLAN's channel system dynamic and extensible — designed to be represented and interacted with via a local, graphical, high-performance interface.
 
 At any given time, each community node:
    - Merges newly appearing community channel entries from the storage layer into the community repo layer
