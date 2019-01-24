@@ -81,16 +81,27 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 - A PDI storage provider features [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a central database for convenience, and migrate to a distributed ledger better for scale later on down the road. 
 - In [go-plan](http://github.com/plan-systems/go-plan), `StorageProvider` is a [gRPC](https://grpc.io/) service defined in [pdi.proto](http://github.com/plan-systems/go-plan/blob/master/pdi/pdi.proto). A PDI storage node makes this service available to the clients/members of a community.  There are two categories of PDI implementations:
     1. **Centralized** - a `StorageProvider` implementation that uses a conventional central server or cluster.
-        - Pros: low latency, convenient, traditional server availability
-        - Cons: Single point of dependence/failure, client can't work "off" network
-        - `pdi-datastore` is a centralized `StorageProvider` implementation that favors ease of connection and setup.  It is implemented using IPFS' [go-datastore](https://github.com/ipfs/go-datastore), offering a selection of proven
-        databases to be considered and plugged in: 
+        - Pros: 
+            - Low latency & high performance
+            - Easy setup & maintenance
+            - Static and predictable availability
+        - Cons: 
+            - Single data choke-point
+            - Single point of failure
+        - `pdi-datastore` is a centralized `StorageProvider` implementation that favors ease of connection and setup.  It is implemented internally using [go-datastore](https://github.com/ipfs/go-datastore), offering a selection of proven databases that can be dropped in: 
             - [LevelDB](http://leveldb.org/), [Badger](https://github.com/dgraph-io/badger), and [Bolt](https://github.com/boltdb/bolt) — _FOSS, fast, lightweight_
-            - [Amazon S3](https://aws.amazon.com/s3/) — _enterprise-grade reliability, scalability, and support_ 
+            - [Amazon S3](https://aws.amazon.com/s3/) — _enterprise-grade, scalable_ 
             - [Redis](https://redis.io/) - _FOSS, replication, major features_
-    2. **Decentralized** - a `StorageProvider` implementation that internally maintains peer connections with other daemons of its kind.  Peers collectively maintain distributed state and, in effect, provide replicated, redundant storage.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how a particular distributed ledger can be a good fit for one community but a poor fit for another. 
-        - Pros: equally secure, scalable, high redundancy, censorship resistent, no centralization, "offline-first"
-        - Cons: slower latency, larger footprint size
+    2. **Decentralized** - a `StorageProvider` implementation that internally maintains peer connections with other nodes of its kind.  Peers collectively maintain distributed state and, in effect, provide replicated, redundant storage.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how a particular distributed ledger may be a good fit for one community but a poor fit for another. 
+        - Pros: 
+            - Censorship and [denial-of-service](https://en.wikipedia.org/wiki/Denial-of-service_attack) resistant
+            - Not subject to central breach or failure
+            - High redundancy; many nodes are replicas
+            - "Offline-first" (network partitions can sub-operate and auto-sync when reconnected)
+        - Cons: 
+            - Potentially high latency
+            - Larger aggregate footprint
+            - Firewall complications
         - In `pdi-eth` and `pdi-holo`, a private Ethereum and Holochain chain are used as the persistent datastore, respectively.  Transaction payload blobs committed to `StorageProvider` are encoded into native blockchain transactions and committed to a private blockchain.  For more, see the "[Scenario](PLAN-Proof-of-Correctness.md#Scenario)" section in the _PLAN Data Model Proof of Correctness_.
     
 ---
