@@ -284,8 +284,8 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 
 #### Root Access Control Channel
 - This is **C**'s root access channel, specifying which members are community authorities ("admins").
-- All community-public channels, including ACCs, implicitly are under authority of this channel.
-- When a new community is formed ("community genesis"), the initial entries this channel are auto-generated in accordance with the parameters and policies provided.
+- All community-public channels, including ACCs, are implicitly under authority of this channel.
+- When a new community is formed ("community genesis"), the initial entries this channel are auto-generated in accordance with the parameters and policies provided by the founding members.
 - Automated machinery in **C** can optionally be geared to use smart contracts on **𝓛<sub>C</sub>** to manage, monitor, or validate entries in this channel.
     - E.g. a majority vote of existing admins could be required in order to add a new admin to the root access channel. 
         
