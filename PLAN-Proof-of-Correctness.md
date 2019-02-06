@@ -256,19 +256,8 @@ Under an append-only storage model, the mechanism that gives rise to mutable per
 Channels are intended as general-purpose containers for [channel entries](#channel-entries) of all forms.  This system uses channels internally for administration and permissions controls.
 
 
-1. **Access Control Channels** (ACCs) are specialized channels used to express permissions for all other channels, including other ACCs.
-    - An ACC serves as an access authority that specifies:
-        - channel permissions for a given member `UUID`, _and_
-        - default permissions for members not otherwise specified.
-    - Like general purpose channels, each ACC must designate a parent ACC, and so on, all the way up to the _reserved_ [root ACC](#Root-Access-Control-Channel).
-    - Multiple channels can name the _same_ ACC as their parent ACC, allowing a single ACC to conveniently manage permissions for any number of channels.
-    - ACCs also are the vehicle for key distribution, where a channel owner "sends" a newly issued private channel to each member with access, using their public key.
-2. **Reserved channels** are specialized channels used by the system to internally carry out community governance and member administration.
-    - Reserved channels specify root-level information and permissions, namely admin and member records.
-    - Entries in these channels must meet additional security/signing requirements and serve prescribed purposes.  
-    - Because reserved channels have nuanced specifications, they do not solely rely on ACCs for access controls.
-    - The number, purpose, and use of these channels can be expanded to meet future needs. 
-3. **General purpose channels**, alas, are the system's primary service deliverable, comprising most channels in **C**.
+1. **General purpose channels**, alas, are this system's primary deliverable and _raison d'être_.  
+    - Most channels are this type and a general purpose channel is somewhat analogous to a file on a traditional operating system.
     - When a new channel is created, the creator (and hence owner) specifies a "protocol descriptor", a string directing client UIs to consistently interpret, handle, and present channel entries in accordance with the expectations associated with the channel's protocol.  
     - Each channel also names a governing access control channel ("parent ACC").  A channel's parent ACC is charged with returning a permission level for any given member `UUID`, allowing  nodes in **C** to independently carry out [Channel Entry Validation](#channel-entry-validation).
     - General purpose channels are either:
@@ -278,6 +267,19 @@ Channels are intended as general-purpose containers for [channel entries](#chann
             - Only members that have at least read-access are "sent" the keys needed in order to decrypt private channel entries.
                 - By default, community admins _do not_ have the authority/means to gain access to a private channel's key.   
                 - This ensures that _only the members that have been explicitly given channel access_ could possibly have access to the channel's key.
+2. **Access Control Channels** (ACCs) are specialized channels used to express permissions for all other channels, including other ACCs.
+    - An ACC serves as an access authority that specifies:
+        - channel permissions for a given member `UUID`, _and_
+        - default permissions for members not otherwise specified.
+    - Like general purpose channels, each ACC must designate a parent ACC, and so on, all the way up to the _reserved_ [root ACC](#Root-Access-Control-Channel).
+    - Multiple channels can name the _same_ ACC as their parent ACC, allowing a single ACC to conveniently manage permissions for any number of channels.
+    - ACCs also are the vehicle for key distribution, where a channel owner "sends" a newly issued private channel to each member with access, using their public key.
+3. **Reserved channels** are specialized channels used by the system to internally carry out community governance and member administration.
+    - Reserved channels specify root-level information and permissions, namely admin and member records.
+    - Entries in these channels must meet additional security/signing requirements and serve prescribed purposes.  
+    - Because reserved channels have nuanced specifications, they do not solely rely on ACCs for access controls.
+    - The number, purpose, and use of these channels can be expanded to meet future needs. 
+
 
 ## Reserved Channels
 
