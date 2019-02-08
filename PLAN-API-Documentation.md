@@ -92,11 +92,11 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
             - [LevelDB](http://leveldb.org/), [Badger](https://github.com/dgraph-io/badger), and [Bolt](https://github.com/boltdb/bolt) — _FOSS, fast, lightweight_
             - [Amazon S3](https://aws.amazon.com/s3/) — _enterprise-grade, scalable_ 
             - [Redis](https://redis.io/) - _FOSS, replication, major features_
-    2. **Decentralized** - a `StorageProvider` implementation that internally maintains peer connections with other nodes of its kind.  Peers collectively maintain distributed state and, in effect, provide replicated, redundant storage.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how a particular distributed ledger may be a good fit for one community but a poor fit for another. 
+    2. **Decentralized** - a `StorageProvider` implementation that internally maintains peer connections with other nodes of its kind.  Peers collectively maintain distributed state and, in effect, provide replicated, redundant storage.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how one particular distributed ledger could fit well for one community but a poor fit for another. 
         - Pros: 
-            - Censorship and [denial-of-service](https://en.wikipedia.org/wiki/Denial-of-service_attack) resistant
+            - Highly censorship and [denial-of-service](https://en.wikipedia.org/wiki/Denial-of-service_attack) resistant
             - Not subject to central breach or failure
-            - High redundancy; many nodes are replicas
+            - High redundancy; each node is a replica
             - "Offline-first" (network partitions can sub-operate and auto-sync when reconnected)
         - Cons: 
             - Potentially high latency
