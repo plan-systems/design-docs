@@ -113,7 +113,7 @@ PLAN has two persistent pluggable storage layers, one characterized by append-on
 
 ## Summary
 
-PLAN is a peer-to-peer community-first tool, built on pluggable append-only and pluggable content-based addressing storage.  Community content is accessible via a _real-time_ visually intuitive interface protected inside cryptographic layers of privacy. Its open-ended channel sub-systems form a level foundation that supports flexible, defensible, and first-class human access.
+PLAN is a peer-to-peer community-first tool, built on append-only and pluggable content-based addressing storage.  Community content is accessible via a _real-time_ visually intuitive interface protected inside cryptographic layers of privacy. Its open-ended channel sub-systems form a level foundation that supports flexible, defensible, and first-class human access.
 
 Using PLAN, communities arise from organizers and members who value owning their own data, having a formidable cryptographic-city wall, and the ability to continue operating in the face of Internet disruptions.  
 
