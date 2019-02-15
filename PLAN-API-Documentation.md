@@ -88,10 +88,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
         - Cons: 
             - Single data choke-point
             - Single point of failure
-        - `pdi-datastore` is a centralized `StorageProvider` implementation that favors ease of connection and setup.  It is implemented internally using [go-datastore](https://github.com/ipfs/go-datastore), offering a selection of proven databases that can be dropped in: 
-            - [LevelDB](http://leveldb.org/), [Badger](https://github.com/dgraph-io/badger), and [Bolt](https://github.com/boltdb/bolt) — _FOSS, fast, lightweight_
-            - [Amazon S3](https://aws.amazon.com/s3/) — _enterprise-grade, scalable_ 
-            - [Redis](https://redis.io/) - _FOSS, replication, major features_
+        - [pdi-datastore](https://github.com/plan-systems/go-plan/tree/master/cmd/pdi-datastore) is PLAN's centralized `StorageProvider` implementation.  It is implemented internally using [Badger](https://github.com/dgraph-io/badger), a modern high performance key-value database.
     2. **Decentralized** - a `StorageProvider` implementation that internally maintains peer connections with other nodes of its kind.  Peers collectively maintain distributed state and, in effect, provide replicated, redundant storage.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how one particular distributed ledger could fit well for one community but a poor fit for another. 
         - Pros: 
             - Highly censorship and [denial-of-service](https://en.wikipedia.org/wiki/Denial-of-service_attack) resistant
