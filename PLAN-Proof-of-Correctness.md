@@ -172,17 +172,17 @@ The members of **C** present the following system of operation...
 - Transactions residing in **𝓛<sub>C</sub>** are storage containers for `EntryCrypt`:
     ```golang
     type EntryCrypt struct {
-        CommunityKeyID    UUID     // The community key used to encrypt .HeaderCrypt
-        HeaderCrypt       []byte   // EntryHeader encrypted with .CommunityKeyID
-        ContentCrypt      []byte   // Channel content, encrypted with EntryHeader.ContentKeyID
-        Sig               []byte   // Authenticates this entry; signed by EntryHeader.AuthorMemberID
+        CommunityKeyID    UUID     // The community key used to encrypt .InfoCrypt
+        InfoCrypt         []byte   // EntryInfo encrypted with .CommunityKeyID
+        ContentCrypt      []byte   // Channel content, encrypted with EntryInfo.ContentKeyID
+        Sig               []byte   // Authenticates this entry; signed by EntryInfo.AuthorMemberID
     }
     ```
-- Given entry **e** arriving from **𝓛<sub>C</sub>** and access to  **[]k<sub>C</sub>**, node **n<sub>i</sub>** decrypts **e**`.HeaderCrypt` into an `EntryHeader` ("**e<sub>hdr</sub>**"):
+- Given entry **e** arriving from **𝓛<sub>C</sub>** and access to  **[]k<sub>C</sub>**, node **n<sub>i</sub>** decrypts **e**`.InfoCrypt` into an `EntryInfo` ("**e<sub>info</sub>**"):
     ```golang
-    type EntryHeader struct {
+    type EntryInfo struct {
         EntryOp           int32    // Entry opcode. Typically, POST_CONTENT
-        TimeAuthored      int64    // When this header was sealed/signed
+        TimeAuthored      int64    // When this struct was sealed/signed
         ChannelID         UUID     // Channel that this entry is posted to (or operates on)
         ChannelEpochID    UUID     // Epoch of the channel in effect when entry was authored
         AuthorMemberID    UUID     // Creator of this entry (and signer of EntryCrypt.Sig)
@@ -214,7 +214,7 @@ The members of **C** present the following system of operation...
 
     // EntryIndex packages the the essential parts of an entry, plus status information.
     type EntryIndex struct {
-        EntryHeader      EntryHeader
+        EntryInfo        EntryInfo
         EntryStatus      EntryStatus      // Status of entry (e.g. LIVE, DEFERRED)
         ContentPos       uint64           // Byte offset into ..ContentTome
         ContentLen       uint32           // Byte length at .ContentPos in ..ContentTome
@@ -262,7 +262,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     - Each channel also names a governing access control channel ("parent ACC").  A channel's parent ACC is charged with returning a permission level for any given member `UUID`, allowing  nodes in **C** to independently carry out [Channel Entry Validation](#channel-entry-validation).
     - General purpose channels are either:
         - **community-public**, where channel entry content is encrypted with the latest community key, _or_
-        - **private**, where entry content is encrypted with the key identified by **e<sub>hdr</sub>**`.ContentKeyID`.  
+        - **private**, where entry content is encrypted with the key identified by **e<sub>info</sub>**`.ContentKeyID`.  
             - Key mechanics for private channels are similar to [starting a new community epoch](#issuing-a-new-Community-Epoch), except the channel owner updating the `ChannelEpoch` performs key generation and distribution.  
             - Only members that have at least read-access are "sent" the keys needed in order to decrypt private channel entries.
                 - By default, community admins _do not_ have the authority/means to gain access to a private channel's key.   
@@ -457,35 +457,35 @@ Channels are intended as general-purpose containers for [channel entries](#chann
         - Unless **e** was crafted with malicious intent, it would be unexpected for **e** to remain indefinitely deferred.
 - For each new entry **e** arriving from **𝓛<sub>C</sub>** (or is locally authored and also submitted to **𝓛<sub>C</sub>**):
     1. Authenticate **e**:
-        1. **e<sub>digest</sub>** ⇐  ComputeDigest(**e**`.CommunityKeyID`,   **e**`.HeaderCrypt`,  **e**.`ContentCrypt`)
-        2. **e<sub>hdr</sub>** ⇐ `EntryHeader` ⇐ Decrypt(**e**`.HeaderCrypt`,  **[]k<sub>C</sub>**.LookupKey(**e**`.CommunityKeyID`)
+        1. **e<sub>digest</sub>** ⇐  ComputeDigest(**e**`.CommunityKeyID`,   **e**`.InfoCrypt`,  **e**.`ContentCrypt`)
+        2. **e<sub>info</sub>** ⇐ `EntryInfo` ⇐ Decrypt(**e**`.InfoCrypt`,  **[]k<sub>C</sub>**.LookupKey(**e**`.CommunityKeyID`)
             - if the community key is not found, then **e** is deferred.
-        3. **𝓔<sub>author</sub>** ⇐ **𝓡<sub>i</sub>**.LookupMemberEpoch(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
+        3. **𝓔<sub>author</sub>** ⇐ **𝓡<sub>i</sub>**.LookupMemberEpoch(**e<sub>info</sub>**.`AuthorMemberID`, **e<sub>info</sub>**`.AuthorMemberEpoch`)
             - if **𝓔<sub>author</sub>** = `nil`, then **e** is deferred. 
-            - if **e<sub>hdr</sub>**`.TimeAuthored` falls outside the scope of **𝓔<sub>author</sub>**, then **e** is deferred.
-        3. **k<sub>pub</sub>** ⇐ **𝓡<sub>i</sub>**.LookupPublicKey(**e<sub>hdr</sub>**.`AuthorMemberID`, **e<sub>hdr</sub>**`.AuthorMemberEpoch`)
+            - if **e<sub>info</sub>**`.TimeAuthored` falls outside the scope of **𝓔<sub>author</sub>**, then **e** is deferred.
+        3. **k<sub>pub</sub>** ⇐ **𝓡<sub>i</sub>**.LookupPublicKey(**e<sub>info</sub>**.`AuthorMemberID`, **e<sub>info</sub>**`.AuthorMemberEpoch`)
             - if **k<sub>pub</sub>** = `nil`, then **e** is deferred. 
         4. ValidateSig(**e<sub>digest</sub>**, **e**`.Sig`, **k<sub>pub</sub>**)
             - if **e**`.Sig` is invalid, then **e** is deferred.
     2. Validate **e** in its destination channel:
-        1. **𝘾𝒉<sub>dst</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore(**e<sub>hdr</sub>**.`ChannelID`)
+        1. **𝘾𝒉<sub>dst</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore(**e<sub>info</sub>**.`ChannelID`)
             - if **𝘾𝒉<sub>dst</sub>** = `nil`, then **e** is deferred.
         2. Check that **e** cites an agreeable `ChannelEpoch`:
-            - **𝓔<sub>cited</sub>** ⇐ **𝘾𝒉<sub>dst</sub>**.LookupEpoch(**e<sub>hdr</sub>**.`ChannelEpochID`)
+            - **𝓔<sub>cited</sub>** ⇐ **𝘾𝒉<sub>dst</sub>**.LookupEpoch(**e<sub>info</sub>**.`ChannelEpochID`)
                 - if **𝓔<sub>cited</sub>** = `nil`, then **e** is deferred.
-            - if **e<sub>hdr</sub>**`.TimeAuthored` falls outside the scope of **𝓔<sub>cited</sub>**, then **e** is deferred.
-            - if **𝓔<sub>cited</sub>**.CanAccept(**e<sub>hdr</sub>**), then proceed, otherwise **e** is deferred.
+            - if **e<sub>info</sub>**`.TimeAuthored` falls outside the scope of **𝓔<sub>cited</sub>**, then **e** is deferred.
+            - if **𝓔<sub>cited</sub>**.CanAccept(**e<sub>info</sub>**), then proceed, otherwise **e** is deferred.
         3. Check that **𝘾𝒉<sub>dst</sub>**'s parent ACC permits **e**:
             - **𝘾𝒉<sub>AC</sub>** ⇐ **𝓡<sub>i</sub>**.GetChannelStore(**𝓔<sub>cited</sub>**.`AccessChannelID`)
-            - **𝓅<sub>author</sub>** ⇐ **𝘾𝒉<sub>AC</sub>**.LookupPermissions(**e<sub>hdr</sub>**.`AuthorMemberID`)
-            - if  **𝓅<sub>author</sub>** does not allow **e<sub>hdr</sub>**`.EntryOp`, then **e** is deferred.
+            - **𝓅<sub>author</sub>** ⇐ **𝘾𝒉<sub>AC</sub>**.LookupPermissions(**e<sub>info</sub>**.`AuthorMemberID`)
+            - if  **𝓅<sub>author</sub>** does not allow **e<sub>info</sub>**`.EntryOp`, then **e** is deferred.
         4. If **e** inserts a permissions change but does not [issue a new channel epoch](#issuing-a-New-Channel-Epoch) as required, then **e** is deferred.
     3. Merge **e** into **𝓡<sub>i</sub>**:
         - **𝘾𝒉<sub>dst</sub>**.InsertEntry(**e**)
     4. Propagate the mutation of **𝘾𝒉<sub>dst</sub>** as required ("revalidation"):
         - if  **𝘾𝒉<sub>dst</sub>** is now _equally_ or _less_ restrictive, then `return` since dependencies that are live will be unaffected.
         - if  **𝘾𝒉<sub>dst</sub>** is now _more_ restrictive, then revalidate dependent channels:
-            - **t<sub>rev</sub>** ⇐ **e<sub>hdr</sub>**`.TimeAuthored`
+            - **t<sub>rev</sub>** ⇐ **e<sub>info</sub>**`.TimeAuthored`
             - **[]𝘾𝒉<sub>dep</sub>** ⇐ **𝘾𝒉<sub>dst</sub>**.GetDependentChannels(**t<sub>rev</sub>**)
             - for each **𝘾𝒉<sub>j</sub>** in **[]𝘾𝒉<sub>dep</sub>**:
                 - Scanning forward from **t<sub>rev</sub>** in  **𝘾𝒉<sub>j</sub>**, for each entry **e<sub>k</sub>**:
@@ -539,7 +539,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
     - What information is discernible to actors outside of **C**?
 - Let **α** be an actor that is _not_ a member of **C**, implying that **α** does not possess the latest community keys.  
     - ⇒ the _only_ information directly available to **α** is the `UUID` of the encryption key used for each `EntryCrypt` on **𝓛<sub>C</sub>**.
-        1. ⇒ information opacity is maximized since all information resides within `HeaderCrypt` and `ContentCrypt`.
+        1. ⇒ information opacity is maximized since all information resides within `InfoCrypt` and `ContentCrypt`.
             - Adversaries snooping **𝓛<sub>C</sub>** can only discern _when_ a new community security epoch began (by noting the appearance of a new community key `UUID`).  However, this is weak information since such an event could correspond to any number of circumstances.
         2. ⇒ _only_ members of **C** effectively have read-access to **C**'s content and member activity.
     - If **α** is a former member of **C**, then **α**'s access is limited to read-only up to when  **α** was [deactivated](#deactivating-A-Member) (when the [new community epoch was issued](#issuing-a-new-Community-Epoch) as part of deactivating a member).
@@ -557,9 +557,9 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
             - **txn<sub>j</sub>** bears an author that **𝓛<sub>C</sub>** recognizes as having permission to post a transaction of that size, _and_
             - **txn<sub>j</sub>** bears a valid signature that proves the contents and author borne by **txn<sub>j</sub>** is authentic.
         2.  **Community Keyring Access**, referring to that _only_ community members are issued **[]k<sub>C</sub>**.  
-            - So even if actor **α** is able procure postage on **𝓛<sub>C</sub>**, they must also submit an `EntryCrypt` containing an `EntryHeader` encrypted using a recent community key — otherwise **𝓡<sub>i</sub>** will reject it.
+            - So even if actor **α** is able procure postage on **𝓛<sub>C</sub>**, they must also submit an `EntryCrypt` containing an `EntryInfo` encrypted using a recent community key — otherwise **𝓡<sub>i</sub>** will reject it.
         3. **Channel Entry Validation**, referring to "deep" validation of entries arriving from **𝓛<sub>C</sub>**.  Part of this flow is verifying that:
-            - the signature contained in a given `EntryCrypt` is a valid signature from the member `UUID` borne by its `EntryHeader`, _and_
+            - the signature contained in a given `EntryCrypt` is a valid signature from the member `UUID` borne by its `EntryInfo`, _and_
             - the member is a valid/current member of **C** (based on **𝓡<sub>i</sub>**'s [Member Epoch Channel](#Member-Epoch-Channel)).
     - Given that the members of **C** maintain exclusive possession of their private keys, _only_ they can mutate **𝓛<sub>C</sub>** or **𝓡<sub>i</sub>**.
     - In the case where **m**'s private keys are possibly compromised, **m** would immediately initiate a [Member Halt](#member-halt), leaving any actor in possession of **m**'s keys challenged or unable to move past the above layers. 
