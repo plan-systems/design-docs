@@ -433,9 +433,9 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     5. On a newly created "blank" node, **n<sub>α</sub>** (or an existing node of **C** in a logged-out state):
         1. **α** passes **τ** to the client
         2. the client prompts for the passphrase that decrypts **τ**
-        3. the client opens **τ**, and as applicable:
-            - bootstraps **𝓛<sub>C</sub>**
-            - builds/updates **𝓡<sub>α</sub>** normally
+        3. the client opens **τ** and now has what it needs to:
+            - connect and write to **𝓛<sub>C</sub>**
+            - decrypt entries from **C** and rebuild **𝓡<sub>α</sub>** normally
         4. Once that **𝓡<sub>α</sub>** is up to date (i.e. once **𝓔<sub>α0</sub>** is live in the _Member Epoch Channel_), **α** posts a successor `MemberEpoch` as they would when [starting a new member epoch](#issuing-a-new-Member-Epoch).  
 
 #### Deactivating A Member
@@ -489,11 +489,11 @@ Channels are intended as general-purpose containers for [channel entries](#chann
             - **[]𝘾𝒉<sub>dep</sub>** ⇐ **𝘾𝒉<sub>dst</sub>**.GetDependentChannels(**t<sub>rev</sub>**)
             - for each **𝘾𝒉<sub>j</sub>** in **[]𝘾𝒉<sub>dep</sub>**:
                 - Scanning forward from **t<sub>rev</sub>** in  **𝘾𝒉<sub>j</sub>**, for each entry **e<sub>k</sub>**:
-                    - [re]validate **e<sub>k</sub>** (steps 1-5 above)
+                    - (re)validate **e<sub>k</sub>** (4 validate steps above)
                     - if **e<sub>k</sub>** is now deferred:
                         - **𝘾𝒉<sub>j</sub>**.RemoveEntry(**e<sub>k</sub>**)
                         - Defer **e<sub>k</sub>** normally
-                        - Propagate the mutation of **𝘾𝒉<sub>j</sub>**
+                        - Sub-propagate the mutation of **𝘾𝒉<sub>j</sub>** as applicable
         - Although there are edge cases where change propagation could result in a cascading workload, the amount of work is generally either n/a or negligible.  This is because:
             - Most entries are content-related, not access-control related.
                 - Revalidation only needs to proceed if an entry makes a channel _more_ restrictive.
