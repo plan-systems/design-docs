@@ -293,7 +293,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
         
 
 #### Member Epoch Channel
-- This is a special channel where members post revisions to their currently published `MemberEpoch`.
+- This is a special channel where members post revisions to their currently published `MemberEpoch`, also known as the _Community Member Registry_ channel.
     - `MemberEpoch` contains essential information about a specific member, such as their most recently published public keys and their "home" channel `UUID`
         ```golang
         // MemberEpoch contains a member's community-public info
@@ -303,7 +303,6 @@ Channels are intended as general-purpose containers for [channel entries](#chann
             PubSigningKey     []byte
             PubEncryptKey     []byte
             HomeChannel       UUID
-            ExInfo            plan.Block
         }
         ```
 - Each entry is this channel embeds a `MemberEpoch`, **𝓔**, and is only considered valid if:
@@ -678,6 +677,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
 
 - Suppose some members of **C** decide, for whatever reason, that they are better off in their own community ("**C′**"), with their own pact of governance or leadership.  
 - They desire **C′** to be the equivalent of **C** but _only up to a given time_ ("**t<sub>C′</sub>**") — at which time the authority structure or membership is arbitrarily altered.
+    - Let **g** be the genesis authority of **C** at time of its creation.
     - Let **[]a** be the admins of **C** at time **t<sub>C′</sub>**
     - Let **[]a′** be the founders (and admins-to-be) of **C′**
 - Given that **𝓛<sub>C</sub>** is append-only CRDT, each transaction is assumed to have a timestamp and identifying ID.
@@ -691,7 +691,7 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
         1. They demote or deactivate **[]a** (and any other desired members), _and_
         2. For each member demoted/deactivated, reduce/burn their postage allocation on **𝓛<sub>C′</sub>** as appropriate. 
 - ⇒ **C′** is free to operate independently of  **C** and under the authority of **[]a′**.
-    - Although **C′** is now operating under altered governance or leadership, the privacy of all legacy encrypted entry content is preserved.  Otherwise, members from **C** would have had to share their private keys.   
+    - Although **C′** is now operating under altered governance or leadership, the privacy of all legacy encrypted entry content is preserved.  Otherwise, members from **C** would have had to disclose their private keys.   
 
 #### Proof of Storage Portability
 
