@@ -66,15 +66,15 @@ Security frameworks often don't analyze or provision for the loss of private key
 In any system, replicated data transactions and messages take non-trivial periods of time to traverse and propagate across the network.  Also, any number of nodes could be offline for indefinite periods of time. 
 
 No assumptions are made about network connectivity or reachability in this proof, and propagation times are expressed as "**Δ<sub>C</sub>**":
-- Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.9% chance that all _reachable_ nodes in **C** have received a given replicated transaction across **𝓛<sub>C</sub>**.
+- Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.7% chance that all _reachable_ nodes in **C** have received a given replicated transaction across **𝓛<sub>C</sub>**.
 - **Δ<sub>C</sub>** serves as a "rule-of-thumb" for characterizing information latency within **C**.  It allows us to more fully express aggregate performance, decision making calculus, and case-study analysis.
-- Although **Δ<sub>C</sub>** depends on how aggressively **𝓛<sub>C</sub>** trades off redundancy with bandwidth conservation,  **Δ<sub>C</sub>** tends to track with `log(N)`, given `N` "well-connected" nodes.
-- For example: 
-    - Given a collection of N=1000 well-connected nodes, having:
-        1. a standard distribution of peer latency centered at .25 sec (with σ = .25 sec) 
-        2. a standard distribution of node "diameter" centered at 10 steps (with σ = 10 steps).
-    - ⇒ **Δ<sub>C</sub>** is in the neighborhood of 1*40 secs ⇒ 1 minute.
-    - If N is _doubled_, then **Δ<sub>C</sub>** only increases on the order of seconds. 
+- Although **Δ<sub>C</sub>** depends on how aggressively **𝓛<sub>C</sub>** trades off redundancy with bandwidth conservation,  **Δ<sub>C</sub>** generally tracks with `log(N)`, given `N` "well-connected" nodes.
+- ⇒ Even a "dumb" peer-based network has attractive latency characteristics as N increases at human scales.   For example:
+    - Consider a collection of N=1000 well-connected nodes, having:
+        1. a standard distribution of node neighbor latency centered at .2 sec (with σ = .1 sec) 
+        2. a standard distribution of "swarm diameter" centered at 10 hops (with σ = 5 hops).
+    - ⇒ **Δ<sub>C</sub>** is in the neighborhood of (.2 + 6 * .1) * (10 + 6 * 5) secs (about 1 minute).
+    - If N is _doubled_, then **Δ<sub>C</sub>** _only_ increases a couple seconds since the limiting swarm diameter increases by 2-3 hops. 
 
 Like the way an operating system is _only_ as swift as its host storage system, the latency and "liveness" (availability) of the system presented below is solely dependent on **𝓛**.  This means that the design tradeoffs that **𝓛<sub>C</sub>** makes will determine **C**'s overall network properties and behavior.  [Liveness vs Safety](#liveness-vs-safety) discusses tradeoffs for various choices of **𝓛**.
 
