@@ -21,7 +21,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 |       [Channel GUI Adapters](#Channel-GUI-Adapters)      | Provides an interchangeable front-end GUI experience for a given channel type                                                          |
 |       [Cloud File Interface](#Cloud-File-Interface)      | Abstracts expendable shared bulk storage; designed to be compatible with distributed content-addressable storage systems               |
 |       [Secure Key Interface](#Secure-Key-Interface)      | Abstracts private key handling and crypto services; designed to integrate third-party encryption and authentication systems            |
-|              [Web Services](Web-Services)                | Serves public requests for explicitly shared community content via conventional internet protocols                                     |
+|              [Web Services](#Web-Services)               | Serves public requests for explicitly shared community content via conventional internet protocols                                     |
 
 ## Interoperable Data Structures
 
