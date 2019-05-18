@@ -9,21 +9,24 @@
 #    generate 10^17 random hashes is about the odds of a meteor hitting your home (1 in 10 trillion).
 #    In software design, this question appears as: what hashspace size do I need in order to effectively 
 #    rule out a hash collision, given that I expect there to be N "draws" in the hashspace and I want
-#    the odds to be no worse than P. 
+#    the odds to be no worse than P.   "Draw" is a reference to playing cards, where drawing cards
+#    to form a hand is an attempt at what is possible.
 #
-# Some reference points:
-#     Match 6 lottery combos              1e7
-#     Seconds in a century                3e9
-#     Seconds in all recorded history     1e11
-#     Seconds in a billion years          3e16
-#     Seconds since Big Bang              4e17
-#     Millimeters in a light year         1e18
-#     Drops of water on Earth             3e25
-#     Protons in your body                1e28
-#     Diameter of the universe in mm      1e30
-#     Possible BTC and ETH addresses      1e48
-#     Possible 32 byte addresses          1e77
-#     Protons in observable universe      1e80
+# Points of reference:                  b10     b2
+# --------------------------------------------------
+#     Match 6 lottery combos            1e7     2^23
+#     Seconds in a century              3e9     2^31
+#     Seconds in all recorded history   1e11    2^36
+#     Seconds in a billion years        3e16    2^55
+#     Seconds since Earth formed        2e17    2^57
+#     Seconds since Big Bang            4e17    2^58
+#     Millimeters in a light year       1e18    2^60  
+#     Drops of water on Earth           3e25    2^85
+#     Protons in your body              1e28    2^93
+#     Diameter of the universe in mm    1e30    2^100
+#     Possible BTC and ETH addresses    1e48    2^160
+#     Possible 32 byte addresses        1e77    2^256
+#     Protons in observable universe    1e80    2^266
 #
 # The talented and well-spoken Michael at Vsauce delightfully shows how BIG these numbers really are:
 #     https://www.youtube.com/watch?v=ObiqJzfyACM&t=888s
@@ -37,7 +40,7 @@ Space Size
 ----------
 bytes                 4 bytes          8 bytes          16 bytes         20 bytes         24 bytes         32 bytes         64 bytes
 bits                  32 bits          64 bits          128 bits         160 bits         192 bits         256 bits         512 bits
-count                 4.3e+09          1.8e+19          3.4e+38          1.5e+48          6.3e+57          1.2e+77          1.3e+154
+combos                4.3e+09          1.8e+19          3.4e+38          1.5e+48          6.3e+57          1.2e+77          1.3e+154
                       ------------     ------------     ------------     ------------     ------------     ------------     ------------
 Collision Odds
 --------------
@@ -94,6 +97,9 @@ bitList = [
     512,
 ]
 
+def decimalTo2exp(value):
+    exp = math.log(value) / math.log(2.)
+    return "2^%.1f" % exp
 
 def getPrettyInt(N):
     fN = float(N)
@@ -129,7 +135,7 @@ if 1:
         line += "%-17s" % ("%d bits" % numBits)
     print line
 
-    line = "%-22s" % "count"
+    line = "%-22s" % "combos"
     for numBits in bitList:
         line += "%-17s" % ("%.1e" % float(pow(2., numBits)))
     print line
@@ -153,4 +159,6 @@ for odds in oddsList:
 
 
 
-
+print decimalTo2exp(3e16)
+print decimalTo2exp(2e17) 
+print decimalTo2exp(4e17)
