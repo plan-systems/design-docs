@@ -65,10 +65,12 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 
     | Protobuf File      | Purpose                                         |
     |--------------------|-------------------------------------------------|
-    | [go-plan/plan/plan.proto](http://github.com/plan-systems/go-plan/blob/master/plan/plan.proto)                  | PLAN-wide general purpose data structures       |
-    | [go-plan/pdi/pdi.proto](http://github.com/plan-systems/go-plan/blob/master/pdi/pdi.proto)                      | Persistent Data Interface (PDI) data structures |
-    | [go-plan/ski/ski.proto](http://github.com/plan-systems/go-plan/blob/master/ski/ski.proto)                      | Secure Key Interface (SKI) data structures      |
-    | [go-plan/pservice/pservice.proto](http://github.com/plan-systems/go-plan/blob/master/pservice/pservice.proto)  | gRPC network services and data structures       |
+    | [plan.proto](http://github.com/plan-systems/plan-protobufs/blob/master/pkg/plan/plan.proto)                  | PLAN-wide constants and data structures         |
+    | [pdi.proto](http://github.com/plan-systems/plan-protobufs/blob/master/pkg/pdi/pdi.proto)                     | Persistent Data Interface (PDI) data structures |
+    | [ski.proto](http://github.com/plan-systems/plan-protobufs/blob/master/pkg/ski/ski.proto)                     | Secure Key Interface (SKI) data structures      |
+    | [repo.proto](http://github.com/plan-systems/plan-protobufs/blob/master/pkg/repo/repo.proto)                  | Repo-centric messages data structures           |
+    | [client.proto](http://github.com/plan-systems/plan-protobufs/blob/master/pkg/client/client.proto)            | Client support and service                      |
+    | [ch.proto](http://github.com/plan-systems/plan-protobufs/blob/master/pkg/ch/ch.proto)                        | Channel protocol data structures                |
 
 
 ---
@@ -79,7 +81,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 - The PDI embraces an append-only model so that a wide range of centralized databases, replicating data types, and distributed ledgers can be used off the shelf.
 - PDI transactions ("channel entries") are modeled as immutable and permanent (though content mutability is recreated virtually via PLAN's higher-level channel database layer).
 - A PDI storage provider features [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a central database for convenience, and migrate to a distributed ledger better for scale later on down the road. 
-- In [go-plan](http://github.com/plan-systems/go-plan), `StorageProvider` is a [gRPC](https://grpc.io/) service defined in [pdi.proto](http://github.com/plan-systems/go-plan/blob/master/pdi/pdi.proto). A PDI storage node makes this service available to the clients/members of a community.  There are two categories of PDI implementations:
+- In [plan-core](http://github.com/plan-systems/plan-core), `StorageProvider` is a [gRPC](https://grpc.io/) service defined in [pdi.proto](http://github.com/plan-systems/plan-protobufs/blob/master/proto/pdi.proto). A PDI storage node makes this service available to the clients/members of a community.  There are two categories of PDI implementations:
     1. **Centralized** - a `StorageProvider` implementation that uses a conventional central server or cluster.
         - Pros: 
             - Low latency & high performance
@@ -88,7 +90,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
         - Cons: 
             - Single data choke-point
             - Single point of failure
-        - [pdi-datastore](https://github.com/plan-systems/go-plan/tree/master/cmd/pdi-datastore) is PLAN's centralized `StorageProvider` implementation.  It is implemented internally using [Badger](https://github.com/dgraph-io/badger), a modern high performance key-value database.
+        - [pdi-local](https://github.com/plan-systems/plan-pdi-local) is PLAN's centralized `StorageProvider` implementation.  It is implemented internally using [Badger](https://github.com/dgraph-io/badger), a modern high performance key-value database.
     2. **Decentralized** - a `StorageProvider` implementation that internally maintains peer connections with other nodes of its kind.  Peers collectively maintain distributed state and, in effect, provide replicated, redundant storage.  [Liveness vs Safety](PLAN-Proof-of-Correctness.md#Liveness-vs-Safety) discusses how one particular distributed ledger could fit well for one community but a poor fit for another. 
         - Pros: 
             - Highly censorship and [denial-of-service](https://en.wikipedia.org/wiki/Denial-of-service_attack) resistant
