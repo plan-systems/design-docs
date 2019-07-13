@@ -129,10 +129,10 @@ Using PLAN, communities arise from organizers and members who value owning their
 
 | Milestone |  Timeframe  | Status | Description                                                             |
 |:---------:|:-----------:|:------:|-------------------------------------------------------------------------------------------|
-| [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)        |  2018 Q2  | ✅ | Permissions model [proof of concept](https://github.com/plan-systems/permissions-model)     |
+| [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)        |  2018 Q2  | ✅ | Permissions model [proof of concept](https://github.com/plan-systems/permissions-model)   |
 | [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)    |  2018 Q3  | ✅ | PLAN [Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
 | [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)         |  2019 Q2  | ✅ | PLAN Data Model [alpha demo](https://www.plan-systems.org/2019/06/24/hello-universe/)     |
-| [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |  2019 Q3  | 🔆 | [plan-client-unity](https://github.com/plan-systems/plan-client-unity) client alpha |                                       |
+| [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |  2019 Q3  | 🔆 | [plan-client-unity](https://github.com/plan-systems/plan-client-unity) pre-alpha          |                                       |
 | [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)     |  2019 Q4  |    | [CFI](PLAN-API-Documentation.md#cloud-file-interface) ([IPFS](https://ipfs.io/)) integration   |
 | [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace)      | 2019 Q4   |    | Installer and GUI setup experience for macOS                                              |
 | [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) | 2020 Q1 |    | Ethereum, Substrate, Holochain used for p2p [PDI](PLAN-API-Documentation.md#Persistent-Data-Interface) implementation |
