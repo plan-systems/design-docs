@@ -10,13 +10,13 @@ P  L  A  N etwork
 ## Welcome to PLAN!
 
 PLAN is open-source collaboration software for groups to securely communicate and coordinate activities, featuring:
-- Channels specialized for chat, file sharing, interactive maps, tasking, scheduling, and inventory management
-- End-to-end security, complete data ownership, and mission-critical reliability
+- Channels specialized for chat, file sharing, interactive maps, tasking, scheduling, and logistics
+- End-to-end security, total data ownership, and mission-critical reliability
 - A highly visual interface where channels, file, and links are found in virtual spaces
 - Optional storage decentralization for risk mitigation and offline operation
-- Built-in collaboration tools for teams to organize and manage operations
-- Relationship and organization management and visualization
-- A “[pluggable](PLAN-API-Documentation.md#Primary-Interfaces)” architecture designed to support modification and flexibility.
+- Built-in collaboration tools for teams to organize and manage projects and operations
+- Relationship and organization management and visualization (CRM)
+- A [pluggable](PLAN-API-Documentation.md#Primary-Interfaces) architecture designed to support modification and flexibility.
 	
 PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.  PLAN is freely available through the GNU General Public License ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
 
@@ -34,7 +34,7 @@ PLAN is designed and intended for:
 This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and then explore our other supporting documents:
 1. [FAQ](#FAQ)
 2. [API Documentation](PLAN-API-Documentation.md)
-3. [Data Model Proof of Correctness](PLAN-Proof-of-Correctness.md)
+3. [PLAN Data Model Proof of Correctness](PLAN-Proof-of-Correctness.md) (whitepaper)
 
 ## Why PLAN?
 
@@ -52,7 +52,9 @@ May PLAN empower organizations and individuals, and may it be an instrument of p
 
 The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it's intuitive and reliable_.
 
-Instead of a 2D-constrained and sandboxed web browser experience, a PLAN user experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders channels of information into virtual space.  The client is served by a "community" node that uses a storage abstraction compatible with many existing [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
+Instead of a constrained and sandboxed web browser experience, a PLAN user experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders channels of information into virtual space.  The client is served by a "pnode" that uses a storage abstraction compatible with many existing [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
+
+_For a visual aid, see the [PLAN Network Configurations Diagram](https://i2.wp.com/www.plan-systems.org/wp-content/uploads/2019/07/PLAN_networkconfig_diagram.jpg?ssl=1)._
 
 Design goals:
 - Multiplatform: _Android, iOS, Linux, macOS, Windows_
@@ -125,20 +127,17 @@ Using PLAN, communities arise from organizers and members who value owning their
 
 ## Project Milestones
 
-| Milestone |  Timeframe  | Description                                                                               |
-|:---------:|:-----------:|-------------------------------------------------------------------------------------------|
-|   [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)  |   2018 Q2   | Permissions model [proof of concept](https://github.com/plan-systems/permissions-model)     |
-|  [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)  |   2018 Q3   | PLAN [Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
-|   [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)   |   2019 Q1   | [plan-core](https://github.com/plan-systems/plan-core) command line proof of concept demo       |
-|   [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)  |   2019 Q2   |  [CFI](PLAN-API-Documentation.md#cloud-file-interface) ([IPFS](https://ipfs.io/)) integration   |
-|  [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |   2019 Q2   | [plan-client-unity](https://github.com/plan-systems/plan-client-unity) preliminary proof of concept |                                       |
-| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) |   2019 Q3   | Ethereum, DFINITY, Holochain, or other DLT used for first p2p [PDI](PLAN-API-Documentation.md#Persistent-Data-Interface) implementation |
-|   [Turing](https://en.wikipedia.org/wiki/Alan_Turing)  |   2019 Q3   | Support and QA for Linux                                                          | 
-|  [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace) |   2019 Q3   | Installer and GUI setup experience for macOS                                              |
-|  [Galileo](https://en.wikipedia.org/wiki/Galileo_Galilei)  |   2019 Q4   | PLAN Systems internally switches from Slack to PLAN                                       |
-| [Hollerith](https://en.wikipedia.org/wiki/Herman_Hollerith) |   2019 Q4   | Installer and GUI setup experience for Windows                                            | 
-|   [Barton](https://en.wikipedia.org/wiki/Clara_Barton)  |   2020 Q1   | PLAN helps support [Art Community Builders](http://artcommunitybuilders.org/)             |
-|     -     |    2020+    | PLAN expands support for other volunteer-run events                                       |
+| Milestone |  Timeframe  | Status | Description                                                             |
+|:---------:|:-----------:|:------:|-------------------------------------------------------------------------------------------|
+| [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)        |  2018 Q2  | ✅ | Permissions model [proof of concept](https://github.com/plan-systems/permissions-model)     |
+| [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)    |  2018 Q3  | ✅ | PLAN [Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
+| [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)         |  2019 Q2  | ✅ | PLAN Data Model [alpha demo](https://www.plan-systems.org/2019/06/24/hello-universe/)     |
+| [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |  2019 Q3  | 🔆 | [plan-client-unity](https://github.com/plan-systems/plan-client-unity) client alpha |                                       |
+| [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)     |  2019 Q4  |    | [CFI](PLAN-API-Documentation.md#cloud-file-interface) ([IPFS](https://ipfs.io/)) integration   |
+| [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace)      | 2019 Q4   |    | Installer and GUI setup experience for macOS                                              |
+| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) | 2020 Q1 |    | Ethereum, Substrate, Holochain used for p2p [PDI](PLAN-API-Documentation.md#Persistent-Data-Interface) implementation |
+| [Galileo](https://en.wikipedia.org/wiki/Galileo_Galilei)    | 2020 Q2   |    | PLAN Systems internally switches from Slack to PLAN                                       |
+| [Hollerith](https://en.wikipedia.org/wiki/Herman_Hollerith) | 2020 H2   |    | Installer and GUI setup experience for Windows, Linux, and Android                        | 
 
 
 
