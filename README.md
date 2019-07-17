@@ -18,7 +18,7 @@ PLAN is open-source collaboration software for groups to securely communicate an
 - Relationship and organization management and visualization (CRM)
 - A [pluggable](PLAN-API-Documentation.md#Primary-Interfaces) architecture designed to support modification and flexibility.
 	
-PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how HTTP originated as a step towards interoperability and compatibility.  PLAN is freely available through the GNU General Public License ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
+PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how Tim Berners-Lee created HTTP in the name of interoperability.  PLAN is freely available through the GNU General Public License ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
 
 PLAN is designed and intended for:
 - Community organizations
