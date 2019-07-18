@@ -9,24 +9,24 @@ P  L  A  N etwork
 
 ## Welcome to PLAN!
 
-PLAN is open-source collaboration software for groups to securely communicate and coordinate activities, featuring:
-- Channels specialized for chat, file sharing, interactive maps, tasking, scheduling, and logistics
-- End-to-end security, total data ownership, and mission-critical reliability
-- A highly visual interface where channels, file, and links are found in virtual spaces
-- Optional storage decentralization for risk mitigation and offline operation
-- Built-in collaboration tools for teams to organize and manage projects and operations
-- Relationship and organization management and visualization (CRM)
-- A [pluggable](PLAN-API-Documentation.md#Primary-Interfaces) architecture designed to support modification and flexibility.
+PLAN is an open-source platform for communications, group collaboration, and spatial planning. It offers highly unique features, leveraged from modern feats of engineering in distributed crypto systems, 3D graphics, and open protocols/standards, featuring:
+- A complete data model for interfacing with real-world systems, data silos, and interoperable standards
+- A [pluggable](PLAN-API-Documentation.md#Primary-Interfaces) architecture designed to support modification and flexibility
+- Channels specialized for messaging, file sharing, interactive maps, tasking, scheduling, and logistics operations
+- End-to-end security, total data ownership, total data privacy, and mission-critical reliability
+- A spatially immersive interface where channels, files, and links are placed in virtual spaces
+- Storage decentralization for risk mitigation and offline-first operation
+- Built-in collaboration and visualization tools for teams to organize and manage projects, decisions, and relationships (CRM)
 	
 PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how Tim Berners-Lee created HTTP in the name of interoperability.  PLAN is freely available through the GNU General Public License ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
 
 PLAN is designed and intended for:
 - Community organizations
-- Crisis management teams
 - Educators and researchers
 - Civic institutions
-- Businesses and sales teams
-- Clubs and gaming groups
+- Trust networks and governance strutures
+- Entrepenuers and businesses
+- Teams, clubs and gaming groups
 - Support groups
 
 ## What's in This Repo?
@@ -38,7 +38,7 @@ This repo presents and discusses the layers, abstractions, and technologies that
 
 ## Why PLAN?
 
-Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human usability and convenience.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought.
+Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human relationships and usability.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought.
 
 ![alt text](https://github.com/plan-systems/design-docs/blob/master/PLAN-Elements-and-Design-Principles.jpg "PLAN Elements and Design Principles")
 
@@ -52,7 +52,7 @@ May PLAN empower organizations and individuals, and may it be an instrument of p
 
 The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it's intuitive and reliable_.
 
-Instead of a constrained and sandboxed web browser experience, a PLAN user experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders channels of information into virtual space.  The client is served by a "pnode" that uses a storage abstraction compatible with many existing [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
+Instead of a constrained and sandboxed web browser experience, a PLAN community experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders channels of information into virtual space.  The client is served by a "pnode" that uses a storage abstraction compatible with many existing [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
 
 _For a visual aid, see the [PLAN Network Configurations Diagram](https://i2.wp.com/www.plan-systems.org/wp-content/uploads/2019/07/PLAN_networkconfig_diagram.jpg?ssl=1)._
 
