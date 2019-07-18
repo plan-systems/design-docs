@@ -136,7 +136,7 @@ Using PLAN, communities arise from organizers and members who value owning their
 | [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |  2019 Q3  | 🔆 | [plan-client-unity](https://github.com/plan-systems/plan-client-unity) pre-alpha          |                                       |
 | [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)     |  2019 Q4  |    | [CFI](PLAN-API-Documentation.md#cloud-file-interface) ([IPFS](https://ipfs.io/)) integration   |
 | [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace)      | 2019 Q4   |    | Installer and GUI setup experience for macOS                                              |
-| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) | 2020 Q1 |    | Ethereum, Substrate, Holochain used for p2p [PDI](PLAN-API-Documentation.md#Persistent-Data-Interface) implementation |
+| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) | 2020 Q1 |    | Ethereum, Substrate, Holochain, or Solid used for p2p [PDI](PLAN-API-Documentation.md#Persistent-Data-Interface) implementation |
 | [Galileo](https://en.wikipedia.org/wiki/Galileo_Galilei)    | 2020 Q2   |    | PLAN Systems internally switches from Slack to PLAN                                       |
 | [Hollerith](https://en.wikipedia.org/wiki/Herman_Hollerith) | 2020 H2   |    | Installer and GUI setup experience for Windows, Linux, and Android                        | 
 
