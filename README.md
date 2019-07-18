@@ -19,7 +19,7 @@ PLAN is an open-source platform for communications, group collaboration, and spa
 - Built-in collaboration and visualization tools for teams to organize and manage projects, decisions, and relationships (CRM)
 - Free, GNU General Public Licensing ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html))
 	
-PLAN’s architecture brings all these parts together into an _integrated_, visual interface. The design principles of PLAN center around making information highly secure, interoperable, and extensible. PLAN is inspired in part by Tim Berners-Lee's creation of HTTP as an interoperable standard, as well as the infinately adaptable IRC messaging protocol.  
+PLAN’s architecture brings all these parts together into an _integrated_, visual interface. The design principles of PLAN center around making information highly secure, interoperable, and extensible. PLAN is inspired in part by Tim Berners-Lee's creation of HTTP as an interoperable standard, as well as the infinitely adaptable IRC messaging protocol.  
 
 PLAN is designed and intended for:
 - Community organizations
@@ -87,7 +87,7 @@ PLAN has a 3D/visual frontend with a peer-to-peer backend that uses one or more 
 
 What defines a community? In PLAN, a community is designed to reflect the human relationships that make up the community, whether that's a household, neighborhood, first-responders unit, off-grid farm, city council, media production, veterans network, maker-space, artist collective, emotional support network, small business, or gaming group. The entire community's network traffic and infrastructure is inaccessible to all others, forming a cryptographic _city wall_ of privacy and security.  
 
-A PLAN community is formed when one or more founders/organizers gather and together use the community genesis tool that codifies initial governance and administration.  In that process, they also decide which of the available [StorageProviders](PLAN-API-Documentation.md#persistent-data-interface) implementaitons are best for their needs.  After that, the founders and subsequent members of the community maintain a copy of the "community keyring", giving members the ability to access the community's shared data repository. Anyone _without_ this keyring — anyone _not_ in the community — is _outside_ the community's crypto city wall.  
+A PLAN community is formed when one or more founders/organizers gather and together use the community genesis tool that codifies initial governance and administration.  In that process, they also decide which of the available [StorageProviders](PLAN-API-Documentation.md#persistent-data-interface) implementations are best for their needs.  After that, the founders and subsequent members of the community maintain a copy of the "community keyring", giving members the ability to access the community's shared data repository. Anyone _without_ this keyring — anyone _not_ in the community — is _outside_ the community's crypto city wall.  
 
 Inside this outer layer of security, residing on each community node, lives an IRC-inspired channel infrastructure. Each PLAN channel entry contains content and metadata that works like HTTP headers, allowing content to be richly interpreted.  But a channel's "protocol identifier" also contributes to describing how entry content should be interpreted.  
 
