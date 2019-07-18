@@ -17,8 +17,9 @@ PLAN is an open-source platform for communications, group collaboration, and spa
 - A spatially immersive interface where channels, files, and links are placed in virtual spaces
 - Storage decentralization for risk mitigation and offline-first operation
 - Built-in collaboration and visualization tools for teams to organize and manage projects, decisions, and relationships (CRM)
+- Free, GNU General Public Licensing ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html))
 	
-PLAN’s architecture brings all these parts together into a unified, _integrated_, visual interface. The design principles of PLAN center around making information highly interoperable and extensible, inspired by how Tim Berners-Lee created HTTP in the name of interoperability.  PLAN is freely available through the GNU General Public License ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html)). 
+PLAN’s architecture brings all these parts together into an _integrated_, visual interface. The design principles of PLAN center around making information highly secure, interoperable, and extensible. PLAN is inspired in part by Tim Berners-Lee's creation of HTTP as an interoperable standard, as well as the infinately adaptable IRC messaging protocol.  
 
 PLAN is designed and intended for:
 - Community organizations
