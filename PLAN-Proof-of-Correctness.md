@@ -9,7 +9,7 @@ P  L  A  N etwork
 
 ## What is this?
 
-This document is a proof of correctness that spells out PLAN's data model, security mechanisms, encryption layers, and access controls.
+This document is a proof of correctness for the PLAN data model, an IRC-inspired virtual channel system that provides a canvas for community content organization, access controls, real-world security features.  The purpose of this system is to host PLAN clients, playback requested channel entries, process and propagate newly authored entries, and maintain a consistent and secure state.
 
 In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-through and demonstration that a proposed method and/or design rigorously satisfies a given set of specifications or claims.  The intention is to remove _all doubt_ that there exists a set of conditions such that the proposed method would _not_ meet all the specifications.
 
@@ -40,7 +40,6 @@ On their nodes, the members of **C** agree to employ **𝓛**, an _append-only_ 
 
 Let **𝓛<sub>C</sub>** be a CRDT whose genesis is under exclusive control of the admins of **C**.  **𝓛<sub>C</sub>** is assumed to either contain (or have access to) a verification system such that a transaction submitted to **𝓛<sub>C</sub>** is acceptable _only if_ the transaction's author (signer) has explicit _𝓛-append permission_ ("postage").  At first this may appear to be a strong requirement, but it reflects the _transference_ of security liability of the key(s) specified during the genesis of **𝓛<sub>C</sub>** to an _external_ set of authorities.
 
-
 For example, a customized "private distro" of the [Ethereum](https://en.wikipedia.org/wiki/Ethereum) blockchain ("**⧫**") could be used to implement **𝓛** since:
 - The admins of **C**, on creating **⧫<sub>C</sub>**, would issue themselves some large bulk amount _C-Ether_ (postage)
 - The admins of **C** would periodically distribute portions of _C-Ether_ to members of **C** (a postage quota).  
@@ -49,7 +48,7 @@ For example, a customized "private distro" of the [Ethereum](https://en.wikipedi
     - Any transaction that does not "burn" an amount of postage commensurate with the byte size of the payload would be dropped/rejected.
     - Any transaction that attempts to transfer postage from a non-designated identities would be dropped/rejected.
 
-For context, consider watching the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video clip](https://www.youtube.com/watch?v=cidZRD3NzHg&t=1214s) speak about blockchain as an empowering distributed security and information technology.
+For context, consider watching the distinguished [George Glider](https://en.wikipedia.org/wiki/George_Gilder) in this [video clip](https://www.youtube.com/watch?v=cidZRD3NzHg&t=1214s) speak on the empowering nature of distributed information technology.
 
 ---
 
@@ -58,25 +57,6 @@ For context, consider watching the distinguished [George Glider](https://en.wiki
 We acknowledge that even the most advanced and secure systems are vulnerable to private key loss or theft, socially engineered deception, and physical coercion.  That is, an adversary in possession of another's private keys without their knowledge, or an adversary manipulating or coercing others is difficult (or impossible) to prevent.  Biometric authentication systems can mitigate _some_ of these threats, but they also introduce additional surfaces that could be exploited (e.g. spoofing a biometric device or exploiting an engineering oversight).
 
 Security frameworks often don't analyze or provision for the loss of private keys since the implications are typically catastrophic, effectively making the issue someone else's intractable problem. Any system lacking such analysis and provisioning can only be considered incomplete for every-day use. The system of operation presented here features swift countermeasures and recovery _once it becomes known_ that private keys have been compromised (or suspect activity has been witnessed). 
-
----
-
-## On Network Latency
-
-In any system, replicated data transactions and messages take non-trivial periods of time to traverse and propagate across the network.  Also, any number of nodes could be offline for indefinite periods of time. 
-
-No assumptions are made about network connectivity or reachability in this proof, and propagation times are expressed as "**Δ<sub>C</sub>**":
-- Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.7% chance that all _reachable_ nodes in **C** have received a given replicated transaction across **𝓛<sub>C</sub>**.
-- **Δ<sub>C</sub>** serves as a "rule-of-thumb" for characterizing information latency within **C**.  It allows us to more fully express aggregate performance, decision making calculus, and case-study analysis.
-- Although **Δ<sub>C</sub>** depends on how aggressively **𝓛<sub>C</sub>** trades off redundancy with bandwidth conservation,  **Δ<sub>C</sub>** generally tracks with `log(N)`, given `N` "well-connected" nodes.
-- ⇒ Even a "dumb" peer-based network has attractive latency characteristics as N increases at human scales.   For example:
-    - Consider a collection of N=1000 well-connected nodes, having:
-        1. a standard distribution of node neighbor latency centered at .2 sec (with σ = .1 sec) 
-        2. a standard distribution of "swarm diameter" centered at 10 hops (with σ = 5 hops).
-    - ⇒ **Δ<sub>C</sub>** is in the neighborhood of (.2 + 6 * .1) * (10 + 6 * 5) secs (about 1 minute).
-    - If N is _doubled_, then **Δ<sub>C</sub>** _only_ increases a couple seconds since the limiting swarm diameter increases by 2-3 hops. 
-
-Like the way an operating system is _only_ as swift as its host storage system, the latency and "liveness" (availability) of the system presented below is solely dependent on **𝓛**.  This means that the design tradeoffs that **𝓛<sub>C</sub>** makes will determine **C**'s overall network properties and behavior.  [Liveness vs Safety](#liveness-vs-safety) discusses tradeoffs for various choices of **𝓛**.
 
 --- 
 
@@ -372,7 +352,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
     2. Recovers **k<sub>C</sub>** from the `KeyIssue` using the member's private keyring.
     3. Adds **k<sub>C</sub>** to **m**'s own community keyring.
     4. Uses **k<sub>C</sub>** to encrypt all subsequent authored entries bound for **𝓛<sub>C</sub>**
-- Within **Δ<sub>C</sub>**, newly authored transactions are _strictly only_ readable by the current members of **C**.
+- Within [**Δ<sub>C</sub>**](#on-network-latency), newly authored transactions are _strictly only_ readable by the current members of **C**.
     - An actor in possession of a halted keyring or any keys past member epochs will not have any of the keys needed to extract **k<sub>C</sub>**.
     - If **𝓛<sub>C</sub>** favors safety, then **C** could additionally be configured to reject entries encrypted with a community key older than **Δ<sub>C</sub>** since offline nodes effectively remain in a halted state until they regain access to a critical threshold of central validators.  
 
@@ -442,7 +422,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 - The designated authority of **C** performs a procedure identical to the [Member Halt](#member-halt) procedure.  In effect:
     1. Any subsequent entries authored by **m** will be rejected, _and_
     2. **m** will be unable to post any transactions to **𝓛<sub>C</sub>**, _and_
-    4. All new entries on **𝓛<sub>C</sub>** will be unreadable to **m** within **Δ<sub>C</sub>**.
+    4. All new entries on **𝓛<sub>C</sub>** will be unreadable to **m** within [**Δ<sub>C</sub>**](#on-network-latency)
 
 
 #### Channel Entry Validation
@@ -511,7 +491,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 "Liveness versus safety" refers to canonical tradeoffs made during the design of a blockchain or distributed ledger.  This discussion is variant of the [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) applied to distributed ledgers, where "[liveness](https://en.wikipedia.org/wiki/Liveness)" corresponds to _availability_ and "[safety](https://en.wikipedia.org/wiki/Safety_property)" corresponds to _consistency_.  Here, we weigh the tradeoffs made by a given **𝓛<sub>C</sub>** implementation:
 
 - If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
-    1. **Δ<sub>C</sub>** will reflect network latency and topology.
+    1. [**Δ<sub>C</sub>**]((#on-network-latency) will reflect network latency and topology.
     2. [Channel Entry Validation](#Channel-Entry-Validation) could potentially encounter an important but late-arriving entry, triggering a cascade of entry revalidation.
     3.  The nodes of **C** are conveniently "offline-first" and will operate in independent cells if network connectivity is limited.
         - As partitions rejoin after some time and synchronize, each **𝓡<sub>i</sub>** will receive new batches of old transactions (from other partitions).
@@ -706,6 +686,23 @@ _Each item below corresponds to each item in the [Specifications & Requirements]
 
 
 ---
+
+## On Network Latency
+
+In any system, replicated data transactions and messages take non-trivial periods of time to traverse and propagate across the network.  Also, any number of nodes could be offline for indefinite periods of time. No assumptions are made about network connectivity or reachability in this proof, and propagation times are expressed as "**Δ<sub>C</sub>**":
+
+- Let **Δ<sub>C</sub>** be the time period needed for there to be at least a 99.7% chance that all _reachable_ nodes in **C** have received a given replicated transaction across **𝓛<sub>C</sub>**.
+- **Δ<sub>C</sub>** serves as a "rule-of-thumb" for characterizing information latency within **C**.  It allows us to more fully express aggregate performance, decision making calculus, and case-study analysis.
+- Although **Δ<sub>C</sub>** depends on how aggressively **𝓛<sub>C</sub>** trades off redundancy with bandwidth conservation,  **Δ<sub>C</sub>** generally tracks with `log(N)`, given `N` "well-connected" nodes.
+- ⇒ Even a "dumb" peer-based network has attractive latency characteristics as N increases at human scales.   For example:
+    - Consider a collection of N=1000 well-connected nodes, having:
+        1. a standard distribution of node neighbor latency centered at .2 sec (with σ = .1 sec) 
+        2. a standard distribution of "swarm diameter" centered at 10 hops (with σ = 5 hops).
+    - ⇒ **Δ<sub>C</sub>** is in the neighborhood of (.2 + 6 * .1) * (10 + 6 * 5) secs (about 1 minute).
+    - If N is _doubled_, then **Δ<sub>C</sub>** _only_ increases a couple seconds since the limiting swarm diameter increases by 2-3 hops. 
+
+Like the way an operating system is _only_ as swift as its host storage system, the latency and "liveness" (availability) of the system presented below is solely dependent on **𝓛**.  This means that the design tradeoffs that **𝓛<sub>C</sub>** makes will determine **C**'s overall network properties and behavior.  [Liveness vs Safety](#liveness-vs-safety) discusses tradeoffs for various choices of **𝓛**.
+
 ---
 
 Back to [README](README.md)
