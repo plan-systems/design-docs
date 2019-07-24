@@ -15,11 +15,11 @@ PLAN is an open-source platform for communications, group collaboration, and spa
 - Channels specialized for messaging, file sharing, interactive maps, tasking, scheduling, and logistics operations
 - End-to-end security, total data ownership, total data privacy, and mission-critical reliability
 - A spatially immersive interface where channels, files, and links are placed in virtual spaces
-- Storage decentralization for risk mitigation and offline-first operation
+- Storage decentralization for risk mitigation and "offline-first" operation
 - Built-in collaboration and visualization tools for teams to organize and manage projects, decisions, and relationships (CRM)
 - Free, GNU General Public Licensing ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html))
 	
-PLAN’s architecture brings all these parts together into an _integrated_, visual interface. The design principles of PLAN center around making information highly secure, interoperable, and extensible. PLAN is inspired in part by Tim Berners-Lee's creation of HTTP as an interoperable standard, as well as the infinitely adaptable IRC messaging protocol.  
+PLAN’s architecture brings all these parts together into an _integrated_, visual interface. The design principles of PLAN center around making information highly secure, interoperable, and extensible. PLAN is inspired in part by HTTP as an interoperable standard, as well as the infinitely adaptable IRC messaging protocol.  
 
 PLAN is designed and intended for:
 - Community organizations
@@ -30,6 +30,12 @@ PLAN is designed and intended for:
 - Teams, clubs and gaming groups
 - Support groups
 
+![alt text](https://github.com/plan-systems/design-docs/blob/master/PLAN-Elements-and-Design-Principles.jpg "PLAN Elements and Design Principles")
+
+## Why PLAN?
+
+Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human relationships and usability.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought.
+
 ## What's in This Repo?
 
 This repo presents and discusses the layers, abstractions, and technologies that comprise PLAN.  It is written for a technical audience ready to understand and vet PLAN's architecture and design.  We recommend that visitors read this document and then explore our other supporting documents:
@@ -37,13 +43,7 @@ This repo presents and discusses the layers, abstractions, and technologies that
 2. [API Documentation](PLAN-API-Documentation.md)
 3. [PLAN Data Model Proof of Correctness](PLAN-Proof-of-Correctness.md) (whitepaper)
 
-## Why PLAN?
-
-Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human relationships and usability.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought.
-
-![alt text](https://github.com/plan-systems/design-docs/blob/master/PLAN-Elements-and-Design-Principles.jpg "PLAN Elements and Design Principles")
-
-## PLAN Systems
+## About PLAN Systems
 
 [PLAN Systems](http://plan-systems.org) is a non-profit public charity, developing and providing publicly available systems that foster robust digital self-reliance for low resource communities, while also reducing the burden on local, state, and federal agencies.  
 
