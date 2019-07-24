@@ -21,9 +21,11 @@ PLAN is an open-source platform for communications, group collaboration, and spa
 
 ![alt text](https://github.com/plan-systems/design-docs/blob/master/PLAN-Elements-and-Design-Principles.jpg "PLAN Elements and Design Principles")
 
-PLAN’s architecture brings all these parts together into an _integrated_, visual interface. The design principles of PLAN center around making information highly secure, interoperable, and extensible. PLAN is inspired in part by HTTP as an interoperable standard, as well as the infinitely adaptable IRC messaging protocol.  
+## Why PLAN?
 
-PLAN is designed and intended for:
+Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human relationships and usability.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought.
+
+PLAN is intended for:
 - Community organizations
 - Educators and researchers
 - Civic institutions
@@ -32,9 +34,6 @@ PLAN is designed and intended for:
 - Teams, clubs and gaming groups
 - Support groups
 
-## Why PLAN?
-
-Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human relationships and usability.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought.
 
 ## What's in This Repo?
 
