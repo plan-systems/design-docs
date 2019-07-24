@@ -11,14 +11,16 @@ P  L  A  N etwork
 
 PLAN is an open-source platform for communications, group collaboration, and spatial planning. It offers highly unique features, leveraged from modern feats of engineering in distributed crypto systems, 3D graphics, and open protocols/standards, featuring:
 - A complete data model for interfacing with real-world systems, data silos, and interoperable standards
-- A [pluggable](PLAN-API-Documentation.md#Primary-Interfaces) architecture designed to support modification and flexibility
-- Channels specialized for messaging, file sharing, interactive maps, tasking, scheduling, and logistics operations
+- A [pluggable](PLAN-API-Documentation.md#Primary-Interfaces) architecture designed for modification and flexibility
+- Integrated messaging, file sharing, interactive maps, tasking, scheduling, and logistics operations
 - End-to-end security, total data ownership, total data privacy, and mission-critical reliability
 - A spatially immersive interface where channels, files, and links are placed in virtual spaces
 - Storage decentralization for risk mitigation and "offline-first" operation
-- Built-in collaboration and visualization tools for teams to organize and manage projects, decisions, and relationships (CRM)
+- Built-in collaboration and visualization tools for teams managing projects, organizations, and relationships (CRM)
 - Free, GNU General Public Licensing ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html))
-	
+
+![alt text](https://github.com/plan-systems/design-docs/blob/master/PLAN-Elements-and-Design-Principles.jpg "PLAN Elements and Design Principles")
+
 PLAN’s architecture brings all these parts together into an _integrated_, visual interface. The design principles of PLAN center around making information highly secure, interoperable, and extensible. PLAN is inspired in part by HTTP as an interoperable standard, as well as the infinitely adaptable IRC messaging protocol.  
 
 PLAN is designed and intended for:
@@ -29,8 +31,6 @@ PLAN is designed and intended for:
 - Entrepenuers and businesses
 - Teams, clubs and gaming groups
 - Support groups
-
-![alt text](https://github.com/plan-systems/design-docs/blob/master/PLAN-Elements-and-Design-Principles.jpg "PLAN Elements and Design Principles")
 
 ## Why PLAN?
 
