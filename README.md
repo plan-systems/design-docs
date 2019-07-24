@@ -16,7 +16,7 @@ PLAN is an open-source platform for communications, group collaboration, and spa
 - End-to-end security, total data ownership, total data privacy, and mission-critical reliability
 - A spatially immersive interface where channels, files, and links are placed in virtual spaces
 - Storage decentralization for risk mitigation and "offline-first" operation
-- Built-in collaboration and visualization tools for teams managing projects, organizations, and relationships (CRM)
+- Built-in collaboration and visualization tools for teams managing projects, organizations, and relationships
 - Free, GNU General Public Licensing ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html))
 
 ![alt text](https://github.com/plan-systems/design-docs/blob/master/PLAN-Elements-and-Design-Principles.jpg "PLAN Elements and Design Principles")
