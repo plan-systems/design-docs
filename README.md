@@ -25,14 +25,15 @@ PLAN is an open-source platform for communications, group collaboration, and spa
 
 Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human relationships and usability.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought.
 
-PLAN is intended for:
-- Community organizations
+PLAN is ideal for:
+- Community organizers
 - Educators and researchers
-- Civic institutions
-- Trust networks and governance strutures
 - Entrepenuers and businesses
+- Journalists and media productions
+- Civic institutions
+- Trust networks and governance structures
 - Teams, clubs and gaming groups
-- Support groups
+- Human development and support groups
 
 
 ## What's in This Repo?
@@ -127,12 +128,12 @@ Using PLAN, communities arise from organizers and members who value owning their
 
 ## Project Milestones
 
-| Milestone |  Timeframe  | Status | Description                                                             |
+| Milestone |  Timeframe  | Status | Description                                                                               |
 |:---------:|:-----------:|:------:|-------------------------------------------------------------------------------------------|
 | [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)        |  2018 Q2  | ✅ | Permissions model [proof of concept](https://github.com/plan-systems/permissions-model)   |
 | [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)    |  2018 Q3  | ✅ | PLAN [Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
 | [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)         |  2019 Q2  | ✅ | PLAN Data Model [alpha demo](https://www.plan-systems.org/2019/06/24/hello-universe/)     |
-| [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |  2019 Q3  | 🔆 | [plan-client-unity](https://github.com/plan-systems/plan-client-unity) pre-alpha          |                                       |
+| [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |  2019 Q3  | 🔆 | [plan-client-unity](https://github.com/plan-systems/plan-client-unity) alpha              |                                       |
 | [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)     |  2019 Q4  |    | [CFI](PLAN-API-Documentation.md#cloud-file-interface) ([IPFS](https://ipfs.io/)) integration   |
 | [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace)      | 2019 Q4   |    | Installer and GUI setup experience for macOS                                              |
 | [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) | 2020 Q1 |    | Ethereum, Substrate, Holochain, or Solid used for p2p [PDI](PLAN-API-Documentation.md#Persistent-Data-Interface) implementation |
