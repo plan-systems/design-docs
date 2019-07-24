@@ -491,7 +491,7 @@ Channels are intended as general-purpose containers for [channel entries](#chann
 "Liveness versus safety" refers to canonical tradeoffs made during the design of a blockchain or distributed ledger.  This discussion is variant of the [CAP theorem](https://en.wikipedia.org/wiki/CAP_theorem) applied to distributed ledgers, where "[liveness](https://en.wikipedia.org/wiki/Liveness)" corresponds to _availability_ and "[safety](https://en.wikipedia.org/wiki/Safety_property)" corresponds to _consistency_.  Here, we weigh the tradeoffs made by a given **𝓛<sub>C</sub>** implementation:
 
 - If **𝓛<sub>C</sub>** favors _liveness over safety_ (such as [Ethereum](https://www.ethereum.org/) or [Holochain](https://holochain.org/)), then partitions of **𝓛<sub>C</sub>** will operate independently and will synchronize when rejoined.  This implies:
-    1. [**Δ<sub>C</sub>**]((#on-network-latency) will reflect network latency and topology.
+    1. [**Δ<sub>C</sub>**](#on-network-latency) will reflect network latency and topology.
     2. [Channel Entry Validation](#Channel-Entry-Validation) could potentially encounter an important but late-arriving entry, triggering a cascade of entry revalidation.
     3.  The nodes of **C** are conveniently "offline-first" and will operate in independent cells if network connectivity is limited.
         - As partitions rejoin after some time and synchronize, each **𝓡<sub>i</sub>** will receive new batches of old transactions (from other partitions).
