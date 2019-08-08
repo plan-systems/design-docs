@@ -77,7 +77,10 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 
 
 ## Persistent Data Interface
-- The **Persistent Data Interface** ("PDI") is PLAN's append-only storage abstraction.  It stores all of a PLAN community's channel entries and is only _cryptographically accessible_ to its members.
+- The **Persistent Data Interface** ("PDI") is PLAN's append-only storage abstraction, storing a community's essential content (often text-based in nature).  By the time content arrives at this layer, it has already been encrypted by the community's [community keyring](https://github.com/plan-systems/design-docs/blob/master/PLAN-Proof-of-Correctness.md#System-Security) and is therefore _cryptographically inaccessible_  to the rest of the world.  
+- PLAN's persistent storage abstraction is a container for content, enforces postage, manages its structure and transport, and validates authorship.  The PDI does not manage high-level user security or permissions.  The PDI's primary purpose is to:
+	1. Store, replicate, and serve signed transactions (aka "extrinsics"), and
+	2. Disallow/drop transactions whose author does not have community postage.
 - The PDI embraces an append-only model so that a wide range of centralized databases, replicating data types, and distributed ledgers can be used off the shelf.
 - PDI transactions ("channel entries") are modeled as immutable and permanent (though content mutability is recreated virtually via PLAN's higher-level channel database layer).
 - A PDI storage provider features [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a central database for convenience, and migrate to a distributed ledger better for scale later on down the road. 
