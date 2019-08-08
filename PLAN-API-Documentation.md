@@ -84,7 +84,7 @@ PLAN features 7 primary areas of extension and interoperability.  Together, they
 - The PDI embraces an append-only model so that a wide range of centralized databases, replicating data types, and distributed ledgers can be used off the shelf.
 - PDI transactions ("channel entries") are modeled as immutable and permanent (though content mutability is recreated virtually via PLAN's higher-level channel database layer).
 - A PDI storage provider features [portability](PLAN-Proof-of-Correctness.md#Proof-of-Storage-Portability), so a community could start with a central database for convenience, and migrate to a distributed ledger better for scale later on down the road. 
-- In [plan-core](http://github.com/plan-systems/plan-core), `StorageProvider` is a [gRPC](https://grpc.io/) service defined in [pdi.proto](http://github.com/plan-systems/plan-protobufs/blob/master/proto/pdi.proto). A PDI storage node makes this service available to the clients/members of a community.  There are two categories of PDI implementations:
+- In [plan-core](http://github.com/plan-systems/plan-core), `StorageProvider` is a [gRPC](https://grpc.io/) service defined in [pdi.proto](https://github.com/plan-systems/plan-protobufs/blob/master/pkg/pdi/pdi.proto). A PDI storage node makes this service available to the clients/members of a community.  There are two categories of PDI implementations:
     1. **Centralized** - a `StorageProvider` implementation that uses a conventional central server or cluster.
         - Pros: 
             - Low latency & high performance
