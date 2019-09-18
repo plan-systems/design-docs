@@ -9,21 +9,20 @@ P  L  A  N etwork
 
 ## Welcome to PLAN!
 
-PLAN is an open-source platform for communications, group collaboration, and spatial planning. It offers highly unique features, leveraged from modern feats of engineering in distributed crypto systems, 3D graphics, and open protocols/standards, featuring:
-- A complete data model for interfacing with real-world systems, data silos, and interoperable standards
-- A [pluggable](PLAN-API-Documentation.md#Primary-Interfaces) architecture designed for modification and flexibility
-- Integrated messaging, file sharing, interactive maps, tasking, scheduling, and logistics operations
-- End-to-end security, total data ownership, total data privacy, and mission-critical reliability
-- A spatially immersive interface where channels, files, and links are placed in virtual spaces
-- Storage decentralization for risk mitigation and "offline-first" operation
+PLAN is a platform for communications, group collaboration, and spatial planning. It leverages modern feats of engineering in distributed crypto systems, 3D graphics, and open protocols, featuring:
 - Built-in collaboration and visualization tools for teams managing projects, organizations, and relationships
+- Integrated messaging, file sharing, interactive maps, tasking, scheduling, and logistics operations
+- Storage decentralization for risk mitigation and offgrid operation
+- A spatially immersive interface where channels, files, and links are arranged in virtual spaces
+- End-to-end security, total data ownership, total data privacy, and mission-critical reliability
+- A [pluggable](PLAN-API-Documentation.md#Primary-Interfaces) architecture designed for extension and flexibility
 - Free, GNU General Public Licensing ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html))
 
 ![alt text](https://github.com/plan-systems/design-docs/blob/master/PLAN-Elements-and-Design-Principles.jpg "PLAN Elements and Design Principles")
 
 ## Why PLAN?
 
-Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other “serverless” technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human relationships and usability.  Such a system must be resistant to mass-messaging/spam, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought.
+Distributed technologies offer astonishing potential, but they lack a consistent and accessible graphical user experience. Distributed ledgers and other peer-based technologies are ripe to be integrated into a _unified_ visual interface that prioritizes human relationships and usability.  Such a system must be resistant to vandalism, outside interference, and malicious actors.  As an information visualizer, PLAN allows teams to communicate and conduct logistics planning efficiently, reliability, and privately. PLAN offers assurance that the information we store and depend on will be available not only during times of prosperity, but also during natural disaster, political crisis, or economic drought.
 
 PLAN is ideal for:
 - Community organizers
@@ -51,34 +50,34 @@ May PLAN empower organizations and individuals, and may it be an instrument of p
 
 ## Architecture Objectives
 
-The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it's intuitive and reliable_.
+The primary objective of PLAN's architecture and user interface is to simplify the complex nature of digital privacy and distributed systems using interactive visual idioms that blend into the user experience as seamlessly as possible. In most cases, it’s not particularly important to an end-user where exactly data resides, how it's served, or how encryption works — _but that it's intuitive and visual_.
 
-Instead of a constrained and sandboxed web browser experience, a PLAN community experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders channels of information into virtual space.  The client is served by a "pnode" that uses a storage abstraction compatible with many existing [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
+Instead of a constrained and sandboxed web browser experience, a PLAN user experiences their organization's structure and content through the [Unity](https://unity3d.com) graphics engine as it renders information organized in "channels" into virtual space.  The client is served by a "pnode" that uses a storage abstraction compatible with many existing [distributed ledgers](https://en.wikipedia.org/wiki/Distributed_ledger).
 
 _For a visual aid, see the [PLAN Network Configurations Diagram](https://i2.wp.com/www.plan-systems.org/wp-content/uploads/2019/07/PLAN_networkconfig_diagram.jpg?ssl=1)._
 
-Design goals:
+PLAN design goals:
 - Multiplatform: _Android, iOS, Linux, macOS, Windows_
-- User experience is 2D/orthographic, first person, isometric, AR, VR
+- Space channels can be experienced in 2D/orthographic, first person, isometric, or AE/VR
 - Peer-to-peer [persistent storage abstraction](PLAN-API-Documentation.md#persistent-data-interface) compatible with distributed ledgers
 - Peer-to-peer [cloud storage abstraction](PLAN-API-Documentation.md#cloud-file-interface) compatible with distributed storage systems
 - Pluggable content handling and rendering via [channel GUI adapters](PLAN-API-Documentation.md#channel-gui-adapters)
-- “Offline first” to allow work when only part of the network reachable
-- Access controls for groups as a whole or for individual channels or members
-- Allow a community to peer-host select content for external consumption
+- Offgrid operation to allow work when only part of the network reachable
+- Access controls for groups as a whole or individual members
+- Allow a community to peer-serve content to visitors
 
 PLAN users get:
-- A responsive, engaging, animated, and intuitive experience
+- A responsive, engaging, and visual experience
 - A first-class input and display device experience
 - Full horsepower of the device/workstation
-- Complete data ownership and control
+- Total data ownership and privacy
 
 How is PLAN implemented?
 - User client written in [Unity](https://unity3d.com) 3D engine (C# and .NET Core)
-- Peer-to-peer backend daemon ("node") written in [Go](https://golang.org)
-- Channels are identified and interpreted via self-describing metadata
-- Access control implemented using channels; each channel is a child of some other channel, up to a root.
-- Local file system caching and partial network resilience to enable offline work
+- Peer-to-peer backend daemon ("pnode") written in [Go](https://golang.org)
+- A sequence of channel entries that are interpreted and visualized based on the channel's protocol identifier
+- Access control implemented also using channels; each channel is a child of some other channel, up to a root.
+- Local file system caching and partial network resilience to enable offgrid work
 
 
 ## Architecture Synopsis
