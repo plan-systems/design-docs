@@ -111,6 +111,7 @@ The members of **C** wish to assert...
 #### Storage Portability
 - **C**, led by a coordinated admin effort, retains the ability to switch-out 𝓛 technologies. 
 - For example, suppose **𝓛<sub>C</sub>** has the safety feature such that it automatically halts under suspicious network conditions or insufficient peer connectivity (but requires central connectivity).  However, earlier in **C**'s history, they used a CRDT that favored [liveness over safety](#liveness-vs-safety), allowing partitions of **C** to still be able to collaborate without central connectivity.
+- Or for example, suppose a member of **C** inadvertently adds data to the community record that is inappropriate or legally unacceptable (even if it is no longer accessible at the client level).  In such case, the community would want to "rebase" the community's persistent store so that the offending content entries are not carried over.
 
 
 ---
