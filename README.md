@@ -1,19 +1,19 @@
 # PLAN Design & Engineering Docs
 
 ```
-         P urposeful
+         P rivacy
          L ogistics
-         A rchitecture
-P  L  A  N etwork
+         A ccessibility
+P  L  A  N etworks
 ```
 
 ## Welcome to PLAN!
 
-PLAN is a software platform for communications, group collaboration, and spatial planning. It leverages modern feats of engineering in distributed crypto systems, 3D graphics, and open protocols, featuring:
+PLAN is a software platform for communications, group collaboration, and spatial planning. PLAN leverages modern feats of engineering in distributed crypto systems, 3D graphics, and open protocols.  It features:
 - Built-in collaboration and visualization tools for teams managing projects, organizations, and relationships
 - Integrated messaging, file sharing, interactive maps, tasking, scheduling, and logistics operations
 - Storage decentralization for risk mitigation and offgrid operation
-- A spatially immersive interface where channels, files, and links are arranged in virtual spaces
+- An intuitive and visual 3D user interface where channels, files, and links are arranged in virtual spaces
 - End-to-end security, total data ownership, total data privacy, and mission-critical reliability
 - A [pluggable](PLAN-API-Documentation.md#Primary-Interfaces) architecture designed for extension and flexibility
 - Free, GNU General Public Licensing ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html))
