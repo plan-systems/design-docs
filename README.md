@@ -132,12 +132,12 @@ Using PLAN, communities arise from organizers and members who value owning their
 | [Newton](https://en.wikipedia.org/wiki/Isaac_Newton)        |  2018 Q2  | ✅ | Permissions model [proof of concept](https://github.com/plan-systems/permissions-model)   |
 | [Babbage](https://en.wikipedia.org/wiki/Charles_Babbage)    |  2018 Q3  | ✅ | PLAN [Proof of Correctness](PLAN-Proof-of-Correctness.md) complete                        |
 | [Morse](https://en.wikipedia.org/wiki/Samuel_Morse)         |  2019 Q2  | ✅ | PLAN Data Model [alpha demo](https://www.plan-systems.org/2019/06/24/hello-universe/)     |
-| [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |  2019 Q3  | 🔆 | [plan-client-unity](https://github.com/plan-systems/plan-client-unity) alpha              |                                       |
-| [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)     |  2019 Q4  |    | [CFI](PLAN-API-Documentation.md#cloud-file-interface) ([IPFS](https://ipfs.io/)) integration   |
-| [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace)      | 2019 Q4   |    | Installer and GUI setup experience for macOS                                              |
-| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) | 2020 Q1 |    | Ethereum, Substrate, Holochain, or Solid used for p2p [PDI](PLAN-API-Documentation.md#Persistent-Data-Interface) implementation |
-| [Galileo](https://en.wikipedia.org/wiki/Galileo_Galilei)    | 2020 Q2   |    | PLAN Systems internally switches from Slack to PLAN                                       |
-| [Hollerith](https://en.wikipedia.org/wiki/Herman_Hollerith) | 2020 H2   |    | Installer and GUI setup experience for Windows, Linux, and Android                        | 
+| [Mercator](https://en.wikipedia.org/wiki/Gerardus_Mercator) |  2020 Q4  | 🔆 | [plan-client-unity](https://github.com/plan-systems/plan-client-unity) pre-alpha          |
+| [Kepler](https://en.wikipedia.org/wiki/Johannes_Kepler)     |  2021 Q1  |    | [CFI](PLAN-API-Documentation.md#cloud-file-interface) integration   |
+| [Lovelace](https://en.wikipedia.org/wiki/Ada_Lovelace)      |  2021 Q2  |    | Installer and GUI setup experience for macOS                                              |
+| [Fessenden](https://en.wikipedia.org/wiki/Reginald_Fessenden) | 2021 H2 |    | [Substrate](https://www.parity.io/substrate/) [PDI](PLAN-API-Documentation.md#Persistent-Data-Interface) implementation |
+| [Galileo](https://en.wikipedia.org/wiki/Galileo_Galilei)    | 2021 H2   |    | PLAN Systems internally switches from Slack to PLAN                                       |
+| [Hollerith](https://en.wikipedia.org/wiki/Herman_Hollerith) | 2021 H2   |    | Installer and GUI setup experience for Windows, Linux, and Android                        | 
 
 
 
