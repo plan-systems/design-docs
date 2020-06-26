@@ -20,7 +20,7 @@ The following represents the tree structure used to store a set of nodes.  Each 
 NodeSpace Channel
 |
 |
-/-- n/<NodeID>/<LayerID>/name			=> user-specified node description (UTF8)
+/-- n/<NodeID>/<LayerID>/name			=> user-specified node name
 |	|		            /uri[.<ident>]	=> [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
 |	|					/x[0-9]			=> positional/cord value
 |	|					/.<user_field>	=> user-specified string/value (UTF8)
@@ -32,10 +32,11 @@ NodeSpace Channel
 |	n/...
 |
 |
-/-- l/<LayerID>/name					=> user-specified node layer description (UTF8)
+/-- l/<LayerID>/name					=> user-specified layer name
 	|		   /cord_space				=> cord space type
 	|		   /cord_unit				=> cord unit type
-	|		   /index					=> int32 used to order NodeSpace layers
+	|		   /color					=> layer color ("RRGGBB")
+	|		   /index					=> layer index value (0, 1, 2..)
 	|
 	l/<LayerID>/...
 	|		   /...
@@ -43,14 +44,18 @@ NodeSpace Channel
 	l/...
 
 ```
+## Node Linking
+
+Each `uri` field allows a node to link to any other node.  The linked node can reside in the same NodeSpace or an external NodeSpace specified by its channel URI.  A node may contain any number of links, allowing most network graphs to be represented.  The PLAN user interface offers node automated relationship visualization, offering users the ability to discern important information that may not otherwise be visible.
+
 
 ## Layers & Linking
 
-A NodeSpace contains a set of explicit node layers identified by a `LayerID`.  The default ("primary") node layer has an `index` value of 0, meaning that any references (local or externally) to a given NodeID are resolved to the NodeSpace's primary node layer.   By convention, the primary node layer defines each node's `name`, default target `uri`, and a coordinate position as applicable.  Additional node layers typically represent other contexts or representations of nodes (or node subsets).  
+A NodeSpace contains a set of node layers, each identified by a `LayerID`.  The default ("primary") node layer has an `index` value of 0 and is the implied layer when a node links to another node and no layer is specified.  By convention, the primary node layer defines each node's `name`, default target `uri`, and a coordinate position as applicable.  Additional node layers typically represent other contexts or representations of nodes (or node subsets).  
 
 ## Example NodeSpace
 
-Consider a creative maker-space for example. A NodeSpace channel could be used for each equipment/work area.  The primary node layer could contain top-level information and contain a uri to a NodeSpace that presents a rich scene of information and links. An additional layer called "Sign-Out" could contain a link for each 
+Consider a shared creative maker-space. A NodeSpace channel could be used for each equipment/work station.  The primary node layer could contain top-level information and contain a uri to a NodeSpace that presents a rich scene of information and links:
 
 ```
 /l/11/name			=> "Shop 101 Equipment Stations"
@@ -61,7 +66,7 @@ Consider a creative maker-space for example. A NodeSpace channel could be used f
 /l/42/name			=> "Training Coordinators"
 	/index			=> 1
 
-/l/55/name			=> "Power Source"
+/l/55/name			=> "Power Distribution"
 	/index			=> 2
 
 /n/73l6/11/name		=> "2HP Drill Press"
