@@ -1,10 +1,10 @@
 # PLAN API Documentation
 
 ```
-         P urposeful
-         L ogistics
-         A rchitecture
-P  L  A  N etwork
+         P.rivacy
+         L.ogistics
+         A.ccessibility
+P  L  A  N.etworks
 ```
 
 A technology is only as interesting as how it can be harnessed and applied in our world.  

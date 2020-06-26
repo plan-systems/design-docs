@@ -1,10 +1,10 @@
 # PLAN Design & Engineering Docs
 
 ```
-         P rivacy
-         L ogistics
-         A ccessibility
-P  L  A  N etworks
+         P.rivacy
+         L.ogistics
+         A.ccessibility
+P  L  A  N.etworks
 ```
 
 ## Welcome to PLAN!
