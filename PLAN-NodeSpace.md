@@ -20,10 +20,10 @@ The following represents the tree structure used to store a set of nodes.  Each 
 NodeSpace Channel
 |
 |
-/-- n/<NodeID>/<LayerID>/name			=> user-specified node name
-|   |		        /uri[.<ident>]		=> [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
-|   |		        /x[0-9]			=> positional/cord value
-|   |		        /.<user_field>		=> user-specified string/value (UTF8)
+/-- n/<NodeID>/<LayerID>/name                   => user-specified node name
+|   |		        /uri[.<ident>]          => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
+|   |		        /x[0-9]                 => positional/cord value
+|   |		        /.<user_field>          => user-specified string/value (UTF8)
 |   |		        /...
 |   |
 |   n/<NodeID>/<LayerID>/...
@@ -31,11 +31,11 @@ NodeSpace Channel
 |   |
 |   n/...
 |
-/-- l/<LayerID>/name				=> user-specified layer name
-|              /cord_space			=> cord space type
-|              /cord_unit			=> cord unit type
-|              /color				=> layer color ("RRGGBB")
-|              /index				=> layer index value (0, 1, 2..)
+/-- l/<LayerID>/name                            => user-specified layer name
+|              /cord_space                      => cord space type
+|              /cord_unit                       => cord unit type
+|              /color                           => layer color ("RRGGBB")
+|              /index	                        => layer index value (0, 1, 2..)
 |
 l/<LayerID>/...
 |          /...
