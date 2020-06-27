@@ -13,38 +13,35 @@ A NodeSpace a PLAN channel data schema that reflects a collection of abstract ob
 
 ## Channel Data Structure
 
-The following tree structure defines the key/value storage schema for a NodeSpace channel.  Each `NodeID` and `LayerID` is presumed to be unique from other nodes and layers in the channel they reside in.  
+The following tree structure defines the key/value storage schema for a NodeSpace channel.  Each `NodeID` and `LayerID` is unique from other nodes and layers in the channel they reside in.  
 
 ```
-
-NodeSpace Channel
-|
-|
-/-- n/<NodeID>/<LayerID>/name               => user-specified node name
-|   |                /uri[.<ident>]         => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
-|   |                /x[0-0xFF]             => positional/cord value
-|   |                /id                    => seed/id/uuid/token
-|   |                /sig                   => hash(id).sign(keypair[0-0xFF])
-|   |                /.<user_field>         => user-specified string/value (UTF8)
-|   |                /...
-|   |
-|   n/<NodeID>/<LayerID>/...
-|   |                   /...
-|   |
-|   n/...
-|
-/-- l/<LayerID>/name                        => user-specified layer name
-|              /cord_space                  => cord space type
-|              /cord_unit                   => cord unit type
-|              /color                       => layer color ("RRGGBB")
-|              /index                       => layer index value (0, 1, 2..)
-|
+l/<LayerID>/name                        => user-specified layer name
+           /cord_space                  => cord space type
+           /cord_unit                   => cord unit type
+           /color                       => layer color ("RRGGBB")
+           /index                       => layer index value (0, 1, 2..)
+ 
 l/<LayerID>/...
-|          /...
-|
-l/...
+           /...
+ 
+...
 
+n/<NodeID>/<LayerID>/name               => user-specified node name
+                    /uri[.<ident>]      => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
+                    /x[0-0xFF]          => positional/cord value
+                    /id                 => seed/token/id
+                    /.<user_field>      => user-specified string/value (UTF8)
+                    /...
+   
+n/<NodeID>/<LayerID>/...
+                    /...
+
+...
 ```
+
+
+
 ## Node Linking
 
 Each `uri` field allows a node to link to any other node.  The linked node can reside in the same NodeSpace or an external NodeSpace specified by its channel URI.  A node may contain any number of links, allowing most network graphs to be represented.  The PLAN user interface offers node automated relationship visualization, offering users the ability to discern important information that may not otherwise be visible.
