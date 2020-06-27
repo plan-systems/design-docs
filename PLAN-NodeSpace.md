@@ -9,18 +9,18 @@ P  L  A  N.etworks
 
 ## What is a NodeSpace?
 
-A NodeSpace is the name given to a collection of objects ("nodes") in relation to each other where each node can have a set of associated fields/parameters, spatial coordinates, or references ("links") to other nodes.  Given that PLAN is a channel-based system, where each channel has an immutable channel protocol identifier assigned during channel genesis, a "NodeSpace" is a PLAN channel type whose entries conform to the types described in this document.  
+A NodeSpace a PLAN channel data schema that reflects a collection of abstract objects ("nodes") in relation to each other and nodes in other NodeSpaces.  Each node has a set of associated fields/parameters, including spatial coordinates and references ("links") to other nodes.  
 
 ## Channel Data Structure
 
-The following represents the tree structure used to store a set of nodes.  Each `NodeID` and `LayerID` is presumed to be unique from all other nodes and layers in the channel and considered "local" to the channel they reside in.  
+The following tree structure defines the key/value storage schema for a NodeSpace channel.  Each `NodeID` and `LayerID` is presumed to be unique from other nodes and layers in the channel they reside in.  
 
 ```
 
 NodeSpace Channel
 |
 |
-/-- n/<NodeID>/<LayerID>/name                   => user-specified node name
+/-- n/<NodeID>/<LayerID>/name               => user-specified node name
 |   |		        /uri[.<ident>]          => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
 |   |		        /x[0-9]                 => positional/cord value
 |   |		        /.<user_field>          => user-specified string/value (UTF8)
