@@ -29,7 +29,7 @@ l/<LayerID>/...
 ...
 
 n/<NodeID>/<LayerID>/name               => user-specified node name
-                    /uri[.<ident>]      => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
+                    /uri[.<ident>]      => [[<uri>/n/]|.]<NodeID>[/<LayerID>]
                     /x[0-9]             => positional cord value
                     /t                  => time value
                     /.<user_field>      => user-specified value
@@ -53,42 +53,78 @@ Each `uri` field allows a node to link to any other node.  The linked node can r
 
 A NodeSpace contains a set of node layers, each identified by a `LayerID`.  The default ("primary") node layer has an `index` value of 0 and is the implied layer when a node links to another node and no layer is specified.  By convention, the primary node layer defines each node's `name`, default target `uri`, and a coordinate position as applicable.  Additional node layers typically represent other contexts or representations of nodes (or node subsets).  
 
-## Example NodeSpace
+## Example NodeSpaces
 
-Consider a shared creative maker-space. A NodeSpace channel could be used for each equipment/work station.  The primary node layer could contain top-level information and contain a uri to a NodeSpace that presents a rich scene of information and links:
+Consider a shared creative maker-space. A NodeSpace channel could be used for each equipment workstation.  The primary node layer could contain top-level information and contain a uri to a NodeSpace that presents a rich scene of information and links.  Another NodeSpace can be used to represent project that have been created, where each project can cite a link to the project and links to what equipment was used.
+
+`NodeSpace uri: "shop101-eq"`
+```
+/l/11/name               => "Shop 101 Work Stations"
+     /cord_space         => "cartesian/xy" 
+     /cord_unit          => "length/meters"
+     /index              => 0
+
+/l/30/name               => "Training Coordinators"
+     /index              => 1
+
+/l/55/name               => "Power Distribution"
+     /index              => 2
+
+/l/60/name               => "Find Inspiration!"
+     /index              => 3
+
+/n/73l6/11/name          => "Lincoln 220 Cutter/Welder"
+          /uri           => "shop101/lincoln-220-welcome"
+          /x0            => 33.0
+          /x1            => 20.0
+       /30/uri           => "shrugs-faculty/n/424323"
+       /55/uri           => "shrugs-hall/n/NE-breaker-8-01"
+       /60/uri           => "shop101-gallery/n/2020-1"
+
+/n/7110/11/name          => "Miller Plasma Cutter"
+          /uri           => "shop101/miller-cutter-welcome"
+          /x0            => 10.0
+          /x1            => 30.0
+       /30/uri           => "shrugs-faculty/n/12331"
+       /55/uri           => "./8801/."
+
+/n/8801/11/name          => "CrossFire Plasma Table"
+          /uri           => "shop101/cf-plasma-welcome"
+          /x0            => 10.0
+          /x1            => 18.5
+       /30/uri.0         => "shrugs-faculty/n/424323"
+          /uri.1         => "shrugs-TAs/n/6456"
+       /55/uri           => "shrugs-hall/n/NE-breaker-8-02"
+       /60/uri           => "shop101-gallery/n/2020-2"
 
 ```
-/l/11/name            => "Shop 101 Equipment Stations"
-     /cord_space      => "cartesian/xy" 
-     /cord_unit       => "length/meters"
-     /index           => 0
 
-/l/42/name            => "Training Coordinators"
-     /index           => 1
+`NodeSpace uri: "shop101-gallery"`
+```
+/l/10/name               => "Shop 101 Project Gallery"
+     /time_unit          => "utc/seconds" 
+     /index              => 0
+     /.desc              => "Explore and experience what projects have been created"
 
-/l/55/name            => "Power Distribution"
-     /index           => 2
+/l/30/name               => "Equipment Used"
+     /index              => 1
+     /.desc              => "Equipment used to craft each project"
 
-/n/73l6/11/name       => "2HP Drill Press"
-          /uri        => "shop101/2hp-drill-welcome"
-          /x0         => 33.0
-          /x1         => 20.0
-       /42/uri        => "shrugs-faculty/n/424323/."
-       /55/uri        => "./8801/."
 
-/n/8801/11/name       => "CrossFire Plasma Table"
-          /uri        => "shop101/cf-plasma-welcome"
-          /x0         => 10.0
-          /x1         => 18.5
-       /42/uri.0      => "shrugs-faculty/n/424323/."
-          /uri.1      => "shrugs-TAs/n/12456/."
-       /55/uri        => "shrugs-hall/n/NE-breaker-21-02"
+/n/2020-1/10/name        => "Waldo's Wall"
+            /.desc       => "Steel triangles cut and welded into a mosaic" 
+            /uri         => "shop101/waldos-wall-project"
+            /uri.author  => "shrugs-univ/n/17145"
+            /t           => 1593266130
+         /30/uri.0       => "shop101-eq/n/73l6"
+            /uri.1       => "shop101-eq/n/7110"
 
-/n/7110/11/name       => "Miller Plasma Cutter"
-          /uri        => "shop101/miller-cutter-welcome"
-          /x0         => 10.0
-          /x1         => 30.0
-       /42/uri        => "shrugs-faculty/n/12331/."
-       /55/uri        => "./8801/."
+/n/2020-2/30/name        => "Stencil Shrug"
+            /.desc       => "Metal sculpture with carefully cut and welded metal" 
+            /uri         => "shop101/shrug-sculpture"
+            /uri.author  => "shrugs-TAs/n/6456"
+            /t           => 1592056593
+         /30/uri.0       => "shop101-eq/n/8801"
+            /uri.1       => "shop101-eq/n/73l6"
 
 ```
