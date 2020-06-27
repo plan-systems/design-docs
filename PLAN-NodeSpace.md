@@ -128,13 +128,13 @@ Consider a volunteer firefighter's network. A NodeSpace channel can be used to c
             /x1          => 77.0458
 
 /n/2020-2/30/name        => "That Others May Live"
-            /.desc       => "Honoring the Veterans Fire Fighters that have come before us." 
-            /uri         => "station7/history"
+            /.desc       => "Honoring the veteran volunteer fire fighters of our community." 
+            /uri         => "station7/history-timeline"
             /uri.author  => "station7-TAs/n/6456"
             /t           => 1592056593
          /30/uri.0       => "station7-eq/n/8801"
             /uri.1       => "station7-eq/n/73l6"
-         /40/uri         => "acme-virtual-tours-321
+         /40/uri         => "ff-virtual-tours-321
             /x0          => 31.7683
             /x1          => -35.2137
             /t           => 1593216511
