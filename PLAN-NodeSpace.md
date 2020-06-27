@@ -22,7 +22,9 @@ NodeSpace Channel
 |
 /-- n/<NodeID>/<LayerID>/name               => user-specified node name
 |   |                /uri[.<ident>]         => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
-|   |                /x[0-9]                => positional/cord value
+|   |                /x[0-0xFF]             => positional/cord value
+|   |                /id                    => seed/id/uuid/token
+|   |                /sig                   => hash(id).sign(keypair[0-0xFF])
 |   |                /.<user_field>         => user-specified string/value (UTF8)
 |   |                /...
 |   |
