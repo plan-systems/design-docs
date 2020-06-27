@@ -33,7 +33,7 @@ n/<NodeID>/<LayerID>/name               => user-specified node name
                     /x[0-9]             => positional/cord value
                     /t                  => universal time index
                     /id                 => seed/token/id
-                    /.<user_field>      => user-specified string/value (UTF8)
+                    /.<user_field>      => user-specified value
                     /...
    
 n/<NodeID>/<LayerID>/...
