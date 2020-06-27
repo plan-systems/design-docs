@@ -44,7 +44,6 @@ n/<NodeID>/<LayerID>/...
 ```
 
 
-
 ## Node Linking
 
 Each `uri` field allows a node to link to any other node.  The linked node can reside in the same NodeSpace or an external NodeSpace specified by its channel URI.  A node may contain any number of links, allowing most network graphs to be represented.  The PLAN user interface offers node automated relationship visualization, offering users the ability to discern important information that may not otherwise be visible.
@@ -56,11 +55,11 @@ A NodeSpace contains a set of node layers, each identified by a `LayerID`.  The 
 
 ## Example NodeSpaces
 
-Consider a volunteer firefighter's network. A NodeSpace channel can be used to create an organizational map of personnel, positions, fire-stations, equipment maintenance, and current training status of each trainer and volunteer.  The primary node layer could contain top-level information and a uri to a NodeSpace that presents a rich scene of information and links, from the headquarters element all the way to a team responding to an on-scene emergency.  Another NodeSpace can be used to represent past fires that have been extinguished, along with detailed reports, chain of custody documentation, and lessons learned.
+Consider a shared creative maker-space. A NodeSpace channel can be used for each equipment workstation.  The primary node layer could contain top-level information and contain a uri to a NodeSpace that presents a rich scene of information and links.  Another NodeSpace can be used to represent project that have been created, where each project can cite a link to the project and links to what equipment was used.
 
-**NodeSpace uri `firestation7-eq`**
+**NodeSpace uri `shop101-eq`**
 ```
-/l/11/name               => "Volunteer Fire Station 7"
+/l/11/name               => "Shop 101 Work Stations"
      /cord_space         => "cartesian/xy" 
      /cord_unit          => "length/meters"
      /index              => 0
@@ -68,73 +67,72 @@ Consider a volunteer firefighter's network. A NodeSpace channel can be used to c
 /l/30/name               => "Training Coordinators"
      /index              => 1
 
-/l/55/name               => "On-site Power Distribution"
+/l/55/name               => "Power Distribution"
      /index              => 2
 
-/l/60/name               => "On-Call & Ops Schedule"
+/l/60/name               => "Find Inspiration!"
      /index              => 3
 
 /n/73l6/11/name          => "Lincoln 220 Cutter/Welder"
-          /uri           => "station7/lincoln-220-welcome"
+          /uri           => "shop101/lincoln-220-welcome"
           /x0            => 33.0
           /x1            => 20.0
-       /30/uri           => "station7-faculty/n/424323"
-       /55/uri           => "station7-forum/n/NE-breaker-8-01"
-       /60/uri           => "veterans-gallery/n/2020-1"
+       /30/uri           => "shrugs-faculty/n/424323"
+       /55/uri           => "shrugs-hall/n/NE-breaker-8-01"
+       /60/uri           => "shop101-gallery/n/2020-1"
 
-/n/7110/11/name          => "Emergency Dispatch"
-          /uri           => "station7/dispatch"
+/n/7110/11/name          => "Miller Plasma Cutter"
+          /uri           => "shop101/miller-cutter-welcome"
           /x0            => 10.0
           /x1            => 30.0
-       /30/uri           => "station7-operator/n/12331"
+       /30/uri           => "shrugs-faculty/n/12331"
        /55/uri           => "./8801/."
 
-/n/8801/11/name          => "Fire Engine #42 "
-          /uri           => "station7/cf-plasma-welcome"
+/n/8801/11/name          => "CrossFire Plasma Table"
+          /uri           => "shop101/cf-plasma-welcome"
           /x0            => 10.0
           /x1            => 18.5
-       /30/uri.0         => "station7-faculty/n/424323"
-          /uri.1         => "station7-TAs/n/6456"
-       /55/uri           => "station7-forum/n/NE-breaker-8-02"
-       /60/uri           => "veterans-gallery/n/2020-2"
-
+       /30/uri.0         => "shrugs-faculty/n/424323"
+          /uri.1         => "shrugs-TAs/n/6456"
+       /55/uri           => "shrugs-hall/n/NE-breaker-8-02"
+       /60/uri           => "shop101-gallery/n/2020-2"
 ```
 
-**NodeSpace uri `station7vets-gallery`**
+**NodeSpace uri `shop101-gallery`**
 ```
-/l/10/name               => "Station 7 Veterans Gallery"
+/l/10/name               => "Shop 101 Project Gallery"
      /time_unit          => "utc/seconds" 
      /index              => 0
-     /.desc              => "Explore past service calls and experiences of Station 7 Veterans "
+     /.desc              => "Experience famous projects have been created"
 
 /l/30/name               => "Equipment Used"
      /index              => 1
-     /.desc              => "Equipment used to respond each emergency"
+     /.desc              => "Equipment used to craft each project"
 
-/l/40/name               => "Rescue Response Map"
+/l/40/name               => "Project Exhibit Location"
      /index              => 2
      /cord_space         => "earth-geospace/latlong" 
      /cord_unit          => "angle/degrees"
-     /.desc              => "Experience Station 7 volunteer fire fighters working on-site"
+     /.desc              => "Experience the project installation site"
 
-/n/2020-1/10/name        => "Chief's Wall"
-            /.desc       => "News and announcements from the Fire Chief" 
-            /uri         => "firestation7/chiefs-wall-announce"
-            /uri.author  => "chief-univ/n/17145"
+/n/2020-1/10/name        => "Waldo's Wall"
+            /.desc       => "Steel triangles cut and welded into a mosaic" 
+            /uri         => "shop101/waldos-wall-project"
+            /uri.author  => "shrugs-univ/n/17145"
             /t           => 1593266130
-         /30/uri.0       => "firestation7-eq/n/73l6"
-            /uri.1       => "firestation7-eq/n/7110"
+         /30/uri.0       => "shop101-eq/n/73l6"
+            /uri.1       => "shop101-eq/n/7110"
          /40/x0          => 38.8931
             /x1          => 77.0458
 
-/n/2020-2/30/name        => "That Others May Live"
-            /.desc       => "Honoring the veteran volunteer fire fighters of our community." 
-            /uri         => "station7/history-timeline"
-            /uri.author  => "station7-TAs/n/6456"
+/n/2020-2/30/name        => "Stencil Shrug"
+            /.desc       => "Metal sculpture with carefully cut and welded metal" 
+            /uri         => "shop101/shrug-sculpture"
+            /uri.author  => "shrugs-TAs/n/6456"
             /t           => 1592056593
-         /30/uri.0       => "station7-eq/n/8801"
-            /uri.1       => "station7-eq/n/73l6"
-         /40/uri         => "ff-virtual-tours-321
+         /30/uri.0       => "shop101-eq/n/8801"
+            /uri.1       => "shop101-eq/n/73l6"
+         /40/uri         => "acme-virtual-tours-321
             /x0          => 31.7683
             /x1          => -35.2137
             /t           => 1593216511
