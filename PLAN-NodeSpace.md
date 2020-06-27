@@ -110,6 +110,11 @@ Consider a shared creative maker-space. A NodeSpace channel could be used for ea
      /index              => 1
      /.desc              => "Equipment used to craft each project"
 
+/l/40/name               => "Project Exhibit Location"
+     /index              => 2
+     /cord_space         => "earth-geospace/latlong" 
+     /cord_unit          => "angle/degrees"
+     /.desc              => "Experience the project installation site"
 
 /n/2020-1/10/name        => "Waldo's Wall"
             /.desc       => "Steel triangles cut and welded into a mosaic" 
@@ -118,6 +123,8 @@ Consider a shared creative maker-space. A NodeSpace channel could be used for ea
             /t           => 1593266130
          /30/uri.0       => "shop101-eq/n/73l6"
             /uri.1       => "shop101-eq/n/7110"
+         /40/x0          => 38.8931
+            /x1          => 77.0458
 
 /n/2020-2/30/name        => "Stencil Shrug"
             /.desc       => "Metal sculpture with carefully cut and welded metal" 
@@ -126,5 +133,7 @@ Consider a shared creative maker-space. A NodeSpace channel could be used for ea
             /t           => 1592056593
          /30/uri.0       => "shop101-eq/n/8801"
             /uri.1       => "shop101-eq/n/73l6"
-
+         /40/uri         => "acme-virtual-tours-321
+            /x0          => 31.7683
+            /x1          => -35.2137
 ```
