@@ -20,22 +20,22 @@ The following tree structure defines the key/value storage schema for a NodeSpac
 NodeSpace Channel
 |
 |
-/-- n/<NodeID>/<LayerID>/name                   => user-specified node name
-|   |		        /uri[.<ident>]          => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
-|   |		        /x[0-9]                 => positional/cord value
-|   |		        /.<user_field>          => user-specified string/value (UTF8)
-|   |		        /...
+/-- n/<NodeID>/<LayerID>/name               => user-specified node name
+|   |                /uri[.<ident>]         => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
+|   |                /x[0-9]                => positional/cord value
+|   |                /.<user_field>         => user-specified string/value (UTF8)
+|   |                /...
 |   |
 |   n/<NodeID>/<LayerID>/...
-|   |		        /...
+|   |                   /...
 |   |
 |   n/...
 |
-/-- l/<LayerID>/name                            => user-specified layer name
-|              /cord_space                      => cord space type
-|              /cord_unit                       => cord unit type
-|              /color                           => layer color ("RRGGBB")
-|              /index	                        => layer index value (0, 1, 2..)
+/-- l/<LayerID>/name                        => user-specified layer name
+|              /cord_space                  => cord space type
+|              /cord_unit                   => cord unit type
+|              /color                       => layer color ("RRGGBB")
+|              /index                       => layer index value (0, 1, 2..)
 |
 l/<LayerID>/...
 |          /...
@@ -57,37 +57,37 @@ A NodeSpace contains a set of node layers, each identified by a `LayerID`.  The 
 Consider a shared creative maker-space. A NodeSpace channel could be used for each equipment/work station.  The primary node layer could contain top-level information and contain a uri to a NodeSpace that presents a rich scene of information and links:
 
 ```
-/l/11/name			=> "Shop 101 Equipment Stations"
-    /cord_space		=> "cartesian/xy" 
-    /cord_unit		=> "length/meters"
-	/index			=> 0
+/l/11/name            => "Shop 101 Equipment Stations"
+    /cord_space       => "cartesian/xy" 
+    /cord_unit        => "length/meters"
+    /index            => 0
 
-/l/42/name			=> "Training Coordinators"
-	/index			=> 1
+/l/42/name            => "Training Coordinators"
+    /index            => 1
 
-/l/55/name			=> "Power Distribution"
-	/index			=> 2
+/l/55/name            => "Power Distribution"
+    /index            => 2
 
-/n/73l6/11/name		=> "2HP Drill Press"
-		  /uri		=> "shop101/2hp-drill-welcome"
-		  /x0		=> 33.0
-		  /x1		=> 20.0
-	   /42/uri  	=> "shrugs-faculty/n/424323/."
-	   /55/uri 		=> "./8801/."
+/n/73l6/11/name       => "2HP Drill Press"
+          /uri        => "shop101/2hp-drill-welcome"
+          /x0         => 33.0
+          /x1         => 20.0
+       /42/uri        => "shrugs-faculty/n/424323/."
+       /55/uri        => "./8801/."
 
-/n/8801/11/name		=> "CrossFire Plasma Table"
-		  /uri		=> "shop101/cf-plasma-welcome"
-		  /x0		=> 10.0
-		  /x1		=> 18.5
-	   /42/uri.0 	=> "shrugs-faculty/n/424323/."
-	      /uri.1 	=> "shrugs-TAs/n/12456/."
-	   /55/uri 		=> "shrugs-hall/n/NE-breaker-21-02"
+/n/8801/11/name       => "CrossFire Plasma Table"
+          /uri        => "shop101/cf-plasma-welcome"
+          /x0         => 10.0
+          /x1         => 18.5
+       /42/uri.0      => "shrugs-faculty/n/424323/."
+          /uri.1      => "shrugs-TAs/n/12456/."
+       /55/uri        => "shrugs-hall/n/NE-breaker-21-02"
 
-/n/7110/11/name		=> "Miller Plasma Cutter"
-		  /uri		=> "shop101/miller-cutter-welcome"
-		  /x0		=> 10.0
-		  /x1		=> 30.0
-	   /42/uri   	=> "shrugs-faculty/n/12331/."
-	   /55/uri 		=> "./8801/."
+/n/7110/11/name       => "Miller Plasma Cutter"
+          /uri        => "shop101/miller-cutter-welcome"
+          /x0         => 10.0
+          /x1         => 30.0
+       /42/uri        => "shrugs-faculty/n/12331/."
+       /55/uri        => "./8801/."
 
 ```
