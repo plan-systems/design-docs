@@ -58,15 +58,15 @@ Consider a shared creative maker-space. A NodeSpace channel could be used for ea
 
 ```
 /l/11/name            => "Shop 101 Equipment Stations"
-    /cord_space       => "cartesian/xy" 
-    /cord_unit        => "length/meters"
-    /index            => 0
+     /cord_space      => "cartesian/xy" 
+     /cord_unit       => "length/meters"
+     /index           => 0
 
 /l/42/name            => "Training Coordinators"
-    /index            => 1
+     /index           => 1
 
 /l/55/name            => "Power Distribution"
-    /index            => 2
+     /index           => 2
 
 /n/73l6/11/name       => "2HP Drill Press"
           /uri        => "shop101/2hp-drill-welcome"
