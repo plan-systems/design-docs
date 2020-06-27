@@ -31,7 +31,7 @@ l/<LayerID>/...
 n/<NodeID>/<LayerID>/name               => user-specified node name
                     /uri[.<ident>]      => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
                     /x[0-9]             => positional/cord value
-                    /t                  => universal time index
+                    /t                  => time value
                     /id                 => seed/token/id
                     /.<user_field>      => user-specified value
                     /...
