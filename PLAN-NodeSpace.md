@@ -31,7 +31,8 @@ l/<LayerID>/...
 n/<NodeID>/<LayerID>/name               => user-specified node name
                     /uri[.<ident>]      => [[<uri>/n/]|.]<NodeID>[/<LayerID>]
                     /x[0-9]             => positional cord value
-                    /t                  => time value
+                    /t                  => [start] time value
+                    /t.end              => end time value
                     /.<user_field>      => user-specified value
                     /...
    
@@ -136,4 +137,7 @@ Consider a shared creative maker-space. A NodeSpace channel could be used for ea
          /40/uri         => "acme-virtual-tours-321
             /x0          => 31.7683
             /x1          => -35.2137
+            /t           => 1593216511
+            /t.end       => 1655128530
+
 ```
