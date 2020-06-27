@@ -19,6 +19,7 @@ The following tree structure defines the key/value storage schema for a NodeSpac
 l/<LayerID>/name                        => user-specified layer name
            /cord_space                  => cord space type
            /cord_unit                   => cord unit type
+           /time_unit                   => time unit type
            /color                       => layer color ("RRGGBB")
            /index                       => layer index value (0, 1, 2..)
  
@@ -29,7 +30,8 @@ l/<LayerID>/...
 
 n/<NodeID>/<LayerID>/name               => user-specified node name
                     /uri[.<ident>]      => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
-                    /x[0-0xFF]          => positional/cord value
+                    /x[0-9]             => positional/cord value
+                    /t                  => universal time index
                     /id                 => seed/token/id
                     /.<user_field>      => user-specified string/value (UTF8)
                     /...
@@ -38,6 +40,7 @@ n/<NodeID>/<LayerID>/...
                     /...
 
 ...
+
 ```
 
 
