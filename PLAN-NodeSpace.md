@@ -57,7 +57,7 @@ A NodeSpace contains a set of node layers, each identified by a `LayerID`.  The 
 
 Consider a shared creative maker-space. A NodeSpace channel could be used for each equipment workstation.  The primary node layer could contain top-level information and contain a uri to a NodeSpace that presents a rich scene of information and links.  Another NodeSpace can be used to represent project that have been created, where each project can cite a link to the project and links to what equipment was used.
 
-`NodeSpace uri: "shop101-eq"`
+**NodeSpace uri `shop101-eq`**
 ```
 /l/11/name               => "Shop 101 Work Stations"
      /cord_space         => "cartesian/xy" 
@@ -99,7 +99,7 @@ Consider a shared creative maker-space. A NodeSpace channel could be used for ea
 
 ```
 
-`NodeSpace uri: "shop101-gallery"`
+**NodeSpace uri `shop101-gallery`**
 ```
 /l/10/name               => "Shop 101 Project Gallery"
      /time_unit          => "utc/seconds" 
