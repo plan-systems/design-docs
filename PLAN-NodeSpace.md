@@ -20,7 +20,7 @@ The following tree structure defines the key/value storage schema for a NodeSpac
 NodeSpace Channel
 |
 |
-/-- n/<NodeID>/<LayerID>/name               => user-specified node name
+/-- n/<NodeID>/<LayerID>/name                   => user-specified node name
 |   |		        /uri[.<ident>]          => [[<uri>/n/]|.]<NodeID>/[<LayerID>|.]
 |   |		        /x[0-9]                 => positional/cord value
 |   |		        /.<user_field>          => user-specified string/value (UTF8)
