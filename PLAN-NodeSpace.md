@@ -13,7 +13,7 @@ A NodeSpace a PLAN channel data schema that reflects a collection of abstract ob
 
 ## Channel Data Structure
 
-The following tree structure defines the key/value storage schema for a NodeSpace channel.  Each `NodeID` and `LayerID` is unique from other nodes and layers in the channel they reside in.  
+The following tree structure defines the key/value entry storage schema for a NodeSpace channel.  Each `NodeID` and `LayerID` is unique from other nodes and layers in the channel they reside in.  Other than what is required to adequately represent content structure, all key/value entries are optional.
 
 ```
 l/<LayerID>/name                        => user-specified layer name
