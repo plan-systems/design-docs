@@ -30,7 +30,7 @@ l/<LayerID>/...
 
 n/<NodeID>/<LayerID>/name               => user-specified node name
                     /uri[.<ident>]      => [[<uri>/n/]|.]<NodeID>[/<LayerID>]
-                    /x[0-7]             => positional cord value (max 8D)
+                    /x[1..4]            => positional cord value
                     /t                  => [start] time value
                     /t.end              => end time value
                     /.<user_field>      => user-specified value
@@ -141,58 +141,8 @@ Consider a shared creative maker-space. A NodeSpace channel can be used for each
 ```
 
 
-## Serialization
+## Official Specification
 
-A user experiencing a NodeSpace will typically be in a richly populated spatial environment, complete with labels, placed graphics, text, and visual assets. This means the user interface will be repeatedly loading linked nodes as the user navigates and explores the space.  This process is more efficient and highly facilitated by use of a binary serialization schema.
+A user experiencing a NodeSpace will typically be in a richly populated spatial environment, complete with labels, placed graphics, text, and visual assets. This means the user interface will be repeatedly loading linked nodes as the user navigates and explores the space.  This process is more efficient and highly facilitated by use of a binary serialization schema.  
 
-The following is a draft serialization specification and binary RPC using [protobufs](https://developers.google.com/protocol-buffers).  If possible, a binary RPC using [Cap'n Proto](https://capnproto.org/) will be preferred, as a C# implementation usable in Unity is still forthcoming.
-
-``` protobuf
-
-message NSField {
-                string              field_name                  = 1;
-    
-    oneof value {
-                int64               int                         = 10;
-                double              double                      = 11;
-                string              str                         = 12;
-                string              node_uri                    = 13;
-                string              layer_uri                   = 14;
-                fixed32             RGBA                        = 15;
-                bytes               bytes                       = 16;
-    }
-}
-
-message Node {
-                string              node_ID                     = 1;
-
-                string              name                        = 2; 
-                string              uri                         = 3;
-                double              t                           = 4;
-                double              t_end                       = 5;
-
-                double              x0                          = 10;
-                double              x1                          = 11;
-                double              x2                          = 12;
-                double              x3                          = 13;
-
-    repeated    NSField             fields                      = 20;
-}
-
-
-
-message NodeLayer {
-                string              layer_ID                    = 1;
-
-                int32               index                       = 2;
-                string              name                        = 3;
-                string              cord_space_type             = 4;
-                string              cord_unit_type              = 5;
-                string              time_unit_type              = 6;
-                fixed32             RGBA                        = 7;
-
-    repeated    NSField             fields                      = 20,
-}
-
-
-```
+See [plan.proto](https://github.com/plan-systems/plan-proto/blob/master/plan.proto) for the most up to date revision of NodeSpace.
