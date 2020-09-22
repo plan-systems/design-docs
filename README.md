@@ -9,7 +9,7 @@ P  L  A  N.etworks
 
 ## Welcome to PLAN!
 
-PLAN is a software platform for communications, group collaboration, and spatial planning. PLAN leverages modern feats of engineering in distributed crypto systems, 3D graphics, and open protocols.  It features:
+PLAN is a software platform for communications, group collaboration, and spatial planning. PLAN leverages modern feats of engineering in distributed crypto systems, 3D graphics, and "trustless" protocols.  It features:
 - Built-in collaboration and visualization tools for teams managing projects, organizations, and relationships
 - Integrated messaging, file sharing, interactive maps, tasking, scheduling, and logistics operations
 - Storage decentralization for risk mitigation and offgrid operation
