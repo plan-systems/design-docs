@@ -39,7 +39,7 @@ When you're ready to contribute your changes back, open a Pull Request on the pr
 
 ### Developing a new PLAN component in Go
 
-If you want to create a brand new PLAN component written in Go (such as a new PDI provider), you'll want to use [`plan-core`](https://github.com/plan-systems/plan-core).
+If you want to create a brand new PLAN component written in Go (such as a new PDI provider), you'll want to use [`plan-go`](https://github.com/plan-systems/plan-go).
 
 Create your new repo and initialize the Go modules system:
 
@@ -53,9 +53,9 @@ Then import the specific subpackages you'll need for your application:
 
 ```go
 import (
-	"github.com/plan-systems/plan-core/pdi"
-	"github.com/plan-systems/plan-core/plan"
-	"github.com/plan-systems/plan-core/tools/ctx"
+	"github.com/plan-systems/plan-go/vault"
+	"github.com/plan-systems/plan-go/repo"
+	"github.com/plan-systems/plan-go/ctx"
 )
 ```
 
@@ -71,7 +71,7 @@ If you are working on a large feature that might have cross-repository concerns,
 cd ~/src/PLAN  # or wherever you'd like to work
 
 # clone the set of repos you'd like to work with
-for repo in {plan-client-phost,plan-core,plan-pdi-local,plan-pnode,plan-protobufs};
+for repo in {plan-go,plan-protobufs,plan-client-unity};
 do
     git clone git@github.com:plan-systems/${repo}.git
 done
@@ -91,4 +91,4 @@ When we're done, we can `make unhack` to comment-out the `replace` directives an
 
 PLAN uses [protobufs](https://developers.google.com/protocol-buffers/) for communication between components. The protobufs are defined in the [`plan-protobufs`](https://github.com/plan-systems/plan-protobufs) repo. This allows you to write a PLAN component in any language.
 
-Currently the PLAN team is building all server components in [Go](https://golang.org/). The core functions for PLAN in Go are defined in the [`plan-core`](https://github.com/plan-systems/plan-core) repo. If you wanted to build a component in another language, you could use the protobufs in `plan-protobufs` to create your own language bindings and implement the functionality in `plan-core` as a community project.
+Currently the PLAN team is building all server components in [Go](https://golang.org/). The core functions for PLAN in Go are defined in the [`plan-go`](https://github.com/plan-systems/plan-go) repo. If you wanted to build a component in another language, you could use the protobufs in `plan-protobufs` to create your own language bindings and implement the functionality in `plan-core` as a community project.
