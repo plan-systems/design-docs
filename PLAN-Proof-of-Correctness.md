@@ -1,15 +1,15 @@
- # PLAN Data Model Proof of Correctness
+ # PLAN Security Model & Proof of Correctness
 
 ```
-         P urposeful
-         L ogistics
-         A rchitecture
-P  L  A  N etwork
+         P.rivacy
+         L.ogistics
+         A.ccessibility
+P  L  A  N.etworks
 ```
 
 ## What is this?
 
-This document is a proof of correctness for the PLAN data model, an IRC-inspired virtual channel system that provides a canvas for community content organization, access controls, real-world security features.  The purpose of this system is to host PLAN clients, playback requested channel entries, process and propagate newly authored entries, and maintain a consistent and secure state.
+This document is a proof of correctness for the PLAN security model, an IRC-inspired virtual channel system that serves as a canvas for community content organization, access controls, real-world security features.  The purpose of this system is to host PLAN-compatible clients, playback requested channel entries, process and propagate newly authored entries, and maintain a consistent and secure state.
 
 In computer science, a "proof of [correctness](https://en.wikipedia.org/wiki/Correctness_(computer_science))" refers to a formal walk-through and demonstration that a proposed method and/or design rigorously satisfies a given set of specifications or claims.  The intention is to remove _all doubt_ that there exists a set of conditions such that the proposed method would _not_ meet all the specifications.
 
