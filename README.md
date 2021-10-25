@@ -16,7 +16,6 @@ PLAN is a software platform for communications, group collaboration, and spatial
 - An intuitive and visual 3D user interface where channels, files, and links are arranged in virtual spaces
 - End-to-end security, total data ownership, total data privacy, and mission-critical reliability
 - A [pluggable](PLAN-API-Documentation.md#Primary-Interfaces) architecture designed for extension and flexibility
-- Free, GNU General Public Licensing ([GPL3](https://www.gnu.org/licenses/gpl-3.0.en.html))
 
 ![alt text](https://github.com/plan-systems/design-docs/blob/master/PLAN-Elements-and-Design-Principles.jpg "PLAN Elements and Design Principles")
 
