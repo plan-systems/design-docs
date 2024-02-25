@@ -1,11 +1,4 @@
-# PLAN Design & Engineering Docs
-
-```
-         P.rivacy
-         L.ogistics
-         A.ccessibility
-P  L  A  N.etworks
-```
+# PLAN Design Docs
 
 ## Welcome to PLAN!
 
