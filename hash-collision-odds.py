@@ -12,21 +12,25 @@
 #    the odds to be no worse than P.   "Draw" is a reference to playing cards, where drawing cards
 #    to form a hand is an attempt at what is possible.
 #
-# Points of reference:                  b10     b2
-# --------------------------------------------------
-#     Match 6 lottery combos            1e7     2^23
-#     Seconds in a century              3e9     2^31
-#     Seconds in all recorded history   1e11    2^36
-#     Seconds in a billion years        3e16    2^55
-#     Seconds since Earth formed        2e17    2^57
-#     Seconds since Big Bang            4e17    2^58
-#     Millimeters in a light year       1e18    2^60  
-#     Drops of water on Earth           3e25    2^85
-#     Protons in your body              1e28    2^93
-#     Diameter of the universe in mm    1e30    2^100
-#     Possible BTC and ETH addresses    1e48    2^160
-#     Possible 32 byte addresses        1e77    2^256
-#     Protons in observable universe    1e80    2^266
+# Points of reference:                  b10     b2     b64
+# ----------------------------------------------------------
+#     match 6 lottery combos            1e7     2^23
+#     seconds in a century              3e9     2^31   1/2
+#     seconds in all recorded history   1e11    2^36
+#     seconds in a billion years        3e16    2^55
+#     seconds since Earth formed        2e17    2^57
+#     seconds since Big Bang            4e17    2^58
+#     millimeters in a light year       1e18    2^60  
+#     grains of Sand on earth           1e19    2^64    1
+#     drops of water on earth           1e26    2^85
+#     protons in your body              1e28    2^93
+#     diameter of the universe in mm    1e30    2^100
+#     planck units length of universe   1e38    2^128   2
+#     possible BTC or ETH addresses     1e48    2^160
+#     possible 3x8 byte addresses       1e57    2^192   3
+#     possible amp.tag addresses        1e57    2^192
+#     number of atoms in universe       1e80    2^266
+#     possible 32 byte addresses        1e77    2^256   4
 #
 # The talented and well-spoken Michael at Vsauce delightfully shows how BIG these numbers really are:
 #     https://www.youtube.com/watch?v=ObiqJzfyACM&t=888s
